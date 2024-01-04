@@ -1,0 +1,46 @@
+[{
+        "id": 1,
+        "name": "Jeux du snake",
+        "desc": "Le jeu du snake est un jeu de serpent dans lequel le joueur doit manger les lettres composant le mot &agrave; trouver afin de gagner des points.",
+        "short_desc": "Manger les lettres composant le mot &agrave; trouver pour gagner.",
+        "img": "/static/icons/games-icons/snake-30-dark-grey.png",
+        "url": "snake.html",
+        "difficulty": 1
+    },
+    {
+        "id": 2,
+        "name": "Jeux du pendu",
+        "desc": "Le jeux du pendu est un jeu dans lequel le joueur doit trouver le mot cach&eacute; en proposant des lettres. Chaque indice utilis&eacute; fait perdre des points.",
+        "short_desc": "Essayer de deviner le mot cach&eacute; pour gagner",
+        "img": "/static/icons/games-icons/hangman-30-dark-grey.png",
+        "url": "pendu.html",
+        "difficulty": 1
+    },
+    {
+        "id": 3,
+        "name": "Subway Surfers",
+        "desc": "Subway Surfers est un jeu de course dans lequel le joeur doit choisir la voie avec la bonne traduction du mot affich&eacute;.",
+        "short_desc": "Choisir la voie avec la bonne traduction du mot affich&eacute;.",
+        "img": "/static/icons/games-icons/subway-30-dark-grey.png",
+        "url": "subway.html",
+        "difficulty": 2
+    },
+    {
+        "id": 4,
+        "name": "Jeux du memory",
+        "desc": "Le jeux du memory est un jeu dans lequel le joueur doit m&eacute;moriser l&apos;emplacement des mots et de leur traduction afin de les retrouver par paire.",
+        "short_desc": "Retrouver les paires de mots et de leur traduction.",
+        "img": "/static/icons/games-icons/memory-30-dark-grey.png",
+        "url": "memory.html",
+        "difficulty": 1
+    },
+    {
+        "id": 5,
+        "name": "Jeux d&apos;assimilation",
+        "desc": "Le jeu d&apos;assimilation est un jeu dans lequel le joueur doit cliquer sur les bonnes paires le plus rapidement possible alors que ces derni&egrave;re tombent.",
+        "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
+        "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
+        "url": "assimilation.html",
+        "difficulty": 3
+    }
+]

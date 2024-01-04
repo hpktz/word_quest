@@ -1,0 +1,391 @@
+{% extends "dashboard/main.html" %}{% block color %}dashboard-color{% endblock %} {% block dashboard %}selected{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">Dashboard</div>
+    <div class="search-bar-container">
+        <input class="search-bar" type="text" placeholder="Votre recherche" onfocus="open_info_box()" onblur="close_info_box()" onkeyup="search(this)">
+        <img src="/static/icons//search-30-dark-grey.png" class="img" alt="search-icon">
+    </div>
+</div>
+<div class="tips">
+    <div class="title">Astuce</div>
+    <div class="text">{{daytime_tip}}</div>
+    <img src="/static/imgs/3d-young-man-with-coffee-standing-and-speaking.png" class="img" alt="tips-illustration">
+</div>
+<div class="search-results"> </div>
+{% endblock %} {% block daytime_tip %} {{daytime_tip}} {% endblock %} {% block content %}
+<main class="dashboard-main-container">
+    <section class="main-infos">
+        <div class="title">MES LISTES</div>
+        <div class="user-infos">
+            <div></div>
+        </div>
+        <div class="filters">
+            <div class="creation-date">
+                <div class="date">
+                    <input type="date" class="date-start-input" value="{{start_date}}" onchange="change_time()">
+                    <img src="/static/icons/fleche-droite-30-dark-grey.png" alt="">
+                    <input type="date" class="date-end-input" value="{{end_date}}" onchange="change_time()">
+                </div>
+                <div class="filter">
+                    <img src="/static/icons/menu-30-dark-grey.png" alt="">
+                    <select class="filter-select" onchange="filter_by(this)">
+                        <option value="date-increasing">Date ↓</option>
+                        <option value="date-decreasing">Date ↑</option>
+                        <option value="name-increasing">A-Z</option>
+                        <option value="name-decreasing">Z-A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="lists-container" id="lists-container" data-lists="{{lists}}">
+        {% for list in lists %}
+        <div class="list-box" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
+            <div class="infos">
+                <div class="creation">
+                    <p>Créée le {{ list["created_at"] }}</p>
+                </div>
+                <p class="title">{{ list["title"] }}</p>
+                <div class="hidden">
+                    <div class="progress">
+                        <div class="title">Progression</div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: {{list['progress']}}%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <p class="words">Liste de {{ list["words"]|length }} mot{% if list["words"]|length > 1 %}s{% endif %} - {% for index in range((10, list["words"]|length)|min) %}{% if index > 0 %}, {% endif %}{{list["words"][index]["word"]}}{% endfor %}</p>
+            </div>
+            <div class="actions">
+                <div class="delete-logo clickable-logo delete-zone">
+                    <a href="" class="delete-zone" onclick="delete_list(this, event, {{list['id']}})">
+                        <img src="/static/icons/delete-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %} {% if lists|length == 0 %}
+        <div class="list-box-empty" style="display: block;">
+            <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">
+            <p class="text">Aucune liste trouvée</p>
+        </div>
+        {% else %}
+        <div class="list-box-empty" style="display: none;">
+            <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">
+            <p class="text">Aucune liste trouvée</p>
+        </div>
+        {% endif %}
+    </section>
+    <section class="games-trail" data-color="1">
+        <div class="no-list-selected">
+            <div>
+                <img src="/static/imgs/3d-black-cursor.png" class="img" alt="cursor-icon">
+                <div class="text">Selectionnez une liste pour voir les niveaux</div>
+            </div>
+        </div>
+    </section>
+    <div class="overlay-load-game">
+        <div class="content">
+            <spanc class="loader"></spanc>
+        </div>
+    </div>
+    <div class="delete-list-pop-up">
+        <div class="header">
+            <div class="title">Suppression de la liste</div>
+            <div class="close-logo clickable-logo">
+                <a href="" onclick="close_delete_list(this, event)">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="text">
+            Êtes-vous sûr de vouloir supprimer cette liste ? Cette action est irréversible.<br/><br/> Si vous souhaitez retourner à la liste des listes, fermez cette fenêtre.
+        </div>
+        <div class="submit-button">
+            <a id="delete-list-redirect" href="">Supprimer</a>
+        </div>
+    </div>
+    <script>
+        function search(el) {
+            var search = el.value;
+            var content = document.getElementsByClassName('lists-container')[0].dataset.lists;
+            content = content.replace(/'/g, '"');
+            content = JSON.parse(content);
+
+            const searchResults = document.querySelector('.search-results');
+            searchResults.innerHTML = "";
+
+            const listsBoxContainer = document.getElementsByClassName('list-box');
+            if (search.length > 0) {
+                var result = content.filter(function(item) {
+                    return item.title.toLowerCase().includes(search.toLowerCase());
+                });
+                if (result.length > 0) {
+                    for (let i = 0; i < result.length; i++) {
+                        var matchPart = result[i].title.toLowerCase().match(search.toLowerCase())[0];
+                        var matchIndex = result[i].title.toLowerCase().indexOf(matchPart);
+                        var matchLength = matchPart.length;
+                        var match = result[i].title.substring(matchIndex, matchIndex + matchLength);
+                        var title = result[i].title.replace(match, `<strong>${match}</strong>`);
+
+                        var element = null;
+                        for (let j = 0; j < listsBoxContainer.length; j++) {
+                            if (listsBoxContainer[j].dataset.list_id == result[i].id) {
+                                element = listsBoxContainer[j];
+                            }
+                        }
+
+                        const container = document.createElement('p');
+                        container.classList.add('content');
+                        container.onclick = function() {
+                            open_game_trail(element);
+                        }
+                        container.innerHTML = ">&nbsp;&nbsp;" + title;
+                        searchResults.appendChild(container);
+                    }
+                } else {
+                    searchResults.innerHTML = "<p class='no-content'>Pas de résultat</p>";
+                }
+            }
+        }
+
+        function open_game_info(el) {
+            var gameInfos = el.dataset.game_infos;
+            gameInfos = gameInfos.replace(/'/g, '"');
+            gameInfos = JSON.parse(gameInfos);
+
+            for (let i = 0; i < document.getElementsByClassName('level').length; i++) {
+                document.getElementsByClassName('level')[i].classList.remove('selected');
+            }
+            el.classList.add('selected');
+
+            var levelInfosPopUpContainer = document.getElementsByClassName('level-infos-pop-up-container')[0];
+            levelInfosPopUpContainer.dataset.position = gameInfos[0].ord;
+            levelInfosPopUpContainer.classList.add('level-info-entry');
+            setTimeout(function() {
+                levelInfosPopUpContainer.classList.remove('level-info-entry');
+            }, 301);
+
+            var levelInfoTitle = levelInfosPopUpContainer.getElementsByClassName('title')[0];
+            var levelInfoText = levelInfosPopUpContainer.getElementsByClassName('text')[0];
+            var levelInfoSubmitButton = levelInfosPopUpContainer.getElementsByClassName('submit-button')[0];
+            if (gameInfos[0].completed == 1) {
+                levelInfoSubmitButton.classList.add('start')
+                levelInfoTitle.innerHTML = gameInfos[0].name;
+                levelInfoText.innerHTML = gameInfos[0].short_desc;
+                levelInfoSubmitButton.innerHTML = "<a href='" + gameInfos[0].url + "/" + gameInfos[0].list_id + "' onclick='open_game(this, event)'>Rejouer</a>";
+            } else if (gameInfos[0].status == "blocked") {
+                levelInfoTitle.innerHTML = "Niveau bloqué";
+                levelInfoText.innerHTML = "Terminez le niveau précédent pour débloquer ce niveau";
+                levelInfoSubmitButton.innerHTML = "<p style='color:white;'>Bloqué</p>";
+            } else {
+                levelInfoSubmitButton.classList.add('start')
+                levelInfoTitle.innerHTML = gameInfos[0].name;
+                levelInfoText.innerHTML = gameInfos[0].short_desc;
+                levelInfoSubmitButton.innerHTML = "<a href='" + gameInfos[0].url + "/" + gameInfos[0].list_id + "' onclick='open_game(this, event)'>Jouer</a>";
+            }
+
+            setTimeout(function() {
+                const overlay = document.getElementsByClassName('overlay-load-game')[0];
+                var rect = levelInfoSubmitButton.getBoundingClientRect();
+
+                var middleX = rect.left + (rect.width / 2);
+                var middleY = rect.top + (rect.height / 2);
+
+                overlay.style.left = middleX + "px";
+                overlay.style.top = middleY + "px";
+            }, 301);
+        }
+
+        function open_game(el, event) {
+            event.preventDefault();
+
+            const overlay = document.getElementsByClassName('overlay-load-game')[0];
+            overlay.style.top = "0px";
+            overlay.style.left = "0px";
+            overlay.classList.add('active');
+
+            setTimeout(function() {
+                if (el.classList.contains('submit-button')) {
+                    const href = el.querySelector('a').getAttribute('href');
+                    window.location.href = href;
+                } else {
+                    const href = el.getAttribute('href');
+                    window.location.href = href;
+                }
+            }, 2000)
+        }
+
+        async function open_game_trail(el, event) {
+            console.log(event.target);
+            if (event.target.classList.contains('delete-zone')) {
+                return;
+            }
+
+            if (is_open()) {
+                const arrow = document.getElementsByClassName('close-logo')[0].children[0];
+                responsive(arrow, event);
+            }
+
+            const trailContainer = document.getElementsByClassName('games-trail')[0];
+            trailContainer.classList.add('active');
+
+            const listsContainer = document.getElementsByClassName('list-box');
+            var position = 0;
+            for (let i = 0; i < listsContainer.length; i++) {
+                if (listsContainer[i] == el) {
+                    position = i;
+                }
+            }
+
+            const id = el.dataset.list_id;
+            const color = position % 3;
+            const response = await fetch(`/dashboard/games/${id}`);
+            const data = await response.text();
+            const gamesTrail = document.getElementsByClassName('games-trail')[0];
+            gamesTrail.innerHTML = data;
+            gamesTrail.dataset.color = color;
+
+            const listsBoxContainer = document.getElementsByClassName('list-box');
+            for (let i = 0; i < listsBoxContainer.length; i++) {
+                listsBoxContainer[i].classList.remove('selected');
+            }
+            el.classList.add('selected');
+        }
+
+        function close_game_trail(el, event) {
+            event.preventDefault();
+            const trailContainer = document.getElementsByClassName('games-trail')[0];
+            trailContainer.classList.remove('active');
+        }
+
+        function close_level_popup(el, event) {
+            if (event.target === el) {
+                var levelInfosPopUpContainer = document.getElementsByClassName('level-infos-pop-up-container')[0];
+                levelInfosPopUpContainer.dataset.position = 0;
+                levelInfosPopUpContainer.classList.add('level-info-entry');
+
+                var level = document.getElementsByClassName('level');
+                for (let i = 0; i < level.length; i++) {
+                    level[i].classList.remove('selected');
+                }
+            }
+        }
+
+        function change_time() {
+            const start = document.getElementsByClassName('date-start-input')[0];
+            const end = document.getElementsByClassName('date-end-input')[0];
+
+            var isThere = false;
+            for (let i = 0; i < document.getElementsByClassName('list-box').length; i++) {
+                var list_creation = document.getElementsByClassName('list-box')[i].dataset.list_creation;
+                var dateISO = list_creation.split('/').reverse().join('-');
+                list_creation = new Date(Date.parse(dateISO));
+                list_creation = list_creation.getTime() / 1000;
+
+                console.log(start.value);
+                var startDate = new Date(start.value);
+                startDate = startDate.getTime() / 1000;
+
+                console.log(end.value);
+                var endDate = new Date(end.value);
+                endDate = endDate.getTime() / 1000;
+
+                console.log(startDate);
+                console.log(endDate);
+                console.log(list_creation);
+
+                if (Number(list_creation) >= startDate && Number(list_creation) <= endDate) {
+                    document.getElementsByClassName('list-box')[i].style.display = 'block';
+                    isThere = true;
+                } else {
+                    document.getElementsByClassName('list-box')[i].style.display = 'none';
+                }
+
+                if (isThere == false) {
+                    document.getElementsByClassName('list-box-empty')[0].style.display = 'block';
+                } else {
+                    document.getElementsByClassName('list-box-empty')[0].style.display = 'none';
+                }
+            }
+        }
+
+        function filter_by(el) {
+            console.log(el.value);
+
+            var filter = el.value;
+            var emptybox = document.getElementsByClassName('list-box-empty')[0];
+
+            var lists = document.getElementsByClassName('list-box');
+            lists = Array.from(lists);
+            if (filter == "date-increasing") {
+                lists.sort(function(a, b) {
+                    var aDate = Date(Date.parse(a.dataset.list_creation.split('/').reverse().join('-')));
+                    var bDate = Date(Date.parse(b.dataset.list_creation.split('/').reverse().join('-')));
+
+                    return aDate - bDate;
+                });
+            } else if (filter == "date-decreasing") {
+                lists.sort(function(a, b) {
+                    var aDate = Date(Date.parse(a.dataset.list_creation.split('/').reverse().join('-')));
+                    var bDate = Date(Date.parse(b.dataset.list_creation.split('/').reverse().join('-')));
+
+                    return bDate - aDate;
+                });
+            } else if (filter == "name-increasing") {
+                lists.sort(function(a, b) {
+                    var Aletter = a.dataset.list_name;
+                    Aletter = Aletter[0].toUpperCase();
+                    var Bletter = b.dataset.list_name;
+                    Bletter = Bletter[0].toUpperCase();
+
+                    return Aletter.localeCompare(Bletter);
+                });
+            } else if (filter == "name-decreasing") {
+                lists.sort(function(a, b) {
+                    var Aletter = a.dataset.list_name;
+                    Aletter = Aletter[0].toUpperCase();
+                    var Bletter = b.dataset.list_name;
+                    Bletter = Bletter[0].toUpperCase();
+
+                    return Bletter.localeCompare(Aletter);
+                });
+            }
+            lists.forEach(function(div) {
+                div.remove();
+            });
+
+            lists.forEach(function(div) {
+                document.getElementById('lists-container').insertBefore(div, emptybox);
+            });
+        }
+
+        function delete_list(el, event, id) {
+            event.preventDefault();
+
+            const deleteListPopUp = document.getElementsByClassName('delete-list-pop-up')[0];
+            deleteListPopUp.classList.add('active');
+            var link = "/dashboard/delete/" + id;
+            document.getElementById('delete-list-redirect').setAttribute('href', link);
+        }
+
+        function close_delete_list(el, event) {
+            event.preventDefault();
+
+            const deleteListPopUp = document.getElementsByClassName('delete-list-pop-up')[0];
+            deleteListPopUp.classList.remove('active');
+        }
+
+        function open_info_box() {
+            const body = document.querySelector('body');
+            body.classList.add('search-phone-active');
+        }
+
+        function close_info_box() {
+            const body = document.querySelector('body');
+            body.classList.remove('search-phone-active');
+        }
+    </script>
+</main>
+{% endblock %}

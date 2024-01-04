@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Word Quest{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles/css/style-dashboard.css">
+    <script>
+        function redirect(el, event) {
+            event.preventDefault();
+
+            const href = el.getAttribute('href');
+
+            const body = document.querySelector('body');
+            body.style.gridTemplateColumns = '95px 1fr';
+            const main = document.querySelector('main');
+            main.style.opacity = '0';
+            main.style.transform = 'translateX(1000px)';
+
+            const responseLogo = document.querySelector('.responsive-logo');
+            responseLogo.style.transform = 'rotate(180deg)';
+
+            setTimeout(function() {
+                window.location.href = href;
+            }, 510);
+        }
+
+        function is_open() {
+            const body = document.querySelector('body');
+
+            return body.classList.contains('open');
+        }
+
+        function responsive(el, event) {
+            event.preventDefault();
+
+            const body = document.querySelector('body');
+
+            if (body.classList.contains('open')) {
+                body.classList.remove('open');
+            } else {
+                body.classList.add('open');
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header class="{% block color %}{% endblock %}">
+        <section class="nav-bar">
+            <div>
+                <div class="account-logo clickable-logo">
+                    <a href="/dashboard/profile" onclick="redirect(this, event)">
+                        <img src="/static/icons/user-30-white.png" alt="logo">
+                    </a>
+                </div>
+                <div class="create-logo clickable-logo">
+                    <a href="/dashboard/create" onclick="redirect(this, event)">
+                        <img src="/static/icons/plus-30-white.png" alt="logo">
+                    </a>
+                </div>
+            </div>
+            <div class="middle-logos">
+                <div class="middle-logo clickable-logo {% block dashboard %}{% endblock %}">
+                    <a href="/dashboard" onclick="redirect(this, event)">
+                        <img src="/static/icons/home-30-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+                <div class="middle-logo clickable-logo {% block quests %}{% endblock %}">
+                    <a href="/dashboard/quests" onclick="redirect(this, event)">
+                        <img src="/static/icons/quest-30-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+                <div class="middle-logo clickable-logo {% block stats %}{% endblock %}">
+                    <a href="/dashboard/stats" onclick="redirect(this, event)">
+                        <img src="/static/icons/graph-30-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+                <div class="middle-logo clickable-logo {% block user %}{% endblock %}">
+                    <a href="/dashboard/stats" onclick="redirect(this, event)">
+                        <img src="/static/icons/user-30-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+                <div class="dynamic-pointer"></div>
+            </div>
+            <div class="app-logos">
+                <div class="app-logo clickable-logo">
+                    <a href="/">
+                        <img src="/static/imgs/app-main-logo.png" alt="logo">
+                    </a>
+                </div>
+                <div class="responsive-logo clickable-logo">
+                    <a href="" onclick="responsive(this, event)">
+                        <img src="/static/icons/arrow-left-30-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section class="infos-section">
+            {% block dashboard_info %}{% endblock %}
+        </section>
+    </header>
+    {% block content %}{% endblock %}
+</body>
+
+</html>

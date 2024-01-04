@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - WORD QUEST</title>
+    <link rel="icon" href="{{ url_for('static', filename='imgs/app-main-logo.png') }}">
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL=../error/nojs.html">
+    </noscript>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/css/style-account-forms.css') }}">
+</head>
+
+<body>
+    <section class="signup-form-container" id="signup-form-container">
+        <form id="signup-form" method="POST" action="/auth/register">
+            <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            <h1>Inscription</h1>
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <p id="login-form-main-alert">{{ messages[0] }}</p>
+            {% endif %} {% endwith %}
+            <input type="text" name="name" class="name-input" id="signup-name-input" placeholder="Pseudo" required>
+            <input type="date" name="birthday" class="birthday-input" id="signup-birthday-input" max="2018-01-01" placeholder="Date de naissance" required>
+            <input type="email" name="email" class="email-input" id="signup-email-input" placeholder="Adresse e-mail" required>
+            <input type="password" name="password" class="password-input" id="signup-password-input" placeholder="Mot de passe" required>
+            <span class="separator"></span>
+            <button type="submit" class="submit-button" id="signup-submit-button">Inscription</button>
+        </form>
+        <span class="separator snd-separator"></span>
+        <div class="create-account-container">
+            <a href="{{ url_for('auth.login') }}" class="create-account">J'ai déjà un compte</a>
+        </div>
+    </section>
+    <script src="scripts/signup.js"></script>
+</body>
+
+</html>

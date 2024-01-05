@@ -6,50 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Word Quest{% endblock %}</title>
     <link rel="stylesheet" href="/static/styles/css/style-dashboard.css">
-    <script>
-        function redirect(el, event) {
-            event.preventDefault();
-
-            const href = el.getAttribute('href');
-
-            const body = document.querySelector('body');
-            body.style.gridTemplateColumns = '95px 1fr';
-            const main = document.querySelector('main');
-            main.style.opacity = '0';
-            main.style.transform = 'translateX(1000px)';
-
-            const responseLogo = document.querySelector('.responsive-logo');
-            responseLogo.style.transform = 'rotate(180deg)';
-
-            setTimeout(function() {
-                window.location.href = href;
-            }, 510);
-        }
-
-        function is_open() {
-            const body = document.querySelector('body');
-
-            return body.classList.contains('open');
-        }
-
-        function responsive(el, event) {
-            event.preventDefault();
-
-            const body = document.querySelector('body');
-
-            if (body.classList.contains('open')) {
-                body.classList.remove('open');
-            } else {
-                body.classList.add('open');
-            }
-        }
-    </script>
+    <script src="/static/styles/js/main.js"></script>
 </head>
 
 <body>
     <header class="{% block color %}{% endblock %}">
         <section class="nav-bar">
             <div>
+                <div class="phone-menu-logo" onclick="open_menu_phone(this)">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
                 <div class="account-logo clickable-logo">
                     <a href="/dashboard/profile" onclick="redirect(this, event)">
                         <img src="/static/icons/user-30-white.png" alt="logo">

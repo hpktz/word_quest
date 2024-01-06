@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 
-_dbserver = "localhost"
+_dbserver = os.getenv('DB_HOST')
 _dbuser = os.getenv('DB_USERNAME')
 _dbpass = os.getenv('DB_PASSWORD')
 _dbname = os.getenv('DB_NAME')

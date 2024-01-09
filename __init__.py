@@ -4,6 +4,7 @@ from flask_session import Session
 
 from auth import auth_bp  # Importez votre blueprint depuis le fichier account.py
 from main import main_bp  # Importez votre blueprint depuis le fichier home.py
+from create import create_bp    
 from models import User  # Assurez-vous d'importer votre classe User appropriée
 from root import *
 import os
@@ -42,6 +43,7 @@ def load_user(user_id):
 # Enregistrez votre blueprint
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)
+app.register_blueprint(create_bp)
 
 @app.before_request
 def before_request():

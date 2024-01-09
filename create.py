@@ -1,0 +1,148 @@
+from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session
+from flask_login import login_user, login_required, logout_user, current_user
+from root import *
+import random as random
+from lxml import html, etree
+import requests
+import uuid
+
+create_bp = Blueprint('create', __name__)
+
+class List:
+    def __init__(self):
+        self.list = []
+        self.last_searched = []
+
+    def add(self, id):
+        for word in self.last_searched:
+            if word['id'] == int(id):
+                word['id'] = str(uuid.uuid4())
+                self.list.append(word)
+                return word
+        return None
+        
+    def search(self, searched):
+        self.last_searched = searched
+
+    
+
+@create_bp.route('/dashboard/create')
+@login_required
+def create():
+    session['list_under_creation'] = List()
+    return render_template('dashboard/create.html')
+
+
+@create_bp.route('/dashboard/create/word-box')
+@login_required
+def word_box():
+    return render_template('dashboard/content/word-box.html')
+
+@create_bp.route('/dashboard/create/empty-word-box')
+@login_required
+def empty_word_box():
+    return render_template('dashboard/content/empty-word-box.html')
+
+@create_bp.route('/dashboard/create/search/<string:x>')
+@login_required
+def search(x): 
+    url = f"https://api.collinsdictionary.com/api/v1/dictionaries/english-french/entries/{x}_1"
+    headers = {
+        "Accept": "application/json",
+        "accessKey": "LGkl9HMIG0q59zJBitg9FQz9LXMphajPH6dM4QNvMOO1rt7EHuyyWAm6CRQnveK3",
+    }
+    if session['list_under_creation'] is None:
+        return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        resp_json = response.json()
+
+        def get_text_recursive(element):
+            text = element.text or ""
+            for child in element:
+                text += get_text_recursive(child)
+            return text
+
+        dom = html.fromstring(resp_json["entryContent"])
+        entries = dom.xpath("//div[@class='hom']")
+        senses = []
+        count = 0
+        for entry in entries:
+            for index, sense in enumerate(entry.iterchildren()):
+                if not isinstance(sense, html.HtmlElement):
+                    continue
+
+                if sense.get("class") == "sense":
+                    count += 1
+                    array = {
+                        "id": count,
+                        "type": entry.xpath(".//span[@class='pos']/text()")[0],
+                        "word": x,
+                        "french_translation": "",
+                        "examples": [],
+                        "french_translation_examples": []
+                    }
+                    word = sense.xpath("./span[@class='cit lang_fr']")
+                    if word:
+                        array["french_translation"] = get_text_recursive(word[0])
+                    else:
+                        continue
+                else:
+                    continue
+
+                # Examples
+                for example in sense.iterchildren():
+                    if not isinstance(example, html.HtmlElement):
+                        continue
+                    if example.get("id", "").split(".")[0] == f"{x}_1":
+                        french_examples = example.xpath(".//span[@class='cit lang_fr']")
+                        for f in french_examples:
+                            if get_text_recursive(f.getprevious()).encode("utf-8") == b', ':
+                                continue
+                            array["french_translation_examples"].append(get_text_recursive(f))
+
+                        english1 = example.xpath(".//span[@class='orth']/text()")
+                        if english1:
+                            array["examples"].append(english1[0])
+                        english2 = example.xpath("./span[@class='quote']/text()")
+                        if english2:
+                            array["examples"].append(english2[0])
+                        english3 = example.xpath(".//span[@class='cit']/span[@class='quote']/text()")
+                        for e in english3:
+                            array["examples"].append(e)
+
+                senses.append(array)
+
+        session['list_under_creation'].search(senses)
+        print(session['list_under_creation'].last_searched)
+
+        if len(senses) == 0:
+            return jsonify({"code": 404, "title": "Word not found", "result": []})
+        else:
+            return jsonify({"code": 200, "title": "Word found", "result": senses})
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
+            return jsonify({"code": 404, "title": "Word not found", "result": []})
+        elif err.response.status_code == 500:
+            return jsonify({"code": 500, "title": "Internal server error", "result": []})
+        
+@create_bp.route('/dashboard/create/add/<string:id>')
+@login_required
+def add(id):
+    if session['list_under_creation'] is None:
+        return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403
+
+    added = session['list_under_creation'].add(id)
+    print(added)
+    print(session['list_under_creation'].list)
+    if added is not None:
+        return jsonify({"code": 200, "title": "Word added", "result": added}), 200
+
+    return jsonify({"code": 404, "title": "Word not found", "result": []}), 404
+
+@create_bp.route('/dashboard/create/word-in-list')
+@login_required
+def word_in_list():
+    return render_template('dashboard/content/word-in-list.html')

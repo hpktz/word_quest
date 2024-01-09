@@ -1321,6 +1321,10 @@ main {
         grid-template-columns: 1fr;
         grid-template-rows: 95px 1fr;
     }
+    body.open {
+        grid-template-columns: 1fr;
+        grid-template-rows: 95px 1fr;
+    }
     header {
         width: calc(100% - 20px);
         height: 75px;

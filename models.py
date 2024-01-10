@@ -23,7 +23,7 @@ class User(UserMixin):
                 self.lives_wait = None
                 self.lists = None
                 return
-                
+                            
             name = user[1]
             birthday = user[2]
             email = user[7]
@@ -31,7 +31,6 @@ class User(UserMixin):
             gems = user[4]
             lives = user[5]
             lives_wait = user[6]
-
 
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM lists WHERE user_id = %s', (user_id,))
@@ -41,8 +40,8 @@ class User(UserMixin):
             results = []
             for list in lists:
                 results.append(dict(zip(columns, list)))
-                results[-1]["created_at"] = datetime.utcfromtimestamp(results[-1]["created_at"]).strftime("%d/%m/%Y")
-                results[-1]["updated_at"] = datetime.utcfromtimestamp(results[-1]["updated_at"]).strftime("%d/%m/%Y")
+                results[-1]["created_at"] = results[-1]["created_at"].date().strftime("%d/%m/%Y")
+                results[-1]["updated_at"] = results[-1]["updated_at"].date().strftime("%d/%m/%Y")
 
             cursor.close()
 

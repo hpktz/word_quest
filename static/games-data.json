@@ -42,5 +42,14 @@
         "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
         "url": "assimilation.html",
         "difficulty": 3
+    },
+    {
+        "id": 6,
+        "name": "Jeux d&apos;assimilation",
+        "desc": "Le jeu d&apos;assimilation est un jeu dans lequel le joueur doit cliquer sur les bonnes paires le plus rapidement possible alors que ces derni&egrave;re tombent.",
+        "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
+        "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
+        "url": "assimilation.html",
+        "difficulty": 5
     }
 ]

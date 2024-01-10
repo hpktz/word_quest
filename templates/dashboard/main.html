@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Word Quest{% endblock %}</title>
     <link rel="stylesheet" href="/static/styles/css/style-dashboard.css">
-    <script src="/static/styles/js/main.js"></script>
     {% block css %}{% endblock %}
+    <script src="/static/styles/js/main.js"></script>
+    <script src="/static/styles/js/alert.js"></script>
 </head>
 
 <body>
@@ -41,14 +42,9 @@
                         <img src="/static/icons/quest-30-dark-grey.png" alt="logo">
                     </a>
                 </div>
-                <div class="middle-logo clickable-logo {% block stats %}{% endblock %}">
-                    <a href="/dashboard/stats" onclick="redirect(this, event)">
-                        <img src="/static/icons/graph-30-dark-grey.png" alt="logo">
-                    </a>
-                </div>
-                <div class="middle-logo clickable-logo {% block user %}{% endblock %}">
-                    <a href="/dashboard/stats" onclick="redirect(this, event)">
-                        <img src="/static/icons/user-30-dark-grey.png" alt="logo">
+                <div class="middle-logo clickable-logo {% block discover %}{% endblock %}">
+                    <a href="/dashboard/discover" onclick="redirect(this, event)">
+                        <img src="/static/icons/compass-30-dark-grey.png" alt="logo">
                     </a>
                 </div>
                 <div class="dynamic-pointer"></div>
@@ -71,6 +67,20 @@
         </section>
     </header>
     {% block content %}{% endblock %}
+<section class="alert pop-up">
+    <div class="header">
+        <div class="title">Erreur</div>
+        <div class="close-logo clickable-logo">
+            <a href="" onclick="close_alert(this, event)">
+                <img src="/static/icons/close.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <img src="/static/icons/issue-100-red.png" class="img">
+    <div class="text">
+        Une erreur est survenue, veuillez réessayer plus tard.
+    </div>
+</section>
 </body>
 
 </html>

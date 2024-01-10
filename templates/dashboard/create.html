@@ -10,11 +10,12 @@
             </a>
         </div>
     </div>
-    <div class="form">
+    <form id="list-infos" class="form">
+        <div class="error-message"></div>
         <div class="input-title ">Le nom de votre liste</div>
         <input type="text" name="name" id="list-name" placeholder="Nom de la liste (requis)" required>
         <div class="input-title ">Description</div>
-        <textarea name="text" id="list-description" cols="30" rows="10" placeholder="Description de la liste"></textarea>
+        <textarea name="desc" id="list-description" cols="30" rows="10" placeholder="Description de la liste"></textarea>
         <div class="input-title ">Objectifs</div>
         <div class="goals-tab">
             <p class="subtitle">Temps</p>
@@ -62,13 +63,13 @@
         </div>
         <div class="notifications-tab">
             <p class="subtitle">Liste publique</p>
-            <input type="checkbox" name="pubic" id="pubic-1">
-            <label for="pubic-1"><span class="slider"></span></label>
+            <input type="checkbox" name="public" id="public-1">
+            <label for="public-1"><span class="slider"></span></label>
         </div>
-    </div>
+    </form>
 </div>
-<div class="create-button">Créer</div>
-{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
+<div class="create-button" onclick="create_list()">Créer</div>
+{% endblock %}{% block create %}selected{% endblock %} {% block content %}
 <main class="create-main-container">
     <div class="main-infos">
         <div class="title">Votre vocabulaire</div>
@@ -84,7 +85,7 @@
             <input type="text" class="search-bar" placeholder="Rechercher..." onkeydown="check_key(event)">
             <div class="search-logo clickable-logo">
                 <a onclick="search_word(event)">
-                    <img src="/static/icons/quest-30-dark-grey.png" alt="logo">
+                    <img src="/static/icons/search-30-white.png" alt="logo">
                 </a>
             </div>
         </div>
@@ -93,7 +94,7 @@
         <div class="text">Cliquez sur la défintion que vous souhaitez apprendre.</div>
         <div class="words-container">
             <div class="empty-word-box">
-                <img src="/static/imgs/3d-robot-assistant-sad.png" alt="search" class="img">
+                <img src="/static/imgs/3d-magnifier-with-wooden-handle.png" alt="search" class="img">
                 <p class="text"> Recherchez un mot pour continuer</p>
             </div>
         </div>
@@ -101,7 +102,7 @@
 
     <div class="list-in-construction">
         <div class="title">Contenu de votre liste</div>
-        <div class="list-container">
+        <div class="list-container" data-items_count="0">
             <div class="no-word-in-list">Vous n'avez pas de mot dans votre liste</div>
         </div>
     </div>

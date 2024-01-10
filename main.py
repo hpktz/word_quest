@@ -10,9 +10,15 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/dashboard')
 @login_required
 def index():
-    start_date = datetime.now().strftime("%d/%m/%Y")
-    end_date = datetime(1970, 1, 1).strftime("%d/%m/%Y")
+    start_date = datetime.now()
+    end_date = datetime(1970, 1, 1)
     for list in current_user.lists:
+        created_at = datetime.strptime(str(list["created_at"]), "%d/%m/%Y")
+        if created_at < start_date:
+            start_date = created_at
+        if created_at > end_date:
+            end_date = created_at
+        
         progress = 0
         for lesson in list["lessons"]:
             if lesson["completed"] == 1:
@@ -22,13 +28,8 @@ def index():
             continue
         list["progress"] = progress / len(list["lessons"]) * 100
 
-        if datetime.strptime(list["created_at"], "%d/%m/%Y") < datetime.strptime(start_date, "%d/%m/%Y"):
-            start_date = list["created_at"]
-        if datetime.strptime(list["created_at"], "%d/%m/%Y") > datetime.strptime(end_date, "%d/%m/%Y"):
-            end_date = list["created_at"]
-
-    start_date = datetime.strptime(start_date, "%d/%m/%Y").strftime("%Y-%m-%d")
-    end_date = datetime.strptime(end_date, "%d/%m/%Y").strftime("%Y-%m-%d")
+    start_date = start_date.date().strftime("%Y-%m-%d")
+    end_date = end_date.date().strftime("%Y-%m-%d")
 
     with open('static/daytime-tips.json') as json_file:
         tips = json.load(json_file)
@@ -48,6 +49,7 @@ def list(list_id):
             games_data = json.load(json_file)
 
         status = None
+        list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
         for game in list_result["lessons"]:
             game_data = [g for g in games_data if g["id"] == game["lesson_id"]][0]
             if game["completed"] == 1:
@@ -72,6 +74,7 @@ def list(list_id):
                 "completed": game["completed"]
             }
             games_result.append(game_result)
+            
         return render_template('dashboard/content/game-trail-template.html', list=list_result, games=games_result)
     except Exception as e:
         print(e)
@@ -94,11 +97,4 @@ def delete(list_id):
     finally:
         if cursor:
             cursor.close()
-        close_connection(conn)
-
-@main_bp.route('/dashboard/quests')
-@login_required
-def quests():
-    return render_template('dashboard/quests.html')
-
-    
+        close_connection(conn)  

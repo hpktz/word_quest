@@ -73,7 +73,7 @@ header.quests-color {
     --header-background: #717744;
 }
 
-header.stats-color {
+header.discover-color {
     --header-background: #BCBD8B;
 }
 
@@ -171,29 +171,24 @@ header .nav-bar .dynamic-pointer {
     background-color: #333;
     border-radius: 10px;
     transition: all 0.2s ease-in-out;
+    opacity: 0;
 }
 
-header .nav-bar .middle-logo:nth-child(1).selected~.dynamic-pointer {
-    top: 0;
-}
-
-header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer {
-    top: 45px;
-}
-
-header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer {
-    top: 90px;
-}
-
+header .nav-bar .middle-logo:nth-child(1).selected~.dynamic-pointer,
 header .nav-bar .middle-logo:nth-child(1):hover~.dynamic-pointer {
+    opacity: 1;
     top: 0;
 }
 
+header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer,
 header .nav-bar .middle-logo:nth-child(2):hover~.dynamic-pointer {
+    opacity: 1;
     top: 45px;
 }
 
+header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer,
 header .nav-bar .middle-logo:nth-child(3):hover~.dynamic-pointer {
+    opacity: 1;
     top: 90px;
 }
 
@@ -1105,7 +1100,7 @@ main {
     }
 }
 
-.dashboard-main-container .delete-list-pop-up {
+.pop-up {
     position: fixed;
     top: 200%;
     left: 50%;
@@ -1117,37 +1112,45 @@ main {
     padding: 10px;
     box-shadow: 0px 0px 10px 0 #959da536;
     transition: all 0.2s ease-in-out;
+    text-align: center;
 }
 
-.dashboard-main-container .delete-list-pop-up.active {
+.pop-up.active {
     top: 50%;
     box-shadow: 0px 0px 1000px 0 #959da5;
 }
 
-.dashboard-main-container .delete-list-pop-up .header {
+.pop-up .header {
     display: grid;
     grid-template-columns: 1fr 30px;
     gap: 10px;
     align-items: center;
 }
 
-.dashboard-main-container .delete-list-pop-up .header .title {
+.pop-up .header .title {
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
     font-weight: 600;
+    text-align: left;
 }
 
-.dashboard-main-container .delete-list-pop-up .header .close-logo {
+.pop-up .header .close-logo {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
-.dashboard-main-container .delete-list-pop-up .text {
+.pop-up .img {
+    width: 55px;
+    margin: auto;
+}
+
+.pop-up .text {
     font-family: 'League Spartan', sans-serif;
     font-size: 16px;
     margin-top: 15px;
     color: grey;
+    text-align: left;
 }
 
 .dashboard-main-container .delete-list-pop-up .submit-button {

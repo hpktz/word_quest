@@ -45,7 +45,7 @@
             </div>
         </div>
     </section>
-    <section class="lists-container" id="lists-container" data-lists="{{lists}}">
+    <section class="lists-container" id="lists-container">
         {% for list in lists %}
         <div class="list-box" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
             <div class="infos">
@@ -94,10 +94,10 @@
     </section>
     <div class="overlay-load-game">
         <div class="content">
-            <spanc class="loader"></spanc>
+            <span class="loader"></span>
         </div>
     </div>
-    <div class="delete-list-pop-up">
+    <div class="delete-list pop-up">
         <div class="header">
             <div class="title">Suppression de la liste</div>
             <div class="close-logo clickable-logo">

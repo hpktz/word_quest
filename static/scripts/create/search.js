@@ -1,5 +1,8 @@
 async function search_word(e) {
     e.preventDefault();
+    
+    const definitionsContainer = document.querySelector('.words-container');
+    definitionsContainer.innerHTML = '<div class="load"><div class="loader"></div></div>';
 
     const defContainerHtml = await (await fetch('/dashboard/create/word-box')).text();
     const defContainerEmptyHtml = await (await fetch('/dashboard/create/empty-word-box')).text();
@@ -11,7 +14,6 @@ async function search_word(e) {
         const searchResponse = await searchRequest.json();
 
         if (searchResponse.code === 200) {
-            const definitionsContainer = document.querySelector('.words-container');
             definitionsContainer.innerHTML = "";
 
             for (let i = 0; i < searchResponse.result.length; i++) {

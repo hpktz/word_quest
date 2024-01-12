@@ -7,12 +7,11 @@
             </a>
         </div>
     </div>
-    {% for game in games %} {% if game["status"] == "blocked" %} {% set game = {'id': game['id'], 'ord': game['ord'], 'name': "", 'short_desc': "", 'img': '/static/icons/games-icons/padlock-30-dark-grey.png', 'status': 'blocked', 'completed': 0} %} {% endif
-    %}
+    {% for game in games %} {% if game["status"] == "blocked" %} {% set game = {'id': game['id'], 'ord': game['ord'], 'name': "", 'short_desc': "", 'img': '/static/icons/games-icons/padlock-30-dark-grey.png', 'status': 'blocked', 'completed': 0} %} {% endif %}
     <div class="level {{game['status']}}" onclick="open_game_info(this)" data-game_infos="[{{game}}]">
         <img class="level-img" src="{{game['img']}}">
     </div>
-    {% endfor %} {% if games[0]['completed'] %}completed{% endif %}
+    {% endfor %}
     <div class="path step-1 {% if games[0]['completed'] %}completed{% endif %}"></div>
     <div class="path step-2 {% if games[1]['completed'] %}completed{% endif %}"></div>
     <div class="path step-3 {% if games[2]['completed'] %}completed{% endif %}"></div>
@@ -24,7 +23,7 @@
         <div class="level-infos-pop-up">
             <div class="title"></div>
             <div class="text"></div>
-            <div class="submit-button" onclick="open_game(this, event)"></div>
+            <div class="submit-button"></div>
         </div>
     </div>
 </div>

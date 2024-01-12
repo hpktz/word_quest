@@ -18,9 +18,6 @@ class User(UserMixin):
                 self.birthday = None
                 self.email = None
                 self.lvl = None
-                self.gems = None
-                self.lives = None
-                self.lives_wait = None
                 self.lists = None
                 return
                             
@@ -28,9 +25,6 @@ class User(UserMixin):
             birthday = user[2]
             email = user[7]
             lvl = user[3]
-            gems = user[4]
-            lives = user[5]
-            lives_wait = user[6]
 
             cursor = conn.cursor()
             cursor.execute('SELECT * FROM lists WHERE user_id = %s', (user_id,))
@@ -77,9 +71,6 @@ class User(UserMixin):
             self.birthday = birthday
             self.email = email
             self.lvl = lvl
-            self.gems = gems
-            self.lives = lives
-            self.lives_wait = lives_wait
             self.lists = results
 
         except Exception as e:
@@ -88,9 +79,6 @@ class User(UserMixin):
             self.birthday = None
             self.email = None
             self.lvl = None
-            self.gems = None
-            self.lives = None
-            self.lives_wait = None
             self.lists = None
 
         finally:

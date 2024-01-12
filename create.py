@@ -1,3 +1,18 @@
+"""
+This module contains the routes for creating a list.
+
+Imports:
+    - flask: For handling requests and responses.
+    - flask_login: For handling user sessions.
+    - root: The root module of the application.
+    - json: For parsing and generating JSON data.
+    - datetime: For handling dates and times.
+    - random: For generating random numbers.
+    - logging: For logging errors and other information.
+
+Blueprint:
+    - create_bp: The blueprint for the routes for creating a list.
+"""
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session
 from flask_login import login_user, login_required, logout_user, current_user
 from root import *
@@ -7,15 +22,55 @@ import requests
 import uuid
 import re
 import json
+import logging
 
 create_bp = Blueprint('create', __name__)
+"""
+The blueprint for the routes for creating a list.
 
-class List:
+Attributes:
+    - create_bp: The blueprint for the routes for creating a list.
+    
+Routes:
+    - /dashboard/create: To display the create page.
+    - /dashboard/create/word-box: To display the word box.
+    - /dashboard/create/empty-word-box: To display the empty word box.
+    - /dashboard/create/search/<string:x>: To search a word in the Collins API.
+    - /dashboard/create/add/<string:id>: To add a word to the list under creation.
+    - /dashboard/create/remove/<string:id>: To remove a word from the list under creation.
+    - /dashboard/create/word-in-list: To display the word in list.
+    - /dashboard/create/create-list: To create a list. 
+"""
+
+class WordList:
+    """
+    This class represents a list of words.
+    
+    Attributes:
+        - _list: The list of words.
+        - _last_searched: The last searched words.
+    
+    Methods:
+        - add: Add a word to the list.
+        - remove: Remove a word from the list.
+        - get_all: Get all the words in the list.
+        - length: Get the length of the list.
+        - search: Search a word in the list.
+    """
     def __init__(self):
         self._list = []
         self._last_searched = []
 
     def add(self, id):
+        """
+        Add a word to the list.
+
+        Args:
+            id (string): The ID of the word to add.
+
+        Returns:
+            dict: The added word if found in the last searched words, otherwise None.
+        """
         for word in self._last_searched:
             if word['id'] == id:
                 word['id'] = str(uuid.uuid4())
@@ -24,6 +79,15 @@ class List:
         return None
         
     def remove(self, id):
+        """
+        Remove a word from the list.
+
+        Args:
+            id (string): The ID of the word to remove.
+
+        Returns:
+            dict: The removed word if found in the list, otherwise None.
+        """
         for word in self._list:
             if word['id'] == id:
                 self._list.remove(word)
@@ -31,12 +95,30 @@ class List:
         return None
     
     def get_all(self):
+        """
+        Get all the words in the list.
+
+        Returns:
+            list: The list of words.
+        """
         return self._list
     
     def length(self):
+        """
+        Get the length of the list.
+
+        Returns:
+            int: The length of the list.
+        """
         return len(self._list)
         
     def search(self, searched):
+        """
+        Memorize the last searched words.
+
+        Args:
+            searched (list): The list of searched words.
+        """
         self._last_searched = searched
 
     
@@ -44,23 +126,59 @@ class List:
 @create_bp.route('/dashboard/create')
 @login_required
 def create():
-    session['list_under_creation'] = List()
+    """
+    Display the create page.
+
+    Returns:
+        flask.Response: The create page.
+    """
+    session['list_under_creation'] = WordList()
     return render_template('dashboard/create.html')
 
 
 @create_bp.route('/dashboard/create/word-box')
 @login_required
 def word_box():
+    """
+    Display the word box.
+    
+    Returns:
+        flask.Response: The word box.
+    """
     return render_template('dashboard/content/word-box.html')
 
 @create_bp.route('/dashboard/create/empty-word-box')
 @login_required
 def empty_word_box():
+    """
+    DIisplay the empty word box.
+
+    Returns:
+        flask.Response: The empty word box.
+    """
     return render_template('dashboard/content/empty-word-box.html')
 
 @create_bp.route('/dashboard/create/search/<string:x>')
 @login_required
 def search(x): 
+    """
+    Search a word in the Collins API.
+
+    Args:
+        x (string): The word to search.
+
+    Returns:
+        dict: The result of the search.
+            - code (int): The status code of the response.
+                -> 200: Word found.
+                -> 404: Word not found.
+                -> 500: Internal server error.
+            - title (string): The title of the response.
+            - result (list): The list of words if found, otherwise an empty list.
+
+    Raises:
+        Exception: If an error occurs while searching the word.
+    """
     url = f"https://api.collinsdictionary.com/api/v1/dictionaries/english-french/entries/{x}_1"
     headers = {
         "Accept": "application/json",
@@ -105,7 +223,6 @@ def search(x):
                 else:
                     continue
 
-                # Examples
                 for example in sense.iterchildren():
                     if not isinstance(example, html.HtmlElement):
                         continue
@@ -135,6 +252,7 @@ def search(x):
         else:
             return jsonify({"code": 200, "title": "Word found", "result": senses})
     except requests.exceptions.HTTPError as err:
+        logging.error("Error while fetching word: " + str(err), exc_info=True)
         if err.response.status_code == 404:
             return jsonify({"code": 404, "title": "Word not found", "result": []})
         elif err.response.status_code == 500:
@@ -143,6 +261,21 @@ def search(x):
 @create_bp.route('/dashboard/create/add/<string:id>')
 @login_required
 def add_to_list(id):
+    """
+    Add a word to the list under creation.
+
+    Args:
+        id (string): The ID of the word to add.
+
+    Returns:
+        dict: The result of the addition.
+            - code (int): The status code of the response.
+                -> 200: Word added.
+                -> 404: Word not found.
+                -> 500: Internal server error.
+            - title (string): The title of the response.
+            - result (dict): The added word if found in the last searched words, otherwise None.
+    """
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403
 
@@ -155,6 +288,21 @@ def add_to_list(id):
 @create_bp.route('/dashboard/create/remove/<string:id>')
 @login_required
 def remove_from_list(id):
+    """
+    Remove a word from the list under creation.
+
+    Args:
+        id (string): The ID of the word to remove.
+
+    Returns:
+        dict: The result of the removal.
+            - code (int): The status code of the response.
+                -> 200: Word removed.
+                -> 404: Word not found.
+                -> 500: Internal server error.
+            - title (string): The title of the response.
+            - result (dict): The removed word if found in the list, otherwise None.
+    """
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403
 
@@ -167,11 +315,34 @@ def remove_from_list(id):
 @create_bp.route('/dashboard/create/word-in-list')
 @login_required
 def word_in_list():
+    """
+    Display the word in list.
+
+    Returns:
+        flask.Response: The word in list.
+    """
     return render_template('dashboard/content/word-in-list.html')
 
 @create_bp.route('/dashboard/create/create-list', methods=['POST'])
 @login_required
 def create_list():
+    """
+    Create a list.
+
+    Returns:
+        dict : The result of the creation.
+            - code (int): The status code of the response.
+                -> 200: List created.
+                -> 400: Bad request.
+                -> 403: Access forbidden.
+                -> 500: Internal server error.
+            - title (string): The title of the response.
+            - message (string): The message of the response.
+                -> Only if the status code is 400.
+
+    Raises:
+        Exception: If an error occurs while creating the list.
+    """
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden"}), 403
     
@@ -189,79 +360,71 @@ def create_list():
     stats = data.get('stats')
     public = data.get('public')
 
-    cursor = None
-    conn = None
     try: 
-        conn = create_connection()
-        cursor = conn.cursor()
-        
-        regex = re.compile(r'^[a-zA-Z0-9\-/😀-🙏]+$')
-        if not regex.match(name) or not regex.match(desc):
-            return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
-        
-        if len(name) > 50 or len(desc) > 500:
-            return jsonify({"code": 400, "title": "Bad request", "message": "Trop de caractères"})
-        
-        if len(name) == 0:
-            return jsonify({"code": 400, "title": "Bad request", "message": "Nom invalide"})
-        
-        if time not in [5, 10, 15] or xp not in [10, 20, 30] or game not in [1, 2, 3]:
-            time = 5
-            xp = 10
-            game = 1
-        
-        if not isinstance(reminder, bool) or not isinstance(stats, bool) or not isinstance(public, bool):
-            reminder = False
-            stats = False
-            public = False
+        with create_connection() as conn, conn.cursor() as cursor:
+            regex = re.compile(r'^[a-zA-Z0-9\-/😀-🙏]+$')
+            if not regex.match(name) or not regex.match(desc):
+                return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
             
-        cursor.execute("INSERT INTO lists (title, description, tgt_time, tgt_xp, tgt_games, notif_remind, notif_stats, public, user_id, creator_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-                       (name, desc, time, xp, game, reminder, stats, public, current_user.id, current_user.id))
-        
-        list_id = cursor.lastrowid
-        
-        for word in session['list_under_creation'].get_all():
-            cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
-                           (word['word'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
+            if len(name) > 50 or len(desc) > 500:
+                return jsonify({"code": 400, "title": "Bad request", "message": "Trop de caractères"})
             
-        user_level = current_user.lvl
-        with open('static/games-data.json') as json_file:
-            levels = json.load(json_file)
-        
-        if user_level == 1:
-            levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
-        elif user_level == 5:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level, user_level]
-        else:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
+            if len(name) == 0:
+                return jsonify({"code": 400, "title": "Bad request", "message": "Nom invalide"})
             
-        data_levels = []
-        for levelnb, level in enumerate(levels_difficulty):
-            while len(data_levels) < 6 and level > 0:
-                possible_levels = []
-                for key, value in enumerate(levels):
-                    for data_level in data_levels:
-                        if data_level["name"] == value["name"]:
-                            break
-                    if value["difficulty"] == level:
-                            possible_levels.append(value)
-
-                if len(possible_levels) > 0:
-                    data_levels.append(random.choice(possible_levels))
-
-                level -= 1
-
-        data_levels = list(reversed(data_levels))
-        
-        for key, level in enumerate(data_levels):
-            cursor.execute("INSERT INTO lessons (list_id, lesson_id, odr) VALUES (%s, %s, %s)", 
-                           (list_id, level["id"], key+1))
+            if time not in [5, 10, 15] or xp not in [10, 20, 30] or game not in [1, 2, 3]:
+                time = 5
+                xp = 10
+                game = 1
             
-        return jsonify({"code": 200, "title": "List created"}), 200
+            if not isinstance(reminder, bool) or not isinstance(stats, bool) or not isinstance(public, bool):
+                reminder = False
+                stats = False
+                public = False
+                
+            cursor.execute("INSERT INTO lists (title, description, tgt_time, tgt_xp, tgt_games, notif_remind, notif_stats, public, user_id, creator_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                           (name, desc, time, xp, game, reminder, stats, public, current_user.id, current_user.id))
+            
+            list_id = cursor.lastrowid
+            
+            for word in session['list_under_creation'].get_all():
+                cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
+                               (word['word'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
+                
+            user_level = current_user.lvl
+            with open('static/games-data.json') as json_file:
+                levels = json.load(json_file)
+            
+            if user_level == 1:
+                levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
+            elif user_level == 5:
+                levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level, user_level]
+            else:
+                levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
+                
+            data_levels = []
+            for levelnb, level in enumerate(levels_difficulty):
+                while len(data_levels) < 6 and level > 0:
+                    possible_levels = []
+                    for key, value in enumerate(levels):
+                        for data_level in data_levels:
+                            if data_level["name"] == value["name"]:
+                                break
+                        if value["difficulty"] == level:
+                                possible_levels.append(value)
+    
+                    if len(possible_levels) > 0:
+                        data_levels.append(random.choice(possible_levels))
+    
+                    level -= 1
+    
+            data_levels = list(reversed(data_levels))
+            
+            for key, level in enumerate(data_levels):
+                cursor.execute("INSERT INTO lessons (list_id, lesson_id, odr) VALUES (%s, %s, %s)", 
+                               (list_id, level["id"], key+1))
+                
+            return jsonify({"code": 200, "title": "List created"}), 200
     except mysql.connector.Error as e:
-        print(e)
+        logging.error("Error while creating list: " + str(e), exc_info=True)
         return jsonify({"code": 500, "title": "Internal server error"}), 500
-    finally:
-        if cursor:
-            cursor.close()
-        close_connection(conn)

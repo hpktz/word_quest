@@ -75,7 +75,14 @@ async function create_list() {
             body: JSON.stringify(body)
         });
         const response = await request.json();
-        console.log(response);
+        const errorMess = document.getElementsByClassName('error-message')[0];
+        if (response.code === 200) {
+            window.location.href = '/dashboard?new_list=true';
+        } else if (response.code === 400) {
+            errorMess.innerHTML = response.message;
+        } else {
+            open_alert('Problème', 'Un problème est survenu lors de la création de la liste. Veuillez réessayer plus tard.');
+        }
     } catch (error) {
         console.log(error);
         open_alert('Problème', 'Un problème est survenu lors de la création de la liste. Veuillez réessayer plus tard.');

@@ -1,17 +1,20 @@
 function search(el) {
     var search = el.value;
-    var content = document.getElementsByClassName('lists-container')[0].dataset.lists;
-    content = content.replace(/'/g, '"');
-    content = JSON.parse(content);
 
     const searchResults = document.querySelector('.search-results');
     searchResults.innerHTML = "";
 
     const listsBoxContainer = document.getElementsByClassName('list-box');
     if (search.length > 0) {
-        var result = content.filter(function(item) {
-            return item.title.toLowerCase().includes(search.toLowerCase());
-        });
+        var result = [];
+        for (let i = 0; i < listsBoxContainer.length; i++) {
+            if (listsBoxContainer[i].dataset.list_name.toLowerCase().includes(search.toLowerCase())) {
+                result.push({
+                    id: listsBoxContainer[i].dataset.list_id,
+                    title: listsBoxContainer[i].dataset.list_name
+                });
+            }
+        }
         if (result.length > 0) {
             for (let i = 0; i < result.length; i++) {
                 var matchPart = result[i].title.toLowerCase().match(search.toLowerCase())[0];

@@ -131,7 +131,7 @@ function close_level_popup(el, event) {
 function delete_list(el, event, id) {
     event.preventDefault();
 
-    const deleteListPopUp = document.getElementsByClassName('delete-list-pop-up')[0];
+    const deleteListPopUp = document.getElementsByClassName('delete-list')[0];
     deleteListPopUp.classList.add('active');
     var link = "/dashboard/delete/" + id;
     document.getElementById('delete-list-redirect').setAttribute('href', link);
@@ -140,6 +140,102 @@ function delete_list(el, event, id) {
 function close_delete_list(el, event) {
     event.preventDefault();
 
-    const deleteListPopUp = document.getElementsByClassName('delete-list-pop-up')[0];
+    const deleteListPopUp = document.getElementsByClassName('delete-list')[0];
     deleteListPopUp.classList.remove('active');
 }
+
+function open_lives(el) {
+    const livesContainer = document.getElementsByClassName('lives-pop-up')[0]; 
+    livesContainer.style.top = (el.offsetTop + 40) + "px";
+    livesContainer.style.left = (el.offsetLeft-230) + "px";
+    el.classList.add('active');
+}
+
+function close_lives(el, e) {
+    e.preventDefault();
+    if (e.target.classList.contains('lives-zone')) {
+        return;
+    }
+    const livesBox = document.getElementById('lives-box');
+    livesBox.classList.remove('active');
+    const livesContainer = document.getElementsByClassName('lives-pop-up')[0]; 
+    livesContainer.style.top = "-300px";
+}
+
+async function lives_counter() {
+    const counter = document.getElementById('lives-counter');
+    const lives = counter.dataset.lives;
+    const start_date = new Date(counter.dataset.time);
+    const end_date = new Date(start_date.getTime() + 15 * 60 * 1000);
+
+    
+    if (parseInt(lives) == 5) {
+        counter.innerHTML = "Vous avez toutes vos vies";
+        counter.dataset.time = new Date();
+        document.getElementById('life-purchase-button').style.display = "none";
+        return;
+    }
+
+    var interval = setInterval(function() {
+        if (counter.dataset.lives != lives) {
+            lives_counter();
+            return clearInterval(interval);
+        }
+        var now = new Date();
+        var diff = end_date - now;
+        console.log(diff);
+        if (diff < 0) {          
+            counter.dataset.lives = parseInt(lives) + 1;
+            document.getElementById('lives-info').innerHTML = parseInt(lives) + 1;
+            counter.dataset.time = new Date();
+            const heartContainer = document.getElementsByClassName('heart-container')[0];
+            heartContainer.getElementsByClassName('img')[lives].src = "/static/imgs/3d-red-heart.png";
+            lives_counter();
+            return clearInterval(interval);
+        }
+        var minutes = Math.floor(diff / 60000);
+        var seconds = ((diff % 60000) / 1000).toFixed(0);
+
+        counter.innerHTML = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    }, 1000);
+
+    interval;
+}
+
+async function purchase_lives(el, event) {
+    event.preventDefault();
+    const response = await fetch('/dashboard/lives/purchase');
+    try {
+        const data = await response.json();
+        if (data.code == 200) {
+            const counter = document.getElementById('lives-counter');
+            const lives = counter.dataset.lives;
+            const time = counter.dataset.time;
+            counter.dataset.lives = parseInt(lives) + 1;
+            counter.dataset.time = time;
+
+            const heartContainer = document.getElementsByClassName('heart-container')[0];
+            heartContainer.getElementsByClassName('img')[lives].src = "/static/imgs/3d-red-heart.png";
+
+            const userInfos = document.getElementsByClassName('user-infos')[0];
+            const livesInfo = document.getElementById('lives-info');
+            livesInfo.innerHTML = parseInt(lives) + 1;
+            userInfos.getElementsByClassName('box')[2].classList.add('pulse');
+
+            const gemsInfo = document.getElementById('gems-info');
+            gemsInfo.innerHTML = data.gems;
+            userInfos.getElementsByClassName('box')[0].classList.add('pulse');
+            setTimeout(function() {
+                userInfos.getElementsByClassName('box')[0].classList.remove('pulse');
+                userInfos.getElementsByClassName('box')[2].classList.remove('pulse');
+            }, 2000);
+        } else {
+            open_alert("Achat impossible", "Vous n'avez peut-être pas assez de points pour acheter des vies");
+        }
+    } catch (e) {
+        console.log(e);
+        open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard")
+    }
+}
+
+window.onload = lives_counter();

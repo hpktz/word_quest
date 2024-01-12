@@ -50,6 +50,12 @@ function open_menu_phone(el) {
     }
 }
 
+function close_boxes(el, event) {
+    event.preventDefault();
+    close_info_box(el, event);
+    close_lives(el, event);
+}
+
 function open_info_box(el, event) {
     event.preventDefault();
     el.setAttribute('onclick', 'close_info_box(this, event)');

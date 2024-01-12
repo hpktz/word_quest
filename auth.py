@@ -90,9 +90,9 @@ def login_post():
                         return redirect(url_for('auth.login'))
             if session["2fa"]["email"] != email:
                 password = password_input.encode('utf-8')
-                if bcrypt.checkpw(password, data[8].encode('utf-8')):
-                    if data[12] == True:
-                        if data[9] == False:
+                if bcrypt.checkpw(password, data[5].encode('utf-8')):
+                    if data[9] == True:
+                        if data[6] == False:
                             user = User(data[0])
                             login_user(user)
                             session.pop("login_tries")
@@ -183,7 +183,7 @@ def register_post():
             cursor.execute(f"SELECT * FROM users WHERE email='{email}'")
             data = cursor.fetchone()
 
-            if data and data[12] == True:
+            if data and data[9] == True:
                 flash("Email déjà utilisé")
                 return redirect(url_for('auth.register'))
             else:
@@ -201,13 +201,15 @@ def register_post():
                         return redirect(url_for('auth.register'))
                     
                     if data:
-                        if data[9] != 0:
+                        if data[6] != 0:
                             flash("Email déjà utilisé")
                             return redirect(url_for('auth.register'))
                         else:
                             cursor.execute("UPDATE users SET name=%s, birthday=%s, password=%s WHERE email=%s", (name, birthday, hashed, email))
                     else:
                         cursor.execute("INSERT INTO users (name, birthday, email, password) VALUES (%s, %s, %s, %s)", (name, birthday, email, hashed))
+                        user_id = cursor.lastrowid
+                        cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, %s, %s),(%s, %s, %s)", (user_id,"gems",200,user_id,"lives",5))
                     
                     secret_key = pyotp.random_base32()
                     totp = pyotp.TOTP(secret_key, interval=120)

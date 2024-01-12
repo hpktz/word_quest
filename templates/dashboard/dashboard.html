@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="search-bar-container">
-        <input class="search-bar" type="text" placeholder="Votre recherche" onfocus="open_info_box()" onblur="close_info_box()" onkeyup="search(this)">
+        <input class="search-bar" type="text" placeholder="Votre recherche" onkeyup="search(this)">
         <img src="/static/icons//search-30-dark-grey.png" class="img" alt="search-icon">
     </div>
     <div class="search-results"> </div>
@@ -20,11 +20,38 @@
     <img src="/static/imgs/3d-young-man-with-coffee-standing-and-speaking.png" class="img" alt="tips-illustration">
 </div>
 {% endblock %} {% block daytime_tip %} {{daytime_tip}} {% endblock %} {% block content %}
-<main class="dashboard-main-container" onclick="close_info_box(this, event)">
+<main class="dashboard-main-container" onclick="close_boxes(this, event)">
     <section class="main-infos">
         <div class="title">MES LISTES</div>
         <div class="user-infos">
-            <div></div>
+            <div class="box">
+                <img src="/static/imgs/3d-pink-gemstone.png" class="img" alt="medal-icon">
+                <div class="text" id="gems-info">{{gems}}</div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-flash-on.png" class="img" alt="medal-icon">
+                <div class="text">{{xp}}</div>
+            </div>
+            <div class="box lives-zone" id="lives-box" onclick="open_lives(this)">
+                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                <div class="text lives-zone" id="lives-info">{{lives}}</div>
+            </div>
+            <div class="lives-pop-up lives-zone">
+                <div class="triangle lives-zone"></div>
+                <div class="container lives-zone">
+                    <div class="heart-container lives-zone">
+                        {% for index in range(5) %}
+                            {% if index < lives %}
+                                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                            {% else %}
+                                <img src="/static/imgs/3d-white-heart.png" class="img lives-zone" alt="medal-icon">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}">Vous avez tout vos coeur</div>
+                    <a href="" onclick="purchase_lives(this, event)" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
+                </div>
+            </div>
         </div>
         <div class="filters">
             <div class="creation-date">
@@ -47,7 +74,12 @@
     </section>
     <section class="lists-container" id="lists-container">
         {% for list in lists %}
-        <div class="list-box" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
+        {% if new_list_id == list['id'] %}
+            {% set css_class = "new-list" %}
+        {% else %}
+            {% set css_class = "" %}
+        {% endif %}
+        <div class="list-box {{ css_class }}" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
             <div class="infos">
                 <div class="creation">
                     <p>Créée le {{ list["created_at"] }}</p>
@@ -110,7 +142,7 @@
             Êtes-vous sûr de vouloir supprimer cette liste ? Cette action est irréversible.<br/><br/> Si vous souhaitez retourner à la liste des listes, fermez cette fenêtre.
         </div>
         <div class="submit-button">
-            <a id="delete-list-redirect" href="">Supprimer</a>
+            <a href="" id="delete-list-redirect">Supprimer</a>
         </div>
     </div>
     <script src="/static/scripts/dashboard/search.js"></script>

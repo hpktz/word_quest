@@ -1,8 +1,17 @@
+/**
+ * Opens the game information and updates the UI based on the provided game information.
+ * 
+ * @function open_game_info
+ * @param {HTMLElement} el - The element that triggered the function.
+ * @returns {void}
+ */
 function open_game_info(el) {
+    // get the game information
     var gameInfos = el.dataset.game_infos;
     gameInfos = gameInfos.replace(/'/g, '"');
     gameInfos = JSON.parse(gameInfos);
 
+    // update the UI based on the game information
     for (let i = 0; i < document.getElementsByClassName('level').length; i++) {
         document.getElementsByClassName('level')[i].classList.remove('selected');
     }
@@ -15,6 +24,7 @@ function open_game_info(el) {
         levelInfosPopUpContainer.classList.remove('level-info-entry');
     }, 301);
 
+    // update the UI based on the game information
     var levelInfoTitle = levelInfosPopUpContainer.getElementsByClassName('title')[0];
     var levelInfoText = levelInfosPopUpContainer.getElementsByClassName('text')[0];
     var levelInfoSubmitButton = levelInfosPopUpContainer.getElementsByClassName('submit-button')[0];
@@ -34,6 +44,7 @@ function open_game_info(el) {
         levelInfoSubmitButton.innerHTML = "<a href='" + gameInfos[0].url + "/" + gameInfos[0].list_id + "' onclick='open_game(this, event)'>Jouer</a>";
     }
 
+    // update the position of the game information popup
     setTimeout(function() {
         const overlay = document.getElementsByClassName('overlay-load-game')[0];
         var rect = levelInfoSubmitButton.getBoundingClientRect();
@@ -46,6 +57,14 @@ function open_game_info(el) {
     }, 301);
 }
 
+/**
+ * Opens a game (opening a loading popup).
+ * 
+ * @function open_game
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
 function open_game(el, event) {
     event.preventDefault();
 
@@ -65,12 +84,22 @@ function open_game(el, event) {
     }, 2000)
 }
 
+/**
+ * Opens the game trail and loads the game data for the selected game list. (by making a request to the server)
+ * 
+ * @async
+ * @function open_game_trail
+ * @param {HTMLElement} el - The element representing the selected game list.
+ * @param {Event} event - The event object triggered by the user action.
+ * @returns {Promise<void>} - A promise that resolves when the game trail is opened and the game data is loaded.
+ */
 async function open_game_trail(el, event) {
     console.log(event.target);
     if (event.target.classList.contains('delete-zone')) {
         return;
     }
 
+    // close all the different popups
     if (is_open()) {
         const arrow = document.getElementsByClassName('close-logo')[0].children[0];
         responsive(arrow, event);
@@ -92,12 +121,14 @@ async function open_game_trail(el, event) {
 
     const id = el.dataset.list_id;
     const color = position % 3;
+    // get the game trail from the server
     const response = await fetch(`/dashboard/games/${id}`);
     const data = await response.text();
     const gamesTrail = document.getElementsByClassName('games-trail')[0];
     gamesTrail.innerHTML = data;
     gamesTrail.dataset.color = color;
 
+    // update the UI based on the game trail
     const listsBoxContainer = document.getElementsByClassName('list-box');
     for (let i = 0; i < listsBoxContainer.length; i++) {
         listsBoxContainer[i].classList.remove('selected');
@@ -105,6 +136,14 @@ async function open_game_trail(el, event) {
     el.classList.add('selected');
 }
 
+/**
+ * Closes the game trail.
+ * 
+ * @function close_game_trail
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
 function close_game_trail(el, event) {
     event.preventDefault();
     const trailContainer = document.getElementsByClassName('games-trail')[0];
@@ -115,6 +154,14 @@ function close_game_trail(el, event) {
     }, 1000);
 }
 
+/**
+ * Closes the level popup if the click event target is the popup container.
+ * 
+ * @function close_level_popup
+ * @param {HTMLElement} el - The element representing the level popup container.
+ * @param {Event} event - The click event object.
+ * @returns {void}
+ */
 function close_level_popup(el, event) {
     if (event.target === el) {
         var levelInfosPopUpContainer = document.getElementsByClassName('level-infos-pop-up-container')[0];
@@ -128,6 +175,15 @@ function close_level_popup(el, event) {
     }
 }
 
+/**
+ * Open a popup to check if the user wants to delete the selected list.
+ *  -> Changes the href attribute of the delete button to the correct URL.
+ * 
+ * @function delete_list
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * @param {number} id - The ID of the list to be deleted.
+ */
 function delete_list(el, event, id) {
     event.preventDefault();
 
@@ -137,6 +193,14 @@ function delete_list(el, event, id) {
     document.getElementById('delete-list-redirect').setAttribute('href', link);
 }
 
+/**
+ * Closes the delete list popup.
+ * 
+ * @function close_delete_list
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
 function close_delete_list(el, event) {
     event.preventDefault();
 
@@ -144,6 +208,13 @@ function close_delete_list(el, event) {
     deleteListPopUp.classList.remove('active');
 }
 
+/**
+ * Opens the lives pop-up and positions it relative to the given element.
+ * 
+ * @function open_lives
+ * @param {HTMLElement} el - The element that triggered the opening of the lives pop-up.
+ * @returns {void}
+ */
 function open_lives(el) {
     const livesContainer = document.getElementsByClassName('lives-pop-up')[0]; 
     livesContainer.style.top = (el.offsetTop + 40) + "px";
@@ -151,6 +222,14 @@ function open_lives(el) {
     el.classList.add('active');
 }
 
+/**
+ * Closes the lives pop-up box.
+ * 
+ * @function close_lives
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} e - The event object.
+ * @returns {void}
+ */
 function close_lives(el, e) {
     e.preventDefault();
     if (e.target.classList.contains('lives-zone')) {
@@ -162,13 +241,22 @@ function close_lives(el, e) {
     livesContainer.style.top = "-300px";
 }
 
+/**
+ * Updates the lives counter and displays the remaining time for the next life.
+ *  -> This function is only used to update the UI. 
+ *     (the amount of lives is updated by the server when the user purchases lives or when he refreshes the page)
+ * 
+ * @async
+ * @function lives_counter
+ * @returns {void}
+ */
 async function lives_counter() {
     const counter = document.getElementById('lives-counter');
     const lives = counter.dataset.lives;
     const start_date = new Date(counter.dataset.time);
     const end_date = new Date(start_date.getTime() + 15 * 60 * 1000);
 
-    
+    // if the user has all his lives, the lives counter is updated and the function is stopped    
     if (parseInt(lives) == 5) {
         counter.innerHTML = "Vous avez toutes vos vies";
         counter.dataset.time = new Date();
@@ -177,13 +265,16 @@ async function lives_counter() {
     }
 
     var interval = setInterval(function() {
+        // if there is a change in the number of lives, the lives counter is updated and the function is stopped
         if (counter.dataset.lives != lives) {
             lives_counter();
             return clearInterval(interval);
         }
+
         var now = new Date();
         var diff = end_date - now;
-        console.log(diff);
+        
+        // if the time is up, the lives counter is updated and the function is stopped
         if (diff < 0) {          
             counter.dataset.lives = parseInt(lives) + 1;
             document.getElementById('lives-info').innerHTML = parseInt(lives) + 1;
@@ -199,14 +290,26 @@ async function lives_counter() {
         counter.innerHTML = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     }, 1000);
 
+    // start the countdown
     interval;
 }
 
+/**
+ * Purchase lives function. (by sending a request to the server)
+ * 
+ * @async
+ * @function purchase_lives
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * @returns {Promise<void>} - A promise that resolves when the function completes.
+ */
 async function purchase_lives(el, event) {
     event.preventDefault();
+    // request to purchase lives
     const response = await fetch('/dashboard/lives/purchase');
     try {
         const data = await response.json();
+        // if the request is successful, the lives counter is updated, and the UI is updated
         if (data.code == 200) {
             const counter = document.getElementById('lives-counter');
             const lives = counter.dataset.lives;
@@ -222,6 +325,7 @@ async function purchase_lives(el, event) {
             livesInfo.innerHTML = parseInt(lives) + 1;
             userInfos.getElementsByClassName('box')[2].classList.add('pulse');
 
+            // UI animation
             const gemsInfo = document.getElementById('gems-info');
             gemsInfo.innerHTML = data.gems;
             userInfos.getElementsByClassName('box')[0].classList.add('pulse');
@@ -230,6 +334,7 @@ async function purchase_lives(el, event) {
                 userInfos.getElementsByClassName('box')[2].classList.remove('pulse');
             }, 2000);
         } else {
+            // if the request is not successful, an alert box is displayed
             open_alert("Achat impossible", "Vous n'avez peut-être pas assez de points pour acheter des vies");
         }
     } catch (e) {

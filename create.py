@@ -179,6 +179,7 @@ def search(x):
     Raises:
         Exception: If an error occurs while searching the word.
     """
+    # Call the Collins API
     url = f"https://api.collinsdictionary.com/api/v1/dictionaries/english-french/entries/{x}_1"
     headers = {
         "Accept": "application/json",
@@ -198,14 +199,19 @@ def search(x):
                 text += get_text_recursive(child)
             return text
 
+        # Parse the response (HTML)
         dom = html.fromstring(resp_json["entryContent"])
+        
+        # Start html code analysis
         entries = dom.xpath("//div[@class='hom']")
         senses = []
         for entry in entries:
             for index, sense in enumerate(entry.iterchildren()):
+                # Skip if not an HtmlElement
                 if not isinstance(sense, html.HtmlElement):
                     continue
 
+                # Create the array with basic informations
                 if sense.get("class") == "sense":
                     array = {
                         "id": str(uuid.uuid4()),
@@ -215,6 +221,7 @@ def search(x):
                         "examples": [],
                         "french_translation_examples": []
                     }
+                    # Retrieve the french translation
                     word = sense.xpath("./span[@class='cit lang_fr']")
                     if word:
                         array["french_translation"] = get_text_recursive(word[0])
@@ -223,16 +230,21 @@ def search(x):
                 else:
                     continue
 
+                # Retrieve the examples
                 for example in sense.iterchildren():
+                    # Skip if not an HtmlElement
                     if not isinstance(example, html.HtmlElement):
                         continue
                     if example.get("id", "").split(".")[0] == f"{x}_1":
+                        # Select all the french elements
                         french_examples = example.xpath(".//span[@class='cit lang_fr']")
                         for f in french_examples:
+                            # Check if there is many french examples for one english example
                             if get_text_recursive(f.getprevious()).encode("utf-8") == b', ':
                                 continue
                             array["french_translation_examples"].append(get_text_recursive(f))
 
+                        # Explore all the english elements
                         english1 = example.xpath(".//span[@class='orth']/text()")
                         if english1:
                             array["examples"].append(english1[0])
@@ -245,6 +257,7 @@ def search(x):
 
                 senses.append(array)
 
+        # Memorize the last searched words
         session['list_under_creation'].search(senses)
 
         if len(senses) == 0:
@@ -351,6 +364,7 @@ def create_list():
 
     data = request.json
 
+    # Get the data
     name = data.get('name')
     desc = data.get('desc')
     time = data.get('time')
@@ -362,6 +376,7 @@ def create_list():
 
     try: 
         with create_connection() as conn, conn.cursor() as cursor:
+            # Check if the list name and description are valid
             regex = re.compile(r'^[a-zA-Z0-9\-/😀-🙏]+$')
             if not regex.match(name) or not regex.match(desc):
                 return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
@@ -372,29 +387,36 @@ def create_list():
             if len(name) == 0:
                 return jsonify({"code": 400, "title": "Bad request", "message": "Nom invalide"})
             
+            # Check if time, xp and game are valid
             if time not in [5, 10, 15] or xp not in [10, 20, 30] or game not in [1, 2, 3]:
                 time = 5
                 xp = 10
                 game = 1
             
+            # Check if reminder, stats and public are valid
             if not isinstance(reminder, bool) or not isinstance(stats, bool) or not isinstance(public, bool):
                 reminder = False
                 stats = False
                 public = False
                 
+            # Create the list
             cursor.execute("INSERT INTO lists (title, description, tgt_time, tgt_xp, tgt_games, notif_remind, notif_stats, public, user_id, creator_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
                            (name, desc, time, xp, game, reminder, stats, public, current_user.id, current_user.id))
             
+            # Get the list ID
             list_id = cursor.lastrowid
             
+            # Add the words to the list
             for word in session['list_under_creation'].get_all():
                 cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
                                (word['word'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
                 
+            # Get the user level
             user_level = current_user.lvl
             with open('static/games-data.json') as json_file:
                 levels = json.load(json_file)
             
+            # Set the levels difficulty according to the user level
             if user_level == 1:
                 levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
             elif user_level == 5:
@@ -402,9 +424,11 @@ def create_list():
             else:
                 levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
                 
+            # Choose the levels according to the levels difficulty
             data_levels = []
             for levelnb, level in enumerate(levels_difficulty):
                 while len(data_levels) < 6 and level > 0:
+                    # Select the possible levels
                     possible_levels = []
                     for key, value in enumerate(levels):
                         for data_level in data_levels:
@@ -413,13 +437,16 @@ def create_list():
                         if value["difficulty"] == level:
                                 possible_levels.append(value)
     
+                    # Select a random level among the possible levels
                     if len(possible_levels) > 0:
                         data_levels.append(random.choice(possible_levels))
     
                     level -= 1
     
+            # Reverse the levels
             data_levels = list(reversed(data_levels))
             
+            # Add the levels to the list
             for key, level in enumerate(data_levels):
                 cursor.execute("INSERT INTO lessons (list_id, lesson_id, odr) VALUES (%s, %s, %s)", 
                                (list_id, level["id"], key+1))

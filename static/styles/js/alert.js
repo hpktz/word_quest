@@ -1,3 +1,12 @@
+
+/**
+ * Opens an alert box with the specified title and description.
+ * 
+ * @function open_alert
+ * @param {string} title - The title of the alert box.
+ * @param {string} desc - The description of the alert box.
+ * @returns {void}
+ */
 function open_alert(title, desc) {
     const alertBox = document.querySelector('.alert');
     const header = document.getElementsByTagName('header')[0];
@@ -14,6 +23,14 @@ function open_alert(title, desc) {
     main.style.pointerEvents = 'none';
 }
 
+/**
+ * Closes the alert box.
+ * 
+ * @function close_alert
+ * @param {HTMLElement} el - The element representing the alert box.
+ * @param {Event} e - The event that triggered the function.
+ * @returns {void}
+ */
 function close_alert(el, e) {
     e.preventDefault();
 

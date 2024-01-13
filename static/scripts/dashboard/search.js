@@ -1,3 +1,11 @@
+/**
+ * Performs a search based on the provided input value. (by checking the value of each list box)
+ *  -> If the request is successful, the search results are displayed on the page.
+ * 
+ * @function search
+ * @param {HTMLInputElement} el - The input element containing the search value.
+ * @returns {void}
+ */
 function search(el) {
     var search = el.value;
 
@@ -7,8 +15,11 @@ function search(el) {
     const listsBoxContainer = document.getElementsByClassName('list-box');
     if (search.length > 0) {
         var result = [];
+        // browse the list boxes
         for (let i = 0; i < listsBoxContainer.length; i++) {
+            // if the list box contains the search value
             if (listsBoxContainer[i].dataset.list_name.toLowerCase().includes(search.toLowerCase())) {
+                // add the list box to the result array
                 result.push({
                     id: listsBoxContainer[i].dataset.list_id,
                     title: listsBoxContainer[i].dataset.list_name
@@ -17,6 +28,7 @@ function search(el) {
         }
         if (result.length > 0) {
             for (let i = 0; i < result.length; i++) {
+                // highlight the search value in the result
                 var matchPart = result[i].title.toLowerCase().match(search.toLowerCase())[0];
                 var matchIndex = result[i].title.toLowerCase().indexOf(matchPart);
                 var matchLength = matchPart.length;
@@ -32,6 +44,7 @@ function search(el) {
 
                 const container = document.createElement('p');
                 container.classList.add('content');
+                // when the user clicks on the search result, the corresponding list box is displayed
                 container.addEventListener('click', function(event) {
                     open_game_trail(element, event);
                 });

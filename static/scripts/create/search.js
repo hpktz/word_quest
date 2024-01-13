@@ -1,21 +1,35 @@
+/**
+ * Performs a word search and displays the search results on the page. (by sending a request to the server)
+ *  -> This function is called when the user clicks on the search button.
+ *  -> This function shows a loader while the search is being performed.
+ *  -> This function displays the search results in a word box.
+ * 
+ * @async
+ * @function search_word
+ * @param {Event} e - The event object.
+ * @returns {Promise<void>} - A promise that resolves once the search results are displayed.
+ * @throws {Error} - If an error occurs during the search process.
+ */
 async function search_word(e) {
     e.preventDefault();
     
     const definitionsContainer = document.querySelector('.words-container');
     definitionsContainer.innerHTML = '<div class="load"><div class="loader"></div></div>';
 
+    // get the html of the word box
     const defContainerHtml = await (await fetch('/dashboard/create/word-box')).text();
     const defContainerEmptyHtml = await (await fetch('/dashboard/create/empty-word-box')).text();
 
     const searchInput = document.querySelector('.search-bar').value.toLowerCase();
+    // get the search results (by making a request to the server)
     const searchRequest = await fetch(`/dashboard/create/search/${searchInput}`);
 
     try {
         const searchResponse = await searchRequest.json();
-
         if (searchResponse.code === 200) {
             definitionsContainer.innerHTML = "";
-
+            // display the search results by replacing the loader with the word box
+            // and by changing the content of the word box
             for (let i = 0; i < searchResponse.result.length; i++) {
                 definitionsContainer.innerHTML += defContainerHtml;
 
@@ -31,14 +45,23 @@ async function search_word(e) {
                 }
             }
         } else {
+            // if there is no search result, the word box is replaced by the "no word box" message
             document.querySelector('.words-container').innerHTML = defContainerEmptyHtml;
         }
     } catch (error) {
-        console.log(error);
+        // if an error occurs during the search process, the word box is replaced by the "no word box" message
         document.querySelector('.words-container').innerHTML = defContainerEmptyHtml;
     }
 }
 
+/**
+ * Checks if the enter key was pressed.
+ * -> If the enter key was pressed, the search_word function is called.
+ * 
+ * @function check_key
+ * @param {Event} e - The event object.
+ * @returns {void}
+ */
 function check_key(e) {
     if (e.keyCode === 13) {
         search_word(e);

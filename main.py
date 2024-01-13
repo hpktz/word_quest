@@ -47,19 +47,24 @@ def index():
     Raises:
         Exception: If an error occurs while fetching the user statements.
     """
+    
+    # Check if the user is coming from the create page
     new_list_param = request.args.get('new_list')
     is_new_list = new_list_param and new_list_param.lower() == 'true'
     
+    # Calculate the start and end date of the user's journey
     start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)
     start_date = start_date.date().strftime("%Y-%m-%d")
 
     end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)    
     end_date = end_date.date().strftime("%Y-%m-%d")
     
+    # Calculate the progress of each list
     for lst in current_user.lists:
         progress = sum(1 for lesson in lst["lessons"] if lesson["completed"] == 1)
         lst["progress"] = round((progress / len(lst["lessons"]) * 100), 0) if progress != 0 else 5 
 
+    # Retrieve a random daytime tip
     with open('static/daytime-tips.json') as json_file:
         tips = json.load(json_file)
 
@@ -67,6 +72,7 @@ def index():
     
     try:
         with create_connection() as conn, conn.cursor() as cursor:
+            # Retrieve the user's amount of gems, lives and XP
             cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS sum_gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS sum_lives, MAX(CASE WHEN transaction_type = 'lives' THEN created_at ELSE 0 END) AS last_live, SUM(CASE WHEN transaction_type = 'xp' THEN transaction ELSE 0 END) AS sum_xp FROM user_statements WHERE user_id = %s ORDER BY created_at DESC LIMIT 1;", (current_user.id,))
             user_statement = cursor.fetchone()
             gems = user_statement[0]
@@ -74,6 +80,7 @@ def index():
             lives_time = user_statement[2]
             xp = user_statement[3]
             
+            # Checking if the user is eligible for potential news lives
             if lives != 5:
                 life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
                 life_time = life_time + timedelta(minutes=15)
@@ -88,6 +95,7 @@ def index():
         gems = 0
         lives = 0
         
+    # Sort the lists by ID in descending order
     lists = sorted(current_user.lists, key=lambda k: k['id'], reverse=True)
     new_list_id = lists[0]["id"] if is_new_list else None
     
@@ -123,15 +131,17 @@ def purchase_lives():
     """
     try:
         with create_connection() as conn, conn.cursor() as cursor:
+            # Retrieve the user's amount of gems and lives
             cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS lives FROM user_statements WHERE user_id = %s;", (current_user.id,))
             user_statement = cursor.fetchone()
             gems = user_statement[0]
             lives = user_statement[1]
+            # Check if the user has enough gems and lives
             if gems < 200 or lives == 5:
                 return jsonify({"code": 400})
             else:
-                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1);", (current_user.id,))
-                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'gems', -200);", (current_user.id,))
+                # Purchase the lives
+                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1), (%s, 'gems', -200);", (current_user.id, current_user.id))
                 return jsonify({"code": 200, "lives": lives + 1, "gems": gems - 200})
     except Exception as e:
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
@@ -153,7 +163,7 @@ def list(list_id):
         Exception: If an error occurs while fetching the game trail.
     """
     try:
-        
+        # Retrieve the list and its associated games
         list_result = [l for l in current_user.lists if l["id"] == list_id][0]  
         games_result = []
 
@@ -161,7 +171,9 @@ def list(list_id):
             games_data = json.load(json_file)
 
         status = None
+        # Sort the games by order
         list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
+        # Calculate the status of each game
         for game in list_result["lessons"]:
             game_data = [g for g in games_data if g["id"] == game["lesson_id"]][0]
             if game["completed"] == 1:
@@ -208,6 +220,7 @@ def delete(list_id):
     """
     try:
         with create_connection() as conn, conn.cursor() as cursor:
+            # Delete the list and its associated data
             cursor.execute("DELETE FROM lists WHERE id = %s", (list_id,))
             cursor.execute("DELETE FROM lessons WHERE list_id = %s", (list_id,))
             cursor.execute("DELETE FROM list_content WHERE list_id = %s", (list_id,))

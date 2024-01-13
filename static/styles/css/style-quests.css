@@ -1,0 +1,228 @@
+.quests-main-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    row-gap: 40px;
+}
+
+.quests-main-container .main-infos .title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    text-align: left;
+    grid-row: 1;
+}
+
+.quests-main-container .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+}
+
+.quests-main-container .stats .stat-box {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 15px;
+}
+
+.quests-main-container .stats .stat-box .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .stats .stat-box .subtitle {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    color: #959da5;
+    height: 28px;
+    margin-top: 10px;
+}
+
+.quests-main-container .stats .stat-box .target-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.quests-main-container .stats .stat-box .target-box .img {
+    width: 20px;
+    height: 20px;
+}
+
+.quests-main-container .stats .stat-box .target-box .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container.good {
+    --progression-color: #064800;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container.average {
+    --progression-color: #c98200;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container.bad {
+    --progression-color: #750000;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container {
+    width: 90px;
+    height: 90px;
+    border: 5px solid var(--progression-color);
+    border-radius: 50%;
+    margin: 15px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container .progress-index {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--progression-color);
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-rows: 1fr 24px;
+    height: 120px;
+    margin-top: 15px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .ordinate {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    border-right: 1px solid #959da5;
+    padding-bottom: 10px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .abscissa{
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: space-around;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 10px;
+    border-top: 1px solid #959da5;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .chart-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding-bottom: 10px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .chart-content .item {
+    height: 20px;
+    width: 8px;
+    background-color: #766153;
+    border-radius: 5px;
+}
+
+.quests-main-container .reaward-ranking-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking {
+    width: 100%;
+    height: fit-content;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 20px;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-position {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 35px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container {
+    margin-top: 20px;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .separate {
+    width: 100%;
+    height: 1px;
+    background-color: #959da5;
+    margin: 10px 0;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box {
+    display: grid;
+    grid-template-columns: 30px 35px 1fr;
+    align-items: center;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .rank {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(1n) {
+    --profile-background: #8B7070;
+}
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(2n) {
+    --profile-background: #70845D;
+}
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(3n) {
+    --profile-background: #5B747D;
+}
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(4n) {
+    --profile-background: #766153;
+}
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(5n) {
+    --profile-background: #6C4A72;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .picture {
+    background-color: var(--profile-background);
+    border-radius: 5px;
+    height: 35px;
+    width: 35px;
+    padding: 5px;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .name {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+

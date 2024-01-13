@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendu | Word Quest</title>
-    <link rel="stylesheet" href="pendu.css">
-    <link rel="stylesheet" href="../timer.css">
+    <title>Jeu du pendu | Word Quest</title>
+    <link rel="stylesheet" href="/static/styles/games/hangman/main.css">
+    <link rel="stylesheet" href="/static/styles/games/timer.css">
 </head>
 <body>
     <section id="begining" class="begining">
@@ -15,12 +15,12 @@
     </section>
     <div class="all">
         <button class="exit">
-            <img src="../games-icons/exit.png" alt="">
+            <img src="/static/icons/games-icons/exit.png" alt="">
         </button>
         <section class="game">
             <div id="animation-xp" class="XP">
                 <p id="xpnotif">+0</p>
-                <img src="../games-icons/big-flash.png" alt="">
+                <img src="/static/icons/games-icons/big-flash.png" alt="">
             </div>
             <div class="bad-letter-content">
                 Mauvaise Lettre
@@ -76,7 +76,7 @@
                 <div id="indice-container" class="container">
                 </div>
                 <button id="add-indice" class="new-indice-btn">
-                    <img src="plus.png" alt="">
+                    <img src="/static/icons/plus-30-white.png" alt="">
                 </button>
             </div>
             
@@ -84,11 +84,11 @@
             
             <div class="info-content">
                 <div class="counter">
-                    <img src="../games-icons/flash.png" alt="">
+                    <img src="/static/icons/games-icons/flash.png" alt="">
                     <p id="xp">0Xp</p>
                 </div>
                 <div class="counter">
-                    <img src="../games-icons/timer-icon.png" alt="">
+                    <img src="/static/icons/games-icons/timer-icon.png" alt="">
                     <p id="countdown-game"></p>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                     <p>XP gagné:</p>
                     <div>
                         <p id="XP-final">+0XP</p>
-                        <img src="../games-icons/flash.png" alt="">
+                        <img src="/static/icons/games-icons/flash.png" alt="">
                     </div>
                 </div>
                 <div class="stats-word">
@@ -115,7 +115,7 @@
             </div>
         </section>
     </div>
-    <script src="pendu.js"></script>
-    <script src="../timer.js"></script>
+    <script src="/static/styles/games/hangman/main.js"></script>
+    <script src="/static/styles/games/timer.js"></script>
 </body>
 </html>

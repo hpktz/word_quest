@@ -48,6 +48,11 @@ app.register_blueprint(create_bp)
 app.register_blueprint(quests_bp)
 app.register_blueprint(discover_bp)
 
+
+# Importation of games blueprints
+from games.hangman import hangman_bp
+app.register_blueprint(hangman_bp)
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated:

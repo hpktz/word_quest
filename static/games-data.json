@@ -13,7 +13,7 @@
         "desc": "Le jeux du pendu est un jeu dans lequel le joueur doit trouver le mot cach&eacute; en proposant des lettres. Chaque indice utilis&eacute; fait perdre des points.",
         "short_desc": "Essayer de deviner le mot cach&eacute; pour gagner",
         "img": "/static/icons/games-icons/hangman-30-dark-grey.png",
-        "url": "pendu.html",
+        "url": "/dashboard/games/hangman",
         "difficulty": 1
     },
     {

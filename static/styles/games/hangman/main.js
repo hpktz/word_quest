@@ -159,7 +159,6 @@ setTimeout(() => {
                 const letter = e.key;
 
                 if(word.includes(letter)){
-
                     if(!goodLetter.includes(letter)){
                         goodLetter.push(letter);
 

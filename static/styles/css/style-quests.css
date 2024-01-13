@@ -40,6 +40,13 @@
     margin-top: 10px;
 }
 
+.quests-main-container .stats .stat-box .empty-target-box {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 25px;
+    color: #b4b4b4;
+    margin-top: 25%;
+}
+
 .quests-main-container .stats .stat-box .target-box {
     display: flex;
     align-items: center;
@@ -135,11 +142,18 @@
     background-color: #766153;
     border-radius: 5px;
 }
+.quests-main-container .stats .stat-box .bar-chart-container .chart-content .empty-item {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 25px;
+    color: #b4b4b4;
+    margin: auto;
+}
 
 .quests-main-container .reaward-ranking-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    padding-bottom: 20px;
 }
 
 .quests-main-container .reaward-ranking-container  .ranking {
@@ -173,6 +187,13 @@
     height: 1px;
     background-color: #959da5;
     margin: 10px 0;
+}
+
+.quests-main-container .reaward-ranking-container  .ranking .ranking-container .empty-ranking-box {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 25px;
+    color: #b4b4b4;
+    margin: auto;
 }
 
 .quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box {
@@ -224,5 +245,36 @@
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
     font-weight: 400;
+}
+
+.quests-main-container .reaward-ranking-container .reward .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 920px) {
+    body.open .quests-main-container .stats {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    .quests-main-container .stats {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+    .quests-main-container .reaward-ranking-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 40px;
+    }
+    .quests-main-container .reaward-ranking-container .reward {
+        grid-row: 2;
+    }
+    .quests-main-container .reaward-ranking-container .ranking {
+        grid-row: 1;
+    }
 }
 

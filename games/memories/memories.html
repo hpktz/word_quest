@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memories | WordQuest</title>
+    <link rel="stylesheet" href="memories.css">
+    <link rel="stylesheet" href="../timer.css">
+</head>
+<body>
+    <section id="begining" class="begining">
+        <div>
+            <p id="begin"></p>
+        </div>
+    </section>
+    <section class="memories">
+        <div class="container">
+            <div class="rules">Trouve les doublets de mots anglais/francais !</div>
+            <div id="game"class="game"></div>
+            <span class="separation"></span>
+            <div class="countdown ">
+            <img src="../games-icons/timer-icon.png" class="" alt="">
+            <p id="countdown-game" class=""></p>
+            </div>
+        </div>
+    </section>
+    <!-- <sction id="loose" class="end">
+        <div>
+            <div class="end-container">
+                <div>
+                    <p class="end-message"> C'est perdu !</p>
+                    <p class="time-down">le temps est écoulé...</p>
+                </div>
+                <div class="buttons-end">
+                    <button>Go Home</button>
+                    <button id="retry-loose">Retry</button>
+                </div>
+            </div>
+        </div>
+    </sction>
+    <section id="win" class="end">
+        <div>
+            <div class="end-container">
+                <div>
+                    <p class="end-message"> Bravo !</p>
+                    <p class="time-down">Vous avez reussi le niveau !</p>
+                </div>
+                <div  class="buttons-end">
+                    <button>Go Home</button>
+                    <button id="retry-win">Retry</button>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <section id="recap" class="recap">
+        <h1 id="remarque">Bravo !</h1>
+        <div class="stats">
+            <div class="stats-xp">
+                <p>XP gagné:</p>
+                <div>
+                    <p id="XP-final">+0XP</p>
+                    <img src="../games-icons/flash.png" alt="">
+                </div>
+            </div>
+            <div class="stats-word">
+                <p>Mots trouvé</p>
+                <p id="word-finded"></p>
+            </div>
+        </div>
+        <div class="recap-btns">
+            <button >Retour au menu</button>
+            <button id="retry">Réessayer</button>
+        </div>
+    </section>
+    <script src="memory.js"></script>
+    <script src="../timer.js"></script>
+</body>
+</html>

@@ -1,3 +1,44 @@
+header .info-section .stat-box {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+header .info-section .stat-box .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+header .info-section .stat-box .main-nbr {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+header .info-section .stat-box .img {
+    height: 70px;
+    position: absolute;
+    right: -10px;
+    bottom: 0;
+    opacity: 0.2;
+}
+
+header .infos-section::-webkit-scrollbar-track{
+    background-color: #717744;
+}
+
+header .infos-section::-webkit-scrollbar-thumb{
+    background-color: #333;
+    border: 1.25Px solid #717744;
+}
+
 .quests-main-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -252,6 +293,47 @@
     font-size: 18px;
     font-weight: 600;
 }
+.quests-main-container .reaward-ranking-container .reward .reward-box {
+    width: 100%;
+    height: 275px;
+    position: relative;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest  {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height:100px;
+    width: 100px;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.opened  {
+    top: calc(50% - 20px);
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.blocked .img  {
+    filter: grayscale(100%);
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest img {
+    width: 100px;
+    height: 100px;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .base {
+    width: 150px;
+    height: 30px;
+    background-color: #959da5;
+    border-radius:100%;
+    position: absolute;
+    top: calc(50% + 30px);  
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
 
 @media screen and (max-width: 920px) {
     body.open .quests-main-container .stats {
@@ -275,6 +357,9 @@
     }
     .quests-main-container .reaward-ranking-container .ranking {
         grid-row: 1;
+    }
+    body.info-section-phone-active header .infos-section .info-section {
+        grid-template-rows: 75px auto
     }
 }
 

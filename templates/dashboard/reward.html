@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link  type="text/css" rel="stylesheet" href="/static/styles/css/style-reward.css">
+</head>
+<body>
+    <div class="chest-container">
+        <div class="chest-top">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top">
+                <div class="corner-top-right"></div>
+                <div class="corner-top-left"></div>
+                <div class="corner-bottom-right"></div>
+                <div class="corner-bottom-left"></div>
+            </div>
+            <div class="face bottom"></div>
+        </div>
+        <div class="chest-body">
+            <div class="lock-container">
+                <div class="lock-top"></div>
+                <div class="lock-bottom"></div>
+            </div>
+            <div class="corner-top-right"></div>
+            <div class="corner-top-left"></div>
+            <div class="corner-bottom-right"></div>
+            <div class="corner-bottom-left"></div>
+            <div class="strip-1"></div>
+            <div class="strip-2"></div>
+            <div class="strip-3"></div>
+        </div>
+        <div class="chest-bottom"></div>
+        <div class="reward-type-container">
+            <img src="/static/imgs/3d-pink-gemstone.png" class="img">
+        </div>
+        <div class="reward-container">+&nbsp;{{reward}}</div>
+    </div>
+    <div class="overlay"></div>
+    <script>
+        const chest = document.querySelector('.chest-container');
+        const overlay = document.querySelector('.overlay');
+        chest.addEventListener('click', () => {
+            overlay.classList.add('active');
+            chest.classList.add('active');
+
+            setTimeout(() => {
+                window.location.href = "/dashboard/quests";
+            }, 6000);
+        });
+    </script>
+</body>
+</html>

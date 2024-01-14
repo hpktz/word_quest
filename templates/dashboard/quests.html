@@ -2,7 +2,25 @@
 {% block css %}<link rel="stylesheet" href="/static/styles/css/style-quests.css">{% endblock %}
 {% block dashboard_info %}
 <div class="info-section">
+    <div class="title">
+        <div>Quêtes</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+                <img src="/static/icons/binoculars-30-white.png" alt="logo">
+            </a>
+        </div>
     </div>
+    <div class="stat-box">
+        <div class="text">Il est recommandé, par jour, de gagner</div>
+        <div class="main-nbr">10xp</div>
+        <img src="/static/imgs/3d-flash-on.png" class="img">
+    </div>
+    <div class="stat-box">
+        <div class="text">Par leçons, vous ne pouvez perdre que</div>
+        <div class="main-nbr">1</div>
+        <img src="/static/imgs/3d-red-heart.png" class="img">
+    </div>
+</div>
 {% endblock %}{% block quests %}selected{% endblock %} {% block content %}
 <main class="quests-main-container">
     <section class="main-infos">
@@ -94,7 +112,21 @@
         <div class="reward">
             <div class="title">Ma récompense</div>
             <div class="reward-box">
-                <div class="chest"></div>
+                {% if reward %}
+                    <div class="chest opened">
+                        <img src="/static/imgs/opened-chest.png" alt="">
+                    </div>
+                {% elif stats[-1]["target_achieved"] %}
+                    <div class="chest">
+                        <a href="/dashboard/quests/reward" onclick="redirect(this, event)">
+                            <img src="/static/imgs/closed-chest.png" alt="">
+                        </a>
+                    </div>                
+                {% else %}
+                    <div class="chest blocked">
+                        <img src="/static/imgs/closed-chest.png" alt="">
+                    </div>
+                {% endif %}
                 <div class="base"></div>
             </div>
         </div>

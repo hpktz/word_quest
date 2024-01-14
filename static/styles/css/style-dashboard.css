@@ -174,19 +174,31 @@ header .nav-bar .dynamic-pointer {
     opacity: 0;
 }
 
-header .nav-bar .middle-logo:nth-child(1).selected~.dynamic-pointer,
+header .nav-bar .middle-logo:nth-child(1).selected~.dynamic-pointer {
+    opacity: 1;
+    top: 0;
+}
+
+header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer {
+    opacity: 1;
+    top: 45px;
+}
+
+header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer {
+    opacity: 1;
+    top: 90px;
+}
+
 header .nav-bar .middle-logo:nth-child(1):hover~.dynamic-pointer {
     opacity: 1;
     top: 0;
 }
 
-header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer,
 header .nav-bar .middle-logo:nth-child(2):hover~.dynamic-pointer {
     opacity: 1;
     top: 45px;
 }
 
-header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer,
 header .nav-bar .middle-logo:nth-child(3):hover~.dynamic-pointer {
     opacity: 1;
     top: 90px;

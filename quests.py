@@ -30,6 +30,8 @@ def quests():
             result = cursor.fetchall()
             cursor.execute("SELECT u.id as user_id, u.name as username, SUM(ll.xp) as total_xp, RANK() OVER (ORDER BY SUM(ll.xp) DESC) as user_rank FROM users u JOIN lessons_log ll ON u.id = ll.user_id GROUP BY u.id, u.name ORDER BY total_xp DESC;")
             ranking = cursor.fetchall()
+            cursor.execute("SELECT * FROM rewards WHERE user_id = %s AND DATE(created_at) = CURDATE()", (current_user.id,))
+            reward = cursor.fetchall()
             
         results = []
         progress = 0
@@ -96,9 +98,47 @@ def quests():
             progress=progress,
             user_rank=user_rank,
             top_ranking=top_ranking,
-            arround_ranking=arround_ranking
+            arround_ranking=arround_ranking,
+            reward=reward
         )
     
     except mysql.connector.Error as e:
         logging.error("Error while fetching quests: " + str(e), exc_info=True)
         return render_template('dashboard/quests.html')
+
+
+@quests_bp.route('/dashboard/quests/reward')
+@login_required
+def reward():
+    try:
+        with create_connection() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM rewards WHERE user_id = %s AND DATE(created_at) = CURDATE()", (current_user.id,))
+            rewards = cursor.fetchall()
+            if rewards:
+                return redirect(url_for('quests.quests'))
+            else:
+                # check if the user had done all his targets
+                targets = {"games": 0, "xp": 0,"time": 0}
+                for lst in current_user.lists:
+                    if not all(lesson["completed"] == 1 for lesson in lst["lessons"]):
+                        targets["games"] += lst["tgt_games"]
+                        targets["xp"] += lst["tgt_xp"]
+                        targets["time"] += lst["tgt_time"]
+                cursor.execute("SELECT COUNT(*), SUM(xp), SUM(time) FROM lessons_log WHERE user_id = %s AND DATE(created_at) = CURDATE()", (current_user.id,))
+                result = cursor.fetchall()
+                if not result:
+                    is_eligible = False
+                else:
+                    is_eligible = result[0][0] >= targets["games"] and result[0][1] >= targets["xp"] and result[0][2] >= targets["time"]
+                print(is_eligible)
+                if is_eligible:
+                    cursor.execute("INSERT INTO rewards (user_id) VALUES (%s)", (current_user.id,))
+                    conn.commit()
+                    reward = result[0][1] / targets["xp"] * 1000
+                    return render_template('dashboard/reward.html', reward=int(reward))
+                else:
+                    return redirect(url_for('quests.quests'))
+    
+    except mysql.connector.Error as e:
+        logging.error("Error while fetching rewards: " + str(e), exc_info=True)
+        return render_template('dashboard/reward.html')

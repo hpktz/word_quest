@@ -248,7 +248,7 @@ def sys_2fa():
     """
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
-    if session["2fa"]["email"] == None:
+    if "2fa" not in session or session["2fa"]["email"] == None:
         return redirect(url_for('auth.login'))
     return render_template('auth/2fa.html')
 

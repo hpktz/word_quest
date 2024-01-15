@@ -24,16 +24,24 @@ login_manager.login_view = 'auth.login'
 
 @login_manager.user_loader
 def load_user(user_id):
+    conn = None
+    cursor = None
     try: 
-        with create_connection() as conn, conn.cursor() as cursor:
-            cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
-            result = cursor.fetchone()
-            if not result:
-                return None
-            return User(user_id)
+        conn = create_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
+        result = cursor.fetchone()
+        if not result:
+            return None
+        return User(user_id)
     except mysql.connector.Error as e:
         print(e)
         return None
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)

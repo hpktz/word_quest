@@ -69,31 +69,39 @@ def index():
         tips = json.load(json_file)
 
     tip = tips[random.randint(0, len(tips) - 1)]
-    
+
+    conn = None
+    cursor = None    
     try:
-        with create_connection() as conn, conn.cursor() as cursor:
-            # Retrieve the user's amount of gems, lives and XP
-            cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS sum_gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS sum_lives, MAX(CASE WHEN transaction_type = 'lives' THEN created_at ELSE 0 END) AS last_live, SUM(CASE WHEN transaction_type = 'xp' THEN transaction ELSE 0 END) AS sum_xp FROM user_statements WHERE user_id = %s ORDER BY created_at DESC LIMIT 1;", (current_user.id,))
-            user_statement = cursor.fetchone()
-            gems = user_statement[0]
-            lives = user_statement[1]
-            lives_time = user_statement[2]
-            xp = user_statement[3]
-            
-            # Checking if the user is eligible for potential news lives
-            if lives != 5:
-                life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
+        conn = create_connection()
+        cursor = conn.cursor()
+        # Retrieve the user's amount of gems, lives and XP
+        cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS sum_gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS sum_lives, MAX(CASE WHEN transaction_type = 'lives' THEN created_at ELSE 0 END) AS last_live, SUM(CASE WHEN transaction_type = 'xp' THEN transaction ELSE 0 END) AS sum_xp FROM user_statements WHERE user_id = %s ORDER BY created_at DESC LIMIT 1;", (current_user.id,))
+        user_statement = cursor.fetchone()
+        gems = user_statement[0]
+        lives = user_statement[1]
+        lives_time = user_statement[2]
+        xp = user_statement[3]
+        
+        # Checking if the user is eligible for potential news lives
+        if lives != 5:
+            life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
+            life_time = life_time + timedelta(minutes=15)
+            while life_time < datetime.now() and lives < 5:
+                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1);", (current_user.id,))
+                lives += 1
                 life_time = life_time + timedelta(minutes=15)
-                while life_time < datetime.now() and lives < 5:
-                    cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1);", (current_user.id,))
-                    lives += 1
-                    life_time = life_time + timedelta(minutes=15)
-                    lives_time = datetime.now()
+                lives_time = datetime.now()
                     
     except Exception as e:
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
         gems = 0
         lives = 0
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
         
     # Sort the lists by ID in descending order
     lists = sorted(current_user.lists, key=lambda k: k['id'], reverse=True)
@@ -129,23 +137,31 @@ def purchase_lives():
     Raises:
         Exception: If an error occurs while fetching the user statements.
     """
+    conn = None
+    cursor = None
     try:
-        with create_connection() as conn, conn.cursor() as cursor:
-            # Retrieve the user's amount of gems and lives
-            cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS lives FROM user_statements WHERE user_id = %s;", (current_user.id,))
-            user_statement = cursor.fetchone()
-            gems = user_statement[0]
-            lives = user_statement[1]
-            # Check if the user has enough gems and lives
-            if gems < 200 or lives == 5:
-                return jsonify({"code": 400})
-            else:
-                # Purchase the lives
-                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1), (%s, 'gems', -200);", (current_user.id, current_user.id))
-                return jsonify({"code": 200, "lives": lives + 1, "gems": gems - 200})
+        conn = create_connection()
+        cursor = conn.cursor()
+        # Retrieve the user's amount of gems and lives
+        cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS lives FROM user_statements WHERE user_id = %s;", (current_user.id,))
+        user_statement = cursor.fetchone()
+        gems = user_statement[0]
+        lives = user_statement[1]
+        # Check if the user has enough gems and lives
+        if gems < 200 or lives == 5:
+            return jsonify({"code": 400})
+        else:
+            # Purchase the lives
+            cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1), (%s, 'gems', -200);", (current_user.id, current_user.id))
+            return jsonify({"code": 200, "lives": lives + 1, "gems": gems - 200})
     except Exception as e:
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
         return jsonify({"code": 400})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 @main_bp.route('/dashboard/games/<int:list_id>')
 @login_required
@@ -218,14 +234,20 @@ def delete(list_id):
     Raises:
         Exception: If an error occurs while deleting the list.
     """
+    conn = None
+    cursor = None
     try:
-        with create_connection() as conn, conn.cursor() as cursor:
-            # Delete the list and its associated data
-            cursor.execute("DELETE FROM lists WHERE id = %s", (list_id,))
-            cursor.execute("DELETE FROM lessons WHERE list_id = %s", (list_id,))
-            cursor.execute("DELETE FROM list_content WHERE list_id = %s", (list_id,))
-            conn.commit()
-            return redirect(url_for('main.index'))
+        # Delete the list and its associated data
+        cursor.execute("DELETE FROM lists WHERE id = %s", (list_id,))
+        cursor.execute("DELETE FROM lessons WHERE list_id = %s", (list_id,))
+        cursor.execute("DELETE FROM list_content WHERE list_id = %s", (list_id,))
+        conn.commit()
+        return redirect(url_for('main.index'))
     except Exception as e:
         logging.error("Error while deleting list: " + str(e), exc_info=True)
         return redirect(url_for('main.index'))
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

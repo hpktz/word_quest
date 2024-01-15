@@ -313,7 +313,7 @@ header .infos-section::-webkit-scrollbar-thumb{
     top: calc(50% - 20px);
 }
 
-.quests-main-container .reaward-ranking-container .reward .reward-box .chest.blocked .img  {
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.blocked img  {
     filter: grayscale(100%);
 }
 

@@ -24,23 +24,16 @@ login_manager.login_view = 'auth.login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    cursor = None
-    conn = None
     try: 
-        conn = create_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
-        result = cursor.fetchone()
-        if not result:
-            return None
-        return User(user_id)
+        with create_connection() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
+            result = cursor.fetchone()
+            if not result:
+                return None
+            return User(user_id)
     except mysql.connector.Error as e:
         print(e)
         return None
-    finally:
-        if cursor:
-            cursor.close()
-        close_connection(conn)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)
@@ -56,7 +49,7 @@ app.register_blueprint(hangman_bp)
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
-        pass
+        print(current_user.lists)
 
 if __name__ == '__main__':
     app.run(debug=True)

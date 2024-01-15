@@ -76,70 +76,67 @@ def login_post():
     conn = None 
     cursor = None
     try:
-        conn = create_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
-        data = cursor.fetchone()
+        with create_connection() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+            data = cursor.fetchone()
 
-        if data:
-            if email in session["login_tries"]:
-                if session["login_tries"][email]["trials"] >= 3:
-                    # Affiche le message d'erreur et le temps restant
-                    if time.time() - session["login_tries"][email]["last"] < 60:
-                        flash("Trop de tentatives de connexion, veuillez réessayer dans " + str(int(60 - (time.time() - session["login_tries"][email]["last"]))) + " secondes")
-                        return redirect(url_for('auth.login'))
-            if session["2fa"]["email"] != email:
-                password = password_input.encode('utf-8')
-                if bcrypt.checkpw(password, data[5].encode('utf-8')):
-                    if data[10] == True:
-                        if data[6] == False:
-                            user = User(data[0])
-                            login_user(user)
-                            session.pop("login_tries")
-                            return redirect(url_for('main.index'))
+            if data:
+                if email in session["login_tries"]:
+                    if session["login_tries"][email]["trials"] >= 3:
+                        # Affiche le message d'erreur et le temps restant
+                        if time.time() - session["login_tries"][email]["last"] < 60:
+                            flash("Trop de tentatives de connexion, veuillez réessayer dans " + str(int(60 - (time.time() - session["login_tries"][email]["last"]))) + " secondes")
+                            return redirect(url_for('auth.login'))
+                if session["2fa"]["email"] != email:
+                    password = password_input.encode('utf-8')
+                    if bcrypt.checkpw(password, data[5].encode('utf-8')):
+                        if data[10] == True:
+                            if data[6] == False:
+                                user = User(data[0])
+                                login_user(user)
+                                session.pop("login_tries")
+                                return redirect(url_for('main.index'))
+                            else:
+                                secret_key = pyotp.random_base32()
+                                totp = pyotp.TOTP(secret_key, interval=120)
+                                session["2fa"]["id"] = data[0]
+                                session["2fa"]["email"] = email
+                                session["2fa"]["code"] = totp.now()
+                                session["2fa"]["action"] = "login"
+                                session["2fa"]["secret_key"] = secret_key
+                                session["2fa"]["totp"] = totp
+                                session["2fa"]["expires"] = time.time() + 60
+                                session["2fa"]["delay"] =  time.time() + 60
+                                send_mail(email, "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
+                                return redirect(url_for('auth.sys_2fa'))
                         else:
-                            secret_key = pyotp.random_base32()
-                            totp = pyotp.TOTP(secret_key, interval=120)
-                            session["2fa"]["id"] = data[0]
-                            session["2fa"]["email"] = email
-                            session["2fa"]["code"] = totp.now()
-                            session["2fa"]["action"] = "login"
-                            session["2fa"]["secret_key"] = secret_key
-                            session["2fa"]["totp"] = totp
-                            session["2fa"]["expires"] = time.time() + 60
-                            session["2fa"]["delay"] =  time.time() + 60
-                            send_mail(email, "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
-                            return redirect(url_for('auth.sys_2fa'))
+                            session["from_input"] = [email, password_input]
+                            flash("Votre compte n'est pas activé")
+                            return redirect(url_for('auth.login'))
                     else:
+                        if email in session["login_tries"]:
+                            session["login_tries"][email]["trials"] += 1
+                            session["login_tries"][email]["last"] = time.time()
+                        else:
+                            session["login_tries"][email] = {
+                                "trials": 1,
+                                "last": time.time()
+                            }
                         session["from_input"] = [email, password_input]
-                        flash("Votre compte n'est pas activé")
+                        flash("Mot de passe incorrect")
                         return redirect(url_for('auth.login'))
                 else:
-                    if email in session["login_tries"]:
-                        session["login_tries"][email]["trials"] += 1
-                        session["login_tries"][email]["last"] = time.time()
-                    else:
-                        session["login_tries"][email] = {
-                            "trials": 1,
-                            "last": time.time()
-                        }
-                    session["from_input"] = [email, password_input]
-                    flash("Mot de passe incorrect")
-                    return redirect(url_for('auth.login'))
+                    return redirect(url_for('auth.sys_2fa'))
             else:
-                return redirect(url_for('auth.sys_2fa'))
-        else:
-            session["from_input"] = [email, password_input]
-            flash("Email incorrect")
-            return redirect(url_for('auth.login'))
-    except mysql.connector.Error as e:
+                session["from_input"] = [email, password_input]
+                flash("Email incorrect")
+                return redirect(url_for('auth.login'))
+    except Exception as e:
+        print(e)
         session["from_input"] = [email, password_input]
         flash('Erreur de connexion')
         return redirect(url_for('auth.login'))
-    finally:
-        if cursor:
-            cursor.close()
-        close_connection(conn)
+
 
 @auth_bp.route('/register')
 def register():
@@ -158,8 +155,6 @@ def register_post():
         email = request.form.get('email')
         password_input = request.form.get('password')
 
-        cursor = None
-        
         if "login_tries" not in session:
             session["login_tries"] = {}
         if "2fa" not in session:
@@ -175,64 +170,57 @@ def register_post():
                 "totp": None,
             }
 
-        conn = None 
-        cursor = None
         try:
-            conn = create_connection()
-            cursor = conn.cursor()
-            cursor.execute(f"SELECT * FROM users WHERE email='{email}'")
-            data = cursor.fetchone()
+            with create_connection() as conn, conn.cursor() as cursor:
+                cursor.execute(f"SELECT * FROM users WHERE email='{email}'")
+                data = cursor.fetchone()
 
-            if data and data[10] == True:
-                flash("Email déjà utilisé")
-                return redirect(url_for('auth.register'))
-            else:
-                if session["2fa"]["email"] != email:
-                    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-                        flash("Email invalide")
-                        return redirect(url_for('auth.register'))
-                    
-                    password = password_input.encode('utf-8')
-                    hashed = bcrypt.hashpw(password, bcrypt.gensalt())
-
-                    birthday_pattern = re.compile(r"\d{4}-\d{2}-\d{2}")
-                    if not birthday_pattern.match(birthday):
-                        flash("Date de naissance invalide")
-                        return redirect(url_for('auth.register'))
-                    
-                    if data:
-                        if data[6] != 0:
-                            flash("Email déjà utilisé")
-                            return redirect(url_for('auth.register'))
-                        else:
-                            cursor.execute("UPDATE users SET name=%s, birthday=%s, password=%s WHERE email=%s", (name, birthday, hashed, email))
-                    else:
-                        cursor.execute("INSERT INTO users (name, birthday, email, password) VALUES (%s, %s, %s, %s)", (name, birthday, email, hashed))
-                        user_id = cursor.lastrowid
-                        cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, %s, %s),(%s, %s, %s)", (user_id,"gems",200,user_id,"lives",5))
-                    
-                    secret_key = pyotp.random_base32()
-                    totp = pyotp.TOTP(secret_key, interval=120)
-                    session["2fa"]["id"] = None
-                    session["2fa"]["email"] = email
-                    session["2fa"]["code"] = totp.now()
-                    session["2fa"]["action"] = "register"
-                    session["2fa"]["secret_key"] = secret_key
-                    session["2fa"]["totp"] = totp
-                    session["2fa"]["expires"] = time.time() + 60
-                    session["2fa"]["delay"] =  time.time() + 60
-                    send_mail(email, "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
-                    return redirect(url_for('auth.sys_2fa'))
+                if data and data[10] == True:
+                    flash("Email déjà utilisé")
+                    return redirect(url_for('auth.register'))
                 else:
-                    return redirect(url_for('auth.sys_2fa'))
+                    if session["2fa"]["email"] != email:
+                        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                            flash("Email invalide")
+                            return redirect(url_for('auth.register'))
+
+                        password = password_input.encode('utf-8')
+                        hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+
+                        birthday_pattern = re.compile(r"\d{4}-\d{2}-\d{2}")
+                        if not birthday_pattern.match(birthday):
+                            flash("Date de naissance invalide")
+                            return redirect(url_for('auth.register'))
+
+                        if data:
+                            if data[6] != 0:
+                                flash("Email déjà utilisé")
+                                return redirect(url_for('auth.register'))
+                            else:
+                                cursor.execute("UPDATE users SET name=%s, birthday=%s, password=%s WHERE email=%s", (name, birthday, hashed, email))
+                        else:
+                            cursor.execute("INSERT INTO users (name, birthday, email, password) VALUES (%s, %s, %s, %s)", (name, birthday, email, hashed))
+                            user_id = cursor.lastrowid
+                            cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, %s, %s),(%s, %s, %s)", (user_id,"gems",200,user_id,"lives",5))
+
+                        secret_key = pyotp.random_base32()
+                        totp = pyotp.TOTP(secret_key, interval=120)
+                        session["2fa"]["id"] = None
+                        session["2fa"]["email"] = email
+                        session["2fa"]["code"] = totp.now()
+                        session["2fa"]["action"] = "register"
+                        session["2fa"]["secret_key"] = secret_key
+                        session["2fa"]["totp"] = totp
+                        session["2fa"]["expires"] = time.time() + 60
+                        session["2fa"]["delay"] =  time.time() + 60
+                        send_mail(email, "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
+                        return redirect(url_for('auth.sys_2fa'))
+                    else:
+                        return redirect(url_for('auth.sys_2fa'))
         except Exception as e:
             print(e)
             flash('Erreur de connexion')
             return redirect(url_for('auth.register'))
-        finally:
-            if cursor:
-                cursor.close()
-            close_connection(conn)
 
 @auth_bp.route('/2fa')
 def sys_2fa():
@@ -322,28 +310,21 @@ def sys_2fa_post():
         return redirect(url_for('main.index'))
     
     def _register(email):
-        conn = None 
-        cursor = None
         try:
-            conn = create_connection()
-            cursor = conn.cursor()
-            cursor.execute("UPDATE users SET activated=TRUE WHERE email=%s", (email,))
-            cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
-            data = cursor.fetchone()
-            user = User(data[0])
-            login_user(user)
+            with create_connection() as conn, conn.cursor() as cursor:
+                cursor.execute("UPDATE users SET activated=TRUE WHERE email=%s", (email,))
+                cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+                data = cursor.fetchone()
+                user = User(data[0])
+                login_user(user)
 
-            session.pop("login_tries")
-            session.pop("2fa")
-            return redirect(url_for('main.index'))
+                session.pop("login_tries")
+                session.pop("2fa")
+                return redirect(url_for('main.index'))
         except Exception as e:
             print(e)
             flash('Une erreur est survenue lors de l\'activation de votre compte')
             return redirect(url_for('auth.register'))
-        finally:
-            if cursor:
-                cursor.close()
-            close_connection(conn)
     
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))

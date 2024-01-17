@@ -105,7 +105,9 @@ def quests():
             reward=reward
         )
     
-    except mysql.connector.Error as e:
+    except Exception as e:
+        if conn:
+            conn.rollback()
         logging.error("Error while fetching quests: " + str(e), exc_info=True)
         return render_template('dashboard/quests.html')
     
@@ -151,7 +153,9 @@ def reward():
             else:
                 return redirect(url_for('quests.quests'))
     
-    except mysql.connector.Error as e:
+    except Exception as e:
+        if conn:
+            conn.rollback()
         logging.error("Error while fetching rewards: " + str(e), exc_info=True)
         return render_template('dashboard/reward.html')
     

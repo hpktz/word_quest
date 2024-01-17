@@ -94,6 +94,8 @@ def index():
                 lives_time = datetime.now()
                     
     except Exception as e:
+        if conn:
+            conn.rollback()
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
         gems = 0
         lives = 0
@@ -155,6 +157,8 @@ def purchase_lives():
             cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1), (%s, 'gems', -200);", (current_user.id, current_user.id))
             return jsonify({"code": 200, "lives": lives + 1, "gems": gems - 200})
     except Exception as e:
+        if conn:
+            conn.rollback()
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
         return jsonify({"code": 400})
     finally:
@@ -244,6 +248,8 @@ def delete(list_id):
         conn.commit()
         return redirect(url_for('main.index'))
     except Exception as e:
+        if conn:
+            conn.rollback()
         logging.error("Error while deleting list: " + str(e), exc_info=True)
         return redirect(url_for('main.index'))
     finally:

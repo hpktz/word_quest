@@ -5,4 +5,4 @@ bcrypt==4.1.2
 pyotp==2.9.0
 python-dotenv==1.0.0
 mysql-connector==2.2.9
-gunicorn==21.2.0
+lxml==5.1.0

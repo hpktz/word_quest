@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, session, render_template
 from flask_login import LoginManager, current_user
 from flask_session import Session
 
@@ -54,10 +54,9 @@ app.register_blueprint(discover_bp)
 from games.hangman import hangman_bp
 app.register_blueprint(hangman_bp)
 
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        print(current_user.lists)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

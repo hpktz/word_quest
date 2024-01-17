@@ -29,10 +29,10 @@ class User(UserMixin):
             cursor.execute('SELECT * FROM lists WHERE user_id = %s', (user_id,))
             columns = [column[0] for column in cursor.description]
             lists = cursor.fetchall()
-
             results = []
             for lst in lists:
                 result = dict(zip(columns, lst))
+                print(result)
                 result["created_at"] = result["created_at"].date().strftime("%d/%m/%Y")
                 result["updated_at"] = result["updated_at"].date().strftime("%d/%m/%Y")
 
@@ -40,7 +40,6 @@ class User(UserMixin):
                 result["lessons"] = []
 
                 cursor.execute('SELECT id, word, type, examples, trans_word, trans_examples FROM list_content WHERE list_id = %s', (result["id"],))
-                columns = [column[0] for column in cursor.description]
                 words = cursor.fetchall()
 
                 for word in words:
@@ -53,11 +52,11 @@ class User(UserMixin):
                     })
 
                 cursor.execute('SELECT id, lesson_id, odr, completed FROM lessons WHERE list_id = %s', (result["id"],))
-                columns = [column[0] for column in cursor.description]
+                columns_lesson = [column[0] for column in cursor.description]
                 lessons = cursor.fetchall()
 
                 for lesson in lessons:
-                    result["lessons"].append(dict(zip(columns, lesson)))
+                    result["lessons"].append(dict(zip(columns_lesson, lesson)))
 
                 results.append(result)
 
@@ -68,7 +67,8 @@ class User(UserMixin):
             self.lists = results
 
         except Exception as e:
-            print(e)
+            if conn:
+                conn.rollback()
             self.name = None
             self.birthday = None
             self.email = None

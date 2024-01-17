@@ -9,6 +9,7 @@ import re
 
 from root import *
 from sendmails import send_mail
+import logging
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -133,7 +134,9 @@ def login_post():
             flash("Email incorrect")
             return redirect(url_for('auth.login'))
     except Exception as e:
-        print(e)
+        if conn:
+            conn.rollback()
+        logging.error("Error connecting to database: " + str(e))
         session["from_input"] = [email, password_input]
         flash('Erreur de connexion')
         return redirect(url_for('auth.login'))
@@ -227,7 +230,9 @@ def register_post():
                 else:
                     return redirect(url_for('auth.sys_2fa'))
         except Exception as e:
-            print(e)
+            if conn:
+                conn.rollback()
+            logging.error("Error connecting to database: " + str(e))
             flash('Erreur de connexion')
             return redirect(url_for('auth.register'))
         finally:
@@ -339,7 +344,9 @@ def sys_2fa_post():
             session.pop("2fa")
             return redirect(url_for('main.index'))
         except Exception as e:
-            print(e)
+            if conn:
+                conn.rollback()
+            logging.error("Error connecting to database: " + str(e))
             flash('Une erreur est survenue lors de l\'activation de votre compte')
             return redirect(url_for('auth.register'))
         finally:

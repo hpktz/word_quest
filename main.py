@@ -245,6 +245,8 @@ def delete(list_id):
     conn = None
     cursor = None
     try:
+        conn = create_connection()
+        cursor = conn.cursor()
         # Delete the list and its associated data
         cursor.execute("DELETE FROM lists WHERE id = %s", (list_id,))
         cursor.execute("DELETE FROM lessons WHERE list_id = %s", (list_id,))

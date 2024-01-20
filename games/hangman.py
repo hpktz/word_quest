@@ -77,10 +77,11 @@ def index(list_id):
     else:
         list_result = list_result[0]
     
+    print(list_result)
     
     list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
     # Calculate the status of each game
-    for index,game in enumerate(list_result["lessons"]):
+    for index, game in enumerate(list_result["lessons"]):
         if index == 0 and game["lesson_id"] == hangman_id:
             session['game'] = hangman(list_result["words"], 5)
             return redirect(url_for('hangman.start', session_id=session['game'].id))
@@ -96,8 +97,8 @@ def start(session_id):
         return render_template('games/hangman.html')
     else:
         abort(404)
-        
-@hangman_bp.route('/dashboard/games/hangman/session/<string:session_id>/route', methods=['POST'])
+     
+@hangman_bp.route('/dashboard/games/hangman/session/<string:session_id>/ask_letter', methods=['POST'])
 def route(session_id):
     if 'game' in session and str(session['game'].id) == str(session_id):
         data = request.get_json()

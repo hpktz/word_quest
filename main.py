@@ -51,14 +51,18 @@ def index():
     # Check if the user is coming from the create page
     new_list_param = request.args.get('new_list')
     is_new_list = new_list_param and new_list_param.lower() == 'true'
-    
-    # Calculate the start and end date of the user's journey
-    start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)
-    start_date = start_date.date().strftime("%Y-%m-%d")
 
-    end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)    
-    end_date = end_date.date().strftime("%Y-%m-%d")
-    
+    # Calculate the start and end date of the user's journey
+    if current_user.lists:
+        start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)
+        start_date = start_date.date().strftime("%Y-%m-%d")
+
+        end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)    
+        end_date = end_date.date().strftime("%Y-%m-%d")
+    else:
+        start_date = None
+        end_date = None
+
     # Calculate the progress of each list
     for lst in current_user.lists:
         progress = sum(1 for lesson in lst["lessons"] if lesson["completed"] == 1)

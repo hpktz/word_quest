@@ -56,7 +56,10 @@ app.register_blueprint(hangman_bp)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    user = None
+    if current_user.is_authenticated:
+        user = current_user.name
+    return render_template('index.html', user = user)
 
 if __name__ == '__main__':
     app.run(debug=True)

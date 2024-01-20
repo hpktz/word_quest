@@ -28,15 +28,37 @@ class hangman():
         pass
     
     def _lose_life(self):
-        with create_connection() as conn, conn.cursor() as cursor:
+        conn = None
+        cursor = None
+        try:
+            conn = create_connection()
+            cursor = conn.cursor()
             cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', -1);", (current_user.id))
             conn.commit()
-
+        except Exception as e:
+            pass # Handle the exception
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+                
     def _end_lesson(self):
-        with create_connection() as conn, conn.cursor() as cursor:
+        conn = None
+        cursor = None
+        try:
+            conn = create_connection()  
+            cursor = conn.cursor()
             cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.id,))
             cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.id, xp, self.lives, time))
             conn.commit()
+        except Exception as e:
+            pass
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
 
         # Si le jouer a fait trop de fautes, on lui fait perdre une vie
         # Ainsi tu appelles : self._lose_life()

@@ -16,6 +16,8 @@ body, html {
 
 body {
     padding: 50px 50px 0 50px;
+    max-width: 1200px;
+    margin: auto;
 }
 
 ::-webkit-scrollbar {
@@ -37,6 +39,25 @@ body {
     border: 2px solid #f1f1f1;
 }
 
+.animate {
+    animation: smoothEntry 0.75s ease-in-out;
+}
+
+.to-animate {
+    opacity: 0;
+}
+
+@keyframes smoothEntry {
+    0% {
+        opacity: 0;
+        transform: translate(50px, -50px) rotateX(45deg) rotateY(30deg);;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0) rotateX(0deg) rotateY(0deg);
+    }
+}
+
 main {
     overflow-y: hidden;
     overflow-x: hidden;
@@ -48,6 +69,7 @@ header {
     top: 10px;
     left: 50%;
     width: calc(100% - 90px);
+    max-width: 1100px;
     transform: translateX(-50%);
     display: grid;
     grid-template-columns: 40px 1fr 250px 125px;
@@ -60,6 +82,18 @@ header {
     padding: 0 10px;
     height: 60px;
     z-index: 100;
+    animation: smoothEntryHeader 0.75s ease-in-out;
+}
+
+@keyframes smoothEntryHeader {
+    0% {
+        opacity: 0;
+        transform: translate(-55%, -10px) rotateX(45deg) rotateY(30deg);;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0) rotateX(0deg) rotateY(0deg);
+    }
 }
 
 header .logo img {
@@ -110,6 +144,22 @@ header .search-bar .img {
     cursor: pointer;
 }
 
+header .dashboard-access-not-connected {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 0;
+    text-align: center;
+    color: white;   
+    background-color: #333;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+header .dashboard-access-not-connected:hover {
+    background-color: #555;
+}
+
 header .dashboard-access {
     display: grid;
     grid-template-columns: 30px 1fr;
@@ -117,6 +167,7 @@ header .dashboard-access {
     gap: 10px;
     background-color: #F6F6F6;
     border-radius: 10px;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -221,7 +272,7 @@ main .frst-section .imgs {
 main .frst-section .imgs .main-img {
     position: absolute;
     top: -50px;
-    right: -80px;
+    right: -70px;
     width: 600px;
     height: 600px;
 }
@@ -321,7 +372,116 @@ main .thd-section .menu-container .item:hover {
     border-radius: 10px;
 }
 
-/**** CAROUSEL ****/
+main .thd-section .carousel-container {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+main .thd-section .carousel-container.pos1 .content:nth-child(1) {
+    left: 50%;
+}
+
+main .thd-section .carousel-container.pos1 .content:nth-child(2) {
+    left: 150%;
+}
+
+main .thd-section .carousel-container.pos1 .content:nth-child(3) {
+    left: 250%;
+}
+
+main .thd-section .carousel-container.pos1 .content:nth-child(4) {
+    left: 350%;
+}
+
+main .thd-section .carousel-container.pos2 .content:nth-child(1) {
+    left: -50%;
+}
+
+main .thd-section .carousel-container.pos2 .content:nth-child(2) {
+    left: 50%;
+}
+
+main .thd-section .carousel-container.pos2 .content:nth-child(3) {
+    left: 150%;
+}
+
+main .thd-section .carousel-container.pos2 .content:nth-child(4) {
+    left: 250%;
+}
+
+main .thd-section .carousel-container.pos3 .content:nth-child(1) {
+    left: -150%;
+}
+
+main .thd-section .carousel-container.pos3 .content:nth-child(2) {
+    left: -50%;
+}
+
+main .thd-section .carousel-container.pos3 .content:nth-child(3) {
+    left: 50%;
+}
+
+main .thd-section .carousel-container.pos3 .content:nth-child(4) {
+    left: 150%;
+}
+
+main .thd-section .carousel-container.pos4 .content:nth-child(1) {
+    left: -250%;
+}
+
+main .thd-section .carousel-container.pos4 .content:nth-child(2) {
+    left: -150%;
+}
+
+main .thd-section .carousel-container.pos4 .content:nth-child(3) {
+    left: -50%;
+}
+
+main .thd-section .carousel-container.pos4 .content:nth-child(4) {
+    left: 50%;
+}
+
+main .thd-section .carousel-container .content {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    transform: translate(-50%, 0);
+    transition: all 0.3s ease;
+}
+
+main .thd-section .carousel-container .content .texts .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #eeeeee;
+    margin-top: 25px;
+    text-align: left;
+}
+
+main .thd-section .carousel-container .content .texts .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: lightgrey;
+    margin-top: 25px;
+    text-align: left;
+}
+
+main .thd-section .carousel-container .content .illustration {
+    width: 100%;
+    height: 100%;
+    /** OPTIONAL **/
+    background-color: #333;
+}
+
+main .thd-section .carousel-container .content .illustration .img {
+    width: 100%;
+    height: 100%;
+}
 
 main .frth-section {
     display: grid;

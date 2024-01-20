@@ -20,16 +20,23 @@
             <img src="/static/icons/search-30-dark-grey.png" class="img" alt="search-icon">
             <input class="search" type="text" placeholder="Rechercher">
         </div>
-        <div class="dashboard-access">
+        {% if user %}
+        <a href="/dashboard" class="dashboard-access">
             <div class="account-icon">
                 <img src="/static/icons/user-30-white.png" class="img" alt="account-icon">
             </div>
-            <div class="account-name">Prénom</div>
+            <div class="account-name">{{user}}</div>
+        </a>
+        {% else %}
+        <a href="/dashboard" class="dashboard-access-not-connected">
+            <div class="account-name">Me connecter</div>
+        </a>
+        {% endif %}
         </div>
     </header>
     <main>
         <section class="frst-section">
-            <div class="texts">
+            <div class="texts animate">
                 <div class="title">Explorez et apprenez<br/> l'anglais en vous amusant</div>
                 <div class="subtitle">Une liste de vocabulaire ?  Trouvez le chemin de la réussite !</div>
                 <div class="text">Renseignez votre liste de vocabulaire et apprenez là grâce à de nombreux mini-jeux générés juste pour vous !</div>
@@ -40,52 +47,89 @@
                     <div class="text">En savoir plus</div>
                 </div>
             </div>
-            <div class="imgs">
+            <div class="imgs animate">
                 <img src="/static/imgs/3d-globe.png" class="main-img">
             </div>
         </section>
         <section class="main-container-section">
             <div class="snd-section">
-                <div class="title">Comment ça marche ?</div>
-                <div class="steps-container">
+                <div class="title ">Comment ça marche ?</div>
+                <div class="steps-container ">
                     <div class="step-box">
                         <div class="nbr">1</div>
                         <div class="text">Paramétrez vos objectifs journalier</div>
                     </div>
-                    <div class="step-box">
+                    <div class="step-box ">
                         <div class="nbr">2</div>
                         <div class="text">Renseignez votre liste de vocabulaire</div>
                     </div>
-                    <div class="step-box">
+                    <div class="step-box ">
                         <div class="nbr">3</div>
                         <div class="text">Apprenez comme un chef tout en vous amusant</div>
                     </div>
                 </div>
             </div>
             <div class="thd-section">
-                <div class="title">La magie en action</div>
-                <div class="menu-container">
-                    <div class="item">Snake</div>
-                    <div class="item">Hangman</div>
-                    <div class="item">Snake</div>
-                    <div class="item">Snake</div>
+                <div class="title  ">La magie en action</div>
+                <div class="menu-container  ">
+                    <div class="item active" onclick="switch_carousel(this, 'pos1')">Snake</div>
+                    <div class="item" onclick="switch_carousel(this, 'pos2')">Hangman</div>
+                    <div class="item" onclick="switch_carousel(this, 'pos3')">Snake</div>
+                    <div class="item" onclick="switch_carousel(this, 'pos4')">Snake</div>
                 </div>
-                <div class="carousel-container"></div>
+                <div class="carousel-container pos1  ">
+                    <div class="content">
+                        <div class="texts">
+                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
+                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
+                        </div>
+                        <div class="illustration">
+                            <img src="" class="img" alt="">
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="texts">
+                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
+                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
+                        </div>
+                        <div class="illustration">
+                            <img src="" class="img" alt="">
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="texts">
+                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
+                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
+                        </div>
+                        <div class="illustration">
+                            <img src="" class="img" alt="">
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="texts">
+                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
+                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
+                        </div>
+                        <div class="illustration">
+                            <img src="" class="img" alt="">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="frth-section">
-                <div class="advice-box">
+                <div class="advice-box ">
                     <img src="/static/imgs/3d-brown-leather-diary-with-yellow-bookmark.png" class="img" alt="">
                     <div class="title">Mettez vous des barrières à franchir !</div>
                     <div class="text">Fixez vous des objectifs clairs pour chacune de vos listes de vocabulaire.
                         Un algorithme évaluera la difficulté de vos objectifs !</div>
                 </div>
-                <div class="advice-box">
+                <div class="advice-box ">
                     <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="">
                     <div class="title">Gagnez de l'expérience</div>
                     <div class="text">Atteignez vos objectifs et gagnez de l'expériences. Plus vos objectifs 
                         sont compliqués, plus l'expérience gagné sera grande !</div>
                 </div>
-                <div class="advice-box">
+                <div class="advice-box ">
                     <img src="/static/imgs/3d-space-rocket.png" class="img" alt="">
                     <div class="title">Montez dans le classement et améliorez vous !</div>
                     <div class="text">L'éxpérience gagnée vous fait monter dans le classement et est assez 
@@ -93,7 +137,7 @@
                 </div>
             </div>
             <div class="fifth-section">
-                <div class="title">Pour qui ?</div>
+                <div class="title ">Pour qui ?</div>
                 <div class="carousel-container pos1">
                     <div class="slide">
                         <div class="illustration">
@@ -123,7 +167,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-infos">
+                <div class="carousel-infos ">
                     <div class="item active" onclick="change_slide(this, 'pos1')"></div>
                     <div class="item" onclick="change_slide(this, 'pos2')" ></div>
                     <div class="item" onclick="change_slide(this, 'pos3')"></div>
@@ -132,28 +176,28 @@
         </section>
         <footer>
             <div>
-                <div class="main-title">WORD QUEST</div>
+                <div class="main-title ">WORD QUEST</div>
                 <div class="infos-container">
-                    <div class="info-box">
+                    <div class="info-box ">
                         <div class="title">Liens rapides</div>
                         <a href="" class="link">Accueil</a>
                         <a href="" class="link">Methode</a>
                         <a href="" class="link">A propos</a>
                     </div>
-                    <div class="info-box">
+                    <div class="info-box ">
                         <div class="title">Ressources</div>
                         <a href="" class="link">Ressources utilisées</a>
                         <a href="" class="link">Politique de confidentialité</a>
                         <a href="" class="link">Conditions d'utilisation</a>
                     </div>
                 </div>
-                <a href="" class="social-media-link">
+                <a href="" class="social-media-link ">
                     <img src="/static/icons/twitter-30-black.png" class="img">
                 </a>
             </div>
-            <div class="separate"></div>
+            <div class="separate "></div>
             <div >
-                <div class="help-box">
+                <div class="help-box ">
                     <div class="img-container">
                         <img src="/static/imgs/3d-young-people-in-casual-clothes-standing.png" class="img" alt="community-illustration">
                     </div>
@@ -165,7 +209,7 @@
                         <img src="/static/icons/arrow-right-30-dark-grey.png" class="img" alt="">
                     </a>
                 </div>
-                <div class="help-box">
+                <div class="help-box ">
                     <div class="img-container">
                         <img src="/static/imgs/3d-young-woman-waving-her-hand-while-sitting-at-the-computer.png" class="img" alt="community-illustration">
                     </div>
@@ -181,6 +225,17 @@
         </footer>
     </main>
     <script>
+        function switch_carousel(el, pos){
+            let slidesContainer = document.getElementsByClassName('carousel-container')[0];
+            slidesContainer.setAttribute('class', 'carousel-container ' + pos);
+
+            let items = document.querySelectorAll('.menu-container .item');
+            items.forEach(item => {
+                item.classList.remove('active');
+            });
+            el.classList.add('active');
+        }
+
         function change_slide(el, pos){
             let slidesContainer = document.getElementsByClassName('carousel-container')[1];
             slidesContainer.setAttribute('class', 'carousel-container ' + pos);

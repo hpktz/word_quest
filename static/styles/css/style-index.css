@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +8,8 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-body, html {
+body,
+html {
     height: 100%;
     background-color: #f6f6f6;
 }
@@ -50,7 +50,8 @@ body {
 @keyframes smoothEntry {
     0% {
         opacity: 0;
-        transform: translate(50px, -50px) rotateX(45deg) rotateY(30deg);;
+        transform: translate(50px, -50px) rotateX(45deg) rotateY(30deg);
+        ;
     }
     100% {
         opacity: 1;
@@ -62,6 +63,10 @@ main {
     overflow-y: hidden;
     overflow-x: hidden;
     padding-top: 100px;
+}
+
+.header-phone-logo {
+    display: none;
 }
 
 header {
@@ -88,7 +93,8 @@ header {
 @keyframes smoothEntryHeader {
     0% {
         opacity: 0;
-        transform: translate(-55%, -10px) rotateX(45deg) rotateY(30deg);;
+        transform: translate(-55%, -10px) rotateX(45deg) rotateY(30deg);
+        ;
     }
     100% {
         opacity: 1;
@@ -150,7 +156,7 @@ header .dashboard-access-not-connected {
     font-weight: bold;
     padding: 10px 0;
     text-align: center;
-    color: white;   
+    color: white;
     background-color: #333;
     border-radius: 10px;
     text-decoration: none;
@@ -242,7 +248,6 @@ main .frst-section .texts .separate {
     margin: 25px 0;
     margin-left: 10px;
 }
-
 
 main .frst-section .texts .more {
     display: flex;
@@ -361,13 +366,13 @@ main .thd-section .menu-container .item {
 }
 
 main .thd-section .menu-container .item.active {
-    background-color:  #717744;
+    background-color: #717744;
     color: white;
     border-radius: 10px;
 }
 
 main .thd-section .menu-container .item:hover {
-    background-color:  #717744;
+    background-color: #717744;
     color: white;
     border-radius: 10px;
 }
@@ -589,7 +594,8 @@ main .fifth-section .carousel-container.pos3 .slide:nth-child(3) {
 main .fifth-section .slide {
     position: absolute;
     transform: translateX(-50%);
-    width: 100%;max-width: 750px;
+    width: 100%;
+    max-width: 750px;
     padding: 10px;
     display: grid;
     border-radius: 25px;
@@ -757,4 +763,200 @@ footer .help-box .btn {
 footer .help-box .btn .img {
     width: 25px;
     height: 25px;
+}
+
+@media all and (max-width: 1111px) {
+    main .frst-section .imgs .main-img {
+        width: 100%;
+        height: auto;
+        right: 0;
+    }
+}
+
+@media all and (max-width: 900px) {
+    main .fifth-section .slide {
+        width: calc(100% - 100px);
+    }
+}
+
+@media all and (max-width: 850px) {
+    footer {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 2px 1fr;
+        gap: 25px;
+    }
+    footer .separate {
+        width: 100%;
+        height: 1px;
+    }
+    .header-phone-button {
+        position: fixed;
+        top: 10px;
+        left: 50px;
+        width: 75px;
+        height: 75px;
+        background-color: white;
+        box-shadow: 0px 0px 10px 0 #959da536;
+        border-radius: 10px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 2px 2px 2px 1fr;
+        gap: 10px;
+        place-items: center;
+        align-items: center;
+        transform: translateX(-50%);
+        animation: smoothEntryHeader 0.75s ease-in-out;
+        z-index: 101;
+    }
+    .header-phone-button .item {
+        width: 40px;
+        height: 2px;
+        background-color: #333;
+        transition: all 0.3s ease;
+    }
+    .header-phone-button .item:nth-child(1) {
+        grid-row: 2;
+    }
+    .header-phone-button .item:nth-child(2) {
+        grid-row: 3;
+    }
+    .header-phone-button .item:nth-child(3) {
+        grid-row: 4;
+    }
+    .header-phone-button.active .item:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+    }
+    .header-phone-button.active .item:nth-child(2) {
+        opacity: 0;
+    }
+    .header-phone-button.active .item:nth-child(3) {
+        transform: rotate(-45deg) translate(8px, -8px);
+    }
+    .header-phone-logo {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        z-index: 101;
+    }
+    .header-phone-logo img {
+        width: 50px;
+        height: 50px;
+    }
+    header {
+        width: 20px;
+        height: 20px;
+        opacity: 0;
+        overflow: hidden;
+        top: 20px;
+        left: 40px;
+        grid-template-columns: 1fr;
+        grid-template-rows: 40px 40px 1fr 30px;
+        gap: 25px;
+        padding: 0;
+        padding: 15px;
+        transition: all 0.3s ease;
+        animation: none;
+    }
+    header.active {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        opacity: 1;
+        overflow: visible;
+        top: 10px;
+        left: 50%;
+    }
+    header .logo {
+        display: none;
+    }
+    header .search-bar {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
+    }
+    header .menu {
+        grid-column: 1;
+        grid-row: 3;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+    header .menu .item {
+        font-family: "Bangers", cursive;
+        font-size: 35px;
+        cursor: pointer;
+    }
+    header .dashboard-access-not-connected {
+        grid-column: 1;
+        grid-row: 4;
+        width: 100%;
+    }
+    header .dashboard-access {
+        grid-column: 1;
+        grid-row: 4;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    body {
+        padding: 25px 15px 0 15px;
+    }
+    main .frst-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        gap: 25px;
+        position: relative;
+    }
+    main .frst-section .texts {
+        z-index: 1;
+    }
+    main .frst-section .imgs {
+        position: absolute;
+        top: calc(50% - 150px);
+        right: -40px;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        filter: blur(1px);
+        opacity: 0.5;
+    }
+    main .snd-section .steps-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 25px;
+    }
+    main .thd-section .menu-container {
+        flex-wrap: wrap;
+    }
+    main .thd-section .menu-container .item {
+        width: calc(50% - 10px);
+    }
+    main .thd-section .carousel-container .content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 25px;
+    }
+    main .frth-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 25px;
+    }
+    main .fifth-section .slide {
+        width: calc(100% - 50px);
+        height: 300px;
+        grid-template-columns: 1fr;
+        padding: 10px 10px 10px 80px;
+    }
+    main .fifth-section .slide .illustration {
+        position: absolute;
+        left: -25px;
+        height: 200px;
+    }
+    main .fifth-section .slide .illustration .img {
+        height: 100%;
+    }
+    main .fifth-section .slide .content {
+        grid-column: 1;
+    }
 }

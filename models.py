@@ -32,7 +32,6 @@ class User(UserMixin):
             results = []
             for lst in lists:
                 result = dict(zip(columns, lst))
-                print(result)
                 result["created_at"] = result["created_at"].date().strftime("%d/%m/%Y")
                 result["updated_at"] = result["updated_at"].date().strftime("%d/%m/%Y")
 

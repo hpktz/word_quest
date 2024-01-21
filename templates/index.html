@@ -1,11 +1,21 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Quest</title>
-    <link  type="text/css" rel="stylesheet" href="/static/styles/css/style-index.css">
+    <link type="text/css" rel="stylesheet" href="/static/styles/css/style-index.css">
 </head>
+
 <body>
+    <div class="header-phone-button" onclick="header_menu_phone()">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+    </div>
+    <div class="header-phone-logo">
+        <img src="/static/imgs/app-main-logo.png" alt="logo">
+    </div>
     <header>
         <div class="logo">
             <img src="/static/imgs/app-main-logo.png" alt="logo">
@@ -38,7 +48,7 @@
         <section class="frst-section">
             <div class="texts animate">
                 <div class="title">Explorez et apprenez<br/> l'anglais en vous amusant</div>
-                <div class="subtitle">Une liste de vocabulaire ?  Trouvez le chemin de la réussite !</div>
+                <div class="subtitle">Une liste de vocabulaire ? Trouvez le chemin de la réussite !</div>
                 <div class="text">Renseignez votre liste de vocabulaire et apprenez là grâce à de nombreux mini-jeux générés juste pour vous !</div>
                 <div class="btn">C'est parti !</div>
                 <div class="separate"></div>
@@ -120,20 +130,17 @@
                 <div class="advice-box ">
                     <img src="/static/imgs/3d-brown-leather-diary-with-yellow-bookmark.png" class="img" alt="">
                     <div class="title">Mettez vous des barrières à franchir !</div>
-                    <div class="text">Fixez vous des objectifs clairs pour chacune de vos listes de vocabulaire.
-                        Un algorithme évaluera la difficulté de vos objectifs !</div>
+                    <div class="text">Fixez vous des objectifs clairs pour chacune de vos listes de vocabulaire. Un algorithme évaluera la difficulté de vos objectifs !</div>
                 </div>
                 <div class="advice-box ">
                     <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="">
                     <div class="title">Gagnez de l'expérience</div>
-                    <div class="text">Atteignez vos objectifs et gagnez de l'expériences. Plus vos objectifs 
-                        sont compliqués, plus l'expérience gagné sera grande !</div>
+                    <div class="text">Atteignez vos objectifs et gagnez de l'expériences. Plus vos objectifs sont compliqués, plus l'expérience gagné sera grande !</div>
                 </div>
                 <div class="advice-box ">
                     <img src="/static/imgs/3d-space-rocket.png" class="img" alt="">
                     <div class="title">Montez dans le classement et améliorez vous !</div>
-                    <div class="text">L'éxpérience gagnée vous fait monter dans le classement et est assez 
-                        significative pour voir où en sont vos progrets !</div>
+                    <div class="text">L'éxpérience gagnée vous fait monter dans le classement et est assez significative pour voir où en sont vos progrets !</div>
                 </div>
             </div>
             <div class="fifth-section">
@@ -169,7 +176,7 @@
                 </div>
                 <div class="carousel-infos ">
                     <div class="item active" onclick="change_slide(this, 'pos1')"></div>
-                    <div class="item" onclick="change_slide(this, 'pos2')" ></div>
+                    <div class="item" onclick="change_slide(this, 'pos2')"></div>
                     <div class="item" onclick="change_slide(this, 'pos3')"></div>
                 </div>
             </div>
@@ -196,7 +203,7 @@
                 </a>
             </div>
             <div class="separate "></div>
-            <div >
+            <div>
                 <div class="help-box ">
                     <div class="img-container">
                         <img src="/static/imgs/3d-young-people-in-casual-clothes-standing.png" class="img" alt="community-illustration">
@@ -225,7 +232,19 @@
         </footer>
     </main>
     <script>
-        function switch_carousel(el, pos){
+        function header_menu_phone() {
+            let menu = document.getElementsByClassName('header-phone-button')[0];
+            let header = document.getElementsByTagName('header')[0];
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                header.classList.remove('active');
+            } else {
+                menu.classList.add('active');
+                header.classList.add('active');
+            }
+        }
+
+        function switch_carousel(el, pos) {
             let slidesContainer = document.getElementsByClassName('carousel-container')[0];
             slidesContainer.setAttribute('class', 'carousel-container ' + pos);
 
@@ -236,7 +255,7 @@
             el.classList.add('active');
         }
 
-        function change_slide(el, pos){
+        function change_slide(el, pos) {
             let slidesContainer = document.getElementsByClassName('carousel-container')[1];
             slidesContainer.setAttribute('class', 'carousel-container ' + pos);
 
@@ -251,7 +270,7 @@
             let slidesContainer = document.getElementsByClassName('carousel-container')[1];
             let pos = slidesContainer.getAttribute('class').split(' ')[1];
             pos = pos.replace('pos', '');
-            if (Number(pos) === 3){
+            if (Number(pos) === 3) {
                 pos = 1
             } else {
                 pos = Number(pos) + 1;
@@ -262,7 +281,7 @@
             let activeItem = document.querySelector('.carousel-infos .item.active');
             let activeItemIndex = Array.prototype.indexOf.call(items, activeItem);
             let nextItemIndex = activeItemIndex + 1;
-            if(nextItemIndex > items.length - 1){
+            if (nextItemIndex > items.length - 1) {
                 nextItemIndex = 0;
             }
             let nextItem = items[nextItemIndex];
@@ -270,4 +289,5 @@
         }, 5000);
     </script>
 </body>
+
 </html>

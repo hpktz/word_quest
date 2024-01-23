@@ -21,6 +21,7 @@ Session(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Vous devez vous connecter pour accéder à cette page.'
 
 @login_manager.user_loader
 def load_user(user_id):

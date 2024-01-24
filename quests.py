@@ -146,9 +146,10 @@ def reward():
                 is_eligible = result[0][0] >= targets["games"] and result[0][1] >= targets["xp"] and result[0][2] >= targets["time"]
             print(is_eligible)
             if is_eligible:
-                cursor.execute("INSERT INTO rewards (user_id) VALUES (%s)", (current_user.id,))
-                conn.commit()
                 reward = result[0][1] / targets["xp"] * 1000
+                cursor.execute("INSERT INTO rewards (user_id) VALUES (%s)", (current_user.id,))
+                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'gems', %s)", (current_user.id, reward))
+                conn.commit()
                 return render_template('dashboard/reward.html', reward=int(reward))
             else:
                 return redirect(url_for('quests.quests'))

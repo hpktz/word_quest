@@ -7,6 +7,7 @@ from main import main_bp  # Importez votre blueprint depuis le fichier home.py
 from create import create_bp
 from quests import quests_bp
 from discover import discover_bp
+from user_data import user_data_bp
 from models import User  # Assurez-vous d'importer votre classe User appropriée
 from root import *
 import os
@@ -49,7 +50,7 @@ app.register_blueprint(main_bp)
 app.register_blueprint(create_bp)
 app.register_blueprint(quests_bp)
 app.register_blueprint(discover_bp)
-
+app.register_blueprint(user_data_bp)
 
 # Importation of games blueprints
 from games.hangman import hangman_bp

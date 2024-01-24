@@ -65,6 +65,10 @@ body {
 
 /** MAIN SKELETON **/
 
+header.profile-color {
+    --header-background: #766153;
+}
+
 header.dashboard-color {
     --header-background: #373D20;
 }
@@ -387,7 +391,7 @@ main {
 
 .dashboard-main-container .main-infos .user-infos .box:nth-child(1).pulse {
     --background-animation: #e091b1;
-    animation: pulse 2s ;
+    animation: pulse 2s;
 }
 
 .dashboard-main-container .main-infos .user-infos .box:nth-child(3).pulse {
@@ -573,6 +577,7 @@ main {
     grid-template-columns: 1fr 30px;
     transition: all 0.2s ease-in-out;
 }
+
 .dashboard-main-container .lists-container .list-box.new-list {
     opacity: 0;
     transform: translateY(-15px) scale(0.9);

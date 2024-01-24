@@ -26,17 +26,18 @@
             <div class="item">Forum</div>
             <div class="item">A propos</div>
         </div>
-        <div class="search-bar">
-            <img src="/static/icons/search-30-dark-grey.png" class="img" alt="search-icon">
-            <input class="search" type="text" placeholder="Rechercher">
-        </div>
         {% if user %}
-        <a href="/dashboard" class="dashboard-access">
-            <div class="account-icon">
+        <div class="account-menu">
+            <a href="/dashboard" class="item">
+                <img src="/static/icons/home-30-dark-grey.png" class="img" alt="account-icon">
+            </a>
+            <a href="/dashboard/settings" class="item">
+                <img src="/static/icons/settings-30-dark-grey.png" class="img" alt="account-icon">
+            </a>
+            <a href="/dashboard/profile" class="item profile">
                 <img src="/static/icons/user-30-white.png" class="img" alt="account-icon">
-            </div>
-            <div class="account-name">{{user}}</div>
-        </a>
+            </a>
+        </div>
         {% else %}
         <a href="/dashboard" class="dashboard-access-not-connected">
             <div class="account-name">Me connecter</div>

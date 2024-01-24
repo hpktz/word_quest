@@ -20,6 +20,8 @@ class hangman():
         self.lettersDiscoverd = []
         
         # Etc ... (xp, score, etc)
+    def new_word(self):
+        self.word = random.choice(self.words)
     
     def checking_letter(self):
         pass

@@ -1,0 +1,90 @@
+{% extends"dashboard/main.html" %} {% block title %}Quêtes{% endblock %}{% block color %}profile-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-profile.css">{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">
+        <div>Profil</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+                <img src="/static/icons//search-30-white.png" alt="logo">
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block content %}
+<main class="profile-main-container">
+    <section class="profile-header">
+        <div class="profile-picture">
+            <img src="/static/imgs/profiles/{{ current_user.picture }}.png" alt="profile-picture">
+        </div>
+        <div class="profile-main-infos">
+            <div class="name">{{ current_user.name }}</div>
+            <div class="info-box">
+                <img src="/static/icons/member-30-dark-grey.png" class="img">
+                <div class="text">1 abonnement / 6 abonnés</div>
+            </div>
+            <div class="info-box">
+                <img src="/static/icons/calendar-30-dark-grey.png" class="img">
+                <div class="text">Membre depuis le 9 aout 2019</div>
+            </div>
+        </div>
+    </section>
+    <section class="profile-content">
+        <div class="title">Statistiques</div>
+        <div class="stats-container">
+            <div class="box">
+                <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img">
+                <div class="texts">
+                    <div class="number">200</div>
+                    <div class="text">XP gagnés</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-reward-badge-with-star-and-ribbon.png" class="img">
+                <div class="texts">
+                    <div class="number">5</div>
+                    <div class="text">Classement</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-pink-gemstone.png" class="img">
+                <div class="texts">
+                    <div class="number">3948</div>
+                    <div class="text">XP gégnés</div>
+                </div>
+            </div>
+        </div>
+        <div class="title" style="margin-top: 50px;">Listes</div>
+    </section>
+    <section class="friends-list">
+        <div class="menu">
+            <div class="item item_sub active" onclick="switch_friend_list()">Abonnements</div>
+            <div class="item item_sub" onclick="switch_friend_list()">Abonnés</div>
+        </div>
+        <div class="content content_sub active">
+            <div class="account-container">
+                <img src="/static/imgs/profiles/{{ current_user.picture }}.png" class="account-picture" alt="profile-picture">
+                <div class="texts">
+                    <div class="name">Hippouille</div>
+                    <div class="xp">1900 XP</div>
+                </div>
+            </div>
+        </div>
+        <div class="content content_sub">
+            <div class="nothing-container">
+                <img src="/static/icons/disappointed-30-grey.png" class="account-picture" alt="profile-picture">
+                <div class="text">Pas d'abonné</div>
+            </div>
+        </div>
+    </section>
+    <script>
+        function switch_friend_list() {
+            let menu_items = document.getElementsByClassName("item_sub");
+            let contents = document.getElementsByClassName("content_sub");
+            for (let i = 0; i < menu_items.length; i++) {
+                menu_items[i].classList.toggle("active");
+                contents[i].classList.toggle("active");
+            }
+        }
+    </script>
+</main>
+{% endblock %}

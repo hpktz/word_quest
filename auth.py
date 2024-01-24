@@ -92,7 +92,7 @@ def login_post():
             if session["2fa"]["email"] != email:
                 password = password_input.encode('utf-8')
                 if bcrypt.checkpw(password, data[5].encode('utf-8')):
-                    if data[10] == True:
+                    if data[11] == True:
                         if data[6] == False:
                             user = User(data[0])
                             login_user(user)
@@ -187,7 +187,7 @@ def register_post():
             cursor.execute(f"SELECT * FROM users WHERE email='{email}'")
             data = cursor.fetchone()
 
-            if data and data[10] == True:
+            if data and data[11] == True:
                 flash("Email déjà utilisé")
                 return redirect(url_for('auth.register'))
             else:

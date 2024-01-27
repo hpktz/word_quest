@@ -29,9 +29,13 @@ def quests():
         is_there_targets = targets["games"] != 0 or targets["xp"] != 0 or targets["time"] != 0
         
         seven_days_ago = datetime.now() - timedelta(days=7)
-        cursor.execute("SELECT DATE(created_at) as day, COUNT(*) as lesson_count,  SUM(xp) as total_xp, SUM(time) as total_time FROM lessons_log WHERE user_id = %s AND DATE(created_at) >= %s GROUP BY day", (current_user.id,seven_days_ago))
+        cursor.execute("SELECT DATE(created_at) as day, COUNT(*) as lesson_count,  SUM(xp) as total_xp, \
+            SUM(time) as total_time FROM lessons_log \
+            WHERE user_id = %s AND DATE(created_at) >= %s GROUP BY day", (current_user.id,seven_days_ago))
         result = cursor.fetchall()
-        cursor.execute("SELECT u.id as user_id, u.name as username, SUM(ll.xp) as total_xp, RANK() OVER (ORDER BY SUM(ll.xp) DESC) as user_rank FROM users u JOIN lessons_log ll ON u.id = ll.user_id GROUP BY u.id, u.name ORDER BY total_xp DESC;")
+        cursor.execute("SELECT u.id as user_id, u.name as username, SUM(ll.xp) as total_xp, \
+            RANK() OVER (ORDER BY SUM(ll.xp) DESC) as user_rank FROM users u JOIN lessons_log ll ON u.id = ll.user_id \
+            GROUP BY u.id, u.name ORDER BY total_xp DESC;")
         ranking = cursor.fetchall()
         cursor.execute("SELECT * FROM rewards WHERE user_id = %s AND DATE(created_at) = CURDATE()", (current_user.id,))
         reward = cursor.fetchall()

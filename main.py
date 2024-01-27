@@ -80,7 +80,11 @@ def index():
         conn = create_connection()
         cursor = conn.cursor()
         # Retrieve the user's amount of gems, lives and XP
-        cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) AS sum_gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) AS sum_lives, MAX(CASE WHEN transaction_type = 'lives' THEN created_at ELSE 0 END) AS last_live, SUM(CASE WHEN transaction_type = 'xp' THEN transaction ELSE 0 END) AS sum_xp FROM user_statements WHERE user_id = %s ORDER BY created_at DESC LIMIT 1;", (current_user.id,))
+        cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'gems' THEN transaction ELSE 0 END) \
+                AS sum_gems, SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) \
+                AS sum_lives, MAX(CASE WHEN transaction_type = 'lives' THEN created_at ELSE 0 END) \
+                AS last_live, SUM(CASE WHEN transaction_type = 'xp' THEN transaction ELSE 0 END) AS sum_xp \
+                FROM user_statements WHERE user_id = %s ORDER BY created_at DESC LIMIT 1;", (current_user.id,))
         user_statement = cursor.fetchone()
         gems = user_statement[0]
         lives = user_statement[1]

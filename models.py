@@ -40,7 +40,7 @@ class User(UserMixin):
                 result["words"] = []
                 result["lessons"] = []
 
-                cursor.execute('SELECT id, word, type, examples, trans_word, trans_examples FROM list_content WHERE list_id = %s', (result["id"],))
+                cursor.execute('SELECT id, word, word_type, examples, trans_word, trans_examples FROM list_content WHERE list_id = %s', (result["id"],))
                 words = cursor.fetchall()
 
                 for word in words:
@@ -69,6 +69,7 @@ class User(UserMixin):
             self.lists = results
 
         except Exception as e:
+            print(e)
             if conn:
                 conn.rollback()
             self.name = None

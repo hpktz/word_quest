@@ -56,30 +56,3 @@ function search(el) {
         }
     }
 }
-
-async function call_server() {
-    try {
-        // To send data to the server, we use the POST method
-        const request = await fetch('your route', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                data: 'data'
-            })
-        });
-        const response = await request.json();
-        if (response.status == 200) {
-            if (response.code == 200) {
-                // display the result
-            } else {
-                // display an error message
-            }
-        } else {
-            // display an error message
-        }
-    } catch (error) {
-        // display an error message
-    }
-}

@@ -10,6 +10,9 @@
 function redirect(el, event) {
     event.preventDefault();
     // Animate the page change.
+    if (event.target.classList.contains('not-clickable-zone')) {
+        return;
+    }
     const href = el.getAttribute('href');
     const body = document.querySelector('body');
     const main = document.querySelector('main');

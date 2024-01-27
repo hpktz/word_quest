@@ -1344,6 +1344,44 @@ main {
     width: 100%;
 }
 
+.dashboard-main-container .share-box {
+    width: 100%;
+    height: fit-content;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    display: grid;
+    grid-template-columns: 1fr 70px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.dashboard-main-container.share-box .link {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+}
+
+.dashboard-main-container.share-box .link::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.dashboard-main-container.share-box .link .loader {
+    position: relative;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #555;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    animation: spin 1s linear infinite;
+}
+
 @media screen and (max-width: 1085px) {
     body {
         grid-template-columns: 95px 1fr;

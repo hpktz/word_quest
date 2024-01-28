@@ -266,4 +266,4 @@ def delete(list_id):
         if cursor:
             cursor.close()
         if conn:
-            conn.close()
+            conn.close() 

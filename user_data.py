@@ -120,7 +120,7 @@ def user_profile(id):
             results = cursor.fetchall()
             columns = [column[0] for column in cursor.description]
             for row in results:
-                if row[2] == 0 and not is_current_user and not is_subscribed:
+                if row[3] == 0 and not is_current_user and not is_subscribed:
                     continue
                 
                 result = dict(zip(columns, row))

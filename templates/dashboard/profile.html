@@ -98,9 +98,21 @@
                     {% endif %} {% endif %}
                 </div>
             </a>
-            {% endfor %} {% else %} {% endif %}
+            {% endfor %} {% else %}
+            <div class="empty-list-box">
+                <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="logo">
+                <div class="text">Aucune liste visible</div>
+            </div>
+            {% endif %}
         </div>
     </section>
+    {% else %}
+    <section class="private-profile">
+        <img src="/static/imgs/3d-business-desk.png" class="img" alt="">
+        <div class="title">Profil privé</div>
+        <div class="text">Vous ne pouvez pas accéder au profil de cet utilisateur car il est privé.</div>
+    </section>
+    {% endif %}
     <section class="friends-list">
         <div class="menu">
             <div class="item item_sub active" onclick="switch_friend_list()">Abonnements</div>
@@ -163,7 +175,6 @@
         </a>
         {% endif %}
     </section>
-    {% endif %}
     <script>
         function has_pressed_enter(event) {
             if (event.keyCode == 13) {
@@ -208,17 +219,19 @@
         async function copy_list(el, event) {
             event.preventDefault();
             let id = el.dataset.id;
+            el.innerHTML = "<div class='loader'></div>"
+            el.removeAttribute("onclick");
+            await new Promise(r => setTimeout(r, 1000));
             try {
                 let request = await fetch("/dashboard/list/copy/" + id);
                 let response = await request.json();
                 if (response.code == 200) {
-                    open_alert("Liste copiée", "La liste a été copiée dans votre profil.");
+                    el.innerHTML = "<img src='/static/icons/done-30-grey.png' class='not-clickable-zone' alt='logo'>";
                 } else {
-                    open_alert("Erreur", "Une erreur s'est produite, veuillez réessayer plus tard.");
+                    el.innerHTML = "<img src='/static/icons/issue-100-red.png' class='not-clickable-zone' alt='logo'>";
                 }
             } catch (error) {
-                console.log(error);
-                open_alert("Erreur", "Une erreur s'est produite, veuillez réessayer plus tard.");
+                el.innerHTML = "<img src='/static/icons/issue-100-red.png' class='not-clickable-zone' alt='logo'>";
             }
         }
 

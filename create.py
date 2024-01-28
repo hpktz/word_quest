@@ -120,6 +120,36 @@ class WordList:
             searched (list): The list of searched words.
         """
         self._last_searched = searched
+        
+        
+    def to_json(self):
+        """
+        Convert the list to JSON.
+
+        Returns:
+            dict: The list in JSON.
+        """
+        return json.dumps({
+            "_list": self._list,
+            "_last_searched": self._last_searched
+        })
+        
+    @classmethod
+    def from_json(cls, json_string):
+        """
+        Create a list from JSON.
+
+        Args:
+            json_data (dict): The list in JSON.
+
+        Returns:
+            WordList: The list.
+        """
+        data = json.loads(json_string)
+        word_list = cls()
+        word_list._list = data["_list"]
+        word_list._last_searched = data["_last_searched"]
+        return word_list
 
     
 
@@ -132,7 +162,7 @@ def create():
     Returns:
         flask.Response: The create page.
     """
-    session['list_under_creation'] = WordList()
+    session['list_under_creation'] = WordList().to_json()
     return render_template('dashboard/create.html')
 
 
@@ -258,7 +288,9 @@ def search(x):
                 senses.append(array)
 
         # Memorize the last searched words
-        session['list_under_creation'].search(senses)
+        wordList = WordList.from_json(session['list_under_creation'])
+        wordList.search(senses)
+        session['list_under_creation'] = wordList.to_json()
 
         if len(senses) == 0:
             return jsonify({"code": 404, "title": "Word not found", "result": []})
@@ -292,7 +324,10 @@ def add_to_list(id):
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403
 
-    added = session['list_under_creation'].add(id)
+    wordList = WordList.from_json(session['list_under_creation'])
+    added = wordList.add(id)
+    session['list_under_creation'] = wordList.to_json()
+    
     if added is not None:
         return jsonify({"code": 200, "title": "Word added", "result": added}), 200
 
@@ -319,7 +354,10 @@ def remove_from_list(id):
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403
 
-    removed = session['list_under_creation'].remove(id)
+    wordList = WordList.from_json(session['list_under_creation'])
+    removed = wordList.remove(id)
+    session['list_under_creation'] = wordList.to_json()
+    
     if removed is not None:
         return jsonify({"code": 200, "title": "Word removed", "result": removed}), 200
 
@@ -359,7 +397,9 @@ def create_list():
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden"}), 403
     
-    if session['list_under_creation'].length() < 2:
+    wordList = WordList.from_json(session['list_under_creation'])
+    
+    if wordList.length() < 2:
         return jsonify({"code": 400, "title": "Bad request", "message": "Ajoutez au minimum 3 mots à votre liste"})
 
     data = request.json
@@ -410,7 +450,8 @@ def create_list():
         list_id = cursor.lastrowid
         
         # Add the words to the list
-        for word in session['list_under_creation'].get_all():
+        wordList = WordList.from_json(session['list_under_creation'])
+        for word in wordList.get_all():
             cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
                             (word['word'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
             

@@ -1,0 +1,78 @@
+body {
+    grid-template-columns: 95px 1fr;
+    animation: none;
+}
+
+header {
+    grid-template-columns: 75px 0;
+    background-color: #f6f6f6;
+}
+
+.settings-main-container {
+    display: grid;
+    grid-template-columns: 1fr 500px 1fr;
+}
+
+.settings-main-container .settings-section {
+    grid-column: 2;
+}
+
+.settings-main-container .settings-section .title {
+    font-family: "Bangers", cursive;
+    font-size: 36px;
+    margin-bottom: 50px;
+}
+
+.settings-main-container .settings-section>div {
+    margin: 25px 0;
+}
+
+.settings-main-container .settings-section>div .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.settings-main-container .settings-section input {
+    width: 100%;
+    max-width: 300px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+}
+
+.settings-main-container .settings-section .danger-zone-section {
+    border: 2px solid #9b0000;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+@media screen and (max-width: 1085px) {
+    body.open {
+        grid-template-columns: 95px 1fr;
+    }
+    header .nav-bar {
+        grid-template-rows: 140px 1fr 55px;
+    }
+    header .nav-bar .responsive-logo {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    header .nav-bar {
+        grid-template-rows: 75px 0 0;
+        align-items: center;
+        overflow: hidden;
+        height: 75px;
+        width: 75px;
+        transition: all 0.5s ease-in-out;
+    }
+    body.phone-menu-open header .infos-section {
+        display: none;
+    }
+}

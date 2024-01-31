@@ -42,6 +42,36 @@ body {
 }
 
 
+/** MAIN LOADER **/
+
+.main-loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 5px solid white;
+    border-top: 5px solid #333;
+    animation: main-spin 1s linear infinite;
+    display: none;
+}
+
+.main-loader.active {
+    display: block;
+}
+
+@keyframes main-spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+
 /** BASIC STYLES **/
 
 .clickable-logo a {

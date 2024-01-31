@@ -32,6 +32,7 @@ function redirect(el, event) {
     }
     // Wait for the animation to finish before redirecting.
     setTimeout(function() {
+        document.getElementsByClassName('main-loader')[0].classList.add('active');
         window.location.href = href;
     }, 510);
 }

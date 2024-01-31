@@ -2,13 +2,13 @@ from flask import Flask, session, render_template
 from flask_login import LoginManager, current_user
 from flask_session import Session
 
-from auth import auth_bp  # Importez votre blueprint depuis le fichier account.py
-from main import main_bp  # Importez votre blueprint depuis le fichier home.py
+from auth import auth_bp 
+from main import main_bp
 from create import create_bp
 from quests import quests_bp
 from discover import discover_bp
 from user_data import user_data_bp
-from models import User  # Assurez-vous d'importer votre classe User appropriée
+from models import User
 from root import *
 import os
 

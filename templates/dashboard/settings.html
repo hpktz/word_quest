@@ -1,0 +1,44 @@
+{% extends "dashboard/main.html" %} {% block title %}Quêtes{% endblock %}{% block color %}quests-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-settings.css">{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
+<main class="settings-main-container">
+    <section class="settings-section">
+        <div class="title">Paramètres</div>
+        <div class="user-infos-section">
+            <div class="title">Informations personnelles</div>
+            <form method="POST" action="">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" name="username" id="username">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
+                <label for="phone">Anniversaire</label>
+                <input type="date" name="birthday" id="birthday">
+                <input type="submit" value="Changer les informations">
+            </form>
+        </div>
+        <div class="password-section">
+            <div class="title">Mot de passe</div>
+            <form method="POST" action="">
+                <label for="old-password">Ancien mot de passe</label>
+                <input type="password" name="old-password" id="old-password">
+                <label for="new-password">Nouveau mot de passe</label>
+                <input type="password" name="new-password" id="new-password">
+                <label for="confirm-password">Confirmer le nouveau mot de passe</label>
+                <input type="submit" value="Changer le mot de passe">
+            </form>
+        </div>
+        <div class="danger-zone-section">
+            <div class="title">Danger Zone</div>
+            <div class="box">
+                <div class="title">Changer la visibilité </div>
+                <div class="description">Cette action permet aux autres utilisateurs de voir votre profil ou non</div>
+                <div class="button">Publique</div>
+            </div>
+            <div class="box">
+                <div class="title">Supprimer mon compte</div>
+                <div class="description">Cette action est irréversible</div>
+                <div class="button">Supprimer</div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

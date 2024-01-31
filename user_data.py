@@ -279,3 +279,7 @@ def unsubscribe(id):
             cursor.close()
         if conn:
             conn.close()
+            
+@user_data_bp.route('/dashboard/settings')
+def settings():
+    return render_template('dashboard/settings.html')

@@ -7,3 +7,4 @@ python-dotenv==1.0.0
 mysql-connector==2.2.9
 requests==2.31.0
 lxml==5.1.0
+gunicorn==21.2.0

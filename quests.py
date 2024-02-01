@@ -6,8 +6,6 @@ import logging as logging
 from datetime import datetime, timedelta
 import locale
 
-locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
-
 quests_bp = Blueprint('quests', __name__)
 
 @quests_bp.route('/dashboard/quests')

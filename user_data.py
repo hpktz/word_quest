@@ -7,8 +7,6 @@ from datetime import datetime, timedelta
 import locale
 import json
 
-locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
-
 user_data_bp = Blueprint('user_data', __name__)
 
 @user_data_bp.route('/dashboard/profile/user')

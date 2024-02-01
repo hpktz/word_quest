@@ -14,7 +14,7 @@
 
 <body>
     <section class="signup-form-container" id="signup-form-container">
-        <form id="signup-form" method="POST" action="/auth/register">
+        <form id="signup-form" method="POST" action="/auth/register" onsubmit="send_form(event)">
             <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
             <h1>Inscription</h1>
             {% with messages = get_flashed_messages() %} {% if messages %}
@@ -32,6 +32,13 @@
             <a href="{{ url_for('auth.login') }}" class="create-account">J'ai déjà un compte</a>
         </div>
     </section>
+    <script>
+        function send_form(event) {
+            event.preventDefault();
+            document.getElementById("signup-submit-button").innerHTML = '<div class="loader"></div>';
+            document.getElementById("signup-form").submit();
+        }
+    </script>
     <script src="scripts/signup.js"></script>
 </body>
 

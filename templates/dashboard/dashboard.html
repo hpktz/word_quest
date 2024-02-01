@@ -21,7 +21,7 @@
 </div>
 {% endblock %} {% block daytime_tip %} {{daytime_tip}} {% endblock %} {% block content %}
 <main class="dashboard-main-container" onclick="close_boxes(this, event)">
-    <section class="main-infos">
+    <section class="main-infos entry-animation">
         <div class="title">MES LISTES</div>
         <div class="user-infos">
             <div class="box">
@@ -54,7 +54,7 @@
             <div class="creation-date">
                 <div class="date">
                     <input type="date" class="date-start-input" value="{{start_date}}" onchange="change_time()">
-                    <img src="/static/icons/fleche-droite-30-dark-grey.png" alt="">
+                    <img src="/static/icons//arrow-right-30-dark-grey.png" alt="">
                     <input type="date" class="date-end-input" value="{{end_date}}" onchange="change_time()">
                 </div>
                 <div class="filter">
@@ -69,7 +69,7 @@
             </div>
         </div>
     </section>
-    <section class="lists-container" id="lists-container">
+    <section class="lists-container entry-animation" id="lists-container">
         {% for list in lists %} {% if new_list_id == list['id'] %} {% set css_class = "new-list" %} {% else %} {% set css_class = "" %} {% endif %}
         <div class="list-box {{ css_class }}" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
             <div class="infos">
@@ -108,7 +108,7 @@
         </div>
         {% endif %}
     </section>
-    <section class="games-trail" data-color="1">
+    <section class="games-trail entry-animation" data-color="1">
         <div class="no-list-selected">
             <div>
                 <img src="/static/imgs/3d-black-cursor.png" class="img" alt="cursor-icon">

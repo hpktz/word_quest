@@ -14,7 +14,7 @@
 
 <body>
     <section class="login-form-container" id="login-form-container">
-        <form id="login-form" method="POST" action="/auth/login">
+        <form id="login-form" method="POST" action="/auth/login" onsubmit="send_form(event)">
             <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
             <h1>Connexion</h1>
             {% with messages = get_flashed_messages() %} {% if messages %}
@@ -51,6 +51,12 @@
             }
             barre.classList.toggle("hidden");
         })
+
+        function send_form(event) {
+            event.preventDefault();
+            document.getElementById("login-submit-button").innerHTML = '<div class="loader"></div>';
+            document.getElementById("login-form").submit();
+        }
     </script>
 </body>
 

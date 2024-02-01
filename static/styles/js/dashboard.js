@@ -94,7 +94,6 @@ function open_game(el, event) {
  * @returns {Promise<void>} - A promise that resolves when the game trail is opened and the game data is loaded.
  */
 async function open_game_trail(el, event) {
-    console.log(event.target);
     if (event.target.classList.contains('delete-zone')) {
         return;
     }
@@ -110,6 +109,7 @@ async function open_game_trail(el, event) {
 
     const trailContainer = document.getElementsByClassName('games-trail')[0];
     trailContainer.classList.add('active');
+    trailContainer.innerHTML = "<div class='loader'></div>";
 
     const listsContainer = document.getElementsByClassName('list-box');
     var position = 0;
@@ -122,11 +122,15 @@ async function open_game_trail(el, event) {
     const id = el.dataset.list_id;
     const color = position % 3;
     // get the game trail from the server
-    const response = await fetch(`/dashboard/games/${id}`);
-    const data = await response.text();
-    const gamesTrail = document.getElementsByClassName('games-trail')[0];
-    gamesTrail.innerHTML = data;
-    gamesTrail.dataset.color = color;
+    try {
+        const response = await fetch(`/dashboard/games/${id}`);
+        const data = await response.text();
+        const gamesTrail = document.getElementsByClassName('games-trail')[0];
+        gamesTrail.innerHTML = data;
+        gamesTrail.dataset.color = color;
+    } catch (e) {
+        open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard");
+    }
 
     // update the UI based on the game trail
     const listsBoxContainer = document.getElementsByClassName('list-box');
@@ -216,9 +220,9 @@ function close_delete_list(el, event) {
  * @returns {void}
  */
 function open_lives(el) {
-    const livesContainer = document.getElementsByClassName('lives-pop-up')[0]; 
+    const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
     livesContainer.style.top = (el.offsetTop + 40) + "px";
-    livesContainer.style.left = (el.offsetLeft-230) + "px";
+    livesContainer.style.left = (el.offsetLeft - 230) + "px";
     el.classList.add('active');
 }
 
@@ -237,7 +241,7 @@ function close_lives(el, e) {
     }
     const livesBox = document.getElementById('lives-box');
     livesBox.classList.remove('active');
-    const livesContainer = document.getElementsByClassName('lives-pop-up')[0]; 
+    const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
     livesContainer.style.top = "-300px";
 }
 
@@ -273,9 +277,9 @@ async function lives_counter() {
 
         var now = new Date();
         var diff = end_date - now;
-        
+
         // if the time is up, the lives counter is updated and the function is stopped
-        if (diff < 0) {          
+        if (diff < 0) {
             counter.dataset.lives = parseInt(lives) + 1;
             document.getElementById('lives-info').innerHTML = parseInt(lives) + 1;
             counter.dataset.time = new Date();

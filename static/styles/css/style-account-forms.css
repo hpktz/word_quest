@@ -93,7 +93,7 @@ input:focus {
 }
 
 #login-form-main-alert {
-    margin: 15px 0 10px 0;
+    margin-top: 25px;
     font-family: 'League Spartan', sans-serif;
     color: #350000;
     height: 0;
@@ -108,6 +108,82 @@ input:focus {
     height: 0;
     opacity: 0;
     animation: alert-animation 0.3s ease-in-out 0.3s forwards;
+}
+
+.pictures-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    margin-top: 15px;
+    background-color: #ededed;
+    padding: 10px;
+    border-radius: 15px;
+    height: 150px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pictures-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.pictures-container::-webkit-scrollbar-thumb {
+    background-color: #777;
+    border-radius: 5px;
+}
+
+.pictures-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.pictures-container::-webkit-scrollbar-track {
+    background-color: #ededed;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pictures-container .profile-picture-radio {
+    display: none;
+}
+
+.pictures-container>div:nth-child(4n-3) .profile-picture-radio+label {
+    background-color: #717744;
+}
+
+.pictures-container>div:nth-child(4n-2) .profile-picture-radio+label {
+    background-color: #766153;
+}
+
+.pictures-container>div:nth-child(4n-1) .profile-picture-radio+label {
+    background-color: #BCBD8B;
+}
+
+.pictures-container>div:nth-child(4n) .profile-picture-radio+label {
+    background-color: #A5A58D;
+}
+
+.pictures-container .profile-picture-radio+label {
+    display: block;
+    box-sizing: border-box;
+    border-radius: 100%;
+    border: 2px solid #ededed;
+    outline: 2px solid #ededed;
+    transition: all 0.3s;
+    width: 100%;
+    height: 70px;
+    cursor: pointer;
+}
+
+.pictures-container .profile-picture-radio+label .profile-picture {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+
+.pictures-container .profile-picture-radio:checked+label {
+    border: 2px solid #ededed;
+    outline: 2px solid #555;
 }
 
 @keyframes alert-animation {
@@ -224,6 +300,101 @@ input:focus {
     border-top: 2px solid white;
     margin: auto;
     animation: loader-animation 0.5s linear infinite;
+}
+
+.step-bar {
+    width: 100%;
+    height: 5px;
+    background: #ededed;
+    border-radius: 2.5px;
+    margin-top: 25px;
+}
+
+.step-bar-fill {
+    width: 0;
+    height: 5px;
+    background: #333;
+    border-radius: 2.5px;
+    transition: all 0.3s;
+}
+
+.parts-container {
+    position: relative;
+    height: fit-content;
+    height: 344px;
+    overflow: hidden;
+}
+
+.part-1 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 335px;
+    transition: all 0.3s;
+}
+
+.part-2 {
+    position: absolute;
+    left: 150%;
+    top: 0;
+    width: 335px;
+    transition: all 0.3s;
+}
+
+.title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #333333;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.conditions-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 12.5px;
+}
+
+.conditions-container .conditions {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #333333;
+    text-align: left;
+}
+
+.conditions-container input[type="checkbox"] {
+    display: none;
+}
+
+.conditions-container input[type="checkbox"]+label {
+    display: block;
+    width: 50px;
+    height: 25px;
+    border-radius: 25px;
+    background: #ededed;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 2.5px;
+    transition: all 0.3s;
+}
+
+.conditions-container input[type="checkbox"]+label .toggle-button {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 25px;
+    background: #333;
+    transition: all 0.3s;
+}
+
+.conditions-container input[type="checkbox"]:checked+label {
+    background: #333;
+}
+
+.conditions-container input[type="checkbox"]:checked+label .toggle-button {
+    transform: translateX(25px);
+    background: white;
 }
 
 @keyframes loader-animation {

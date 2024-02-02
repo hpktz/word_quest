@@ -19,7 +19,7 @@
 </div>
 {% endblock %} {% block content %}
 <main class="profile-main-container">
-    <section class="profile-header">
+    <section class="profile-header entry-animation">
         <div class="profile-picture">
             <img src="/static/imgs/profiles/{{ picture }}.png" alt="profile-picture">
         </div>
@@ -50,7 +50,7 @@
         </div>
     </section>
     {% if user_infos %}
-    <section class="profile-content">
+    <section class="profile-content entry-animation">
         <div class="title">Statistiques</div>
         <div class="stats-container">
             <div class="box">
@@ -107,13 +107,13 @@
         </div>
     </section>
     {% else %}
-    <section class="private-profile">
+    <section class="private-profile entry-animation">
         <img src="/static/imgs/3d-business-desk.png" class="img" alt="">
         <div class="title">Profil privé</div>
         <div class="text">Vous ne pouvez pas accéder au profil de cet utilisateur car il est privé.</div>
     </section>
     {% endif %}
-    <section class="friends-list">
+    <section class="friends-list entry-animation">
         <div class="menu">
             <div class="item item_sub active" onclick="switch_friend_list()">Abonnements</div>
             <div class="item item_sub" onclick="switch_friend_list()">Abonnés</div>

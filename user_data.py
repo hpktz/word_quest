@@ -6,6 +6,11 @@ import logging as logging
 from datetime import datetime, timedelta
 import locale
 import json
+import bcrypt
+import pyotp
+import time
+
+from sendmails import send_mail
 
 user_data_bp = Blueprint('user_data', __name__)
 
@@ -281,3 +286,175 @@ def unsubscribe(id):
 @user_data_bp.route('/dashboard/settings')
 def settings():
     return render_template('dashboard/settings.html')
+
+
+@user_data_bp.route('/dashboard/settings/change-password', methods = ['POST'])
+@login_required
+def change_password():
+    old_password = request.json.get('old_password')
+    new_password = request.json.get('new_password')
+    mfa = request.json.get('mfa')
+
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT password FROM users WHERE id = %s;", (current_user.id,))
+        result = cursor.fetchone()
+        if not result:
+            return jsonify({
+                "code": 404,
+                "message": "Utilisateur introuvable."
+            })
+        if not bcrypt.checkpw(new_password.encode('utf-8'), result[0].encode('utf-8')):
+            return jsonify({
+                "code": 400,
+                "message": "Ancien mot de passe incorrect."
+            })
+        
+        mfa = bool(mfa)
+        new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+        
+        cursor.execute("UPDATE users SET password = %s, 2fa = %s WHERE id = %s;", (new_password, mfa, current_user.id))
+        conn.commit()
+        return jsonify({
+            "code": 200,
+            "message": "Mot de passe modifié avec succès."
+        })
+        
+    except mysql.connector.Error as e:
+        print(e)
+        abort(500)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    
+    
+@user_data_bp.route('/dashboard/settings/change-user-infos', methods = ['POST'])
+@login_required
+def change_user_infos():
+    name = request.json.get('username')
+    email = request.json.get('email')
+    picture = request.json.get('profilePicture')
+
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        picture = int(picture)
+        if not picture in range(1,12):
+            return jsonify({
+                "code": 400,
+                "message": "Image de profil invalide."
+            })
+        picture = "picture-" + str(picture)
+        if email == current_user.email:
+            
+            cursor.execute("UPDATE users SET name = %s, picture = %s WHERE id = %s;", (name, picture, current_user.id))
+            return jsonify({
+                "code": 200,
+                "message": "Informations modifiées avec succès."
+            })
+        else:
+            cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
+            result = cursor.fetchone()
+            if result:
+                return jsonify({
+                    "code": 400,
+                    "message": "Adresse mail déjà utilisée."
+                })
+            else:
+                if "2fa" not in session or session["2fa"]["expires"] < time.time():
+                    secret_key = pyotp.random_base32()
+                    totp = pyotp.TOTP(secret_key)
+                    
+                    session["2fa"] = {
+                        "username": name,
+                        "email": email,
+                        "picture": picture,
+                        "secret_key": secret_key,
+                        "expires": time.time() + 60
+                    }
+                    send_mail(email, "Vérification de votre adresse mail", "Votre code de vérification est : " + totp.now())
+                    return jsonify({
+                        "code": 201,
+                        "message": "Un code de vérification a été envoyé à votre adresse mail."
+                    })         
+                else:
+                    return jsonify({
+                        "code": 400,
+                        "message": "Un code a déjà été envoyé."
+                    })
+            
+    except mysql.connector.Error as e:
+        print(e)
+        abort(500)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()    
+            
+@user_data_bp.route('/dashboard/settings/verify-email/<string:code>')
+@login_required
+def verify_email(code):
+    if "2fa" not in session or session["2fa"]["expires"] < time.time():
+        return jsonify({
+            "code": 400,
+            "message": "Code expiré."
+        })
+    totp = pyotp.TOTP(session["2fa"]["secret_key"])
+    if not totp.verify(code, valid_window=1):
+        return jsonify({
+            "code": 400,
+            "message": "Code invalide."
+        })
+    
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET name = %s, email = %s, picture = %s WHERE id = %s;", (session["2fa"]["username"], session["2fa"]["email"], session["2fa"]["picture"], current_user.id))
+        del session["2fa"]
+        return jsonify({
+            "code": 200,
+            "message": "Adresse mail modifiée avec succès."
+        })
+        
+    except mysql.connector.Error as e:
+        print(e)
+        abort(500)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()    
+            
+@user_data_bp.route('/dashboard/settings/change-visibility/<int:visibility>')
+@login_required
+def change_visibility(visibility):
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET public = %s WHERE id = %s;", (visibility, current_user.id))
+        conn.commit()
+        return jsonify({
+            "code": 200,
+            "message": "Visibilité modifiée avec succès."
+        })
+        
+    except mysql.connector.Error as e:
+        print(e)
+        abort(500)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

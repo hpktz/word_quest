@@ -1,37 +1,79 @@
-{% extends "dashboard/main.html" %} {% block title %}Quêtes{% endblock %}{% block color %}quests-color{% endblock %} {% block css %}
+{% extends "dashboard/main.html" %} {% block title %}Paramètres{% endblock %}{% block color %}quests-color{% endblock %} {% block css %}
 <link rel="stylesheet" href="/static/styles/css/style-settings.css">{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
 <main class="settings-main-container">
     <section class="settings-section">
-        <div class="title">Paramètres</div>
-        <div class="user-infos-section">
+        <div class="title entry-animation">Paramètres</div>
+        <div class="user-infos-section entry-animation">
             <div class="title">Informations personnelles</div>
-            <form method="POST" action="">
-                <label for="username">Nom d'utilisateur</label>
-                <input type="text" name="username" id="username">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email">
-                <label for="phone">Anniversaire</label>
-                <input type="date" name="birthday" id="birthday">
-                <input type="submit" value="Changer les informations">
+            <div id="settings-section-alert-mess"></div>
+            <form method="POST" action="" oninput="set_button(this)" onsubmit="send_user_infos(this, event)">
+                <div class="user-infos">
+                    <div class="profile-picture">
+                        {% set picture_id = current_user.picture.split("-")[1]|int %}
+                        <div class="profile-picture-box">
+                            <input type="radio" name="profilePicture" value="{{ picture_id }}" id="profile-picture-{{ picture_id }}" class="profile-picture-radio" onclick="profile_picture_container(this)" checked required>
+                            <label for="profile-picture-{{ picture_id }}">
+                                <img src="/static/imgs/profiles/{{current_user.picture}}.png" alt="profile-picture-{{ picture_id }}" class="profile-picture">
+                            </label>
+                        </div>
+                        {% for i in range(1, 13) %} {% if i != picture_id %}
+                        <div class="profile-picture-box">
+                            <input type="radio" name="profilePicture" value="{{ i }}" id="profile-picture-{{ i }}" class="profile-picture-radio" onclick="profile_picture_container(this)" required>
+                            <label for="profile-picture-{{ i }}">
+                                <img src="/static/imgs/profiles/picture-{{ i }}.png" alt="profile-picture-{{ i }}" class="profile-picture">
+                            </label>
+                        </div>
+                        {% endif %} {% endfor %}
+                    </div>
+                    <div>
+                        <label for="username">Nom d'utilisateur</label>
+                        <input type="text" name="username" id="username" value="{{current_user.name}}">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" value="{{current_user.email}}">
+                        <button type="submit" name="button" class="submit-button">Enregistrer</button>
+                    </div>
+                </div>
             </form>
         </div>
-        <div class="password-section">
-            <div class="title">Mot de passe</div>
-            <form method="POST" action="">
-                <label for="old-password">Ancien mot de passe</label>
-                <input type="password" name="old-password" id="old-password">
-                <label for="new-password">Nouveau mot de passe</label>
-                <input type="password" name="new-password" id="new-password">
-                <label for="confirm-password">Confirmer le nouveau mot de passe</label>
-                <input type="submit" value="Changer le mot de passe">
+        <div class="password-section entry-animation">
+            <div class="title">Sécurité</div>
+            <div id="password-section-alert-mess"></div>
+            <form method="POST" action="" oninput="set_button(this)" onsubmit="send_security_form(this, event)">
+                <div class="password-container">
+                    <div>
+                        <label for="old-password">Ancien mot de passe</label>
+                        <input type="password" name="old-password" id="old-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
+                    </div>
+                    <div>
+                        <label for="new-password">Nouveau mot de passe</label>
+                        <input type="password" name="new-password" id="new-password" placeholder="Votre nouveau mot de passe">
+                    </div>
+                    <div class="mfa-box">
+                        <div>
+                            Activer l'authentification à deux facteurs
+                        </div>
+                        <div>
+                            <input type="checkbox" name="mfa" id="mfa" class="mfa-checkbox" {% if current_user.mfa %}checked{%endif%}>
+                            <label for="mfa" class="toggle">
+                                <div class="toggle-button"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" name="button" class="submit-button">Enregistrer</button>
+                </div>
             </form>
         </div>
-        <div class="danger-zone-section">
+        <div class="danger-zone-section entry-animation">
             <div class="title">Danger Zone</div>
             <div class="box">
                 <div class="title">Changer la visibilité </div>
                 <div class="description">Cette action permet aux autres utilisateurs de voir votre profil ou non</div>
-                <div class="button">Publique</div>
+                <div class="toggle-container">
+                    <input type="checkbox" name="visibility" id="visibility" class="visibility-checkbox" onchange="change_visibility(this, event)" {% if current_user.public %}checked{%endif%}>
+                    <label for="visibility" class="toggle">
+                        <div class="toggle-button"></div>
+                    </label>
+                </div>
             </div>
             <div class="box">
                 <div class="title">Supprimer mon compte</div>
@@ -40,5 +82,255 @@
             </div>
         </div>
     </section>
+    <section class="pop-up otp_check">
+        <div class="header">
+            <div class="title">Vérification de l'email</div>
+            <div class="close-logo clickable-logo">
+                <a href="" onclick="close_popup_verification_email(this, event)">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="body">
+            <form method="POST" action="" oninput="set_button(this)" onsubmit="verification_email(this, event)">
+                <div id="otp-alert-mess"></div>
+                <div class="description">Veuillez renseigner le code reçu par mail pour sauvegarder les modifications.</div>
+                <input type="text" name="code" id="code" placeholder="Entrez le code de vérification">
+                <button type="submit" name="button" class="submit-button">Vérifier</button>
+            </form>
+        </div>
+    </section>
+    <script>
+        function profile_picture_container(radio) {
+            const container = radio.parentElement.parentElement;
+            if (container.classList.contains("active")) {
+                setTimeout(() => {
+                    container.classList.remove("active");
+                }, 301);
+            } else {
+                container.classList.add("active");
+            }
+        }
+
+        function set_button(form) {
+            const button = form.querySelector(".submit-button");
+            button.classList.add("active");
+        }
+
+        function popup_verification_email() {
+            const popup = document.querySelector(".pop-up.otp_check");
+            popup.classList.add("active");
+        }
+
+        function close_popup_verification_email(el = null, event = null) {
+            if (event) {
+                event.preventDefault();
+            }
+            const popup = document.querySelector(".pop-up.otp_check");
+            popup.classList.remove("active");
+        }
+
+        async function verification_email(form, event) {
+            event.preventDefault();
+            const alert = document.getElementById("otp-alert-mess");
+            if (form.button.classList.contains("active")) {
+                form.button.innerHTML = "<div class='loader'></div>";
+            } else {
+                return;
+            }
+            const code = form.querySelector("#code").value;
+            if (code === "") {
+                form.button.innerHTML = "Vérifier";
+                form.button.classList.remove("active");
+                form.button.classList.add("pulse");
+                alert.innerHTML = "<p class='alert-mess'>Veuillez remplir le champ</p>";
+                setTimeout(() => {
+                    form.button.classList.remove("pulse");
+                }, 250);
+                return;
+            }
+            try {
+                const response = await fetch("/dashboard/settings/verify-email/" + code);
+                const data = await response.json();
+                if (data.code == 200) {
+                    form.button.innerHTML = "Vérifié";
+                    form.button.classList.remove("active");
+                    alert.innerHTML = `<p class='success-mess'>${data.message}</p>`;;
+                    setTimeout(() => {
+                        form.button.innerHTML = "Vérifier";
+                        alert.innerHTML = "";
+                        close_popup_verification_email();
+                        document.getElementById("settings-section-alert-mess").innerHTML = `<p class='success-mess'>${data.message}</p>`;
+                        setTimeout(() => {
+                            document.getElementById("settings-section-alert-mess").innerHTML = "";
+                        }, 2000);
+                    }, 2000);
+                } else {
+                    form.button.innerHTML = "Vérifier";
+                    form.button.classList.remove("active");
+                    form.button.classList.add("pulse");
+                    alert.innerHTML = `<p class='alert-mess'>${data.message}</p>`;
+                    setTimeout(() => {
+                        form.button.classList.remove("pulse");
+                    }, 250);
+                }
+            } catch (error) {
+                form.button.innerHTML = "Vérifier";
+                form.button.classList.remove("active");
+                open_alert("Une erreur est survenue", "Une erreur est survenue, veuillez réessayer plus tard");
+            }
+        }
+
+        async function send_user_infos(form, event) {
+            event.preventDefault();
+            const alert = document.getElementById("settings-section-alert-mess");
+            if (form.button.classList.contains("active")) {
+                form.button.innerHTML = "<div class='loader'></div>";
+            } else {
+                return;
+            }
+            const username = form.querySelector("#username").value;
+            const email = form.querySelector("#email").value;
+            if (username === "" || email === "") {
+                form.button.innerHTML = "Enregistrer";
+                form.button.classList.remove("active");
+                form.button.classList.add("pulse");
+                alert.innerHTML = "<p class='alert-mess'>Veuillez remplir tous les champs</p>";
+                setTimeout(() => {
+                    form.button.classList.remove("pulse");
+                }, 250);
+                return;
+            }
+            try {
+                const response = await fetch("/dashboard/settings/change-user-infos", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        profilePicture: form.profilePicture.value
+                    })
+                });
+                const data = await response.json();
+                if (data.code == 200) {
+                    form.button.innerHTML = "Enregistré";
+                    form.button.classList.remove("active");
+                    alert.innerHTML = `<p class='success-mess'>${data.message}</p>`;;
+                    setTimeout(() => {
+                        form.button.innerHTML = "Enregistrer";
+                        alert.innerHTML = "";
+                    }, 2000);
+                } else if (data.code == 201) {
+                    form.button.innerHTML = "Enregistrer";
+                    form.button.classList.remove("active");
+                    popup_verification_email();
+                } else {
+                    form.button.innerHTML = "Enregistrer";
+                    form.button.classList.remove("active");
+                    form.button.classList.add("pulse");
+                    alert.innerHTML = `<p class='alert-mess'>${data.message}</p>`;
+                    setTimeout(() => {
+                        form.button.classList.remove("pulse");
+                    }, 250);
+                }
+            } catch (error) {
+                form.button.innerHTML = "Enregistrer";
+                form.button.classList.remove("active");
+                open_alert("Une erreur est survenue", "Une erreur est survenue, veuillez réessayer plus tard");
+            }
+        }
+
+        async function send_security_form(form, event) {
+            event.preventDefault();
+            const alert = document.getElementById("password-section-alert-mess");
+            if (form.button.classList.contains("active")) {
+                form.button.innerHTML = "<div class='loader'></div>";
+            } else {
+                return;
+            }
+            const old_password = form.querySelector("#old-password").value;
+            const new_password = form.querySelector("#new-password").value;
+            const mfa = form.querySelector("#mfa").checked;
+            if (old_password === "" || new_password === "") {
+                form.button.innerHTML = "Enregistrer";
+                form.button.classList.remove("active");
+                form.button.classList.add("pulse");
+                alert.innerHTML = "<p class='alert-mess'>Veuillez remplir tous les champs</p>";
+                setTimeout(() => {
+                    form.button.classList.remove("pulse");
+                }, 250);
+                return;
+            }
+            console.log(mfa);
+            try {
+                const response = await fetch("/dashboard/settings/change-password", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        old_password: old_password,
+                        new_password: new_password,
+                        mfa: mfa
+                    })
+                });
+                const data = await response.json();
+                if (data.code == 200) {
+                    form.button.innerHTML = "Enregistré";
+                    form.button.classList.remove("active");
+                    alert.innerHTML = `<p class='success-mess'>${data.message}</p>`;;
+                    setTimeout(() => {
+                        form.button.innerHTML = "Enregistrer";
+                        alert.innerHTML = "";
+                    }, 2000);
+                } else {
+                    form.button.innerHTML = "Enregistrer";
+                    form.button.classList.remove("active");
+                    form.button.classList.add("pulse");
+                    alert.innerHTML = `<p class='alert-mess'>${data.message}</p>`;
+                    setTimeout(() => {
+                        form.button.classList.remove("pulse");
+                    }, 250);
+                }
+            } catch (error) {
+                form.button.innerHTML = "Enregistrer";
+                form.button.classList.remove("active");
+                open_alert("Une erreur est survenue", "Une erreur est survenue, veuillez réessayer plus tard");
+            }
+        }
+
+        async function change_visibility(checkbox, event) {
+            checkbox.labels[0].innerHTML = `<div class="loader-container"><div class="loader"></div></div>`;
+            let checked = checkbox.checked;
+            visibility = 0 ? checked : 1;
+            try {
+                const response = await fetch("/dashboard/settings/change-visibility/" + visibility);
+                const data = await response.json();
+                if (data.code == 200) {
+                    if (checked) {
+                        checkbox.checked = false;
+                        checkbox.labels[0].innerHTML = `<div class="toggle-button"></div>`;
+                        setTimeout(() => {
+                            checkbox.checked = true;
+                        }, 100);
+                    } else {
+                        checkbox.checked = true;
+                        checkbox.labels[0].innerHTML = `<div class="toggle-button"></div>`;
+                        setTimeout(() => {
+                            checkbox.checked = false;
+                        }, 100);
+                    }
+                } else {
+                    checkbox.labels[0].innerHTML = `<div class="toggle-button"></div>`;
+                    open_alert("Une erreur est survenue", "Une erreur est survenue, veuillez réessayer plus tard");
+                }
+            } catch (error) {
+                checkbox.labels[0].innerHTML = `<div class="toggle-button"></div>`;
+                open_alert("Une erreur est survenue", "Une erreur est survenue, veuillez réessayer plus tard");
+            }
+        }
+    </script>
 </main>
 {% endblock %}

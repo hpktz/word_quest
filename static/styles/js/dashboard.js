@@ -221,8 +221,9 @@ function close_delete_list(el, event) {
  */
 function open_lives(el) {
     const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
-    livesContainer.style.top = (el.offsetTop + 40) + "px";
-    livesContainer.style.left = (el.offsetLeft - 230) + "px";
+    livesContainer.style.top = (el.offsetTop + 65) + "px";
+    console.log(el.offsetLeft);
+    livesContainer.style.left = (el.offsetLeft + 75) + "px";
     el.classList.add('active');
 }
 
@@ -311,6 +312,7 @@ async function purchase_lives(el, event) {
     event.preventDefault();
     // request to purchase lives
     const response = await fetch('/dashboard/lives/purchase');
+    document.getElementById('life-purchase-button').innerHTML = "<div class='loader'></div>";
     try {
         const data = await response.json();
         // if the request is successful, the lives counter is updated, and the UI is updated
@@ -336,10 +338,15 @@ async function purchase_lives(el, event) {
             setTimeout(function() {
                 userInfos.getElementsByClassName('box')[0].classList.remove('pulse');
                 userInfos.getElementsByClassName('box')[2].classList.remove('pulse');
+                document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
             }, 2000);
         } else {
             // if the request is not successful, an alert box is displayed
-            open_alert("Achat impossible", "Vous n'avez peut-être pas assez de points pour acheter des vies");
+            document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
+            document.getElementById('life-purchase-button').classList.add('pulse');
+            setTimeout(function() {
+                document.getElementById('life-purchase-button').classList.remove('pulse');
+            }, 250);
         }
     } catch (e) {
         console.log(e);

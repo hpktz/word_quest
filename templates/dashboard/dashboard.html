@@ -36,19 +36,6 @@
                 <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
                 <div class="text lives-zone" id="lives-info">{{lives}}</div>
             </div>
-            <div class="lives-pop-up lives-zone">
-                <div class="triangle lives-zone"></div>
-                <div class="container lives-zone">
-                    <div class="heart-container lives-zone">
-                        {% for index in range(5) %} {% if index
-                        < lives %} <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
-                            {% else %}
-                            <img src="/static/imgs/3d-white-heart.png" class="img lives-zone" alt="medal-icon"> {% endif %} {% endfor %}
-                    </div>
-                    <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}">Vous avez tout vos coeur</div>
-                    <a href="" onclick="purchase_lives(this, event)" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
-                </div>
-            </div>
         </div>
         <div class="filters">
             <div class="creation-date">
@@ -158,6 +145,19 @@
             </div>
         </div>
     </section>
+    <div class="lives-pop-up lives-zone">
+        <div class="triangle lives-zone"></div>
+        <div class="container lives-zone">
+            <div class="heart-container lives-zone">
+                {% for index in range(5) %} {% if index
+                < lives %} <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    {% else %}
+                    <img src="/static/imgs/3d-white-heart.png" class="img lives-zone" alt="medal-icon"> {% endif %} {% endfor %}
+            </div>
+            <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}">Vous avez tout vos coeur</div>
+            <a href="" onclick="purchase_lives(this, event)" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
+        </div>
+    </div>
     <script>
         function copy_link() {
             let link = document.getElementsByClassName("link")[0];

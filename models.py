@@ -19,14 +19,18 @@ class User(UserMixin):
                 self.email = None
                 self.lvl = None
                 self.picture = None
+                self.mfa = None
+                self.public = None
                 self.lists = None
                 return
 
             name = user[1]
             birthday = user[2]
-            email = user[7]
+            email = user[4]
             lvl = user[3]
             picture = user[8]
+            mfa = True if user[6] == 1 else False
+            public = True if user[7] == 1 else False
 
             cursor.execute('SELECT * FROM lists WHERE user_id = %s', (user_id,))
             columns = [column[0] for column in cursor.description]
@@ -66,6 +70,8 @@ class User(UserMixin):
             self.email = email
             self.lvl = lvl
             self.picture = picture
+            self.mfa = mfa
+            self.public = public
             self.lists = results
 
         except Exception as e:
@@ -77,6 +83,8 @@ class User(UserMixin):
             self.email = None
             self.lvl = None
             self.picture = None
+            self.mfa = None
+            self.public = None
             self.lists = None
         finally:
             if cursor:

@@ -15,16 +15,37 @@ input {
 }
 
 body {
+    display: grid;
+    place-items: center;
     background-color: #f6f6f6;
 }
 
+body::-webkit-scrollbar {
+    width: 7.5px;
+}
+
+body::-webkit-scrollbar-thumb {
+    border: 2.5px solid #ededed;
+    background-color: #777;
+    border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    border: 1px solid #ededed;
+    background-color: #555;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #ededed;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 section {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 375px;
     height: fit-content;
+    padding-top: 50px;
+    padding-bottom: 50px;
 }
 
 form {
@@ -118,8 +139,7 @@ input:focus {
     background-color: #ededed;
     padding: 10px;
     border-radius: 15px;
-    height: 150px;
-    max-height: 200px;
+    height: 245px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -147,19 +167,15 @@ input:focus {
     display: none;
 }
 
-.pictures-container>div:nth-child(4n-3) .profile-picture-radio+label {
-    background-color: #717744;
+.pictures-container>div:nth-child(3n-2) .profile-picture-radio+label {
+    background-color: #ac9484;
 }
 
-.pictures-container>div:nth-child(4n-2) .profile-picture-radio+label {
-    background-color: #766153;
-}
-
-.pictures-container>div:nth-child(4n-1) .profile-picture-radio+label {
+.pictures-container>div:nth-child(3n-1) .profile-picture-radio+label {
     background-color: #BCBD8B;
 }
 
-.pictures-container>div:nth-child(4n) .profile-picture-radio+label {
+.pictures-container>div:nth-child(3n) .profile-picture-radio+label {
     background-color: #A5A58D;
 }
 
@@ -321,7 +337,7 @@ input:focus {
 .parts-container {
     position: relative;
     height: fit-content;
-    height: 344px;
+    height: 397px;
     overflow: hidden;
 }
 
@@ -353,7 +369,7 @@ input:focus {
     display: flex;
     justify-content: space-between;
     gap: 15px;
-    margin-top: 12.5px;
+    margin-top: 25px;
 }
 
 .conditions-container .conditions {
@@ -381,8 +397,8 @@ input:focus {
 
 .conditions-container input[type="checkbox"]+label .toggle-button {
     display: block;
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
     border-radius: 25px;
     background: #333;
     transition: all 0.3s;

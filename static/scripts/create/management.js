@@ -10,6 +10,7 @@
  */
 async function ad_to_list(el) {
     try {
+        el.classList.add('clicked');
         const wordId = el.getAttribute('data-word_id');
         const wordsBox = document.querySelector(`.list-container`);
         const wordInListHtml = await (await fetch('/dashboard/create/word-in-list')).text();
@@ -27,17 +28,19 @@ async function ad_to_list(el) {
             wordsBox.innerHTML += wordInListHtml;
             wordInList = document.getElementsByClassName('word-in-list-box')[document.getElementsByClassName('word-in-list-box').length - 1];
             wordInList.id = response.result.id;
-            wordInList.getElementsByClassName('word')[0].innerHTML = '<span title="'+response.result.french_translation+'">'+response.result.word+'</span>';
+            wordInList.getElementsByClassName('word')[0].innerHTML = '<span title="' + response.result.french_translation + '">' + response.result.word + '</span>';
             wordInList.getElementsByClassName('type')[0].innerHTML = response.result.type;
             wordInList.getElementsByClassName('trash-logo-clickable-el')[0].setAttribute('onclick', 'remove_from_list(this,event, "' + response.result.id + '")');
-            
+
             wordsBox.dataset.items_count = parseInt(wordsBox.dataset.items_count) + 1;
             wordsContainer.innerHTML = defContainerEmptyHtml;
             document.getElementsByClassName('empty-word-box')[0].getElementsByClassName('text')[0].innerHTML = 'Recherchez un autre mot si vous le souhaitez.';
         } else {
+            el.classList.remove('clicked');
             open_alert('Problème', 'Une erreur est survenue. Veuillez réessayer plus tard.');
         }
     } catch (error) {
+        el.classList.remove('clicked');
         open_alert('Problème', 'Une erreur est survenue. Veuillez réessayer plus tard.');
     }
 
@@ -77,7 +80,7 @@ async function remove_from_list(el, e, wordId) {
         } else {
             open_alert('Problème', 'Une erreur est survenue. Veuillez réessayer plus tard.');
         }
-    } catch (error) {     
+    } catch (error) {
         open_alert('Problème', 'Une erreur est survenue. Veuillez réessayer plus tard.');
     }
 }

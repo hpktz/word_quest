@@ -6,6 +6,7 @@ import time
 import bcrypt
 import pyotp
 import re
+import random
 
 from root import *
 from sendmails import send_mail
@@ -103,13 +104,11 @@ def login_post():
                             totp = pyotp.TOTP(secret_key, interval=120)
                             session["2fa"]["id"] = data[0]
                             session["2fa"]["email"] = email
-                            session["2fa"]["code"] = totp.now()
                             session["2fa"]["action"] = "login"
                             session["2fa"]["secret_key"] = secret_key
-                            session["2fa"]["totp"] = totp
                             session["2fa"]["expires"] = time.time() + 60
                             session["2fa"]["delay"] =  time.time() + 60
-                            send_mail(email, "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
+                            send_mail(email, "2FA code", f"Your 2FA code is: {totp.now()}")
                             return redirect(url_for('auth.sys_2fa'))
                     else:
                         session["from_input"] = [email, password_input]
@@ -163,6 +162,9 @@ def register_post():
         birthday = request.form.get('birthday')
         email = request.form.get('email')
         password_input = request.form.get('password')
+        picture = request.form.get('profile-picture')
+        if not picture:
+            picture = 0
 
         if "login_tries" not in session:
             session["login_tries"] = {}
@@ -204,14 +206,20 @@ def register_post():
                         flash("Date de naissance invalide")
                         return redirect(url_for('auth.register'))
 
+                    picture = int(picture)
+                    if picture > 12 or picture < 1:
+                        picture = random.randint(1, 12)
+                    picture = f"picture-{picture}"
+
+                    print(name, birthday, picture, hashed, email)
                     if data:
                         if data[6] != 0:
                             flash("Email déjà utilisé")
                             return redirect(url_for('auth.register'))
                         else:
-                            cursor.execute("UPDATE users SET name=%s, birthday=%s, password=%s WHERE email=%s", (name, birthday, hashed, email))
+                            cursor.execute("UPDATE users SET name=%s, birthday=%s, picture=%s, password=%s WHERE email=%s", (name, birthday, picture, hashed, email))
                     else:
-                        cursor.execute("INSERT INTO users (name, birthday, email, password) VALUES (%s, %s, %s, %s)", (name, birthday, email, hashed))
+                        cursor.execute("INSERT INTO users (name, birthday, email, picture, password) VALUES (%s, %s, %s, %s, %s)", (name, birthday, email, picture, hashed))
                         user_id = cursor.lastrowid
                         cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, %s, %s),(%s, %s, %s)", (user_id,"gems",200,user_id,"lives",5))
 
@@ -219,13 +227,11 @@ def register_post():
                     totp = pyotp.TOTP(secret_key, interval=120)
                     session["2fa"]["id"] = None
                     session["2fa"]["email"] = email
-                    session["2fa"]["code"] = totp.now()
                     session["2fa"]["action"] = "register"
                     session["2fa"]["secret_key"] = secret_key
-                    session["2fa"]["totp"] = totp
                     session["2fa"]["expires"] = time.time() + 60
                     session["2fa"]["delay"] =  time.time() + 60
-                    send_mail(email, "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
+                    send_mail(email, "2FA code", f"Your 2FA code is: {totp.now()}")
                     return redirect(url_for('auth.sys_2fa'))
                 else:
                     return redirect(url_for('auth.sys_2fa'))
@@ -278,13 +284,11 @@ def sys_2fa_sendCodeAgain():
     if time.time() > session["2fa"]["delay"]:
         secret_key = session["2fa"]["secret_key"]
         totp = pyotp.TOTP(secret_key, interval=120)
-        session["2fa"]["code"] = totp.now()
-        session["2fa"]["totp"] = totp
         session["2fa"]["trials"] = 0
         session["2fa"]["expires"] = time.time() + 300
         session["2fa"]["delay"] =  time.time() + 60
 
-        send_mail(session["2fa"]["email"], "2FA code", f"Your 2FA code is: {session['2fa']['code']}")
+        send_mail(session["2fa"]["email"], "2FA code", f"Your 2FA code is: {totp.now()}")
         flash("Nouveau code envoyé")
         return redirect(url_for('auth.sys_2fa'))
     else:
@@ -369,7 +373,7 @@ def sys_2fa_post():
     if session["2fa"]["trials"] >= 3 and session["2fa"]["delay"] > time.time():
         flash("Trop de tentatives de connexion, veuillez réessayer dans " + str(int(session["2fa"]["delay"] - time.time())) + " secondes")
         return redirect(url_for('auth.sys_2fa'))
-    elif session["2fa"]["totp"].verify(code):
+    elif pyotp.TOTP(session["secret"]).verify(code, valid_window=2):
         if session["2fa"]["action"] == "login":
             return _login(session["2fa"]["id"])
         elif session["2fa"]["action"] == "register":
@@ -393,5 +397,6 @@ def logout():
     Returns:
         A redirect response to the login page.
     """
+    session.clear()
     logout_user()
     return redirect(url_for('auth.login'))

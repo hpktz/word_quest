@@ -307,7 +307,7 @@ def change_password():
                 "code": 404,
                 "message": "Utilisateur introuvable."
             })
-        if not bcrypt.checkpw(new_password.encode('utf-8'), result[0].encode('utf-8')):
+        if not bcrypt.checkpw(old_password.encode('utf-8'), result[0].encode('utf-8')):
             return jsonify({
                 "code": 400,
                 "message": "Ancien mot de passe incorrect."

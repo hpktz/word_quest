@@ -45,7 +45,8 @@ def index():
         flask.Response: The rendered template for the dashboard page.
         
     Raises:
-        Exception: If an error occurs while fetching the user statements.
+        gem (int): The updated number of gems set to 0.
+        lives (int): The updated number of lives set to 0.
     """
     
     # Check if the user is coming from the create page
@@ -145,7 +146,7 @@ def purchase_lives():
             - gems (int): The updated number of gems.
             
     Raises:
-        Exception: If an error occurs while fetching the user statements.
+        500: If an error occurs while fetching the user statements.
     """
     conn = None
     cursor = None
@@ -168,7 +169,7 @@ def purchase_lives():
         if conn:
             conn.rollback()
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
-        return jsonify({"code": 400})
+        abort(500)
     finally:
         if cursor:
             cursor.close()
@@ -188,7 +189,7 @@ def list(list_id):
         flask.Response: The rendered template for the game trail.
    
     Raises:
-        Exception: If an error occurs while fetching the game trail.
+        flask.render_template: The rendered template for the game trail.
     """
     try:
         # Retrieve the list and its associated games
@@ -244,7 +245,7 @@ def delete(list_id):
         flask.Response: A redirect response to the main index page.
 
     Raises:
-        Exception: If an error occurs while deleting the list.
+        flask.redirect: A redirect response to the main index page.
     """
     conn = None
     cursor = None

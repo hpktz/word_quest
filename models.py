@@ -1,4 +1,4 @@
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from root import *
 import json
 from datetime import datetime
@@ -97,3 +97,20 @@ class User(UserMixin):
     @property
     def is_authenticated(self):
         return True
+    
+class AnonymousUserMixin(AnonymousUserMixin):
+    def __init__(self):
+        self.name = None
+        self.birthday = None
+        self.email = None
+        self.lvl = None
+        self.picture = None
+        self.mfa = None
+        self.public = None
+        self.lists = None
+    def get_id(self):
+        return None
+
+    @property
+    def is_authenticated(self):
+        return False

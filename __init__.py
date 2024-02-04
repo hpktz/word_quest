@@ -1,5 +1,5 @@
 from flask import Flask, session, render_template
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, logout_user
 from flask_session import Session
 
 from auth import auth_bp 

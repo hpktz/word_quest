@@ -1878,4 +1878,14 @@ main {
         justify-content: center;
         align-items: center;
     }
+    .pop-up.active {
+        width: 100%;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        transform: translate(0, 0);
+        border-radius: 0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
 }

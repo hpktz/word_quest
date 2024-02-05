@@ -54,7 +54,8 @@ def quests():
         cursor = conn.cursor()
         
         # Get the user's targets
-        for lst in current_user.lists:
+        lists = current_user.get_lists()
+        for lst in lists:
             if not all(lesson["completed"] == 1 for lesson in lst["lessons"]):
                 targets["games"] += lst["tgt_games"]
                 targets["xp"] += lst["tgt_xp"]
@@ -195,7 +196,8 @@ def reward():
         else:
             # Check if the user has completed his targets
             targets = {"games": 0, "xp": 0,"time": 0}
-            for lst in current_user.lists:
+            lists = current_user.get_lists()
+            for lst in lists:
                 if not all(lesson["completed"] == 1 for lesson in lst["lessons"]):
                     targets["games"] += lst["tgt_games"]
                     targets["xp"] += lst["tgt_xp"]

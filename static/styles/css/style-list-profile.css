@@ -1,0 +1,132 @@
+body {
+    grid-template-columns: 95px 1fr;
+    animation: none;
+}
+
+header {
+    grid-template-columns: 75px 0;
+    background-color: #f6f6f6;
+}
+
+.list-main-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto 1fr;
+    gap: 25px;
+}
+
+.list-main-container .header {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+}
+
+.list-main-container .header .title {
+    font-family: "Bangers", cursive;
+    font-size: 36px;
+}
+
+.list-main-container .header .desc {
+    font-family: "League Spartan", sans-serif;
+    max-width: 250px;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.list-main-container .header .mains-infos {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.list-main-container .header .mains-infos .box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.list-main-container .header .mains-infos .box .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.list-main-container .header .mains-infos .box .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+}
+
+.list-main-container .stats-section .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.list-main-container .stats-section .title:nth-child(3) {
+    margin-top: 25px;
+}
+
+.list-main-container .stats-section .stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.list-main-container .stats-section .stats-container .box {
+    display: flex;
+    gap: 20px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    border-radius: 10px;
+}
+
+.list-main-container .stats-section .stats-container .box .img {
+    width: 35px;
+}
+
+.list-main-container .stats-section .stats-container .box .texts .number {
+    font-family: "League Spartan", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.list-main-container .stats-section .stats-container .box .texts .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    color: #555;
+}
+
+@media screen and (max-width: 1085px) {
+    body.open {
+        grid-template-columns: 95px 1fr;
+    }
+    header .nav-bar {
+        grid-template-rows: 140px 1fr 55px;
+    }
+    header .nav-bar .responsive-logo {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    header .nav-bar {
+        grid-template-rows: 75px 0 0;
+        align-items: center;
+        overflow: hidden;
+        height: 75px;
+        width: 75px;
+        transition: all 0.5s ease-in-out;
+    }
+    body.phone-menu-open header .infos-section {
+        display: none;
+    }
+    .list-main-container {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        grid-template-columns: 0 1fr 0;
+    }
+}

@@ -1,0 +1,60 @@
+{% extends "dashboard/main.html" %} {% block title %}Liste - {{title}}{% endblock %}{% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-list-profile.css">{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
+<main class="list-main-container">
+    <section class="header">
+        <div class="title">Nom de la liste</div>
+        <div class="desc">Description de la liste</div>
+        <div class="mains-infos">
+            <div class="box">
+                <img src="/static/icons/user-30-dark-grey.png" class="icon" alt="">
+                <div class="text">Crée par utilistauer</div>
+            </div>
+            <div class="box">
+                <img src="/static/icons/calendar-30-dark-grey.png" class="icon" alt="">
+                <div class="text">Créée le 20 ffjfi</div>
+            </div>
+            <div class="box">
+                <img src="/static/icons/hide-password.png" class="icon" alt="">
+                <div class="text">Publique</div>
+            </div>
+        </div>
+    </section>
+    <section class="stats-section">
+        <div class="title">Statistiques</div>
+        <div class="stats-container">
+            <div class="box">
+                <img src="/static/imgs/3d-paper-page-with-notes.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">0</div>
+                    <div class="text">Fois copiée</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">102</div>
+                    <div class="text">XP accumulés</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-floating-red-hearts.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">0</div>
+                    <div class="text">Likes</div>
+                </div>
+            </div>
+        </div>
+        <div class="title">Dernière activité</div>
+        <div class="graph"></div>
+    </section>
+    <section class="list-section">
+        <div class="title">Contenu de la liste</div>
+        <div class="list-container">
+            <div class="box">
+                <div class="word">Car</div>
+                <div class="type">noun</div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

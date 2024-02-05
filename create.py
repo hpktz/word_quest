@@ -449,8 +449,8 @@ def create_list():
         # Add the words to the list
         wordList = WordList.from_json(session['list_under_creation'])
         for word in wordList.get_all():
-            cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
-                            (word['word'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
+            cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
+                            (word['word'], word['type'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
             
         # Get the user level
         user_level = current_user.lvl
@@ -543,7 +543,7 @@ def copy_list(id):
         
         is_yours = False
         if result[1] is not None:
-            is_yours = any(list["id"] == result[1] for list in current_user.lists)
+            is_yours = any(list["id"] == result[1] for list in current_user.get_lists())
             
         if is_yours or result[2] == current_user.id:
             return jsonify({"code": 400, "title": "Bad request", "message": "Vous ne pouvez pas copier votre propre liste"}), 400
@@ -561,8 +561,8 @@ def copy_list(id):
         
         for word in result:
             word = dict(zip(columns, word))
-            cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
-                            (word['word'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
+            cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
+                            (word['word'], word['word_type'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
         
         user_level = current_user.lvl
         with open('static/games-data.json') as json_file:

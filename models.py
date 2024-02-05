@@ -4,35 +4,23 @@ import json
 from datetime import datetime
 
 class User(UserMixin):
-    def __init__(self, user_id):
+    def __init__(self, user_id, name, birthday, email, lvl, picture, mfa, public):
         self.id = user_id
+        self.name = name
+        self.birthday = birthday
+        self.email = email
+        self.lvl = lvl
+        self.picture = picture
+        self.mfa = mfa
+        self.public = public
+                
+    def get_lists(self):
         conn = None
         cursor = None
         try:
             conn = create_connection()
             cursor = conn.cursor()
-            cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
-            user = cursor.fetchone()
-            if not user:
-                self.name = None
-                self.birthday = None
-                self.email = None
-                self.lvl = None
-                self.picture = None
-                self.mfa = None
-                self.public = None
-                self.lists = None
-                return
-
-            name = user[1]
-            birthday = user[2]
-            email = user[4]
-            lvl = user[3]
-            picture = user[8]
-            mfa = True if user[6] == 1 else False
-            public = True if user[7] == 1 else False
-
-            cursor.execute('SELECT * FROM lists WHERE user_id = %s', (user_id,))
+            cursor.execute('SELECT * FROM lists WHERE user_id = %s', (self.id,))
             columns = [column[0] for column in cursor.description]
             lists = cursor.fetchall()
             results = []
@@ -64,33 +52,16 @@ class User(UserMixin):
                     result["lessons"].append(dict(zip(columns_lesson, lesson)))
 
                 results.append(result)
-
-            self.name = name
-            self.birthday = birthday
-            self.email = email
-            self.lvl = lvl
-            self.picture = picture
-            self.mfa = mfa
-            self.public = public
-            self.lists = results
-
+            return results
         except Exception as e:
             print(e)
-            if conn:
-                conn.rollback()
-            self.name = None
-            self.birthday = None
-            self.email = None
-            self.lvl = None
-            self.picture = None
-            self.mfa = None
-            self.public = None
-            self.lists = None
+            return []
         finally:
             if cursor:
                 cursor.close()
             if conn:
                 conn.close()
+                
     def get_id(self):
         return str(self.id)
 
@@ -108,6 +79,7 @@ class AnonymousUserMixin(AnonymousUserMixin):
         self.mfa = None
         self.public = None
         self.lists = None
+        
     def get_id(self):
         return None
 

@@ -219,7 +219,7 @@ def user_profile(id):
                 # Check if the list is from the current user.
                 is_yours = False
                 if result["initial_id"] is not None:
-                    is_yours = any(list["id"] == result["initial_id"] for list in current_user.lists)
+                    is_yours = any(list["id"] == result["initial_id"] for list in current_user.get_lists())
                 
                 result["is_yours"] = is_yours
 
@@ -421,6 +421,12 @@ def unsubscribe(id):
             cursor.close()
         if conn:
             conn.close()
+            
+            
+@user_data_bp.route('/dashboard/profile/list/<int:id>')
+@login_required
+def profile_list(id):
+    return render_template('dashboard/list-profile.html')
             
 @user_data_bp.route('/dashboard/settings')
 def settings():
@@ -753,7 +759,7 @@ def delete_account():
         cursor.execute("DELETE FROM user_statements WHERE user_id = %s;", (current_user.id,))
         cursor.execute("DELETE FROM lessons_log WHERE user_id = %s;", (current_user.id,))
         cursor.execute("DELETE FROM rewards WHERE user_id = %s;", (current_user.id,))
-        for list in current_user.lists:
+        for list in current_user.get_lists():
             cursor.execute("DELETE FROM list_content WHERE list_id = %s;", (list["id"],))
             cursor.execute("DELETE FROM lessons WHERE list_id = %s;", (list["id"],))
             cursor.execute("DELETE FROM lists WHERE id = %s;", (list["id"],))

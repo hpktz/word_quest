@@ -54,18 +54,19 @@ def index():
     is_new_list = new_list_param and new_list_param.lower() == 'true'
 
     # Calculate the start and end date of the user's journey
-    if current_user.lists:
-        start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)
+    lists = current_user.get_lists()
+    if lists:
+        start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in lists)
         start_date = start_date.date().strftime("%Y-%m-%d")
 
-        end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)    
+        end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in lists)    
         end_date = end_date.date().strftime("%Y-%m-%d")
     else:
         start_date = None
         end_date = None
 
     # Calculate the progress of each list
-    for lst in current_user.lists:
+    for lst in lists:
         progress = sum(1 for lesson in lst["lessons"] if lesson["completed"] == 1)
         lst["progress"] = round((progress / len(lst["lessons"]) * 100), 0) if progress != 0 else 5 
 
@@ -115,7 +116,7 @@ def index():
             conn.close()
         
     # Sort the lists by ID in descending order
-    lists = sorted(current_user.lists, key=lambda k: k['id'], reverse=True)
+    lists = sorted(lists, key=lambda k: k['id'], reverse=True)
     new_list_id = lists[0]["id"] if is_new_list else None
     
     return render_template(
@@ -193,7 +194,7 @@ def list(list_id):
     """
     try:
         # Retrieve the list and its associated games
-        list_result = [l for l in current_user.lists if l["id"] == list_id][0]  
+        list_result = [l for l in current_user.get_lists() if l["id"] == list_id][0]  
         games_result = []
 
         with open('static/games-data.json') as json_file:

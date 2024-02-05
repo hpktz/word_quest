@@ -145,7 +145,7 @@ def login_post():
                     if data[11] == True:
                         # Check if 2FA is required
                         if data[6] == False:
-                            user = User(data[0])
+                            user = User(data[0], data[1], data[2], data[4], data[3], data[8], True if data[6] == 1 else False, True if data[7] == 1 else False)
                             login_user(user)
                             session.pop("login_tries")
                             return redirect(url_for('main.index'))
@@ -366,9 +366,10 @@ def sys_2fa_sendCodeAgain():
         return redirect(url_for('auth.login'))
     if time.time() > session["2fa"]["delay"]:
         # Generate a new 2FA secret key and send the code to the user's email
-        secret_key = session["2fa"]["secret_key"]
+        secret_key = pyotp.random_base32()
         totp = pyotp.TOTP(secret_key)
         session["2fa"]["trials"] = 0
+        session["2fa"]["secret_key"] = secret_key
         session["2fa"]["expires"] = time.time() + 300
         session["2fa"]["delay"] =  time.time() + 60
 
@@ -408,11 +409,29 @@ def sys_2fa_post():
             flask.redirect: A redirect response to the dashboard.
         """
         # Log in the user
-        user = User(user_id)
-        login_user(user)
-        session.pop("login_tries")
-        session.pop("2fa")
-        return redirect(url_for('main.index'))
+        conn = None
+        cursor = None
+        try:
+            conn = create_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE id=%s", (user_id,))
+            data = cursor.fetchone()
+            user = User(data[0], data[1], data[2], data[4], data[3], data[8], True if data[6] == 1 else False, True if data[7] == 1 else False)
+            login_user(user)
+            session.pop("login_tries")
+            session.pop("2fa")
+            return redirect(url_for('main.index'))
+        except Exception as e:
+            if conn:
+                conn.rollback()
+            logging.error("Error connecting to database: " + str(e))
+            flash('Une erreur est survenue lors de la connexion')
+            return redirect(url_for('auth.login'))
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
     
     def _register(email):
         """
@@ -434,7 +453,7 @@ def sys_2fa_post():
             cursor.execute("UPDATE users SET activated=TRUE WHERE email=%s", (email,))
             cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
             data = cursor.fetchone()
-            user = User(data[0])
+            user = User(data[0], data[1], data[2], data[4], data[3], data[8], True if data[6] == 1 else False, True if data[7] == 1 else False)
             login_user(user)
             session.pop("login_tries")
             session.pop("2fa")

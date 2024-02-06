@@ -10,9 +10,10 @@ header {
 
 .list-main-container {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 800px 300px;
     grid-template-rows: auto 1fr;
     gap: 25px;
+    padding-bottom: 15px;
 }
 
 .list-main-container .header {
@@ -97,6 +98,79 @@ header {
 .list-main-container .stats-section .stats-container .box .texts .text {
     font-family: "League Spartan", sans-serif;
     font-size: 15px;
+    color: #555;
+}
+
+.list-main-container .graph {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25px 1fr;
+    grid-template-rows: 1fr 25px;
+    width: 100%;
+    height: 200px;
+    margin-top: 25px;
+}
+
+.list-main-container .graph .ordinate {
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px solid lightgrey;
+    padding-right: 10px;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.list-main-container .graph .abscissa {
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-around;
+    grid-column: 2;
+    grid-row: 2;
+    border-top: 1px solid lightgrey;
+    padding-top: 10px;
+}
+
+.list-main-container .graph .chart-content {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+}
+
+.list-main-container .graph .chart-content .item {
+    width: 12px;
+    border-radius: 6px;
+    background-color: #766153;
+}
+
+.list-main-container .list-section .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.list-main-container .list-section .box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+}
+
+.list-main-container .list-section .box .word {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+}
+
+.list-main-container .list-section .box .type {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
     color: #555;
 }
 

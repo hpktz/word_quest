@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/static/styles/games/hangman/main.css">
     <link rel="stylesheet" href="/static/styles/games/timer.css">
 </head>
+
 <body>
     <section id="begining" class="begining">
         <div>
@@ -15,9 +17,12 @@
     </section>
     <div class="all">
         <button class="exit">
-            <img src="/static/icons/games-icons/exit.png" alt="">
+            <a href="/dashboard"><img src="/static/icons/games-icons/exit.png" alt=""></a>
+
         </button>
         <section class="game">
+            <div class="loader" id="loader">
+            </div>
             <div id="animation-xp" class="XP">
                 <p id="xpnotif">+0</p>
                 <img src="/static/icons/games-icons/big-flash.png" alt="">
@@ -30,25 +35,25 @@
             <svg height="50vh" width="33vw" class=figure-content>
 
                 <!-- Support-->
-                <line x1="30%" y1="10%" x2="75%" y2="10%"/>
-                <line x1="75%" y1="10%" x2="75%" y2="25%"/>
-                <line x1="30%" y1="10%" x2="30%" y2="85%"/>
-                <line x1="5%" y1="85%" x2="55%" y2="85%"/>
+                <line x1="30%" y1="10%" x2="75%" y2="10%" />
+                <line x1="75%" y1="10%" x2="75%" y2="25%" />
+                <line x1="30%" y1="10%" x2="30%" y2="85%" />
+                <line x1="5%" y1="85%" x2="55%" y2="85%" />
 
                 <!--stickman-->
                 <!--head-->
-                <circle cx="75%" cy="34%" r="6%" class="figure-part"/>
+                <circle cx="75%" cy="34%" r="6%" class="figure-part" />
 
                 <!--body-->
-                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part"/>
+                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part" />
 
                 <!--arms-->
-                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part"/>
-                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part"/>
+                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part" />
+                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part" />
                 
                 <!--legs-->
-                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part"/>
-                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part"/>
+                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part" />
+                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part" />
             </svg>
             
             <div class="word" id="word">
@@ -110,12 +115,42 @@
                 </div>
             </div>
             <div class="recap-btns">
-                <button >Retour au menu</button>
+                <button><a href="/dashboard">Retour au menu</a></button>
                 <button id="retry">Réessayer</button>
             </div>
         </section>
+        <div class="keyboard">
+
+            <div class="key-letter">A</div>
+            <div class="key-letter">B</div>
+            <div class="key-letter">C</div>
+            <div class="key-letter">D</div>
+            <div class="key-letter">E</div>
+            <div class="key-letter">F</div>
+            <div class="key-letter">G</div>
+            <div class="key-letter">H</div>
+            <div class="key-letter">I</div>
+            <div class="key-letter">J</div>
+            <div class="key-letter">K</div>
+            <div class="key-letter">M</div>
+            <div class="key-letter">N</div>
+            <div class="key-letter">O</div>
+            <div class="key-letter">P</div>
+            <div class="key-letter">Q</div>
+            <div class="key-letter">R</div>
+            <div class="key-letter">S</div>
+            <div class="key-letter">T</div>
+            <div class="key-letter">U</div>
+            <div class="key-letter">V</div>
+            <div class="key-letter">W</div>
+            <div class="key-letter">X</div>
+            <div class="key-letter">Y</div>
+            <div class="key-letter">X</div>
+            <div class="key-letter">Z</div>
+        </div>
     </div>
     <script src="/static/styles/games/hangman/main.js"></script>
     <script src="/static/styles/games/timer.js"></script>
 </body>
+
 </html>

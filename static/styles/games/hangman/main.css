@@ -17,7 +17,9 @@ body{
     margin: 0;
     overflow: hidden;
 }
-
+a{
+    text-decoration: none;
+}
 .all{
     display: flex;
     flex-direction: row;
@@ -282,8 +284,10 @@ h1{
     padding: 0 2vw;
     
 }
-.recap-btns button{
-    cursor: pointer;
+
+.recap-btns button a {
+    color: white;
+    text-decoration: none;
 }
 .recap-btns button{
     background-color: #766153;
@@ -295,6 +299,7 @@ h1{
     font-family: 'League Spartan';
     font-size: 18px;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .new-indice-btn{
@@ -316,6 +321,76 @@ h1{
 }
 .new-indice-btn:active{
     transform: scale(1);
+}
+
+.loader{
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 5px solid white;
+    border-top: 5px solid black;
+    animation: spin 0.5s linear infinite;
+}
+
+.keyboard{
+    display: none;
+}
+
+@media screen and (max-width: 670px) {
+    .separation-line{
+        display: none;
+    }
+    .other{
+        display: none;
+    }
+    .figure-content{
+        stroke-width: 15px ;
+        height: 40vh;
+        width: 60vw;
+    }
+    .exit img{
+        height: 35px;
+    }
+    .all{
+        flex-direction: column;
+        justify-content: unset;
+    }
+    .keyboard{
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        width: 70vw;
+        gap: 10px;
+    }
+    .keyboard .key-letter{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        font-family: 'League Spartan';
+        background-color: #ccd77c;
+        color: #433831;
+    }
+    .exit{
+        left: 10%;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes Xpanim {

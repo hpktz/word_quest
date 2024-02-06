@@ -112,7 +112,6 @@ def user_profile(id):
         picture = result[8]
         name = result[1]
         date = result[12].date()
-        date = date.strftime("%d %B %Y")
             
         # Retrieve the user's subscriptions and subscribers from the database.
         subscriptions = []
@@ -163,7 +162,9 @@ def user_profile(id):
         for sub in subscribers:
             if int(sub[0]) == int(current_user.id):
                 are_you_subscribed = True
-                subscribed_date = sub[5].date().strftime("%d %B %Y")
+                subscribed_date = sub[5] 
+                # transforme into datetime
+                subscribed_date = convert_date(sub[5].date())
                 break
             
         user_infos = {}
@@ -248,7 +249,7 @@ def user_profile(id):
     return render_template('dashboard/profile.html', 
                            id = user_id,
                            name = name,
-                           date = date,
+                           date = convert_date(date),
                            picture = picture,
                            are_you_subscribed = are_you_subscribed,
                            subscribed_date = subscribed_date,
@@ -426,8 +427,97 @@ def unsubscribe(id):
 @user_data_bp.route('/dashboard/profile/list/<int:id>')
 @login_required
 def profile_list(id):
-    return render_template('dashboard/list-profile.html')
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM lists WHERE id = %s;", (id,))
+        result = cursor.fetchone()
+        if not result:
+            abort(404)
             
+        name = result[7]
+        desc = result[8]
+        created_at = result[15]
+
+        list_owner = result[2]
+        cursor.execute("SELECT name FROM users WHERE id = %s;", (list_owner,))
+        list_owner_name = cursor.fetchone()[0]
+        is_public = False if result[4] == 0 else True
+        is_yours = str(list_owner) == str(current_user.id)
+        print(is_yours)
+        
+        if not is_public and not is_yours:
+            cursor.execute("SELECT * FROM subscriptions WHERE user_id = %s AND subscribed_to=%s;", (list_owner,current_user.id))
+            result = cursor.fetchone()
+            if not result:
+                abort(404)
+        
+        cursor.execute("SELECT COUNT(*) FROM list_likes WHERE list_id = %s;", (id,))
+        result = cursor.fetchone()
+        likes = result[0]
+        
+        cursor.execute("SELECT id FROM lists WHERE initial_id = %s;", (id,))
+        result = cursor.fetchall()
+        copies = len(result)
+        
+        copies_id = [row[0] for row in result]
+        copies_id.append(id)
+        copies_id = ','.join(map(str, copies_id))
+        
+        # Récupérer les xp gagnés par jour pour toutes les listes avec cet initial_id
+        cursor.execute("SELECT created_at, SUM(xp) FROM lessons_log WHERE list_id IN (%s) GROUP BY created_at;", (copies_id,))
+        result = cursor.fetchall()
+        total_xp = sum([row[1] for row in result]) if result else 0
+        
+        days = [[(datetime.now() - timedelta(days=i)).day, 0] for i in range(14)]
+        print(days)
+        result = [[row[0].day, row[1]] for row in result]
+        print(result)
+        for day in days:
+            for row in result:
+                if day[0] == row[0]:
+                    day[1] = row[1]
+                    break
+        days.reverse()
+        
+        max_xp = max([row[1] for row in result]) if result else 0
+        
+        cursor.execute("SELECT * FROM list_content WHERE list_id = %s;", (id,))
+        words = cursor.fetchall()
+        words = [list(row) for row in words]
+        for row in words:
+            row[4] = json.loads(row[4])
+            row[6] = json.loads(row[6])
+            
+        return render_template('dashboard/list-profile.html',
+                               id = id,
+                               name = name,
+                               desc = desc,
+                               list_owner = list_owner,
+                               list_owner_name = list_owner_name,
+                               created_at = convert_date(created_at),
+                               likes = likes,
+                               copies = copies,
+                               total_xp = total_xp,
+                               max_xp = max_xp,
+                               xps = days,
+                               words = words,
+                               is_public = is_public,
+                               is_yours = is_yours)
+
+                       
+    except Exception as e:
+        logging.error("Error while retrieving list: " + str(e))
+        abort(500)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+                
 @user_data_bp.route('/dashboard/settings')
 def settings():
     """

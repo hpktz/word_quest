@@ -1,0 +1,114 @@
+{% extends "dashboard/main.html" %} {% block title %}Liste - {{name}}{% endblock %}{% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-list-profile.css">{% endblock %}{% block content %}
+<main class="list-main-container">
+    <section class="header">
+        <div class="title">{{name}}</div>
+        <div class="desc">{{desc}}</div>
+        <div class="mains-infos">
+            <div class="box">
+                <img src="/static/icons/user-30-dark-grey.png" class="icon" alt="">
+                <div class="text">Par <a href="/dashboard/profile/user/{{list_owner}}">{{list_owner_name}}</a></div>
+            </div>
+            <div class="box">
+                <img src="/static/icons/calendar-30-dark-grey.png" class="icon" alt="">
+                <div class="text">Créée le {{created_at}}</div>
+            </div>
+            <div class="box">
+                <img src="/static/icons/hide-password.png" class="icon" alt="">
+                <div class="text">
+                    {% if is_public %}Publique{% else %}Privée{% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="stats-section">
+        <div class="title">Statistiques</div>
+        <div class="stats-container">
+            <div class="box">
+                <img src="/static/imgs/3d-paper-page-with-notes.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">{{copies}}</div>
+                    <div class="text">Fois copiée</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">{{total_xp}}</div>
+                    <div class="text">XP accumulés</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-floating-red-hearts.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">{{likes}}</div>
+                    <div class="text">Likes</div>
+                </div>
+            </div>
+        </div>
+        <div class="title">Dernière activité</div>
+        <div class="graph">
+            <div class="ordinate">
+                <div class="item">{{max_xp}}</div>
+                <div class="item">{{max_xp//2}}</div>
+                <div class="item">0</div>
+            </div>
+            <div class="chart-content">
+                {% for xp in xps %} {% if max_xp > 0%}{% set height = (xp[1] * 100) // max_xp %}{% else %}{% set height = 0 %}{% endif %}
+                <div class="item" style="height: {{height}}%"></div>
+                {% endfor %}
+            </div>
+            <div class="abscissa">
+                {% for xp in xps %}
+                <div class="item">{{xp[0]}}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <section class="list-section">
+        <div class="title">Contenu de la liste</div>
+        <div class="list-container">
+            {% for word in words %}
+            <div class="box">
+                <div class="word">{{word[2]}} ({{word[5]}})</div>
+                <div class="type">{{word[3]}}</div>
+                <div class="example">
+                    {% if word[4] %} {{word[4][0]}} - {{word[6][0]}} {% else %} Pas d'exemple {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not is_yours %}
+        <div class="separate"></div>
+        <div class="copy-button" onclick="copy_list(this)">
+            Copier la liste
+        </div>
+        {% endif %}
+    </section>
+    <script>
+        async function copy_list(el) {
+            el.innerHTML = "<div class='loader'></div>"
+            try {
+                let response = await fetch('/dashboard/list/copy/{{id}}');
+                let data = await response.json();
+                if (data.code == 200) {
+                    el.innerHTML = "Liste copiée"
+                    el.onclick = null
+                    el.style.cursor = "default"
+                    el.style.backgroundColor = "#555"
+                } else {
+                    el.classList.add("pulse")
+                    setTimeout(() => {
+                        el.classList.remove("pulse")
+                    }, 250)
+                }
+            } catch (error) {
+                el.classList.add("pulse")
+                setTimeout(() => {
+                    el.classList.remove("pulse")
+                }, 250)
+            }
+        }
+    </script>
+</main>
+{% endblock %}

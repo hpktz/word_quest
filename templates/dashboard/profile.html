@@ -78,7 +78,7 @@
         <div class="title" style="margin-top: 50px;">Listes</div>
         <div class="lists-container">
             {% if user_infos["lists"] %} {% for list in user_infos["lists"] %}
-            <a href="/dashboard/list/{{list['id']}}" onclick="redirect(this, event)" class="list-box">
+            <a href="/dashboard/profile/list/{{list['id']}}" onclick="redirect(this, event)" class="list-box">
                 <div class="title">{{list["title"]}}</div>
                 <div class="list-of-words">
                     {% for word in list["words"] %}

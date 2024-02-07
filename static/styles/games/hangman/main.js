@@ -11,7 +11,7 @@ const xpCounter = document.getElementById('xp');
 const xpNotif = document.getElementById('xpnotif');
 const animXp = document.getElementById('animation-xp');
 const xpFinal = document.getElementById('XP-final');
-
+const loader = document.getElementById('loader')
 
 
 const addIndice = document.getElementById('add-indice');
@@ -32,7 +32,7 @@ var XpTotal = 0;
 var xpwin = 5;
 var nbrFaute = 0;
 
-var goodLetter = [''];
+var goodLetters = [''];
 var badLetters = [];
 
 // Ajout des Indices en appuyant sur le + -------------------------------------------------------------------------------------
@@ -66,50 +66,74 @@ addIndice.addEventListener('click', () => {
     }
 })
 
+var word = '';
+async function getWord() {
+    const getWord = await fetch(`/dashboard/games/hangman/session/ask_word`);
 
-function selectedWord() {
-    let selectWord = words[Math.floor(Math.random() * words.length)];
-    words.splice(words.indexOf(selectWord),1)
-    return selectWord
+    var selectWord = await getWord.json();
+    console.log(selectWord["result"]["word"])
+    word = selectWord["result"];
+    if(word['word'] != undefined){
+        wordEl.innerHTML = `
+            ${word['word']
+                .split('')
+                .map(
+                    // le ? permet de faire un if et le : permet de faire un else
+                    lettre => `
+                        <span class="letter">
+                            ${goodLetters.includes(lettre) ? lettre :
+                            '' }
+                        </span>
+                    `
+                )
+                .join('')
+            
+            }`;
+        const internalWord = wordEl.innerText.replace(/\n/g, '');
+            if(internalWord == word['word'].toUpperCase()) {
+            wordFind += 1
+            xpNotif.innerHTML = '+' + String(xpwin);
+            animXp.style.animation = 'Xpanim 1s ease-in-out forwards'
+            XpTotal += xpwin
+            xpCounter.innerHTML = String(XpTotal) + 'Xp';
+            nextWord();
+            }
+        }
+        else{
+            finish();
+        }
 }
-// Affiche le mot caché
-let word = selectedWord()
+
 function afficheMot() {
     
     wordEl.innerHTML = `
-        ${word
+        ${word['word']
             .split('')
             .map(
                 // le ? permet de faire un if et le : permet de faire un else
                 lettre => `
                     <span class="letter">
-                        ${goodLetter.includes(lettre) ? lettre :
+                        ${goodLetters.includes(lettre) ? lettre :
                         '' }
                     </span>
                 `
             )
             .join('')
-        
-        }
-    
-    `;
+
+    }`;
     
     const internalWord = wordEl.innerText.replace(/\n/g, '');
-    // le (/\n/g, '') va permettre de remplacer tout (g = global) les retour à la ligne par '' c'est à dire supprimer les retour à la ligne
-
-    if(internalWord == word.toUpperCase()) {
-        if(words.length == 0){
-            finish();
-        } else{
-            nextWord();
-        }
+    if(internalWord == word['word'].toUpperCase()) {
         wordFind += 1
         xpNotif.innerHTML = '+' + String(xpwin);
         animXp.style.animation = 'Xpanim 1s ease-in-out forwards'
+        badLetters = 0
         XpTotal += xpwin
         xpCounter.innerHTML = String(XpTotal) + 'Xp';
+        nextWord();
     }
 }
+
 
 function updateBadLetter(letter) {
     // afficher les mauvaises lettre
@@ -152,42 +176,69 @@ function printNotification() {
 }
 
 // Event listeners
+var isEventListener = true
+
 setTimeout(() => {
-    window.addEventListener('keydown', e => {
-        if(badLetters.length < figurePart.length){
-            if(e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54){
-                const letter = e.key;
+    window.addEventListener('keydown', async e => {
+        if (isEventListener) {
+            if(badLetters.length < figurePart.length){
 
-                if(word.includes(letter)){
-                    if(!goodLetter.includes(letter)){
-                        goodLetter.push(letter);
+                if(e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54){
+                    isEventListener = false
+                    loader.style.display = 'flex'
+                    const check = await fetch(`/dashboard/games/hangman/session/check_letter/${e.key}`);
+                    loader.style.display = 'none'
+                    var checked = await check.json();
+                    letter = e.key
 
-                        afficheMot();
-                    } else {
+                    if(checked["result"] == "already touch"){
                         printNotification();
                     }
-                } else {
-                    if(!badLetters.includes(letter)){
-                        badLetters.push(letter);
-                        nbrFaute += 1;
-                        if(nbrFaute >=2 && nbrFaute <4){
-                            xpwin = 3
-                        } else if(nbrFaute == 4){
-                            xpwin = 2
-                        } else if(nbrFaute == 5){
-                            xpwin = 1
-                        }else if(nbrFaute == 6){
-                            xpwin = 0
-                        }
-                        updateBadLetter(letter);
-                    } else {
-                        printNotification(letter);
+                    else if(checked["result"]["True"]){
+                        goodLetters = checked["result"]["good"]
+                        afficheMot();
                     }
+                    else{
+                        badLetters = checked["result"]["bad"];
+                        xpwin = checked["result"]["xp"];
+                        updateBadLetter(letter);
+                    }
+                    isEventListener = true
                 }
             }
         }
     })
 }, 5200);
+
+const keyboard = document.querySelectorAll('.key-letter');
+keyboard.forEach(e => {
+    e.addEventListener('click',async () => {
+        if (isEventListener) {
+            if(badLetters.length < figurePart.length){
+                isEventListener = false
+                loader.style.display = 'flex'
+                const check = await fetch(`/dashboard/games/hangman/session/check_letter/${e.innerHTML}`);
+                loader.style.display = 'none'
+                var checked = await check.json();
+
+                if(checked["result"] == "already touch"){
+                    printNotification();
+                }
+                else if(checked["result"]["True"]){
+                    goodLetters = checked["result"]["good"]
+                    afficheMot();
+                }
+                else{
+                    badLetters = checked["result"]["bad"];
+                    xpwin = checked["result"]["xp"];
+                    updateBadLetter(e.innerHTML);
+                }
+                isEventListener = true
+                }
+            }
+        }
+    )
+});
 
 replayBtn.addEventListener('click', () => {
     location.reload()
@@ -195,8 +246,7 @@ replayBtn.addEventListener('click', () => {
    
 
 function nextWord(){
-    
-    setTimeout(() => {
+    setTimeout(async () => {
         nbrIndiceDiscover = 0;
         indiceContainer.innerHTML = "";
         addIndice.style.display = 'flex'
@@ -206,14 +256,18 @@ function nextWord(){
             e.style.stroke = '#717744';
         })
         popup.style.display = 'none';
-        word = selectedWord();
-        goodLetter = [''];
-        badLetters = [];
+
+        const resetletters = await fetch(`/dashboard/games/hangman/session/reset`);
+
+        reset = await resetletters.json()
+        console.log(reset["result"])
+        goodLetters = reset["result"]["good"];
+        badLetters = reset["result"]["bad"];
         nbrFaute = 0;
         xpwin = 5;
         nbrFaute = 0;
         animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
-        afficheMot();
+        getWord();
     }, 1000);
 }
 
@@ -242,8 +296,7 @@ function finish() {
         finding.innerHTML = String(wordFind) + '/' + String(Wordslength)
     }, 100);
 }
-afficheMot();
-
+getWord();
 
 const retryBtn = document.getElementById('retry');
 

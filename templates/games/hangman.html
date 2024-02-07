@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/static/styles/games/hangman/main.css">
     <link rel="stylesheet" href="/static/styles/games/timer.css">
 </head>
+
 <body>
     <section id="begining" class="begining">
         <div>
@@ -15,9 +17,12 @@
     </section>
     <div class="all">
         <button class="exit">
-            <img src="/static/icons/games-icons/exit.png" alt="">
+            <a href="/dashboard"><img src="/static/icons/games-icons/exit.png" alt=""></a>
+
         </button>
         <section class="game">
+            <div class="loader" id="loader">
+            </div>
             <div id="animation-xp" class="XP">
                 <p id="xpnotif">+0</p>
                 <img src="/static/icons/games-icons/big-flash.png" alt="">
@@ -30,25 +35,25 @@
             <svg height="50vh" width="33vw" class=figure-content>
 
                 <!-- Support-->
-                <line x1="30%" y1="10%" x2="75%" y2="10%"/>
-                <line x1="75%" y1="10%" x2="75%" y2="25%"/>
-                <line x1="30%" y1="10%" x2="30%" y2="85%"/>
-                <line x1="5%" y1="85%" x2="55%" y2="85%"/>
+                <line x1="30%" y1="10%" x2="75%" y2="10%" />
+                <line x1="75%" y1="10%" x2="75%" y2="25%" />
+                <line x1="30%" y1="10%" x2="30%" y2="85%" />
+                <line x1="5%" y1="85%" x2="55%" y2="85%" />
 
                 <!--stickman-->
                 <!--head-->
-                <circle cx="75%" cy="34%" r="6%" class="figure-part"/>
+                <circle cx="75%" cy="34%" r="6%" class="figure-part" />
 
                 <!--body-->
-                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part"/>
+                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part" />
 
                 <!--arms-->
-                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part"/>
-                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part"/>
+                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part" />
+                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part" />
                 
                 <!--legs-->
-                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part"/>
-                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part"/>
+                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part" />
+                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part" />
             </svg>
             
             <div class="word" id="word">
@@ -71,13 +76,42 @@
         </div>
         <span class="separation-line"></span>
         <section class="other">
-            <h1>Indices</h1>
             <div class="indices">
+                <h1>Indices</h1>
                 <div id="indice-container" class="container">
                 </div>
                 <button id="add-indice" class="new-indice-btn">
                     <img src="/static/icons/plus-30-white.png" alt="">
                 </button>
+            </div>
+            <div class="keyboard">
+
+                <div class="key-letter" id="test">a</div>
+                <div class="key-letter">b</div>
+                <div class="key-letter">c</div>
+                <div class="key-letter">d</div>
+                <div class="key-letter">e</div>
+                <div class="key-letter">f</div>
+                <div class="key-letter">g</div>
+                <div class="key-letter">h</div>
+                <div class="key-letter">i</div>
+                <div class="key-letter">j</div>
+                <div class="key-letter">k</div>
+                <div class="key-letter">l</div>
+                <div class="key-letter">m</div>
+                <div class="key-letter">n</div>
+                <div class="key-letter">o</div>
+                <div class="key-letter">p</div>
+                <div class="key-letter">q</div>
+                <div class="key-letter">r</div>
+                <div class="key-letter">s</div>
+                <div class="key-letter">t</div>
+                <div class="key-letter">u</div>
+                <div class="key-letter">v</div>
+                <div class="key-letter">w</div>
+                <div class="key-letter">x</div>
+                <div class="key-letter">y</div>
+                <div class="key-letter">z</div>
             </div>
             
             <span class="separation-line2"></span>
@@ -110,7 +144,7 @@
                 </div>
             </div>
             <div class="recap-btns">
-                <button >Retour au menu</button>
+                <button><a href="/dashboard">Retour au menu</a></button>
                 <button id="retry">Réessayer</button>
             </div>
         </section>
@@ -118,4 +152,5 @@
     <script src="/static/styles/games/hangman/main.js"></script>
     <script src="/static/styles/games/timer.js"></script>
 </body>
+
 </html>

@@ -13,7 +13,7 @@ Imports:
 Blueprint:
     - create_bp: The blueprint for the routes for creating a list.
 """
-from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session
+from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session, abort
 from flask_login import login_user, login_required, logout_user, current_user
 from root import *
 import random as random
@@ -160,7 +160,7 @@ def create():
     Display the create page.
 
     Returns:
-        flask.Response: The create page.
+        flask.render_template: The create page.
     """
     session['list_under_creation'] = WordList().to_json()
     return render_template('dashboard/create.html')
@@ -173,7 +173,7 @@ def word_box():
     Display the word box.
     
     Returns:
-        flask.Response: The word box.
+        flask.render_template: The word box.
     """
     return render_template('dashboard/content/word-box.html')
 
@@ -184,7 +184,7 @@ def empty_word_box():
     DIisplay the empty word box.
 
     Returns:
-        flask.Response: The empty word box.
+        flask.render_template: The empty word box.
     """
     return render_template('dashboard/content/empty-word-box.html')
 
@@ -207,7 +207,7 @@ def search(x):
             - result (list): The list of words if found, otherwise an empty list.
 
     Raises:
-        Exception: If an error occurs while searching the word.
+        500: If an error occurs while searching the word.
     """
     # Call the Collins API
     url = f"https://api.collinsdictionary.com/api/v1/dictionaries/english-french/entries/{x}_1"
@@ -298,10 +298,7 @@ def search(x):
             return jsonify({"code": 200, "title": "Word found", "result": senses})
     except requests.exceptions.HTTPError as err:
         logging.error("Error while fetching word: " + str(err), exc_info=True)
-        if err.response.status_code == 404:
-            return jsonify({"code": 404, "title": "Word not found", "result": []})
-        elif err.response.status_code == 500:
-            return jsonify({"code": 500, "title": "Internal server error", "result": []})
+        abort(500)
         
 @create_bp.route('/dashboard/create/add/<string:id>')
 @login_required
@@ -392,7 +389,7 @@ def create_list():
                 -> Only if the status code is 400.
 
     Raises:
-        Exception: If an error occurs while creating the list.
+        500: If an error occurs while creating the list.
     """
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden"}), 403
@@ -420,7 +417,7 @@ def create_list():
         conn = create_connection()
         cursor = conn.cursor()    
         # Check if the list name and description are valid
-        regex = re.compile(r'^[a-zA-Z0-9]+$')
+        regex = re.compile(r'^[a-zA-Z0-9#\'\s,.!?À-ÿ]+$')
         if not regex.match(name) or not regex.match(desc):
             return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
         
@@ -452,8 +449,8 @@ def create_list():
         # Add the words to the list
         wordList = WordList.from_json(session['list_under_creation'])
         for word in wordList.get_all():
-            cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
-                            (word['word'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
+            cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
+                            (word['word'], word['type'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
             
         # Get the user level
         user_level = current_user.lvl
@@ -498,11 +495,10 @@ def create_list():
             
         return jsonify({"code": 200, "title": "List created"}), 200
     except mysql.connector.Error as e:
-        print(e)
         if conn:
             conn.rollback()
         logging.error("Error while creating list: " + str(e), exc_info=True)
-        return jsonify({"code": 500, "title": "Internal server error"}), 500
+        abort(500)
     finally:
         if cursor:
             cursor.close()
@@ -532,7 +528,7 @@ def copy_list(id):
                 -> Only if the status code is 400.
 
     Raises:
-        Exception: If an error occurs while copying the list.
+        500: If an error occurs while copying the list.
     """
     conn = None
     cursor = None
@@ -547,7 +543,7 @@ def copy_list(id):
         
         is_yours = False
         if result[1] is not None:
-            is_yours = any(list["id"] == result[1] for list in current_user.lists)
+            is_yours = any(list["id"] == result[1] for list in current_user.get_lists())
             
         if is_yours or result[2] == current_user.id:
             return jsonify({"code": 400, "title": "Bad request", "message": "Vous ne pouvez pas copier votre propre liste"}), 400
@@ -565,8 +561,8 @@ def copy_list(id):
         
         for word in result:
             word = dict(zip(columns, word))
-            cursor.execute("INSERT INTO list_content (word, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s)", 
-                            (word['word'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
+            cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
+                            (word['word'], word['word_type'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
         
         user_level = current_user.lvl
         with open('static/games-data.json') as json_file:
@@ -614,7 +610,7 @@ def copy_list(id):
         if conn:
             conn.rollback()
         logging.error("Error while copying list: " + str(e), exc_info=True)
-        return jsonify({"code": 500, "title": "Internal server error"}), 500
+        abort(500)
     finally:
         if cursor:
             cursor.close()

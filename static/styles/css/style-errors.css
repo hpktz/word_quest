@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Path: static/styles/css/style-errors.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body,
+html {
+    height: 100%;
+    background-color: #f6f6f6;
+}
+
+html {
+    overflow: hidden;
+}
+
+body .error-main-container {
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+body .error-main-container .error-section {
+    text-align: center;
+}
+
+body .error-main-container .img {
+    width: 100%;
+    text-align: center;
+    max-width: 250px;
+}
+
+body .error-main-container .title {
+    font-family: "Bangers", sans-serif;
+    font-size: 36px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+body .error-main-container .desc {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    max-width: 300px;
+    margin-top: 25px;
+}
+
+body .error-main-container .button-container {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    font-family: "League Spartan", sans-serif;
+    padding: 10px 20px;
+    margin: auto;
+    margin-top: 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+body .error-main-container .button-container a {
+    color: white;
+    text-decoration: none;
+}
+
+body .error-main-container .button-container:hover {
+    background-color: #444;
+}

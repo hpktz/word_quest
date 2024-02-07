@@ -1,0 +1,334 @@
+body {
+    grid-template-columns: 95px 1fr;
+    animation: none;
+}
+
+header {
+    grid-template-columns: 75px 0;
+    background-color: #f6f6f6;
+}
+
+.list-main-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto 1fr;
+    gap: 25px;
+    padding-bottom: 15px;
+}
+
+.list-main-container .header {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+}
+
+.list-main-container .header .title {
+    font-family: "Bangers", cursive;
+    font-size: 36px;
+}
+
+.list-main-container .header .desc {
+    font-family: "League Spartan", sans-serif;
+    max-width: 250px;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.list-main-container .header .mains-infos {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.list-main-container .header .mains-infos .box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.list-main-container .header .mains-infos .box .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.list-main-container .header .mains-infos .box .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+}
+
+.list-main-container .header .mains-infos .box .text a {
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.list-main-container .stats-section .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.list-main-container .stats-section .title:nth-child(3) {
+    margin-top: 25px;
+}
+
+.list-main-container .stats-section .title:nth-child(5) {
+    margin-top: 25px;
+}
+
+.list-main-container .stats-section .stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.list-main-container .stats-section .stats-container .box {
+    display: flex;
+    gap: 20px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    border-radius: 10px;
+}
+
+.list-main-container .stats-section .stats-container .box .img {
+    width: 35px;
+}
+
+.list-main-container .stats-section .stats-container .box .texts .number {
+    font-family: "League Spartan", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.list-main-container .stats-section .stats-container .box .texts .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    color: #555;
+}
+
+.list-main-container .graph {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25px 1fr;
+    grid-template-rows: 1fr 25px;
+    width: 100%;
+    height: 200px;
+    margin-top: 25px;
+}
+
+.list-main-container .graph .ordinate {
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px solid lightgrey;
+    padding-right: 10px;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.list-main-container .graph .abscissa {
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-around;
+    grid-column: 2;
+    grid-row: 2;
+    border-top: 1px solid lightgrey;
+    padding-top: 10px;
+}
+
+.list-main-container .graph .abscissa .item {
+    width: 14px;
+    text-align: center;
+}
+
+.list-main-container .graph .chart-content {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+}
+
+.list-main-container .graph .chart-content .item {
+    width: 12px;
+    border-radius: 6px;
+    background-color: #766153;
+}
+
+.list-main-container .list-section .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.list-main-container .list-section .box {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 20px;
+    row-gap: 10px;
+    padding: 15px 0;
+}
+
+.list-main-container .list-section .box .word {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+}
+
+.list-main-container .list-section .box .type {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+}
+
+.list-main-container .list-section .box .example {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #333;
+    font-style: italic;
+    grid-column: 1 / span 2;
+}
+
+.list-main-container .separate {
+    width: 1px;
+    height: 25px;
+    background-color: lightgrey;
+    margin: 20px auto;
+}
+
+.list-main-container .copy-button {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: white;
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.list-main-container .copy-button:hover {
+    background-color: #555;
+}
+
+.list-main-container .copy-button .loader {
+    width: 14px;
+    height: 14px;
+    border: 2px solid white;
+    border-top: 2px solid #333;
+    border-radius: 50%;
+    margin: auto;
+    animation: spin 1s linear infinite;
+}
+
+.list-main-container .copy-button.pulse {
+    animation: pulse 0.1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: rotate(0def);
+    }
+    33% {
+        transform: rotate(2.5deg);
+    }
+    66% {
+        transform: rotate(-2.5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 1085px) {
+    body.open {
+        grid-template-columns: 95px 1fr;
+    }
+    header .nav-bar {
+        grid-template-rows: 140px 1fr 55px;
+    }
+    header .nav-bar .responsive-logo {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 820px) {
+    .list-main-container {
+        grid-template-columns: 1fr 0;
+        grid-template-rows: auto auto 1fr;
+        padding-bottom: 15px;
+        column-gap: 0;
+    }
+    .list-main-container .list-section {
+        grid-row: 2;
+    }
+    .list-main-container .stats-section {
+        grid-row: 3;
+    }
+    .list-main-container .list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .list-main-container .list-container .box {
+        padding: 10px;
+        background-color: #ededed;
+        border-radius: 10px;
+    }
+    .list-main-container .separate {
+        display: none;
+    }
+    .list-main-container .copy-button {
+        margin: 20px 0 0 auto;
+        width: calc(50% - 10px);
+    }
+}
+
+@media screen and (max-width: 670px) {
+    header .nav-bar {
+        grid-template-rows: 75px 0 0;
+        align-items: center;
+        overflow: hidden;
+        height: 75px;
+        width: 75px;
+        transition: all 0.5s ease-in-out;
+    }
+    body.phone-menu-open header .infos-section {
+        display: none;
+    }
+    .list-main-container {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        grid-template-columns: 1fr;
+        column-gap: 0;
+    }
+    .list-main-container .graph .abscissa .item:nth-child(-n+7) {
+        display: none;
+    }
+    .list-main-container .graph .chart-content .item:nth-child(-n+7) {
+        display: none;
+    }
+}

@@ -9,6 +9,7 @@ Imports:
     - datetime: For handling dates and times.
     - random: For generating random numbers.
     - logging: For logging errors and other information.
+    - re: For handling regular expressions.
 
 Blueprint:
     - main_bp: The blueprint for the main routes of the application.
@@ -20,6 +21,7 @@ import json
 from datetime import datetime, timedelta
 import random as random
 import logging
+import re
 
 main_bp = Blueprint('main', __name__)
 """
@@ -32,6 +34,8 @@ Routes:
     - /dashboard: To display the dashboard page.
     - /dashboard/lives/purchase: To purchase lives for the current user.
     - /dashboard/games/<int:list_id>: To retrieve the game trail for a given list ID.
+    - /dashboard/manage/<int:list_id>: To render the manage page for a given list ID.
+    - /dashboard/manage/update/<int:list_id>: To update list information in the database.
     - /dashboard/delete/<int:list_id>: To delete a list and its associated data from the database.    
 """
 
@@ -45,7 +49,8 @@ def index():
         flask.Response: The rendered template for the dashboard page.
         
     Raises:
-        Exception: If an error occurs while fetching the user statements.
+        gem (int): The updated number of gems set to 0.
+        lives (int): The updated number of lives set to 0.
     """
     
     # Check if the user is coming from the create page
@@ -53,18 +58,19 @@ def index():
     is_new_list = new_list_param and new_list_param.lower() == 'true'
 
     # Calculate the start and end date of the user's journey
-    if current_user.lists:
-        start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)
+    lists = current_user.get_lists()
+    if lists:
+        start_date = min(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in lists)
         start_date = start_date.date().strftime("%Y-%m-%d")
 
-        end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in current_user.lists)    
+        end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in lists)    
         end_date = end_date.date().strftime("%Y-%m-%d")
     else:
         start_date = None
         end_date = None
 
     # Calculate the progress of each list
-    for lst in current_user.lists:
+    for lst in lists:
         progress = sum(1 for lesson in lst["lessons"] if lesson["completed"] == 1)
         lst["progress"] = round((progress / len(lst["lessons"]) * 100), 0) if progress != 0 else 5 
 
@@ -114,7 +120,7 @@ def index():
             conn.close()
         
     # Sort the lists by ID in descending order
-    lists = sorted(current_user.lists, key=lambda k: k['id'], reverse=True)
+    lists = sorted(lists, key=lambda k: k['id'], reverse=True)
     new_list_id = lists[0]["id"] if is_new_list else None
     
     return render_template(
@@ -145,7 +151,7 @@ def purchase_lives():
             - gems (int): The updated number of gems.
             
     Raises:
-        Exception: If an error occurs while fetching the user statements.
+        500: If an error occurs while fetching the user statements.
     """
     conn = None
     cursor = None
@@ -168,7 +174,7 @@ def purchase_lives():
         if conn:
             conn.rollback()
         logging.error("Error while fetching user statements: " + str(e), exc_info=True)
-        return jsonify({"code": 400})
+        abort(500)
     finally:
         if cursor:
             cursor.close()
@@ -188,11 +194,11 @@ def list(list_id):
         flask.Response: The rendered template for the game trail.
    
     Raises:
-        Exception: If an error occurs while fetching the game trail.
+        flask.render_template: The rendered template for the game trail.
     """
     try:
         # Retrieve the list and its associated games
-        list_result = [l for l in current_user.lists if l["id"] == list_id][0]  
+        list_result = [l for l in current_user.get_lists() if l["id"] == list_id][0]  
         games_result = []
 
         with open('static/games-data.json') as json_file:
@@ -232,6 +238,92 @@ def list(list_id):
         logging.error("Error while fetching game trail: " + str(e), exc_info=True)
         return render_template('dashboard/content/game-trail-empty-template.html')
 
+@main_bp.route('/dashboard/manage/<int:list_id>')
+def manage(list_id):
+    """Render the manage page for a given list ID.
+
+    Args:
+        list_id (int): The ID of the list.
+
+    Returns:
+        flask.Response: The rendered template for the manage page.
+
+    Raises:
+        flask.render_template: The rendered template for the manage page.
+    """
+    # Retrieve the list and its associated games
+    try:
+        list_result = [l for l in current_user.get_lists() if l["id"] == list_id][0]
+        list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
+        if list_result:
+            return render_template('dashboard/content/manage-list.html', list=list_result), 200
+        abort(404)
+    except Exception as e:
+        logging.error("Error while fetching list: " + str(e), exc_info=True)
+        abort(500)
+        
+@main_bp.route('/dashboard/manage/update/<int:list_id>', methods=['POST'])
+def update(list_id):
+    """Update the name of a list in the database.
+
+    Args:
+        list_id (int): The ID of the list to be updated.
+
+    Returns:
+        flask.Response: A redirect response to the main index page.
+
+    Raises:
+        flask.redirect: A redirect response to the main index page.
+    """
+    # Update the name of the list
+    conn = None
+    cursor = None
+    try:
+        name = request.json.get('name')
+        description = request.json.get('description')
+        time  = int(request.json.get('time'))
+        xp = int(request.json.get('xp'))
+        game = int(request.json.get('game'))
+        reminder = request.json.get('reminder')
+        stats = request.json.get('stats')
+        public = request.json.get('public')
+        
+        regex = re.compile(r'^[a-zA-Z0-9#\'\s,.!?À-ÿ]+$')
+        if not regex.match(name) or not regex.match(description):
+            return jsonify({"code": 400, "message": "Caractères invalides"})
+        
+        if len(name) > 50 or len(description) > 500:
+            return jsonify({"code": 400, "message": "Trop de caractères"})
+        
+        if len(name) == 0:
+            return jsonify({"code": 400, "message": "Nom invalide"})
+        
+        time_normalized = [5,10,15]
+        xp_normalized = [10,20,30]
+        game_normalized = [1,2,3]
+        
+        print(isinstance(reminder, bool), isinstance(stats, bool), isinstance(public, bool)\
+        , time in time_normalized, xp in xp_normalized, game in game_normalized)
+        
+        if not isinstance(reminder, bool) or not isinstance(stats, bool) or not isinstance(public, bool)\
+        or not time in time_normalized or not xp in xp_normalized or not game in game_normalized:
+            return jsonify({"code": 400, "message": "Les valeurs ne sont pas valides. Veuillez réessayer."})
+    
+        conn = create_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE lists SET title = %s, description = %s, tgt_time = %s, tgt_xp = %s, tgt_games = %s, notif_remind = %s, notif_stats = %s, public = %s WHERE id = %s", (name, description, time, xp, game, reminder, stats, public, list_id))
+        conn.commit()
+    
+        return jsonify({"code": 200, "message": "Liste mise à jour avec succès."})
+    except Exception as e:
+        logging.error("Error while updating list: " + str(e), exc_info=True)
+        return jsonify({"code": 500, "message": "Une erreur s'est produite lors de la mise à jour de la liste. Veuillez réessayer plus tard."})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
 @main_bp.route('/dashboard/delete/<int:list_id>')
 @login_required
 def delete(list_id):
@@ -244,7 +336,7 @@ def delete(list_id):
         flask.Response: A redirect response to the main index page.
 
     Raises:
-        Exception: If an error occurs while deleting the list.
+        flask.redirect: A redirect response to the main index page.
     """
     conn = None
     cursor = None

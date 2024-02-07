@@ -502,6 +502,80 @@ header {
     transform: translateX(25px);
 }
 
+.delete_account .body .description {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.delete_account .body input {
+    width: 100%;
+    max-width: 300px;
+    background-color: #ededed;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.delete_account .body input:hover {
+    background-color: #ebebeb;
+}
+
+.delete_account .body .button {
+    width: 100px;
+    max-width: 300px;
+    background-color: #9b0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: auto;
+    cursor: not-allowed;
+    margin-left: calc(100% - 100px);
+}
+
+.delete_account .body .button.active {
+    width: 100px;
+    max-width: 300px;
+    background-color: #9b0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: calc(100% - 100px);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.delete_account .body .button .loader {
+    width: 15px;
+    height: 15px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    margin: auto;
+    animation: loader-animation 1s linear infinite;
+}
+
+.delete_account .body .button.active:hover {
+    background-color: #9b0000;
+}
+
+.delete_account .body .button.pulse {
+    animation: pulse 0.1s infinite;
+}
+
 @media screen and (max-width: 1085px) {
     body.open {
         grid-template-columns: 95px 1fr;
@@ -525,6 +599,35 @@ header {
     }
     body.phone-menu-open header .infos-section {
         display: none;
+    }
+    .settings-main-container {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        grid-template-columns: 0 1fr 0;
+    }
+    .settings-main-container .user-infos {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+    .settings-main-container .password-container {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        grid-template-rows: auto auto auto auto;
+    }
+    .settings-main-container .password-container>div:nth-child(2) {
+        grid-row: 2;
+    }
+    .settings-main-container .password-container .mfa-box {
+        grid-row: 3;
+    }
+    .settings-main-container .password-container .submit-button {
+        grid-row: 4;
+    }
+    .settings-main-container .settings-section input {
+        max-width: 100%;
+    }
+    .delete_account .body input {
+        max-width: 100%;
     }
 }
 

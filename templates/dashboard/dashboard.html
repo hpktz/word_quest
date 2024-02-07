@@ -108,21 +108,76 @@
             <span class="loader"></span>
         </div>
     </div>
-    <div class="delete-list pop-up">
+    <div class="delete-list pop-up active">
         <div class="header">
-            <div class="title">Suppression de la liste</div>
+            <div class="title">Gestion de la liste</div>
             <div class="close-logo clickable-logo">
                 <a href="" onclick="close_delete_list(this, event)">
                     <img src="/static/icons/close.png" alt="logo">
                 </a>
             </div>
         </div>
-        <div class="text">
-            Êtes-vous sûr de vouloir supprimer cette liste ? Cette action est irréversible.<br/><br/> Si vous souhaitez retourner à la liste des listes, fermez cette fenêtre.
+        <div class="body">
+            <form method="POST" action="" onsubmit="updateList(this, event)">
+                <label for="list-name">Nom de la liste</label>
+                <input type="text" name="list-name" id="list-name" value="{{list_name}}">
+                <label for="list-desc">Description de la liste</label>
+                <textarea name="list-desc" id="list-desc">{{list_desc}}</textarea>
+                <div class="goals-tab">
+                    <p class="subtitle">Temps</p>
+                    <div>
+                        <input type="radio" name="time" id="time-1" value="5" checked>
+                        <label for="time-1">5 min</label>
+                        <input type="radio" name="time" id="time-2" value="10">
+                        <label for="time-2">10 min</label>
+                        <input type="radio" name="time" id="time-3" value="15">
+                        <label for="time-3">15 min</label>
+                    </div>
+                </div>
+                <div class="goals-tab">
+                    <p class="subtitle">XP</p>
+                    <div>
+                        <input type="radio" name="xp" id="xp-1" value="10" checked>
+                        <label for="xp-1">10</label>
+                        <input type="radio" name="xp" id="xp-2" value="20">
+                        <label for="xp-2">20</label>
+                        <input type="radio" name="xp" id="xp-3" value="30">
+                        <label for="xp-3">30</label>
+                    </div>
+                </div>
+                <div class="goals-tab">
+                    <p class="subtitle">Jeux</p>
+                    <div>
+                        <input type="radio" name="game" id="game-1" value="1" checked>
+                        <label for="game-1">1</label>
+                        <input type="radio" name="game" id="game-2" value="2">
+                        <label for="game-2">2</label>
+                        <input type="radio" name="game" id="game-3" value="3">
+                        <label for="game-3">3</label>
+                    </div>
+                </div>
+                <div class="input-title ">Notifications</div>
+                <div class="notifications-tab">
+                    <p class="subtitle">Rappel par mail</p>
+                    <input type="checkbox" name="reminder" id="reminder-1">
+                    <label for="reminder-1"> <span class="slider"></span></label>
+                </div>
+                <div class="notifications-tab">
+                    <p class="subtitle">Stats par mail</p>
+                    <input type="checkbox" name="stats" id="stats-1">
+                    <label for="stats-1"><span class="slider"></span></label>
+                </div>
+                <div class="notifications-tab">
+                    <p class="subtitle">Liste publique</p>
+                    <input type="checkbox" name="public" id="public-1">
+                    <label for="public-1"><span class="slider"></span></label>
+                </div>
+                <button type="submit" class="button">Mettre à jour</button>
+            </form>
         </div>
-        <div class="submit-button">
+        <!-- <div class="submit-button">
             <a href="" id="delete-list-redirect" onclick="redirect(this, event)">Supprimer</a>
-        </div>
+        </div> -->
     </div>
     <section class="pop-up">
         <div class="header">

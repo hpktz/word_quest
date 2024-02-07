@@ -1355,6 +1355,8 @@ main {
     top: 200%;
     left: 50%;
     width: 300px;
+    max-height: calc(100% - 50px);
+    overflow: auto;
     background-color: white;
     height: fit-content;
     transform: translate(-50%, -50%);

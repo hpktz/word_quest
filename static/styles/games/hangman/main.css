@@ -229,6 +229,7 @@ h1{
 }
 
 .recap{
+    z-index: 100;
     width: 400px;
     height: 380px;
     display: none;
@@ -344,12 +345,30 @@ h1{
     .separation-line{
         display: none;
     }
-    .other{
+    .separation-line2{
         display: none;
+    }
+    .other{
+        height: 0;
+    }
+    .info-content{
+        display: none;
+    }
+    .indices{
+        position: absolute;
+        top: 10%;
+        left: 10%;
+    }
+    .new-indice-btn{
+        height: 35px;
+        width: 35px;
+    }
+    .new-indice-btn img{
+        height: 28px;
     }
     .figure-content{
         stroke-width: 15px ;
-        height: 40vh;
+        height: 30vh;
         width: 60vw;
     }
     .exit img{
@@ -357,7 +376,6 @@ h1{
     }
     .all{
         flex-direction: column;
-        justify-content: unset;
     }
     .keyboard{
         margin-top: 20px;
@@ -367,23 +385,42 @@ h1{
         justify-content: center;
         width: 70vw;
         gap: 10px;
+        z-index: 9;
     }
-    .keyboard .key-letter{
+    .key-letter{
         display: flex;
         align-items: center;
         justify-content: center;
         width: 40px;
         height: 40px;
         border-radius: 5px;
+        text-transform: uppercase;
         font-family: 'League Spartan';
         background-color: #ccd77c;
         color: #433831;
+        padding: 2px 0 0 2px;
+    }
+    .key-letter:hover{
+        cursor: pointer;
+    }
+    .key-letter:active{
+        transform: scale(0.8);
     }
     .exit{
         left: 10%;
     }
 }
-
+@media screen and (max-width: 490px) {
+    .keyboard{
+        width: 90vw;
+    }
+}
+@media screen and (max-width: 380px) {
+    .key-letter{
+        width: 30px;
+        height: 30px;
+    }
+}
 @keyframes spin {
     0% {
         transform: rotate(0deg);

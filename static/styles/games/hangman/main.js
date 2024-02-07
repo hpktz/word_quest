@@ -210,6 +210,36 @@ setTimeout(() => {
     })
 }, 5200);
 
+const keyboard = document.querySelectorAll('.key-letter');
+keyboard.forEach(e => {
+    e.addEventListener('click',async () => {
+        if (isEventListener) {
+            if(badLetters.length < figurePart.length){
+                isEventListener = false
+                loader.style.display = 'flex'
+                const check = await fetch(`/dashboard/games/hangman/session/check_letter/${e.innerHTML}`);
+                loader.style.display = 'none'
+                var checked = await check.json();
+
+                if(checked["result"] == "already touch"){
+                    printNotification();
+                }
+                else if(checked["result"]["True"]){
+                    goodLetters = checked["result"]["good"]
+                    afficheMot();
+                }
+                else{
+                    badLetters = checked["result"]["bad"];
+                    xpwin = checked["result"]["xp"];
+                    updateBadLetter(e.innerHTML);
+                }
+                isEventListener = true
+                }
+            }
+        }
+    )
+});
+
 replayBtn.addEventListener('click', () => {
     location.reload()
 })

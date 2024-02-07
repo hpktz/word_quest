@@ -164,10 +164,6 @@ h1{
     margin-bottom: 25px;
 }
 
-.indices{
-    height: 80%;
-}
-
 .indice{
     background: white;
     border-radius: 5px;
@@ -336,12 +332,49 @@ h1{
     border-top: 5px solid black;
     animation: spin 0.5s linear infinite;
 }
-
 .keyboard{
-    display: none;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    z-index: 9;
+}
+.key-letter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-family: 'League Spartan';
+    background-color: #ccd77c;
+    color: #433831;
+    padding: 2px 0 0 2px;
+}
+.key-letter:hover{
+    cursor: pointer;
+}
+.key-letter:active{
+    transform: scale(0.8);
 }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 900px) {
+    .other{
+        width: 40vw;
+    }
+}
+@media screen and (max-width: 850px) {
+    .key-letter{
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
     .separation-line{
         display: none;
     }
@@ -350,6 +383,7 @@ h1{
     }
     .other{
         height: 0;
+        width: auto;
     }
     .info-content{
         display: none;
@@ -376,35 +410,8 @@ h1{
     }
     .all{
         flex-direction: column;
-    }
-    .keyboard{
-        margin-top: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
         justify-content: center;
-        width: 70vw;
-        gap: 10px;
-        z-index: 9;
-    }
-    .key-letter{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 5px;
-        text-transform: uppercase;
-        font-family: 'League Spartan';
-        background-color: #ccd77c;
-        color: #433831;
-        padding: 2px 0 0 2px;
-    }
-    .key-letter:hover{
-        cursor: pointer;
-    }
-    .key-letter:active{
-        transform: scale(0.8);
+        gap: 10%;
     }
     .exit{
         left: 10%;

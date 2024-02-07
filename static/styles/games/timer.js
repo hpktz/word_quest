@@ -1,7 +1,7 @@
 const text = document.getElementById('countdown-game');
 
 
-var time =  60;
+var time =  1000;
 function countDown() {
     const minute = Math.floor(time / 60);
     const seconds = time%60;

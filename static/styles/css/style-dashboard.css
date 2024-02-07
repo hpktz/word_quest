@@ -1429,6 +1429,253 @@ main {
     width: 100%;
 }
 
+.dashboard-main-container .manage-list .body label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.dashboard-main-container .manage-list .body input[type="text"],
+.dashboard-main-container .manage-list .body textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+    background: #ededed;
+    border: 0;
+    outline: none;
+    resize: vertical;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .manage-list .body input[type="text"]:hover,
+.dashboard-main-container .manage-list .body input[type="text"]:focus,
+.dashboard-main-container .manage-list .body textarea:hover,
+.dashboard-main-container .manage-list .body textarea:focus {
+    background: #e0e0e0;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab {
+    display: grid;
+    grid-template-columns: 75px 1fr;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab .subtitle {
+    display: block;
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div input {
+    display: none;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div input+label {
+    display: flex;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div input:checked+label {
+    font-weight: bold;
+    color: #766153;
+}
+
+.dashboard-main-container .manage-list .input-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.dashboard-main-container .manage-list .notifications-tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.dashboard-main-container .manage-list .notifications-tab .subtitle {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"] {
+    display: none;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]+label {
+    width: 50px;
+    height: 25px;
+    background: #ededed;
+    border-radius: 25px;
+    display: block;
+    padding: 3.75px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]+label .slider {
+    display: block;
+    width: 17.5px;
+    height: 17.5px;
+    background: #333;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]:checked+label {
+    background: #333;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]:checked+label .slider {
+    transform: translateX(25px);
+    background: #ededed;
+}
+
+.dashboard-main-container .manage-list button {
+    width: 130px;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #333;
+    outline: none;
+    border: 0;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    margin-left: calc(100% - 130px);
+    margin-top: 25px;
+}
+
+.dashboard-main-container .manage-list button:hover {
+    background: #555;
+}
+
+.dashboard-main-container .manage-list button .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 11px;
+    height: 11px;
+    border: 2px solid #555;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    margin: auto;
+    animation: main-spin 1s linear infinite;
+}
+
+.dashboard-main-container .manage-list button.pulse {
+    animation: pulse-button 0.1s infinite;
+}
+
+.dashboard-main-container .manage-list .body {
+    min-height: 250px;
+    position: relative;
+}
+
+.dashboard-main-container .manage-list .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    border-top: 2px solid white;
+    animation: main-spin 1s linear infinite;
+}
+
+.dashboard-main-container .delete-list-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 25px;
+    margin-top: 25px;
+    border-top: 1px solid #333;
+}
+
+.dashboard-main-container .delete-list-container .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    margin: 0;
+}
+
+.dashboard-main-container .delete-list-container .delete-button {
+    width: 130px;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #a5140f;
+    outline: none;
+    border: 0;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.dashboard-main-container .delete-list-container .delete-button a {
+    text-decoration: none;
+    color: white;
+}
+
+.dashboard-main-container .alert-mess {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #a5140f;
+    animation: error-entry 0.3s linear;
+}
+
+.dashboard-main-container .success-mess {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #717744;
+    animation: error-entry 0.3s linear;
+}
+
+@keyframes error-entry {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 30px;
+    }
+}
+
 .dashboard-main-container .share-box {
     width: 100%;
     height: fit-content;

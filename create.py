@@ -417,7 +417,7 @@ def create_list():
         conn = create_connection()
         cursor = conn.cursor()    
         # Check if the list name and description are valid
-        regex = re.compile(r'^[a-zA-Z0-9]+$')
+        regex = re.compile(r'^[a-zA-Z0-9#\'\s,.!?À-ÿ]+$')
         if not regex.match(name) or not regex.match(desc):
             return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
         

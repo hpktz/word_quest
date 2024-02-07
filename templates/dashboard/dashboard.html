@@ -20,8 +20,8 @@
     <img src="/static/imgs/3d-young-man-with-coffee-standing-and-speaking.png" class="img" alt="tips-illustration">
 </div>
 {% endblock %} {% block daytime_tip %} {{daytime_tip}} {% endblock %} {% block content %}
-<main class="dashboard-main-container" onclick="close_boxes(this, event)">
-    <section class="main-infos entry-animation">
+<main class="dashboard-main-container">
+    <section class="main-infos entry-animation" onclick="close_boxes(this, event)">
         <div class="title">MES LISTES</div>
         <div class="user-infos">
             <div class="box">
@@ -56,7 +56,7 @@
             </div>
         </div>
     </section>
-    <section class="lists-container entry-animation" id="lists-container">
+    <section class="lists-container entry-animation" id="lists-container" onclick="close_boxes(this, event)">
         {% for list in lists %} {% if new_list_id == list['id'] %} {% set css_class = "new-list" %} {% else %} {% set css_class = "" %} {% endif %}
         <div class="list-box {{ css_class }}" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
             <div class="infos">
@@ -77,8 +77,14 @@
             </div>
             <div class="actions">
                 <div class="delete-logo clickable-logo delete-zone">
-                    <a href="" class="delete-zone" onclick="delete_list(this, event, {{list['id']}})">
-                        <img src="/static/icons/delete-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                    <a href="" class="delete-zone" onclick="manage_list(this, event, {{list['id']}})">
+                        <img src="/static/icons/settings-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                    </a>
+                </div>
+                <!-- TODO -->
+                <div class="delete-logo clickable-logo delete-zone">
+                    <a href="" class="delete-zone" onclick="">
+                        <img src="/static/icons/share-30-dark-grey.png" class="delete-zone" alt="delete-icon">
                     </a>
                 </div>
             </div>
@@ -95,7 +101,7 @@
         </div>
         {% endif %}
     </section>
-    <section class="games-trail entry-animation" data-color="1">
+    <section class="games-trail entry-animation" data-color="1" onclick="close_boxes(this, event)">
         <div class="no-list-selected">
             <div>
                 <img src="/static/imgs/3d-black-cursor.png" class="img" alt="cursor-icon">
@@ -108,77 +114,17 @@
             <span class="loader"></span>
         </div>
     </div>
-    <div class="delete-list pop-up active">
+    <section class="manage-list pop-up">
         <div class="header">
             <div class="title">Gestion de la liste</div>
             <div class="close-logo clickable-logo">
-                <a href="" onclick="close_delete_list(this, event)">
+                <a href="" onclick="close_manage_list(this, event)">
                     <img src="/static/icons/close.png" alt="logo">
                 </a>
             </div>
         </div>
-        <div class="body">
-            <form method="POST" action="" onsubmit="updateList(this, event)">
-                <label for="list-name">Nom de la liste</label>
-                <input type="text" name="list-name" id="list-name" value="{{list_name}}">
-                <label for="list-desc">Description de la liste</label>
-                <textarea name="list-desc" id="list-desc">{{list_desc}}</textarea>
-                <div class="goals-tab">
-                    <p class="subtitle">Temps</p>
-                    <div>
-                        <input type="radio" name="time" id="time-1" value="5" checked>
-                        <label for="time-1">5 min</label>
-                        <input type="radio" name="time" id="time-2" value="10">
-                        <label for="time-2">10 min</label>
-                        <input type="radio" name="time" id="time-3" value="15">
-                        <label for="time-3">15 min</label>
-                    </div>
-                </div>
-                <div class="goals-tab">
-                    <p class="subtitle">XP</p>
-                    <div>
-                        <input type="radio" name="xp" id="xp-1" value="10" checked>
-                        <label for="xp-1">10</label>
-                        <input type="radio" name="xp" id="xp-2" value="20">
-                        <label for="xp-2">20</label>
-                        <input type="radio" name="xp" id="xp-3" value="30">
-                        <label for="xp-3">30</label>
-                    </div>
-                </div>
-                <div class="goals-tab">
-                    <p class="subtitle">Jeux</p>
-                    <div>
-                        <input type="radio" name="game" id="game-1" value="1" checked>
-                        <label for="game-1">1</label>
-                        <input type="radio" name="game" id="game-2" value="2">
-                        <label for="game-2">2</label>
-                        <input type="radio" name="game" id="game-3" value="3">
-                        <label for="game-3">3</label>
-                    </div>
-                </div>
-                <div class="input-title ">Notifications</div>
-                <div class="notifications-tab">
-                    <p class="subtitle">Rappel par mail</p>
-                    <input type="checkbox" name="reminder" id="reminder-1">
-                    <label for="reminder-1"> <span class="slider"></span></label>
-                </div>
-                <div class="notifications-tab">
-                    <p class="subtitle">Stats par mail</p>
-                    <input type="checkbox" name="stats" id="stats-1">
-                    <label for="stats-1"><span class="slider"></span></label>
-                </div>
-                <div class="notifications-tab">
-                    <p class="subtitle">Liste publique</p>
-                    <input type="checkbox" name="public" id="public-1">
-                    <label for="public-1"><span class="slider"></span></label>
-                </div>
-                <button type="submit" class="button">Mettre à jour</button>
-            </form>
-        </div>
-        <!-- <div class="submit-button">
-            <a href="" id="delete-list-redirect" onclick="redirect(this, event)">Supprimer</a>
-        </div> -->
-    </div>
+        <div class="body" id="manage-list-content"></div>
+    </section>
     <section class="pop-up">
         <div class="header">
             <div class="title">Partager la liste</div>

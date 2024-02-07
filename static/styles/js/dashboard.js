@@ -180,36 +180,108 @@ function close_level_popup(el, event) {
 }
 
 /**
- * Open a popup to check if the user wants to delete the selected list.
- *  -> Changes the href attribute of the delete button to the correct URL.
+ * Opens the manage list pop-up and loads the list data for the selected list. (by making a request to the server)
+ *  -> This function is only used to open the manage list pop-up and load the list data.
  * 
- * @function delete_list
+ * @function manage_list
  * @param {HTMLElement} el - The element that triggered the event.
  * @param {Event} event - The event object.
  * @param {number} id - The ID of the list to be deleted.
  */
-function delete_list(el, event, id) {
+async function manage_list(el, event, id) {
     event.preventDefault();
 
-    const deleteListPopUp = document.getElementsByClassName('delete-list')[0];
+    const deleteListPopUp = document.getElementsByClassName('manage-list')[0];
     deleteListPopUp.classList.add('active');
-    var link = "/dashboard/delete/" + id;
-    document.getElementById('delete-list-redirect').setAttribute('href', link);
+    const manageListContent = document.getElementById('manage-list-content');
+    manageListContent.innerHTML = "<div class='loader'></div>";
+    try {
+        const response = await fetch(`/dashboard/manage/${id}`);
+        const data = await response.text();
+        if (response.status != 200) {
+            close_manage_list(el, event);
+            open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard");
+        } else {
+            manageListContent.innerHTML = data;
+        }
+    } catch (e) {
+        close_manage_list(el, event);
+        open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard");
+    }
 }
 
 /**
- * Closes the delete list popup.
+ * Closes the manage list pop-up.
  * 
- * @function close_delete_list
+ * @function close_manage_list
  * @param {HTMLElement} el - The element that triggered the event.
  * @param {Event} event - The event object.
  * @returns {void}
  */
-function close_delete_list(el, event) {
+function close_manage_list(el, event) {
     event.preventDefault();
 
-    const deleteListPopUp = document.getElementsByClassName('delete-list')[0];
+    const manageListContent = document.getElementById('manage-list-content');
+    manageListContent.innerHTML = "";
+    const deleteListPopUp = document.getElementsByClassName('manage-list')[0];
     deleteListPopUp.classList.remove('active');
+}
+
+async function update_list(el, event) {
+    event.preventDefault();
+
+    const list_id = el.dataset.id;
+    const list_data = {
+        name: el.listname.value,
+        description: el.listdesc.value,
+        time: el.time.value,
+        xp: el.xp.value,
+        game: el.game.value,
+        reminder: el.reminder.checked,
+        stats: el.stats.checked,
+        public: el.public.checked
+    }
+    el.button.innerHTML = "<div class='loader'></div>";
+    try {
+        const response = await fetch(`/dashboard/manage/update/${list_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(list_data)
+        });
+        const data = await response.json();
+        if (data.code == 200) {
+            el.button.innerHTML = "Modifié";
+            document.getElementById('alert-message-container').innerHTML = '<div class="success-mess">Mofifcation sauvegardées avec succès</div>';
+            const list_box = document.getElementsByClassName('list-box');
+            for (let i = 0; i < list_box.length; i++) {
+                if (list_box[i].dataset.list_id == list_id) {
+                    list_box[i].getElementsByClassName('title')[0].innerHTML = list_data.name;
+                    break;
+                }
+            }
+            setTimeout(function() {
+                el.button.innerHTML = "Modifier";
+                close_manage_list(el, event);
+            }, 1000);
+        } else {
+            el.button.innerHTML = "Modifier";
+            el.button.classList.add('pulse')
+            document.getElementById('alert-message-container').innerHTML = `<div class="alert-mess">${data.message}</div>`;
+            setTimeout(function() {
+                el.button.classList.remove('pulse');
+            }, 250);
+        }
+    } catch (e) {
+        console.log(e);
+        el.button.innerHTML = "Modifier";
+        el.button.classList.add('pulse');
+        document.getElementById('alert-message-container').innerHTML = '<div class="alert-mess">Une erreur est survenue, veuillez réessayer plus tard</div>';
+        setTimeout(function() {
+            el.button.classList.remove('pulse');
+        }, 250);
+    }
 }
 
 /**

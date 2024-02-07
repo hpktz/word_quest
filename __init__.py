@@ -30,22 +30,14 @@ def load_user(user_id):
     conn = None
     cursor = None
     try: 
-        print(user_id)
         conn = create_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
         result = cursor.fetchone()
         if not result:
             return None
-        print(result)
-        name = result[1]
-        birthday = result[2]
-        email = result[4]
-        lvl = result[3]
-        picture = result[8]
-        mfa = True if result[6] == 1 else False
-        public = True if result[7] == 1 else False
-        return User(user_id, name, birthday, email, lvl, picture, mfa, public)
+
+        return User(user_id, result[1], result[2], result[4], result[3], result[8], True if result[6] == 1 else False, True if result[7] == 1 else False)
     except mysql.connector.Error as e:
         print(e)
         return None

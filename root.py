@@ -18,6 +18,7 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 import os
+import datetime
 
 # Load environment variables from .env file
 load_dotenv()
@@ -52,3 +53,11 @@ def valiData(data: str) -> str:
     data = data.replace("'", "''")
     data = data.replace('"', '""')
     return data
+
+def convert_date(date: datetime) -> str:
+    """
+    Convert a datetime object to a string in the format 'dd month yyyy'.
+    """
+    print(date)
+    months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+    return f"{date.day} {months[date.month - 1]} {date.year}"

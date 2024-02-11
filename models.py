@@ -62,6 +62,24 @@ class User(UserMixin):
             if conn:
                 conn.close()
                 
+    def get_likes(self):
+        conn = None
+        cursor = None
+        try:
+            conn = create_connection()
+            cursor = conn.cursor()
+            cursor.execute('SELECT list_id FROM list_likes WHERE user_id = %s', (self.id,))
+            lists = cursor.fetchall()
+            return [lst[0] for lst in lists]
+        except Exception as e:
+            print(e)
+            return []
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+                
     def get_id(self):
         return str(self.id)
 

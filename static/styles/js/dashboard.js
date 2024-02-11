@@ -198,6 +198,7 @@ async function manage_list(el, event, id) {
     try {
         const response = await fetch(`/dashboard/manage/${id}`);
         const data = await response.text();
+        await new Promise(resolve => setTimeout(resolve, 300));
         if (response.status != 200) {
             close_manage_list(el, event);
             open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard");

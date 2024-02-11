@@ -277,7 +277,7 @@ header .infos-section .info-section .title .info-section-phone-logo {
 header .infos-section .tips {
     background-color: #eceaea;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     display: grid;
     grid-template-columns: 1fr 50px;
     gap: 10px;
@@ -364,8 +364,10 @@ main {
 
 .search-bar-container .img {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 5px;
+    top: 5px;
+    width: 25px;
+    height: 25px;
 }
 
 .search-results {
@@ -2078,6 +2080,7 @@ main {
         max-height: none;
         overflow-x: unset;
         overflow-y: unset;
+        padding: 0;
     }
     .dashboard-main-container {
         column-gap: 0;
@@ -2095,7 +2098,8 @@ main {
     .dashboard-main-container .main-infos {
         display: grid;
         grid-template-columns: 1fr 0;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: 50px auto auto;
+        padding: 0;
     }
     .dashboard-main-container .main-infos .user-infos {
         grid-row: 1;

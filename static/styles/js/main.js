@@ -33,7 +33,11 @@ function redirect(el, event) {
     // Wait for the animation to finish before redirecting.
     setTimeout(function() {
         document.getElementsByClassName('main-loader')[0].classList.add('active');
+        // disable animations after redirect
         window.location.href = href;
+        document.getElementsByClassName('main-loader')[0].classList.remove('active');
+        body.removeAttribute('style');
+        main.removeAttribute('style');
     }, 510);
 }
 

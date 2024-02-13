@@ -7,6 +7,7 @@ header .info-section .stat-box {
     position: relative;
     overflow: hidden;
     margin-top: 20px;
+    height: fit-content;
 }
 
 header .info-section .stat-box .text {
@@ -363,6 +364,9 @@ header .infos-section::-webkit-scrollbar-thumb {
         grid-row: 1;
     }
     body.info-section-phone-active header .infos-section .info-section {
-        grid-template-rows: 75px auto
+        grid-template-rows: 30px 140px;
+    }
+    header .info-section .stat-box:nth-child(2) {
+        margin-top: 50px;
     }
 }

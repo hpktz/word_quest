@@ -20,7 +20,7 @@ function redirect(el, event) {
     if (window.matchMedia("(min-width: 670px)").matches) {
         body.style.gridTemplateColumns = '95px 1fr';
         main.style.opacity = '0';
-        main.style.transform = 'translateX(1000px) rotate(0deg)';
+        main.style.transform = 'translateY(-1000px)';
 
         const responseLogo = document.querySelector('.responsive-logo');
         responseLogo.style.transform = 'rotate(180deg)';

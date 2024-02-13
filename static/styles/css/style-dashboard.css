@@ -201,6 +201,15 @@ header .nav-bar .middle-logos {
     position: relative;
 }
 
+header .nav-bar .account-logo .text,
+header .nav-bar .create-logo .text {
+    display: none;
+}
+
+header .nav-bar .middle-logos .text {
+    display: none;
+}
+
 header .nav-bar .middle-logo:nth-child(4) {
     display: none;
 }
@@ -323,24 +332,23 @@ main {
     }
 }
 
- ::-webkit-scrollbar {
-    width: 7.5px;
-}
-
- ::-webkit-scrollbar-track {
-    background: #f6f6f6;
-    margin-top: 10px;
-    margin-bottom: 15px;
-}
-
- ::-webkit-scrollbar-thumb {
-    background: #33333352;
-    border: 1.25px solid #f6f6f6;
-    border-radius: 10px;
-}
-
- ::-webkit-scrollbar-thumb:hover {
-    background: #33333386;
+@media all and (min-width: 670px) {
+     ::-webkit-scrollbar {
+        width: 7.5px;
+    }
+     ::-webkit-scrollbar-track {
+        background: #f6f6f6;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+     ::-webkit-scrollbar-thumb {
+        background: #33333352;
+        border: 1.25px solid #f6f6f6;
+        border-radius: 10px;
+    }
+     ::-webkit-scrollbar-thumb:hover {
+        background: #33333386;
+    }
 }
 
 
@@ -462,7 +470,7 @@ main {
 }
 
 .dashboard-main-container .main-infos .user-infos .box:nth-child(3):hover {
-    background-color: #ebebeb;
+    background-color: #b2bb93;
     border-radius: 10px;
 }
 
@@ -649,7 +657,7 @@ main {
     margin-bottom: 10px;
     cursor: pointer;
     display: grid;
-    grid-template-columns: 1fr 30px;
+    grid-template-columns: 1fr 25px;
     transition: all 0.2s ease-in-out;
 }
 
@@ -799,6 +807,9 @@ main {
 .dashboard-main-container .lists-container .list-box .actions {
     opacity: 0;
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     transition: all 0.2s ease-in-out;
 }
 
@@ -808,9 +819,14 @@ main {
 }
 
 .dashboard-main-container .lists-container .list-box .actions .delete-logo {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
+    opacity: 0.5;
     transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box .actions .delete-logo:hover {
+    opacity: 1;
 }
 
 .dashboard-main-container .lists-container .list-box-empty {
@@ -1304,6 +1320,7 @@ main {
     border-radius: 150px;
     background-color: #373D20;
     transition: all 1s cubic-bezier(.77, -0.01, 0, 1.01), background-color 0.5s ease-in-out 1.5s;
+    z-index: 11;
 }
 
 .dashboard-main-container .overlay-load-game.active {
@@ -1862,17 +1879,34 @@ main {
 @media screen and (max-width: 670px) {
     body {
         grid-template-columns: 1fr;
-        grid-template-rows: 95px 1fr;
+        grid-template-rows: 55px 1fr;
     }
     body.open {
         grid-template-columns: 1fr;
-        grid-template-rows: 95px 1fr;
+        grid-template-rows: 55px 1fr;
     }
     header {
+        position: fixed;
         width: calc(100% - 20px);
-        height: 75px;
+        height: 60px;
         transition: all 0.5s ease-in-out;
+        margin-bottom: 0;
+        border-radius: 5px;
         animation: entry-header-phone 0.5s ease-in-out;
+    }
+    main {
+        grid-row: 2;
+        animation: main-entry-phone 0.5s ease-in-out;
+    }
+    @keyframes main-entry-phone {
+        from {
+            opacity: 0;
+            transform: translateY(-1000px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     @keyframes entry-header-phone {
         from {
@@ -1883,11 +1917,13 @@ main {
         }
     }
     header .nav-bar {
-        grid-template-rows: 75px 0 0;
+        position: fixed;
+        grid-template-rows: 60px 0 0;
         align-items: center;
         overflow: hidden;
-        height: 75px;
-        width: 75px;
+        height: 60px;
+        width: 60px;
+        border-radius: 4px;
         transition: all 0.5s ease-in-out;
     }
     header .nav-bar>div {
@@ -1908,7 +1944,7 @@ main {
     }
     header .nav-bar .phone-menu-logo .bar {
         height: 2px;
-        width: 30px;
+        width: 25px;
         background-color: #333;
         border-radius: 10px;
         cursor: pointer;
@@ -1945,39 +1981,41 @@ main {
     }
     header .nav-bar .responsive-logo {
         display: none;
+        position: fixed;
     }
     header .infos-section {
+        grid-column: 2;
         grid-template-rows: 1fr 0;
         overflow: hidden;
     }
     header .infos-section .info-section .title {
-        margin-top: 7.5px;
+        margin-top: 5px;
+        font-size: 24px;
         text-align: right;
         display: grid;
         place-items: right;
         align-items: center;
+        text-align: center;
         grid-template-columns: 1fr 40px;
         column-gap: 20px;
     }
     header .infos-section .info-section .title .info-section-phone-logo {
         display: block;
-        width: 40px;
-        height: 40px;
-        padding: 5px;
-        border: 1px solid white;
+        width: 30px;
+        height: 30px;
         background-color: rgba(255, 255, 255, 0);
         border-radius: 10px;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
     }
     header .infos-section .info-section .title .info-section-phone-logo:hover {
-        border: 1px solid #333;
         background-color: #333;
     }
     header .info-section .search-bar-container {
         height: 0;
         opacity: 0;
         pointer-events: none;
+        margin: 0;
     }
     header .info-section .search-results {
         height: 0;
@@ -1990,16 +2028,12 @@ main {
         pointer-events: none;
         display: none;
     }
-    body.info-section-phone-active {
-        grid-template-rows: 1fr 1fr;
-    }
     body.info-section-phone-active header {
-        height: 100%;
+        height: calc(100% - 20px);
     }
-    body.info-section-phone-active header .nav-bar {
-        grid-column: 1;
-        grid-row: 1;
-        z-index: 2;
+    body.info-section-phone-active header .infos-section .title {
+        width: calc(100% - 75px);
+        margin-left: auto;
     }
     body.info-section-phone-active header .infos-section {
         grid-row: 1 / span 2;
@@ -2009,14 +2043,14 @@ main {
     body.info-section-phone-active header .infos-section .info-section {
         height: 100%;
         display: grid;
-        grid-template-rows: 75px 75px 1fr;
+        grid-template-rows: 30px 100px 1fr;
         overflow: auto;
     }
     body.info-section-phone-active header .infos-section .search-bar-container {
         height: 35px;
         opacity: 1;
         pointer-events: all;
-        margin-top: 30px;
+        margin-top: 55px;
         transition: all 0.2s ease-in-out 0.4s;
     }
     body.info-section-phone-active header .infos-section .search-results {
@@ -2027,42 +2061,25 @@ main {
         transition: all 0.2s ease-in-out 0.4s;
     }
     body.phone-menu-open {
-        grid-template-columns: 95px 1fr;
         transition: all 0.2s ease-in-out;
         overflow: hidden;
     }
-    body.phone-menu-open header {
-        grid-column: 1 / span 2;
-        grid-row: 1 / span 2;
-        background-color: transparent;
-        box-shadow: none;
+    body.phone-menu-open header .nav-bar {
+        width: calc(100% - 20px);
         height: calc(100% - 20px);
     }
-    body.phone-menu-open header .infos-section {
-        height: 75px;
-        background: var(--header-background);
-        overflow: hidden;
-    }
     body.phone-menu-open main {
-        grid-column: 2;
-        grid-row: 2;
-        transition: all 0.5s ease-in-out;
-        padding: 10px;
-        border-radius: 10px;
-        background-color: #ebebeb;
-        transform: translate(30px, 30px) rotate(7deg);
-        overflow: none;
-        pointer-events: none;
-        z-index: 2;
+        overflow: hidden;
+        opacity: 0;
     }
     body.phone-menu-open header .nav-bar {
         grid-template-rows: 210px 1fr 55px;
         align-items: center;
         overflow: hidden;
-        height: 100%;
     }
     body.phone-menu-open header .nav-bar>div {
         grid-template-rows: 1fr 1fr 1fr;
+        width: 100%;
     }
     body.phone-menu-open header .nav-bar .app-logos {
         grid-template-rows: 1fr 0;
@@ -2076,6 +2093,9 @@ main {
         transform: translateX(0);
         pointer-events: all;
     }
+    body.phone-menu-open header .nav-bar .account-logo {
+        width: 100%;
+    }
     .dashboard-main-container .lists-container {
         max-height: none;
         overflow-x: unset;
@@ -2085,6 +2105,8 @@ main {
     .dashboard-main-container {
         column-gap: 0;
         grid-template-rows: auto 1fr;
+        padding-top: 0;
+        row-gap: 25px;
     }
     .dashboard-main-container .games-trail {
         height: 30px;
@@ -2098,16 +2120,43 @@ main {
     .dashboard-main-container .main-infos {
         display: grid;
         grid-template-columns: 1fr 0;
-        grid-template-rows: 50px auto auto;
+        grid-template-rows: 81px auto auto;
+        column-gap: 0;
         padding: 0;
+    }
+    .dashboard-main-container .main-infos.active {
+        grid-template-rows: 190px auto auto;
     }
     .dashboard-main-container .main-infos .user-infos {
         grid-row: 1;
         grid-column: 1;
         justify-content: space-between;
+        padding: 34px 20px 0 20px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        box-shadow: 0px 0px 10px 0 #959da536;
+        background: #e0e5cd;
+        height: 81px;
+        transition: height 0.2s ease-in-out;
+    }
+    .dashboard-main-container .main-infos.active .user-infos {
+        height: 190px;
+    }
+    .dashboard-main-container .main-infos .user-infos .box {
+        height: 30px;
+        width: 100%;
+        text-align: center;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .img {
+        width: 25px;
+        height: 25px;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .text {
+        font-size: 16px;
     }
     .dashboard-main-container .main-infos .title {
         grid-row: 2;
+        margin-top: 10px;
     }
     .dashboard-main-container .main-infos .filters {
         grid-row: 3;
@@ -2128,8 +2177,20 @@ main {
         z-index: 10;
     }
     .dashboard-main-container .main-infos .filters .creation-date {
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        padding-right: 0;
+        gap: 25px;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .date {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .filter {
+        width: 100%;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .filter select {
+        width: 100%;
+        text-align: center;
     }
     .pop-up.active {
         width: 100%;
@@ -2140,5 +2201,68 @@ main {
         border-radius: 0;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
+    }
+    .lives-pop-up {
+        transform: scale(0.8);
+        transition: top 0s, left 0s, transform 0.3s ease-in-out;
+    }
+    .lives-pop-up.active {
+        transform: scale(1);
+    }
+    .lives-pop-up .triangle {
+        display: none;
+    }
+    .lives-pop-up .container {
+        width: calc(100% - 20px);
+        background-color: transparent;
+        box-shadow: none;
+        padding: 0;
+        border: 0;
+    }
+    .entry-animation {
+        animation: entry-phone 0.5s ease-in-out 0.25s forwards;
+        transform: rotateX(20deg) rotateY(-20deg) translateY(43px);
+    }
+    @keyframes entry-phone {
+        from {
+            transform: rotateX(20deg) rotateY(-20deg) translateY(43px);
+        }
+        to {
+            transform: rotateX(0deg) rotateY(0deg) translateY(0px);
+        }
+    }
+}
+
+@media screen and (max-width: 385px) {
+    .dashboard-main-container .main-infos .filters .creation-date .date {
+        flex-direction: column;
+        align-items: baseline;
+        gap: 10px;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .date input {
+        width: 100%;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .date img {
+        transform: rotate(90deg);
+        margin: 0;
+    }
+    .dashboard-main-container .main-infos .user-infos {
+        overflow-y: auto;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .img {
+        width: 20px;
+        height: 20px;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .text {
+        font-size: 14px;
+    }
+    .dashboard-main-container .games-trail .game-trail {
+        transform: scale(0.65) translateY(-180px);
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .dashboard-main-container .games-trail .game-trail {
+        transform: scale(0.65) translateY(-180px) translateX(-20%);
     }
 }

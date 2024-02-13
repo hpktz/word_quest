@@ -294,10 +294,19 @@ async function update_list(el, event) {
  */
 function open_lives(el) {
     const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
-    livesContainer.style.top = (el.offsetTop + 65) + "px";
-    console.log(el.offsetLeft);
-    livesContainer.style.left = (el.offsetLeft + 75) + "px";
-    el.classList.add('active');
+    if (window.matchMedia("(max-width: 670px)").matches) {
+        livesContainer.style.top = (el.offsetTop + 85) + "px";
+        livesContainer.style.left = "calc(50% - 140px)";
+        livesContainer.classList.add('active');
+
+        const mainInfos = document.getElementsByClassName('main-infos')[0];
+        mainInfos.classList.add('active');
+    } else {
+        livesContainer.style.top = (el.offsetTop + 65) + "px";
+        console.log(el.offsetLeft);
+        livesContainer.style.left = (el.offsetLeft + 75) + "px";
+        el.classList.add('active');
+    }
 }
 
 /**
@@ -317,6 +326,9 @@ function close_lives(el, e) {
     livesBox.classList.remove('active');
     const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
     livesContainer.style.top = "-300px";
+    livesContainer.classList.remove('active');
+    const mainInfos = document.getElementsByClassName('main-infos')[0];
+    mainInfos.classList.remove('active');
 }
 
 /**

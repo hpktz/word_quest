@@ -630,7 +630,7 @@ header .infos-section .create-button:hover {
         grid-template-rows: 1fr 25px;
     }
     body.info-section-phone-active header .infos-section .info-section {
-        grid-template-rows: 75px 1fr 5px;
+        grid-template-rows: 30px 1fr 5px;
     }
     .create-main-container .list-in-construction .list-container {
         display: flex;

@@ -33,11 +33,7 @@ function redirect(el, event) {
     // Wait for the animation to finish before redirecting.
     setTimeout(function() {
         document.getElementsByClassName('main-loader')[0].classList.add('active');
-        // disable animations after redirect
         window.location.href = href;
-        document.getElementsByClassName('main-loader')[0].classList.remove('active');
-        body.removeAttribute('style');
-        main.removeAttribute('style');
     }, 510);
 }
 
@@ -133,3 +129,17 @@ function close_info_box(el, event) {
     const body = document.querySelector('body');
     body.removeAttribute('class');
 }
+
+
+/**
+ * Reload the page when the back button is pressed.
+ * 
+ * @event pageshow
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});

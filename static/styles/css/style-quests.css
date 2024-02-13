@@ -1,7 +1,7 @@
 header .info-section .stat-box {
     width: 100%;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0px 0px 10px 0 #959da536;
     padding: 15px;
     position: relative;
@@ -30,11 +30,11 @@ header .info-section .stat-box .img {
     opacity: 0.2;
 }
 
-header .infos-section::-webkit-scrollbar-track{
+header .infos-section::-webkit-scrollbar-track {
     background-color: #717744;
 }
 
-header .infos-section::-webkit-scrollbar-thumb{
+header .infos-section::-webkit-scrollbar-thumb {
     background-color: #333;
     border: 1.25Px solid #717744;
 }
@@ -158,7 +158,7 @@ header .infos-section::-webkit-scrollbar-thumb{
     padding-bottom: 10px;
 }
 
-.quests-main-container .stats .stat-box .bar-chart-container .abscissa{
+.quests-main-container .stats .stat-box .bar-chart-container .abscissa {
     grid-column: 2;
     grid-row: 2;
     display: flex;
@@ -183,6 +183,7 @@ header .infos-section::-webkit-scrollbar-thumb{
     background-color: #766153;
     border-radius: 5px;
 }
+
 .quests-main-container .stats .stat-box .bar-chart-container .chart-content .empty-item {
     font-family: 'League Spartan', sans-serif;
     font-size: 25px;
@@ -197,7 +198,7 @@ header .infos-section::-webkit-scrollbar-thumb{
     padding-bottom: 20px;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking {
+.quests-main-container .reaward-ranking-container .ranking {
     width: 100%;
     height: fit-content;
     background-color: white;
@@ -206,38 +207,38 @@ header .infos-section::-webkit-scrollbar-thumb{
     padding: 20px;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .title {
+.quests-main-container .reaward-ranking-container .ranking .title {
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
     font-weight: 600;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-position {
+.quests-main-container .reaward-ranking-container .ranking .ranking-position {
     font-family: 'League Spartan', sans-serif;
     font-size: 35px;
     font-weight: 600;
     margin-top: 10px;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container {
     margin-top: 20px;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .separate {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .separate {
     width: 100%;
     height: 1px;
     background-color: #959da5;
     margin: 10px 0;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .empty-ranking-box {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .empty-ranking-box {
     font-family: 'League Spartan', sans-serif;
     font-size: 25px;
     color: #b4b4b4;
     margin: auto;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box {
     display: grid;
     grid-template-columns: 30px 35px 1fr;
     align-items: center;
@@ -245,29 +246,33 @@ header .infos-section::-webkit-scrollbar-thumb{
     margin: 20px 0;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .rank {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .rank {
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
     font-weight: 600;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(1n) {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(1n) {
     --profile-background: #8B7070;
 }
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(2n) {
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(2n) {
     --profile-background: #70845D;
 }
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(3n) {
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(3n) {
     --profile-background: #5B747D;
 }
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(4n) {
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(4n) {
     --profile-background: #766153;
 }
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box:nth-child(5n) {
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(5n) {
     --profile-background: #6C4A72;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .picture {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .picture {
     background-color: var(--profile-background);
     border-radius: 5px;
     height: 35px;
@@ -275,14 +280,14 @@ header .infos-section::-webkit-scrollbar-thumb{
     padding: 5px;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .picture img {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .picture img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 5px;
 }
 
-.quests-main-container .reaward-ranking-container  .ranking .ranking-container .ranking-box .name {
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .name {
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
     font-weight: 400;
@@ -293,27 +298,28 @@ header .infos-section::-webkit-scrollbar-thumb{
     font-size: 18px;
     font-weight: 600;
 }
+
 .quests-main-container .reaward-ranking-container .reward .reward-box {
     width: 100%;
     height: 275px;
     position: relative;
 }
 
-.quests-main-container .reaward-ranking-container .reward .reward-box .chest  {
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest {
     position: absolute;
     top: 50%;
     left: 50%;
-    height:100px;
+    height: 100px;
     width: 100px;
     transform: translate(-50%, -50%);
     z-index: 1;
 }
 
-.quests-main-container .reaward-ranking-container .reward .reward-box .chest.opened  {
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.opened {
     top: calc(50% - 20px);
 }
 
-.quests-main-container .reaward-ranking-container .reward .reward-box .chest.blocked img  {
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.blocked img {
     filter: grayscale(100%);
 }
 
@@ -326,14 +332,12 @@ header .infos-section::-webkit-scrollbar-thumb{
     width: 150px;
     height: 30px;
     background-color: #959da5;
-    border-radius:100%;
+    border-radius: 100%;
     position: absolute;
-    top: calc(50% + 30px);  
+    top: calc(50% + 30px);
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-
 
 @media screen and (max-width: 920px) {
     body.open .quests-main-container .stats {
@@ -362,4 +366,3 @@ header .infos-section::-webkit-scrollbar-thumb{
         grid-template-rows: 75px auto
     }
 }
-

@@ -23,11 +23,13 @@
                 <div class="account-logo clickable-logo">
                     <a href="/dashboard/profile/user" onclick="redirect(this, event)">
                         <img src="/static/icons/user-30-white.png" alt="logo">
+                        <div class="text">Profile</div>
                     </a>
                 </div>
                 <div class="create-logo clickable-logo">
                     <a href="/dashboard/create" onclick="redirect(this, event)">
                         <img src="/static/icons/plus-30-white.png" alt="logo">
+                        <div class="text">Créer</div>
                     </a>
                 </div>
             </div>
@@ -35,16 +37,19 @@
                 <div class="middle-logo clickable-logo {% block dashboard %}{% endblock %}">
                     <a href="/dashboard" onclick="redirect(this, event)">
                         <img src="/static/icons/home-30-dark-grey.png" alt="logo">
+                        <div class="text">Dashboard</div>
                     </a>
                 </div>
                 <div class="middle-logo clickable-logo {% block quests %}{% endblock %}">
                     <a href="/dashboard/quests" onclick="redirect(this, event)">
                         <img src="/static/icons/quest-30-dark-grey.png" alt="logo">
+                        <div class="text">Quêtes</div>
                     </a>
                 </div>
                 <div class="middle-logo clickable-logo {% block discover %}{% endblock %}">
                     <a href="/dashboard/discover" onclick="redirect(this, event)">
                         <img src="/static/icons/compass-30-dark-grey.png" alt="logo">
+                        <div class="text">Découvertes</div>
                     </a>
                 </div>
                 <div class="dynamic-pointer"></div>

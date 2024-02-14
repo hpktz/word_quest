@@ -360,12 +360,13 @@ h1{
     background-color: #ccd77c;
     color: #433831;
     padding: 2px 0 0 2px;
+    transition: 0.3s;
 }
 .key-letter:hover{
     cursor: pointer;
 }
 .key-letter:active{
-    transform: scale(0.8);
+    transform: scale(0.9);
 }
 
 
@@ -409,7 +410,13 @@ h1{
     width: 35vw;
 }
 
-@media screen and (max-width: 1330px) and (max-height: 700px) {
+@media screen and (max-width: 1330px) {
+    .figure-content{
+        width: 400px;
+        height: 430px;
+    }
+}
+@media screen and (max-height: 700px) {
     .figure-content{
         width: 400px;
         height: 430px;
@@ -451,7 +458,17 @@ h1{
     }
 }
 
-@media screen and (max-width: 850px) or (max-height: 500px){
+@media screen and (max-width: 850px){
+    .recap{
+        transform:translate(-50%, -50%) scale(0.7);
+    }
+}
+@media screen and (max-width: 650px){
+    .recap{
+        transform:translate(-50%, -50%) scale(0.5);
+    }
+}
+@media screen and (max-height: 500px){
     .recap{
         transform:translate(-50%, -50%) scale(0.7);
     }

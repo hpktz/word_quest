@@ -21,12 +21,15 @@ class hangman():
         self.hintCount = 0
         self.goodLetters = []
         self.badLetters = []
-        self.xp = 5
+        self.xp = 0
         self.xpmax = len(self.words) * 5
+        self.xpTotal = 0
         
 
 
     def new_word(self):
+        self.xpTotal += self.xp
+        self.xp = 5
         if len(self.words) > 0:
             self.word = random.choice(self.words)
             self.words2.append(self.word)
@@ -38,7 +41,7 @@ class hangman():
                 "code": 200,
                 "message": "ok",
                 "result": self.word,
-                "test": self.words2
+                "xptot": self.xpTotal
             })
         else:
             self.words += self.words2
@@ -47,7 +50,8 @@ class hangman():
                 "code": 404,
                 "message": "not found",
                 "result": [],
-                "test": self.words2
+                "xptot": self.xpTotal
+                
             })
 
     def checking_letter(self, letter):
@@ -111,7 +115,8 @@ class hangman():
                 "code": 200,
                 "message": "ok",
                 "result": {"indice": self.word['type'],
-                            "title": 'Type du mot'}
+                            "title": 'Type du mot',
+                            "xp": self.xp}
 
             })
         if self.hintCount == 2:
@@ -121,7 +126,8 @@ class hangman():
                     "code": 200,
                     "message": "ok",
                     "result": { "indice": random.choice(self.word['trans_examples']),
-                                "title" : 'Phrase en francais'}
+                                "title" : 'Phrase en francais',
+                                "xp": self.xp}
                 })
             else:
                 self.hintCount += 1
@@ -131,7 +137,8 @@ class hangman():
                 "code": 200,
                 "message": "ok",
                 "result": { "indice": self.word['trans_word'],
-                           "title" : 'Le mot en francais'}
+                           "title" : 'Le mot en francais',
+                           "xp": self.xp}
             })
         else:
             return None
@@ -144,6 +151,8 @@ class hangman():
         self.badLetters = []
         self.goodLetters = []
         self.hintCount = 0
+        self.xp = 0
+        self.xpTotal = 0
 
     
     def _lose_life(self):
@@ -202,7 +211,8 @@ class hangman():
             "goodLetters": self.goodLetters,
             "badLetters": self.badLetters,
             "xp": self.xp,
-            "xpmax": self.xpmax
+            "xpmax": self.xpmax,
+            "xpTotal": self.xpTotal
         })
         
     @classmethod
@@ -229,6 +239,7 @@ class hangman():
         to_extract.badLetters= data["badLetters"]
         to_extract.xp = data["xp"]
         to_extract.xpmax = data["xpmax"]
+        to_extract.xpTotal = data["xpTotal"]
 
 
         return to_extract
@@ -238,17 +249,11 @@ class hangman():
 @hangman_bp.route('/dashboard/games/hangman/<int:list_id>')
 @login_required
 def index(list_id):
-    # get the liste index from the user
-    # print('hello')
-    # print(current_user)
-    # print('word')
     list_result = [l for l in current_user.get_lists() if l["id"] == list_id]
     if not list_result:
         abort(404)
     else:
         list_result = list_result[0]
-    
-    print(list_result)
     
     list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
     # Calculate the status of each game

@@ -28,8 +28,8 @@ const keyboard = document.querySelectorAll('.key-letter');
 
 var a = 0;
 var XpTotal = 0;
-var xpwin = 5;
 var nbrFaute = 0;
+var xpwin = 5;
 
 var goodLetters = [''];
 var badLetters = [];
@@ -46,6 +46,7 @@ async function newIndice() {
         const getIndice = await fetch('/dashboard/games/hangman/session/askhint');
 
         var currentIndice = await getIndice.json();
+        xpwin = currentIndice["result"]['xp']
 
         var indice = document.createElement("div");
         var indiceTitle = document.createElement("p");
@@ -58,21 +59,21 @@ async function newIndice() {
         indice.appendChild(indiceTitle);
         indice.appendChild(indiceContent);
         indiceContainer.appendChild(indice);
-        indice.style.animation = 'indicanim 1s ease-in-out forwards'
-        addIndice.style.display = "none"
+        indice.style.animation = 'indicanim 1s ease-in-out forwards';
+        addIndice.style.display = 'none'
         if (currentIndice["result"]["title"] == 'Le mot en francais'){
             addIndice.innerHTML = "Plus d'indice";
             addIndice.style.pointerEvents = 'none'
             addIndice.style.width = 'auto'
             addIndice.style.height = 'auto'
-        }  
+        }
         setTimeout(() => {
-            indice.style.animation = 'depophint 0.5s ease-in-out forwards'
+            indice.style.animation = 'depophint 0.5s ease-in-out forwards';
             setTimeout(() => {
-                indice.style.display = 'none'    
                 addIndice.style.display = 'flex'
+                indice.style.display = 'none'
             }, 600);
-        }, 4000);
+        }, 3000);  
     }
     catch(error){
 
@@ -95,8 +96,9 @@ async function getWord() {
         const getWord = await fetch(`/dashboard/games/hangman/session/ask_word`);
 
         var selectWord = await getWord.json();
-        console.log(selectWord["result"]["word"])
         word = selectWord["result"];
+
+        console.log(selectWord["xptot"])
         if(word['word'] != undefined){
             keyboard.forEach(e => {
                 e.style.background = '#ccd77c';
@@ -155,8 +157,9 @@ function afficheMot() {
             .join('')
 
     }`;
-    
+
     const internalWord = wordEl.innerText.replace(/\n/g, '');
+
     if(internalWord == word['word'].toUpperCase()) {
         wordFind += 1
         xpNotif.innerHTML = '+' + String(xpwin);
@@ -222,7 +225,6 @@ setTimeout(() => {
                         loader.style.display = 'none'
                         var checked = await check.json();
                         letter = e.key
-
                         keyboard.forEach(el => {
                             if(el.innerHTML == letter){
                                 el.style.background = 'grey';
@@ -304,11 +306,9 @@ function nextWord(){
                 e.style.stroke = '#717744';
             })
             popup.style.display = 'none';
-
             const resetletters = await fetch(`/dashboard/games/hangman/session/reset`);
 
             reset = await resetletters.json()
-            console.log(reset["result"])
             goodLetters = reset["result"]["good"];
             badLetters = reset["result"]["bad"];
             nbrFaute = 0;

@@ -58,6 +58,9 @@ app.register_blueprint(user_data_bp)
 from games.hangman import hangman_bp
 app.register_blueprint(hangman_bp)
 
+from games.typefast import typefast_bp
+app.register_blueprint(typefast_bp)
+
 @app.route('/')
 def index():
     user = None

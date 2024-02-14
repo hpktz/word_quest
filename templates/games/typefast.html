@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeFast - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/typefast/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <section class="main-game-section">
+        <a href="/dashboard" class="back">
+            <img src="/static/icons/games-icons/exit.png" alt="">
+        </a>
+        <div class="content">
+            <div class="timer">
+                <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="timer">
+                <div id="time">{{time}}</div>
+            </div>
+            <div class="score"><span id="score">{{max_score-score}}</span> / {{max_score}}</div>
+            <div class="words_list">
+                {% if words %} {% for word in words %}
+                <div class="word">{{word["word"]}}</div>
+                {% endfor %} {% else %}
+                <div class="no-word">Aucun mot</div>
+                {% endif %}
+            </div>
+            <form method="POST" action="" class="form" onsubmit="check_word(this, event)">
+                <input type="text" id="word" name="word" placeholder="Ecrivez un mot de votre liste" required>
+                <button type="submit" name="submit">Vérifier</button>
+            </form>
+        </div>
+    </section>
+    <section class="start-pop-up pop-up">
+        <img src="/static/icons/games-icons/typefast-30-dark-grey.png" alt="logo">
+        <div class="title">Principes</div>
+        <div class="desc">
+            <p>Vous disposez de 2 minutes pour écrire un maximum de mots composant votre liste</p>
+            <p>Un seul mot d'ordre : la rapidité</p>
+            <p>Bonne chance !</p>
+        </div>
+        <div class="counter">
+            Le jeu commande dans <span id="counter">5</span> secondes
+            <div class="inner"></div>
+        </div>
+    </section>
+    <section class="end-pop-up pop-up">
+        <div class="title">Vos résultats</div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-three-yelow-lightnings.png" class="icon" alt="">
+            <div class="text">XP gagné</div>
+            <div class="data" id="data-xp">0</div>
+        </div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-red-heart.png" class="icon" alt="">
+            <div class="text">Vie perdue</div>
+            <div class="data" id="data-life">0</div>
+        </div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-red-clock.png" class="icon" alt="">
+            <div class="text">Temps passé</div>
+            <div class="data" id="data-time">0</div>
+        </div>
+        <div class="button-container">
+            <div class="button try-again" data-url="/dashboard/games/typefast/{{list_id}}">Rejouer</div>
+            <div class="button leave" data-url="/dashboard">Quitter</div>
+        </div>
+    </section>
+    <script>
+        const start_countdown = setInterval(() => {
+            const counter = document.getElementById('counter');
+            counter.textContent = parseInt(counter.textContent) - 1;
+            if (counter.textContent == 0) {
+                clearInterval(start_countdown);
+                document.querySelector('.start-pop-up').classList.remove('active');
+            }
+        }, 1000);
+
+        async function check_word(form, event) {
+            event.preventDefault();
+            const word = form.word.value;
+            const body = document.querySelector('body');
+            const word_list = document.getElementsByClassName('words_list')[0];
+            form.submit.innerHTML = "<div class='loader'></div>"
+            try {
+                const response = await fetch(`/dashboard/games/typefast/${body.dataset.session_id}/check_word/${word}`);
+                const data = await response.json();
+                console.log(data);
+                if (data.code == 200) {
+                    if (!word_list.querySelector('.word')) {
+                        word_list.innerHTML = '';
+                    }
+                    document.getElementById('score').textContent = parseInt(document.getElementById('score').textContent) + 1;
+                    word_list.innerHTML += `<div class="word">${word}</div>`;
+                    form.word.value = '';
+                    form.submit.innerHTML = "Vérifier";
+                } else if (data.code == 201) {
+                    document.getElementById('score').textContent = parseInt(document.getElementById('score').textContent) + 1;
+                    word_list.innerHTML += `<div class="word">${word}</div>`;
+                    form.word.value = '';
+                    form.submit.innerHTML = "Vérifier";
+                    end_game(data.result.xp, data.result.time, data.result.lost_lives);
+                } else {
+                    form.submit.innerHTML = "Vérifier";
+                    form.submit.classList.add("pulse");
+                    setTimeout(() => {
+                        form.submit.classList.remove("pulse");
+                    }, 250);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function end_game(xp, time, life) {
+            const end_pop_up = document.querySelector('.end-pop-up');
+            end_pop_up.classList.add('active');
+            var xp_count = 0;
+            var xp_interval = setInterval(() => {
+                document.getElementById('data-xp').innerHTML = xp_count;
+                console.log(xp_count);
+                xp_count++;
+                if (xp_count >= xp) {
+                    clearInterval(xp_interval);
+                }
+            }, 100);
+
+            var life_count = 0;
+            var life_interval = setInterval(() => {
+                document.getElementById('data-life').innerHTML = life_count;
+                life_count++;
+                if (life_count >= life) {
+                    clearInterval(life_interval);
+                }
+            }, 100);
+
+            var time_count = 0;
+            var time_interval = setInterval(() => {
+                document.getElementById('data-time').innerHTML = time_count;
+                time_count++;
+                if (time_count >= time) {
+                    clearInterval(time_interval);
+                }
+            }, 100);
+        }
+
+        const button = document.querySelectorAll('.button');
+        button.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.innerHTML = "<div class='loader'></div>";
+                window.location.href = btn.dataset.url;
+            });
+        });
+    </script>
+</body>
+
+</html>

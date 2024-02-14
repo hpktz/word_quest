@@ -60,10 +60,7 @@ async function newIndice() {
         indice.appendChild(indiceContent);
         indiceContainer.appendChild(indice);
         indice.style.animation = 'indicanim 1s ease-in-out forwards';
-        addIndice.style.display = 'none'
-        if (currentIndice["result"]["title"] == 'Le mot en francais'){
-        indice.style.animation = 'indicanim 1s ease-in-out forwards'
-        addIndice.style.display = "none"
+        addIndice.style.display = 'none';
         if (currentIndice["result"]["title"] == 'Le mot en francais') {
             addIndice.innerHTML = "Plus d'indice";
             addIndice.style.pointerEvents = 'none'
@@ -75,11 +72,9 @@ async function newIndice() {
             setTimeout(() => {
                 indice.style.display = 'none'
                 addIndice.style.display = 'flex'
-                indice.style.display = 'none'
             }, 600);
         }, 3000);  
-        }
-    } catch (error) {
+        } catch (error) {
 
     }
 }

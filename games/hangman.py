@@ -5,20 +5,18 @@ import random as random
 import datetime as datetime
 import uuid as uuid
 import json
-from functools import wraps 
 
 hangman_bp = Blueprint('hangman', __name__)
 
 hangman_id = 2
 
 class hangman():
-    def __init__(self, list_id, lesson_id, words):
+    def __init__(self, words, lives):
         self.id = str(uuid.uuid4())
-        self.list_id = list_id
-        self.lesson_id = lesson_id
         self.words = words
         self.words2 = []
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1) + datetime.timedelta(seconds=5))
+        self.lives = lives
+        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1) + datetime.timedelta(seconds=4))
         self.word = None
         self.hintCount = 0
         self.goodLetters = []
@@ -28,13 +26,6 @@ class hangman():
         self.xpTotal = 0
         
 
-
-    def new_word(self):
-        self.xpTotal += self.xp
-        self.xp = 5
-        self.xp = 5
-        self.total_xp = 0
-        self.xpmax = len(self.words) * 5
 
     def new_word(self):
         self.xpTotal += self.xp
@@ -107,13 +98,14 @@ class hangman():
         self.badLetters = []
         self.goodLetters = []
         self.hintCount = 0
-        self.total_xp += self.xp
         return jsonify({
                 "code": 200,
                 "message": "ok",
                 "result": {"good": [],
                            "bad": []}
             })
+
+
 
     def ask_hint(self):
         self.hintCount += 1
@@ -151,9 +143,10 @@ class hangman():
         else:
             return None
         
+
+
     def reload(self):
         self.words += self.words2
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1) + datetime.timedelta(seconds=5))
         self.words2 = []
         self.badLetters = []
         self.goodLetters = []
@@ -161,15 +154,15 @@ class hangman():
         self.xp = 0
         self.xpTotal = 0
 
+    
     def _lose_life(self):
         conn = None
         cursor = None
         try:
             conn = create_connection()
-            if current_user.get_lives() > 0:
-                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', -1);", (current_user.id))
-                conn.commit()
-
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', -1);", (current_user.id))
+            conn.commit()
         except Exception as e:
             pass # Handle the exception
         finally:
@@ -184,29 +177,11 @@ class hangman():
         try:
             conn = create_connection()  
             cursor = conn.cursor()
-            cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
-            if self.time < str(datetime.datetime.now()):
-                time = 65
-            else:
-                time = 60 - int((datetime.datetime.strptime(self.time, '%Y-%m-%d %H:%M:%S.%f') - datetime.datetime.now()).total_seconds())
-            lives_to_lose = 0
-            if self.xp / self.xpmax < 0.7:
-                lives_to_lose = 1
-            if self.xp / self.xpmax < 0.4:
-                lives_to_lose = 2
-            if self.xp / self.xpmax < 0.2:
-                lives_to_lose = 3
-                
-            while lives_to_lose > 0:
-                self._lose_life()
-                lives_to_lose -= 1
-            
-            print(current_user.id, self.id, self.xp, lives_to_lose, time)
-            cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.lesson_id, self.total_xp, lives_to_lose, time))
-            cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, self.total_xp))
+            cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.id,))
+            cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.id, xp, self.lives, time))
             conn.commit()
         except Exception as e:
-            print(e)
+            pass
         finally:
             if cursor:
                 cursor.close()
@@ -227,10 +202,9 @@ class hangman():
         """
         return json.dumps({
             "id": self.id,
-            "list_id": self.list_id,
-            "lesson_id": self.lesson_id,
             "words": self.words,
             "words2": self.words2,
+            "lives": self.lives,
             "time": self.time,
             "word": self.word,
             "hintCount": self.hintCount,
@@ -253,10 +227,11 @@ class hangman():
             WordList: The list.
         """
         data = json.loads(json_string)
-        to_extract= cls(data["list_id"], data["lesson_id"], data["words"])
+        to_extract= cls(data["words"], data["lives"])
         to_extract.id= data["id"]
         to_extract.words= data["words"]
         to_extract.words2= data["words2"]
+        to_extract.lives= data["lives"]
         to_extract.time= data["time"]
         to_extract.word= data["word"]
         to_extract.hintCount= data["hintCount"]
@@ -269,29 +244,6 @@ class hangman():
 
         return to_extract
     
-    
-    
-def check_game(func):
-    @wraps(func)
-    def wrapper_function(*args, **kwargs):
-        if 'game' in session:
-            game = hangman.from_json(session["game"])
-            print(game.time)
-            if game.time < str(datetime.datetime.now()):
-                session["game"] = game.to_json()
-                return jsonify({
-                    "code": 404,
-                    "message": "not found",
-                    "result": []
-                })
-            else:
-                return func(*args, **kwargs)
-        return jsonify({
-            "code": 404,
-            "message": "not found",
-            "result": []
-        })
-    return wrapper_function
     
 
 @hangman_bp.route('/dashboard/games/hangman/<int:list_id>')
@@ -307,7 +259,7 @@ def index(list_id):
     # Calculate the status of each game
     for index, game in enumerate(list_result["lessons"]):
         if index == 0 and game["lesson_id"] == hangman_id:
-            game = hangman(list_result["id"], game["id"], list_result["words"])
+            game = hangman(list_result["words"], 5)
             id = game.id
             session['game'] = game.to_json()
             return redirect(url_for('hangman.start', session_id=id))
@@ -328,7 +280,6 @@ def start(session_id):
         abort(404)
      
 @hangman_bp.route('/dashboard/games/hangman/session/<string:session_id>/ask_letter', methods=['POST'])
-@check_game
 def route(session_id):
     game = hangman.from_json(session["game"])
     if 'game' in session and str(game.id) == str(session_id):
@@ -348,7 +299,6 @@ def route(session_id):
         })
 
 @hangman_bp.route('/dashboard/games/hangman/session/ask_word')
-@check_game
 def select_word():
     game = hangman.from_json(session["game"])
     result = game.new_word()
@@ -356,7 +306,6 @@ def select_word():
     return result
 
 @hangman_bp.route('/dashboard/games/hangman/session/check_letter/<string:e>')
-@check_game
 def check(e):
     game = hangman.from_json(session["game"])
     result = game.checking_letter(e)
@@ -365,7 +314,6 @@ def check(e):
 
 
 @hangman_bp.route('/dashboard/games/hangman/session/reset')
-@check_game
 def reset():
     game = hangman.from_json(session["game"])
     result = game.reset_letter()
@@ -373,20 +321,8 @@ def reset():
     return result
 
 @hangman_bp.route('/dashboard/games/hangman/session/askhint')
-@check_game
 def new_hint():
     game = hangman.from_json(session["game"])
     result = game.ask_hint()
     session["game"] = game.to_json()
     return result
-
-@hangman_bp.route('/dashboard/games/hangman/session/finish')
-def finish():
-    game = hangman.from_json(session["game"])
-    game._end_lesson()
-    session.pop('game', None)
-    return jsonify({
-        "code": 200,
-        "message": "ok",
-        "result": []
-    })

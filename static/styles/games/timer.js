@@ -6,7 +6,7 @@ function countDown() {
     const minute = Math.floor(time / 60);
     const seconds = time%60;
     if (minute >= 1){
-        text.innerText = minute + ' m ' + seconds + ' s';
+        text.innerText = minute + 'm ' + seconds + 's';
     }
     else{
         text.innerText = seconds + ' s';

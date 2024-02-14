@@ -15,8 +15,8 @@
             <p id="begin"></p>
         </div>
     </section>
-    <div class="all">
-        <button class="exit">
+    <div class="all" id="all">
+        <button class="exit" id="exit">
             <a href="/dashboard"><img src="/static/icons/games-icons/exit.png" alt=""></a>
 
         </button>
@@ -32,7 +32,7 @@
                 <div id="bad-letter"></div>
                 
             </div>
-            <svg height="50vh" width="33vw" class=figure-content>
+            <svg height="500" width="600" class=figure-content id="svg">
 
                 <!-- Support-->
                 <line x1="30%" y1="10%" x2="75%" y2="10%" />
@@ -74,9 +74,9 @@
             
             <p>Vous avez déja essayé cette lettre !</p>
         </div>
-        <span class="separation-line"></span>
-        <section class="other">
-            <div class="indices">
+        <span class="separation-line" id="sep"></span>
+        <section class="other" id="other">
+            <div class="indices" id="hint">
                 <h1>Indices</h1>
                 <div id="indice-container" class="container">
                 </div>
@@ -84,9 +84,9 @@
                     <img src="/static/icons/plus-30-white.png" alt="">
                 </button>
             </div>
-            <div class="keyboard">
+            <div class="keyboard" id="keyboard">
 
-                <div class="key-letter" id="test">a</div>
+                <div class="key-letter">a</div>
                 <div class="key-letter">b</div>
                 <div class="key-letter">c</div>
                 <div class="key-letter">d</div>

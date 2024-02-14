@@ -37,10 +37,17 @@
 
 }
 #begin{
+    font-size: 100px;
     font-family: 'Bangers', cursive;
     text-align: center;
     animation: beginner 1s 0.5s;
     animation-iteration-count: 4;
+}
+
+@media screen and (max-width: 1000px){
+    #begin{
+        font-size: 70px;
+    }
 }
 
 @keyframes beginner {

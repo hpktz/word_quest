@@ -22,8 +22,10 @@ class hangman():
         self.goodLetters = []
         self.badLetters = []
         self.xp = 5
+        self.xpmax = len(self.words) * 5
         
-        # Etc ... (xp, score, etc)
+
+
     def new_word(self):
         if len(self.words) > 0:
             self.word = random.choice(self.words)
@@ -91,6 +93,7 @@ class hangman():
     def reset_letter(self):
         self.badLetters = []
         self.goodLetters = []
+        self.hintCount = 0
         return jsonify({
                 "code": 200,
                 "message": "ok",
@@ -102,12 +105,36 @@ class hangman():
 
     def ask_hint(self):
         self.hintCount += 1
-        if self.hintCount == 1 and self.xp > 4:
-            self.xp = 4
-        if self.hintCount == 2 and self.xp > 3:
-            self.xp == 3
-        if self.hintCount == 3 and self.xp > 2:
-            self.xp == 2
+        if self.hintCount == 1:
+            self.xp = 4 if self.xp > 4 else self.xp
+            return jsonify({
+                "code": 200,
+                "message": "ok",
+                "result": {"indice": self.word['type'],
+                            "title": 'Type du mot'}
+
+            })
+        if self.hintCount == 2:
+            self.xp = 3 if self.xp > 3 else self.xp
+            if self.word['trans_examples'] != []:
+                return jsonify({
+                    "code": 200,
+                    "message": "ok",
+                    "result": { "indice": random.choice(self.word['trans_examples']),
+                                "title" : 'Phrase en francais'}
+                })
+            else:
+                self.hintCount += 1
+        if self.hintCount == 3:
+            self.xp = 2 if self.xp > 2 else self.xp
+            return jsonify({
+                "code": 200,
+                "message": "ok",
+                "result": { "indice": self.word['trans_word'],
+                           "title" : 'Le mot en francais'}
+            })
+        else:
+            return None
         
             
 
@@ -116,6 +143,7 @@ class hangman():
         self.words2 = []
         self.badLetters = []
         self.goodLetters = []
+        self.hintCount = 0
 
     
     def _lose_life(self):
@@ -173,7 +201,8 @@ class hangman():
             "hintCount": self.hintCount,
             "goodLetters": self.goodLetters,
             "badLetters": self.badLetters,
-            "xp": self.xp
+            "xp": self.xp,
+            "xpmax": self.xpmax
         })
         
     @classmethod
@@ -199,6 +228,7 @@ class hangman():
         to_extract.goodLetters= data["goodLetters"]
         to_extract.badLetters= data["badLetters"]
         to_extract.xp = data["xp"]
+        to_extract.xpmax = data["xpmax"]
 
 
         return to_extract
@@ -282,5 +312,12 @@ def check(e):
 def reset():
     game = hangman.from_json(session["game"])
     result = game.reset_letter()
+    session["game"] = game.to_json()
+    return result
+
+@hangman_bp.route('/dashboard/games/hangman/session/askhint')
+def new_hint():
+    game = hangman.from_json(session["game"])
+    result = game.ask_hint()
     session["game"] = game.to_json()
     return result

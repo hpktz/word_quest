@@ -304,7 +304,7 @@ function open_lives(el) {
     } else {
         livesContainer.style.top = (el.offsetTop + 65) + "px";
         console.log(el.offsetLeft);
-        livesContainer.style.left = (el.offsetLeft + 75) + "px";
+        livesContainer.style.left = (el.offsetLeft - 150) + "px";
         el.classList.add('active');
     }
 }

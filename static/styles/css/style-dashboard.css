@@ -2192,12 +2192,18 @@ main {
         width: 100%;
         text-align: center;
     }
-    .pop-up.active {
+    .pop-up {
+        position: fixed;
+        top: unset;
+        bottom: -200%;
+        left: 0;
         width: 100%;
+        transform: translate(0, 0);
+    }
+    .pop-up.active {
         top: auto;
         bottom: 0;
         left: 0;
-        transform: translate(0, 0);
         border-radius: 0;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;

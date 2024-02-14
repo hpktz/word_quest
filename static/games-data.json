@@ -51,5 +51,14 @@
         "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
         "url": "assimilation.html",
         "difficulty": 5
+    },
+    {
+        "id": 7,
+        "name": "TypeFast",
+        "desc": "Le jeu du TypeFast est un jeu dans lequel le joueur doit taper le plus rapidement possible les mots affich&eacute;s.",
+        "short_desc": "Taper le plus rapidement possible les mots de la liste.",
+        "img": "/static/icons/games-icons/typefast-30-dark-grey.png",
+        "url": "/dashboard/games/typefast",
+        "difficulty": 5
     }
 ]

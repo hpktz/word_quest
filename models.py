@@ -80,6 +80,25 @@ class User(UserMixin):
             if conn:
                 conn.close()
                 
+    def get_lives(self):
+        conn = None
+        cursor = None
+        try:
+            conn = create_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT SUM(CASE WHEN transaction_type = 'lives' THEN transaction ELSE 0 END) \
+                AS sum_lives FROM user_statements WHERE user_id = %s LIMIT 1;", (self.id,))
+            lives = cursor.fetchone()
+            return lives[0]
+        except Exception as e:
+            print(e)
+            return 0
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+                
     def get_id(self):
         return str(self.id)
 

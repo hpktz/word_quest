@@ -36,13 +36,13 @@ var badLetters = [];
 
 // Ajout des Indices en appuyant sur le + -------------------------------------------------------------------------------------
 var indices = [
-    {title:"Indice Rigolo" ,indice: "eh regarde comme cet indice est fou"},
-    {title:"Hippoindice" ,indice: "eh regarde comme cet indice est hippodinguo"},
-    {title:"Yo c'est Billy" ,indice: "un apagnan sucrée au sucre"},
+    { title: "Indice Rigolo", indice: "eh regarde comme cet indice est fou" },
+    { title: "Hippoindice", indice: "eh regarde comme cet indice est hippodinguo" },
+    { title: "Yo c'est Billy", indice: "un apagnan sucrée au sucre" },
 ]
 
 async function newIndice() {
-    try{
+    try {
         const getIndice = await fetch('/dashboard/games/hangman/session/askhint');
 
         var currentIndice = await getIndice.json();
@@ -60,49 +60,48 @@ async function newIndice() {
         indiceContainer.appendChild(indice);
         indice.style.animation = 'indicanim 1s ease-in-out forwards'
         addIndice.style.display = "none"
-        if (currentIndice["result"]["title"] == 'Le mot en francais'){
+        if (currentIndice["result"]["title"] == 'Le mot en francais') {
             addIndice.innerHTML = "Plus d'indice";
             addIndice.style.pointerEvents = 'none'
             addIndice.style.width = 'auto'
             addIndice.style.height = 'auto'
-        }  
+        }
         setTimeout(() => {
             indice.style.animation = 'depophint 0.5s ease-in-out forwards'
             setTimeout(() => {
-                indice.style.display = 'none'    
+                indice.style.display = 'none'
                 addIndice.style.display = 'flex'
             }, 600);
         }, 4000);
-    }
-    catch(error){
+    } catch (error) {
 
     }
 }
 
 
-addIndice.addEventListener('click',async () => {
+addIndice.addEventListener('click', async() => {
     newIndice();
-    if(nbrIndiceDiscover == 3){
+    if (nbrIndiceDiscover == 3) {
         addIndice.innerHTML = `Plus d'indices`
-        
+
     }
 })
 
 var word = '';
 async function getWord() {
 
-    try{
+    try {
         const getWord = await fetch(`/dashboard/games/hangman/session/ask_word`);
 
         var selectWord = await getWord.json();
         console.log(selectWord["result"]["word"])
         word = selectWord["result"];
-        if(word['word'] != undefined){
+        if (word['word'] != undefined) {
             keyboard.forEach(e => {
                 e.style.background = '#ccd77c';
                 e.style.color = '#433831'
             });
-            Wordslength ++;
+            Wordslength++;
             addIndice.style.pointerEvents = 'auto'
             addIndice.innerHTML = '<img src="/static/icons/plus-30-white.png" alt="">'
             wordEl.innerHTML = `
@@ -134,7 +133,7 @@ async function getWord() {
             finish();
         }
     } catch(error){
-
+        finish();
     }
 }
 
@@ -155,7 +154,6 @@ function afficheMot() {
             .join('')
 
     }`;
-    
     const internalWord = wordEl.innerText.replace(/\n/g, '');
     if(internalWord == word['word'].toUpperCase()) {
         wordFind += 1
@@ -167,7 +165,6 @@ function afficheMot() {
         nextWord();
     }
 }
-
 
 function updateBadLetter(letter) {
     // afficher les mauvaises lettre
@@ -210,7 +207,6 @@ var isEventListener = true
 
 setTimeout(() => {
     window.addEventListener('keydown', async e => {
-
         try{
             if (isEventListener) {
                 if(badLetters.length < figurePart.length){
@@ -247,7 +243,7 @@ setTimeout(() => {
                 }
             }
         } catch(error){
-
+            finish();
         }
     })
 }, 5200);
@@ -282,7 +278,7 @@ keyboard.forEach(e => {
                     }
                 }
         } catch(error){
-
+            finish();
         }
         }
     )
@@ -317,36 +313,41 @@ function nextWord(){
             animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
             getWord(); 
         } catch(error) {
-
+            finish();
         }
-
     }, 1000);
 }
 
-function finish() {
-    setTimeout(() => {
-        let xpinterval = setInterval(() => {
-            if(a == XpTotal){
-                clearInterval(xpinterval);
-                a -= 1
+async function finish(xp = XpTotal) {
+    try {
+        const request = await fetch(`/dashboard/games/hangman/session/finish`);
+        const response = await request.json();
+        setTimeout(() => {
+            let xpinterval = setInterval(() => {
+                if(a == XpTotal){
+                    clearInterval(xpinterval);
+                    a -= 1
+                }
+                a += 1
+                xpFinal.innerHTML = '+' + String(a) + 'XP';    
+            }, (1200/XpTotal));
+            if (time < 0) {
+                remarque.innerText = 'le temps est écoulé...';
+            } else if(Wordslength*5 == XpTotal){
+                remarque.innerText = 'Wouah! Parfait!';
+            } else if(Wordslength*5 > XpTotal && XpTotal >= Wordslength*3){
+                remarque.innerText = 'Bravo !';
+            } else if(Wordslength*3 > XpTotal && XpTotal >= Wordslength*2){
+                remarque.innerText = 'Mmmm...';
+            } else {
+                remarque.innerText = 'Dommage... Réessaye';
             }
-            a += 1
-            xpFinal.innerHTML = '+' + String(a) + 'XP';    
-        }, (1200/XpTotal));
-        if (time < 0) {
-            remarque.innerText = 'le temps est écoulé...';
-        } else if(Wordslength*5 == XpTotal){
-            remarque.innerText = 'Wouah! Parfait!';
-        } else if(Wordslength*5 > XpTotal && XpTotal >= Wordslength*3){
-            remarque.innerText = 'Bravo !';
-        } else if(Wordslength*3 > XpTotal && XpTotal >= Wordslength*2){
-            remarque.innerText = 'Mmmm...';
-        } else {
-            remarque.innerText = 'Dommage... Réessaye';
-        }
-        recap.style.display='flex'
-        finding.innerHTML = String(wordFind) + '/' + String(Wordslength)
-    }, 100);
+            recap.style.display='flex'
+            finding.innerHTML = String(wordFind) + '/' + String(Wordslength)
+        }, 100);
+    } catch (error) {
+        window.location.href = '/dashboard'
+    }
 }
 getWord();
 

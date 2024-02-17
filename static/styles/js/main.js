@@ -20,14 +20,14 @@ function redirect(el, event) {
     if (window.matchMedia("(min-width: 670px)").matches) {
         body.style.gridTemplateColumns = '95px 1fr';
         main.style.opacity = '0';
-        main.style.transform = 'translateY(-1000px)';
+        main.style.transform = 'translateX(1000px)';
 
         const responseLogo = document.querySelector('.responsive-logo');
         responseLogo.style.transform = 'rotate(180deg)';
     } else {
         body.removeAttribute('class');
         main.style.opacity = '0';
-        main.style.transform = 'translateX(1000px)'
+        main.style.transform = 'translateY(-1000px)'
         header.style.width = '75px';
     }
     // Wait for the animation to finish before redirecting.

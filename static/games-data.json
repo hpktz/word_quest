@@ -60,5 +60,14 @@
         "img": "/static/icons/games-icons/typefast-30-dark-grey.png",
         "url": "/dashboard/games/typefast",
         "difficulty": 5
+    },
+    {
+        "id": 8,
+        "name": "Quiz",
+        "desc": "Le Quiz est un jeu ou le joueur doit r&eacute;pondre &agrave; un maximum de questions dans un temps imparti. Plus le joueur répond vite, plus il gagne de points.",
+        "short_desc": "R&eacute;pondre &agrave; un maximum de questions dans un temps imparti.",
+        "img": "/static/icons/games-icons/quiz-30-dark-grey.png",
+        "url": "/dashboard/games/quiz",
+        "difficulty": 2
     }
 ]

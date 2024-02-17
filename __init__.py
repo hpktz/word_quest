@@ -61,6 +61,9 @@ app.register_blueprint(hangman_bp)
 from games.typefast import typefast_bp
 app.register_blueprint(typefast_bp)
 
+from games.quiz import quiz_bp
+app.register_blueprint(quiz_bp)
+
 @app.route('/')
 def index():
     user = None
@@ -117,6 +120,10 @@ def forbidden(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('errors/500.html'), 500
+
+@app.route('/dashboard/errors/500')
+def error_500():
+    return render_template('errors/500.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

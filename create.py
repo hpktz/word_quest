@@ -254,7 +254,13 @@ def search(x):
                     # Retrieve the french translation
                     word = sense.xpath("./span[@class='cit lang_fr']")
                     if word:
-                        array["french_translation"] = get_text_recursive(word[0])
+                        if array["type"] == "noun":
+                            french_word = get_text_recursive(word[0])
+                            if french_word[-3:] == "fpl":
+                                array["french_translation"] = french_word[:-4]
+                            array["french_translation"] = get_text_recursive(word[0])[:-2]
+                        else:
+                            array["french_translation"] = get_text_recursive(word[0])
                     else:
                         continue
                 else:

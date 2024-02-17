@@ -1,0 +1,92 @@
+<section class="start-pop-up pop-up active">
+    <img src="/static/icons/games-icons/typefast-30-dark-grey.png" alt="logo">
+    <div class="title">{{popUpTitle}}</div>
+    <div class="desc">
+        <p>{{popUpDesc}}</p>
+        <p>Un seul mot d'ordre : la rapidité</p>
+        <p>Bonne chance !</p>
+    </div>
+    <div class="counter">
+        Le jeu commande dans <span id="counter">5</span> secondes
+        <div class="inner"></div>
+    </div>
+</section>
+<section class="end-pop-up pop-up">
+    <div class="title">Vos résultats</div>
+    <div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-three-yelow-lightnings.png" class="icon" alt="">
+            <div class="text">XP gagné</div>
+            <div class="data" id="data-xp">0</div>
+        </div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-red-heart.png" class="icon" alt="">
+            <div class="text">Vie perdue</div>
+            <div class="data" id="data-life">0</div>
+        </div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-red-clock.png" class="icon" alt="">
+            <div class="text">Temps passé</div>
+            <div class="data" id="data-time">0</div>
+        </div>
+    </div>
+    <div class="button-container">
+        <div class="button try-again" data-url="/dashboard/games/{{popUpGame}}/{{list_id}}">Rejouer</div>
+        <div class="button leave" data-url="/dashboard">Quitter</div>
+    </div>
+</section>
+<script>
+    const start_countdown = setInterval(() => {
+        const counter = document.getElementById('counter');
+        counter.textContent = parseInt(counter.textContent) - 1;
+        if (counter.textContent == 0) {
+            clearInterval(start_countdown);
+            document.querySelector('.start-pop-up').classList.remove('active');
+        }
+    }, 1000);
+
+    /**
+     * 
+     * This function is used to end the game
+     * 
+     * @param {number} xp - The experience points earned by the user
+     * @param {number} time - The time spent by the user
+     * @param {number} life - The number of lives lost by the user
+     * 
+     * @returns {void} - The result of the function
+     */
+
+    function end_game(xp, time, life) {
+        const end_pop_up = document.querySelector('.end-pop-up');
+        end_pop_up.classList.add('active');
+
+        // Display the experience points, the time and the number of lives lost by the user
+        var xp_count = 0;
+        var xp_interval = setInterval(() => {
+            document.getElementById('data-xp').innerHTML = xp_count;
+            console.log(xp_count);
+            xp_count++;
+            if (xp_count > xp) {
+                clearInterval(xp_interval);
+            }
+        }, 100);
+
+        var life_count = 0;
+        var life_interval = setInterval(() => {
+            document.getElementById('data-life').innerHTML = life_count;
+            life_count++;
+            if (life_count > life) {
+                clearInterval(life_interval);
+            }
+        }, 100);
+
+        var time_count = 0;
+        var time_interval = setInterval(() => {
+            document.getElementById('data-time').innerHTML = time_count;
+            time_count++;
+            if (time_count >= time) {
+                clearInterval(time_interval);
+            }
+        }, 10);
+    }
+</script>

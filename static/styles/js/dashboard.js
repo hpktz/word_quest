@@ -36,6 +36,7 @@ function open_game_info(el) {
     } else if (gameInfos[0].status == "blocked") {
         levelInfoTitle.innerHTML = "Niveau bloqué";
         levelInfoText.innerHTML = "Terminez le niveau précédent pour débloquer ce niveau";
+        levelInfoSubmitButton.classList.remove('start');
         levelInfoSubmitButton.innerHTML = "<p style='color:white;'>Bloqué</p>";
     } else {
         levelInfoSubmitButton.classList.add('start')
@@ -67,6 +68,19 @@ function open_game_info(el) {
  */
 function open_game(el, event) {
     event.preventDefault();
+    const live_amount = document.getElementById('lives-info').innerHTML;
+    const el_inner = el.innerHTML;
+    if (parseInt(live_amount) == 0) {
+        el.innerHTML = "Vous n'avez plus de vies";
+        el.classList.add('pulse');
+        setTimeout(function() {
+            el.classList.remove('pulse');
+        }, 250);
+        setTimeout(function() {
+            el.innerHTML = el_inner;
+        }, 2000);
+        return;
+    }
 
     const overlay = document.getElementsByClassName('overlay-load-game')[0];
     overlay.style.top = "0px";
@@ -295,16 +309,15 @@ async function update_list(el, event) {
 function open_lives(el) {
     const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
     if (window.matchMedia("(max-width: 670px)").matches) {
-        livesContainer.style.top = (el.offsetTop + 85) + "px";
+        livesContainer.style.top = "65px";
         livesContainer.style.left = "calc(50% - 140px)";
         livesContainer.classList.add('active');
 
         const mainInfos = document.getElementsByClassName('main-infos')[0];
         mainInfos.classList.add('active');
     } else {
-        livesContainer.style.top = (el.offsetTop + 65) + "px";
-        console.log(el.offsetLeft);
-        livesContainer.style.left = (el.offsetLeft - 150) + "px";
+        livesContainer.style.top = "70px";
+        livesContainer.style.left = "calc(100% - 325px)";
         el.classList.add('active');
     }
 }
@@ -396,8 +409,8 @@ async function lives_counter() {
 async function purchase_lives(el, event) {
     event.preventDefault();
     // request to purchase lives
-    const response = await fetch('/dashboard/lives/purchase');
     document.getElementById('life-purchase-button').innerHTML = "<div class='loader'></div>";
+    const response = await fetch('/dashboard/lives/purchase');
     try {
         const data = await response.json();
         // if the request is successful, the lives counter is updated, and the UI is updated
@@ -420,11 +433,11 @@ async function purchase_lives(el, event) {
             const gemsInfo = document.getElementById('gems-info');
             gemsInfo.innerHTML = data.gems;
             userInfos.getElementsByClassName('box')[0].classList.add('pulse');
+            document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
             setTimeout(function() {
                 userInfos.getElementsByClassName('box')[0].classList.remove('pulse');
                 userInfos.getElementsByClassName('box')[2].classList.remove('pulse');
-                document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
-            }, 2000);
+            }, 500);
         } else {
             // if the request is not successful, an alert box is displayed
             document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
@@ -440,3 +453,54 @@ async function purchase_lives(el, event) {
 }
 
 window.onload = lives_counter();
+
+
+async function copy_list(el, event, list_id) {
+    event.preventDefault();
+
+    const copy_box = document.getElementsByClassName('copy-list')[0];
+    copy_box.classList.add('active');
+    document.getElementById('link').innerHTML = "<div class='loader'></div>";
+
+    try {
+        const response = await fetch(`/dashboard/list/get_link/${list_id}`);
+        const data = await response.json();
+
+        if (data.code != 200) {
+            document.getElementById('link').innerHTML = "Erreur";
+        } else {
+            document.getElementById('link').dataset.link = window.location.protocol + "//" + window.location.hostname + data.link;
+            document.getElementById('link').innerHTML = window.location.protocol + "//" + window.location.hostname + window.location.hostname + data.link;
+        }
+    } catch (e) {
+        console.log(e);
+        document.getElementById('link').innerHTML = "Erreur";
+    }
+}
+
+function copy_link(el, event) {
+    event.preventDefault();
+    let link = document.getElementById("link");
+    let copy_button = el;
+    let text = link.dataset.link;
+    if (text.length > 0) {
+        navigator.clipboard.writeText(text).then(function() {
+            copy_button.innerHTML = "Copié !";
+        }, function() {
+            copy_button.innerHTML = "Erreur";
+        });
+        setTimeout(function() {
+            copy_button.innerHTML = "Copier";
+            close_share_list(el, event);
+        }, 2000);
+    }
+}
+
+function close_share_list(el, event) {
+    event.preventDefault();
+    const copy_box = document.getElementsByClassName('copy-list')[0];
+    copy_box.classList.remove('active');
+
+    document.getElementById('link').dataset.link = "";
+    document.getElementById('link').innerHTML = "";
+}

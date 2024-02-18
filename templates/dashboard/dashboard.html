@@ -83,7 +83,7 @@
                 </div>
                 <!-- TODO -->
                 <div class="delete-logo clickable-logo delete-zone">
-                    <a href="" class="delete-zone" onclick="">
+                    <a href="" class="delete-zone" onclick="copy_list(this, event, {{list['id']}})">
                         <img src="/static/icons/share-30-dark-grey.png" class="delete-zone" alt="delete-icon">
                     </a>
                 </div>
@@ -125,7 +125,7 @@
         </div>
         <div class="body" id="manage-list-content"></div>
     </section>
-    <section class="pop-up">
+    <section class="copy-list pop-up">
         <div class="header">
             <div class="title">Partager la liste</div>
             <div class="close-logo clickable-logo">
@@ -135,12 +135,10 @@
             </div>
         </div>
         <div class="text">
-            Voici un lien pour partager la liste. Il vous suffit de le copier et de le partager à vos amis. <br><br>Ce lien est unique et ne peut être utilisé qu'une seule fois et dans un délai de 5 minutes.
+            Voici un lien pour partager la liste. Il vous suffit de le copier et de le partager à vos amis. <br><br>Ce lien est unique et ne peut être utilisé qu'une seule fois et dans un délai de 1 heure.
         </div>
         <div class="share-box">
-            <div class="link" data-link="">
-                <div class="loader"></div>
-            </div>
+            <div class="link" id="link" data-link=""></div>
             <div class="copy-button" onclick="copy_link(this,event)">
                 Copier
             </div>
@@ -159,25 +157,13 @@
             <a href="" onclick="purchase_lives(this, event)" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
         </div>
     </div>
-    <script>
-        function copy_link() {
-            let link = document.getElementsByClassName("link")[0];
-            let copy_button = document.getElementsByClassName("copy-button")[0];
-            let text = link.dataset.link;
-            if (text.length > 0) {
-                navigator.clipboard.writeText(text).then(function() {
-                    copy_button.innerHTML = "Copié !";
-                }, function() {
-                    copy_button.innerHTML = "Erreur";
-                });
-                setTimeout(function() {
-                    copy_button.innerHTML = "Copier";
-                }, 2000);
-            }
-        }
-    </script>
     <script src="/static/scripts/dashboard/search.js"></script>
     <script src="/static/scripts/dashboard/filters.js"></script>
     <script src="/static/styles/js/dashboard.js"></script>
+    {% if hearts_message %}
+    <script>
+        document.getElementById("lives-box").click();
+    </script>
+    {% endif %}
 </main>
 {% endblock %}

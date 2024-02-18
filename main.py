@@ -10,6 +10,7 @@ Imports:
     - random: For generating random numbers.
     - logging: For logging errors and other information.
     - re: For handling regular expressions.
+    - uuid: For generating unique identifiers.
 
 Blueprint:
     - main_bp: The blueprint for the main routes of the application.
@@ -22,6 +23,7 @@ from datetime import datetime, timedelta
 import random as random
 import logging
 import re
+import uuid
 
 main_bp = Blueprint('main', __name__)
 """
@@ -123,6 +125,8 @@ def index():
     lists = sorted(lists, key=lambda k: k['id'], reverse=True)
     new_list_id = lists[0]["id"] if is_new_list else None
     
+    hearts_message = True if request.args.get('hearts_message') else False
+    
     return render_template(
         'dashboard/dashboard.html', 
         daytime_tip=tip, 
@@ -133,7 +137,8 @@ def index():
         lives=lives, 
         lives_time=lives_time, 
         xp=xp,
-        new_list_id=new_list_id
+        new_list_id=new_list_id, 
+        hearts_message=hearts_message
     )
     
 @main_bp.route('/dashboard/lives/purchase')
@@ -359,3 +364,49 @@ def delete(list_id):
             cursor.close()
         if conn:
             conn.close() 
+            
+            
+@main_bp.route('/dashboard/list/get_link/<int:list_id>')
+@login_required
+def get_link(list_id):
+    """Copy the link to a list to the clipboard.
+
+    Args:
+        list_id (int): The ID of the list.
+
+    Returns:
+        flask.Response: A redirect response to the main index page.
+
+    Raises:
+        flask.redirect: A redirect response to the main index page.
+    """
+    # Check if the list is one of the user's lists
+    list = [l for l in current_user.get_lists() if l["id"] == list_id][0]
+    if list:
+        if list["shared_token"] and list["shared_expires"] > datetime.now():
+            link = "/dashboard/list/copy_link/" + list["shared_token"]
+            return jsonify({"code": 200, "message": "Liste déjà partagée.", "link": link})
+        else:
+            shared_token = str(uuid.uuid4())
+            shared_expires = (datetime.now() + timedelta(minutes=60))
+            conn = None
+            cursor = None
+            try:
+                conn = create_connection()
+                cursor = conn.cursor()
+                cursor.execute("UPDATE lists SET shared_token = %s, shared_expires = %s WHERE id = %s", (shared_token, shared_expires, list_id))
+                conn.commit()
+                link = "/dashboard/list/copy_link/" + shared_token
+                return jsonify({"code": 200, "message": "Liste partagée avec succès.", "link": link})
+            except Exception as e:
+                if conn:
+                    conn.rollback()
+                logging.error("Error while copying link: " + str(e), exc_info=True)
+                return jsonify({"code": 500, "message": "Une erreur s'est produite lors de la copie du lien. Veuillez réessayer plus tard."})
+            finally:
+                if cursor:
+                    cursor.close()
+                if conn:
+                    conn.close()
+    else:
+        return jsonify({"code": 400, "message": "Liste introuvable."})

@@ -9,6 +9,7 @@
     box-sizing: border-box;
     outline: none;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 body,
@@ -428,7 +429,8 @@ main {
 .dashboard-main-container .main-infos .user-infos {
     grid-column: 2;
     display: flex;
-    justify-content: center;
+    justify-content: right;
+    padding-right: 25px;
     gap: 25px;
 }
 
@@ -444,12 +446,12 @@ main {
 }
 
 .dashboard-main-container .main-infos .user-infos .box:nth-child(1).pulse {
-    --background-animation: #e091b1;
+    --background-animation: #ffe4e1;
     animation: pulse 2s;
 }
 
 .dashboard-main-container .main-infos .user-infos .box:nth-child(3).pulse {
-    --background-animation: #e78d89;
+    --background-animation: #f7d9d9;
     animation: pulse 2s infinite;
 }
 
@@ -540,8 +542,9 @@ main {
 
 .lives-pop-up .container .button {
     background-color: #333;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 10px;
+    height: 31px;
     font-family: 'League Spartan', sans-serif;
     text-align: center;
     font-size: 12px;
@@ -550,6 +553,7 @@ main {
     width: 150px;
     text-decoration: none;
     margin: 0 auto;
+    position: relative;
 }
 
 .lives-pop-up .container .button .loader {
@@ -559,7 +563,9 @@ main {
     border: 2px solid white;
     border-top: 2px solid #333;
     animation: main-spin 1s linear infinite;
-    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
 }
 
 .lives-pop-up .container .button.pulse {
@@ -1260,10 +1266,10 @@ main {
     margin-top: 10px;
     background-color: #555;
     border-radius: 10px;
-    padding: 10px;
     font-family: 'League Spartan', sans-serif;
     text-align: center;
     font-size: 16px;
+    padding: 10px;
     font-weight: bold;
     transition: all 0.2s ease-in-out;
 }
@@ -1275,10 +1281,19 @@ main {
 .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start {
     background-color: #333;
     cursor: pointer;
+    padding: 0px;
 }
 
 .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start a {
+    display: block;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
+    padding: 10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start a.pulse {
+    animation: pulse-button 0.1s infinite;
 }
 
 .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start:hover {
@@ -1708,29 +1723,49 @@ main {
     margin-top: 10px;
 }
 
-.dashboard-main-container.share-box .link {
+.dashboard-main-container .share-box .link {
     width: 100%;
     max-width: 100%;
+    height: 14px;
     overflow: auto;
     font-family: "League Spartan", sans-serif;
     font-size: 14px;
+    position: relative;
+    text-align: left;
+    white-space: nowrap;
 }
 
-.dashboard-main-container.share-box .link::-webkit-scrollbar {
+.dashboard-main-container .share-box .link::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-.dashboard-main-container.share-box .link .loader {
-    position: relative;
+.dashboard-main-container .share-box .link .loader {
+    position: absolute;
+    top: 50%;
     left: 50%;
     width: 15px;
     height: 15px;
     border: 2px solid #ccc;
     border-top: 2px solid #555;
     border-radius: 50%;
-    transform: translateX(-50%);
-    animation: spin 1s linear infinite;
+    animation: main-spin 1s linear infinite;
+}
+
+.dashboard-main-container .share-box .copy-button {
+    width: 70px;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #333;
+    outline: none;
+    border: 0;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
 }
 
 @media screen and (max-width: 1085px) {
@@ -2028,6 +2063,9 @@ main {
         pointer-events: none;
         display: none;
     }
+    .dashboard-main-container {
+        position: relative;
+    }
     body.info-section-phone-active header {
         height: calc(100% - 20px);
     }
@@ -2209,8 +2247,10 @@ main {
         border-top-right-radius: 10px;
     }
     .lives-pop-up {
+        position: absolute;
         transform: scale(0.8);
         transition: top 0s, left 0s, transform 0.3s ease-in-out;
+        z-index: 1;
     }
     .lives-pop-up.active {
         transform: scale(1);

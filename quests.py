@@ -212,7 +212,7 @@ def reward():
 
             # Calculate the reward
             if is_eligible:
-                reward = result[0][1] / targets["xp"] * 1000
+                reward = result[0][1] / targets["xp"] * 10
                 # Give the reward to the user
                 cursor.execute("INSERT INTO rewards (user_id) VALUES (%s)", (current_user.id,))
                 cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'gems', %s)", (current_user.id, reward))

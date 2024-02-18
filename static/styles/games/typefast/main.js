@@ -6,6 +6,7 @@
  *  -> Code 404: The word is incorrect
  *  -> Error: The server is not responding -> Redirect the user to the 500 error page
  * 
+ * @function check_word
  * @param {HTMLFormElement} form - The form containing the word entered by the user
  * @param {Event} event - The event that triggered the function
  * 
@@ -60,6 +61,7 @@ async function check_word(form, event) {
  * 
  * This function is used to display the end pop-up
  * 
+ * @function timer
  * @param {Event} event - The event that triggered the function
  * 
  * @returns {void} - The result of the function
@@ -90,18 +92,3 @@ var timer = setInterval(async() => {
 }, 1000);
 
 timer;
-
-
-/**
- * 
- * This function is used to redirect the user to another page
- * 
- * @returns {void} - The result of the function
- */
-const button = document.querySelectorAll('.button');
-button.forEach(btn => {
-    btn.addEventListener('click', () => {
-        btn.innerHTML = "<div class='loader'></div>";
-        window.location.href = btn.dataset.url;
-    });
-});

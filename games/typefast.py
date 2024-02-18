@@ -49,13 +49,13 @@ class typeFast():
     Reprents the typefast game
     
     Attributes:
-        - id: The unique identifier of the game
-        - list_id: The id of the list
-        - lesson_id: The id of the lesson
-        - words: The words to check
-        - words_to_check: The words that have been checked
-        - time: The time when the game will end
-        - start: The time when the game started
+        - id (string): The unique identifier of the game
+        - list_id (int): The id of the list
+        - lesson_id (int): The id of the lesson
+        - words (list): The words to check
+        - words_to_check (list): The words to check
+        - time (string): The time when the game will end
+        - start (string): The time when the game started
         
     Methods:
         - check_word: Check if the word is correct
@@ -83,7 +83,7 @@ class typeFast():
             word (string): The word to check
 
         Returns:
-            dict: The response of the request
+            dict: The response of the request if the game is still in progress
                 - code (int): The status code of the request
                     -> 200: The word is correct
                     -> 404: The word is incorrect
@@ -93,7 +93,7 @@ class typeFast():
                     - time (string): The time when the game started
                     - xp (int): The experience points gained
                     - lost_lives (int): The number of lost lives
-            function: The _end_game function
+            function: The _end_game function if the game is ended
         """
         if self.time < str(datetime.datetime.now()) or len(self.words_to_check) == 0:
             return self._end_game()
@@ -366,6 +366,7 @@ def start(session_id):
     """
     if 'game' in session:
         game = typeFast.from_json(session["game"])
+        reloaded = True if game.get_remaning_time() < 118 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             return render_template('games/typefast.html', 
                                    session_id=session_id, 
@@ -373,14 +374,24 @@ def start(session_id):
                                    score=len(game.words_to_check), 
                                    max_score=len(game.words), 
                                    time=game.get_remaning_time(),
-                                   words=game.get_words_checked()
-                                   )
+                                   words=game.get_words_checked(),
+                                   reloaded=reloaded)
         return redirect(url_for('typefast.index', list_id=game.list_id))
     return redirect(url_for('main.index'))
     
 @typefast_bp.route('/dashboard/games/typefast/<string:session_id>/check_word/<string:word>')
 @check_game
 def check_word(session_id, word):
+    """
+    Check if the word is correct
+    
+    Args:
+        session_id (string): The unique identifier of the game
+        word (string): The word to check
+    
+    Returns:
+        flask.Response: The response of the request
+    """
     game = typeFast.from_json(session["game"])
     response = game.check_word(word)
     session["game"] = game.to_json()
@@ -393,6 +404,22 @@ def check_word(session_id, word):
 @typefast_bp.route('/dashboard/games/typefast/<string:session_id>/check_status')
 @check_game
 def check_status(session_id):
+    """
+    Check the status of the game
+    
+    Args:
+        session_id (string): The unique identifier of the game
+    
+    Returns:
+        dict: The response of the request
+            - code (int): The status code of the request
+                -> 200: The game is in progress
+            - message (string): The message of the request
+            - result (dict): The result of the request
+                - remaining (int): The number of remaining words
+                - time (string): The time when the game started
+                - words (list): The words that have been checked
+    """
     game = typeFast.from_json(session["game"])
     return jsonify({
         "code": 200,

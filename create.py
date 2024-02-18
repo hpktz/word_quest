@@ -623,3 +623,107 @@ def copy_list(id):
         if conn:
             conn.close()
         
+        
+@create_bp.route('/dashboard/list/copy_link/<string:token>')
+@login_required
+def copy_list_link(token):
+    """
+    Copy a list from a link.
+
+    Args:
+        token (string): The token of the list to copy.
+
+    Returns:
+        flask.redirect: The index page.
+
+    Raises:
+        500: If an error occurs while copying the list.
+    """
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        # Check if the list exists and if the token is still valid
+        cursor.execute("SELECT * FROM lists WHERE shared_token = %s AND shared_expires > NOW()", (token,))
+        result = cursor.fetchone()
+        if not result:
+            return redirect(url_for('main.index'))
+        initial_id = result[0]
+        
+        is_yours = False
+        if result[1] is not None:
+            is_yours = any(list["id"] == result[1] for list in current_user.get_lists())
+            
+        if is_yours or result[2] == current_user.id:
+            return jsonify({"code": 400, "title": "Bad request", "message": "Vous ne pouvez pas copier votre propre liste"}), 400
+        
+        # Create the list
+        cursor.execute("INSERT INTO lists (title, description, tgt_time, tgt_xp, tgt_games, notif_remind, notif_stats, public, user_id, creator_id, initial_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                        (result[7], result[8], result[11], result[9], result[10], result[12], result[13], result[4], current_user.id, result[3], result[0]))
+        
+        list_id = cursor.lastrowid
+        
+        # Create the list content
+        cursor.execute("SELECT * FROM list_content WHERE list_id = %s", (initial_id,))
+        result = cursor.fetchall()
+        columns = [i[0] for i in cursor.description]
+        
+        for word in result:
+            word = dict(zip(columns, word))
+            cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
+                            (word['word'], word['word_type'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
+        
+        user_level = current_user.lvl
+        with open('static/games-data.json') as json_file:
+            levels = json.load(json_file)
+        
+        # Set the levels difficulty according to the user level
+        if user_level == 1:
+            levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
+        elif user_level == 5:
+            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level, user_level]
+        else:
+            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
+            
+        # Choose the levels according to the levels difficulty
+        data_levels = []
+        for levelnb, level in enumerate(levels_difficulty):
+            while len(data_levels) < 6 and level > 0:
+                # Select the possible levels
+                possible_levels = []
+                for key, value in enumerate(levels):
+                    for data_level in data_levels:
+                        if data_level["name"] == value["name"]:
+                            break
+                    if value["difficulty"] == level:
+                            possible_levels.append(value)
+
+                # Select a random level among the possible levels
+                if len(possible_levels) > 0:
+                    data_levels.append(random.choice(possible_levels))
+
+                level -= 1
+
+        # Reverse the levels
+        data_levels = list(reversed(data_levels))
+        
+        # Add the levels to the list
+        for key, level in enumerate(data_levels):
+            cursor.execute("INSERT INTO lessons (list_id, lesson_id, odr) VALUES (%s, %s, %s)", 
+                            (list_id, level["id"], key+1))
+        
+        return redirect(url_for('main.index', new_list=True))
+        
+    except Exception as e:
+        print(e)
+        if conn:
+            conn.rollback()
+        logging.error("Error while copying list: " + str(e), exc_info=True)
+        abort(500)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+        

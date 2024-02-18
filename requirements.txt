@@ -10,3 +10,4 @@ lxml==5.1.0
 Google-Images-Search==1.4.6
 python-Levenshtein==0.25.0
 gTTS==2.5.1
+gunicorn==21.2.0

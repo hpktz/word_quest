@@ -8,6 +8,7 @@ mysql-connector==2.2.9
 requests==2.31.0
 lxml==5.1.0
 Google-Images-Search==1.4.6
+windows-curses==2.3.2
 python-Levenshtein==0.25.0
 gTTS==2.5.1
 gunicorn==21.2.0

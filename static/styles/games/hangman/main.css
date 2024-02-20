@@ -1,11 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-body{
+
+body {
     background-color: #F6F6F6;
     color: black;
     font-family: 'League Spartan';
@@ -17,10 +18,12 @@ body{
     margin: 0;
     overflow: hidden;
 }
-a{
+
+a {
     text-decoration: none;
 }
-.all{
+
+.all {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -30,7 +33,7 @@ a{
     max-width: 1400px;
 }
 
-.exit{
+.exit {
     background-color: transparent;
     border: none;
     margin-top: 25px;
@@ -40,19 +43,18 @@ a{
     transform: translateX(-50%);
 }
 
-.exit img{
+.exit img {
     height: 50px;
 }
 
-
-.game{
+.game {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.figure-content{
+.figure-content {
     stroke: #766153;
     stroke-width: 24px;
     stroke-linecap: round;
@@ -60,7 +62,7 @@ a{
     max-width: 880px;
 }
 
-.figure-part{
+.figure-part {
     display: none;
     stroke-width: 12px;
     stroke: #717744;
@@ -73,22 +75,26 @@ a{
     flex-direction: column;
     text-align: right;
 }
-.bad-letter-content p{
+
+.bad-letter-content p {
     margin: 0 0 5px;
 }
-.bad-letter-content span{
+
+.bad-letter-content span {
     font-size: 24px;
     text-transform: uppercase;
 }
 
-#bad-letter{
+#bad-letter {
     height: 30px;
     width: 100%;
 }
-.word{
+
+.word {
     display: flex;
 }
-.letter{
+
+.letter {
     border-bottom: 3px solid black;
     display: inline-flex;
     font-size: 30px;
@@ -100,7 +106,7 @@ a{
     text-transform: uppercase;
 }
 
-.popup-content{
+.popup-content {
     background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
     top: 0;
@@ -111,7 +117,8 @@ a{
     align-items: center;
     justify-content: center;
 }
-.popup{
+
+.popup {
     background-color: black;
     color: white;
     box-shadow: 0 10px 10px 3px rgba(0, 0, 0, 0.5);
@@ -120,7 +127,7 @@ a{
     border-radius: 5px;
 }
 
-.popup button{
+.popup button {
     cursor: pointer;
     background-color: white;
     border: none;
@@ -130,15 +137,15 @@ a{
     font-size: 16px;
 }
 
-.popup button:active{
+.popup button:active {
     transform: scale(0.95);
 }
 
-.popup:focus{
+.popup:focus {
     outline: 0;
 }
 
-.notification-content{
+.notification-content {
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px 10px 0 0;
     padding: 15px 20px;
@@ -146,28 +153,29 @@ a{
     bottom: -80px;
     transition: transform 0.3 ease-in-out;
 }
+
 .notification-content.afficher {
     transform: translateY(-80px);
 }
 
-.separation-line{
+.separation-line {
     width: 1px;
     height: 50vh;
     background-color: #BDBDBD;
 }
 
-.other{
+.other {
     width: 33vw;
     max-width: 600px;
     height: 400px;
 }
 
-h1{
+h1 {
     font-size: 18px;
     margin-bottom: 25px;
 }
 
-.indice{
+.indice {
     background: white;
     border-radius: 5px;
     font-size: 16px;
@@ -175,22 +183,26 @@ h1{
     box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.224);
     margin-bottom: 10px;
 }
-.name-indice{
+
+.name-indice {
     font-weight: 600;
     margin-bottom: 10px;
-} 
-.indice-content{
+}
+
+.indice-content {
     color: #333333;
     font-size: 20px;
 }
-.separation-line2{
+
+.separation-line2 {
     width: 90%;
     height: 1px;
     display: block;
     margin: 0 auto;
     background-color: #BDBDBD;
 }
-.info-content{
+
+.info-content {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,37 +210,40 @@ h1{
     margin-top: 20px;
 }
 
-.counter{
+.counter {
     display: flex;
     align-items: center;
     gap: 25px;
 }
-.counter img{
+
+.counter img {
     height: 40px;
 }
 
-.XP{
+.XP {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%) scale(0.01);
+    transform: translate(-50%, -50%) scale(0.01);
     font-size: 64px;
     font-weight: bolder;
     display: flex;
     align-items: center;
 }
-.XP p{
+
+.XP p {
     transform: translateY(5px);
     background: linear-gradient(to bottom, #FEDE00, #F5AA00);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-.XP img{
+
+.XP img {
     height: 84px;
 }
 
-.recap{
+.recap {
     z-index: 100;
     width: 400px;
     height: 380px;
@@ -238,18 +253,20 @@ h1{
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: #F6F6F6;
     color: black;
     padding: 50px 0;
     border-radius: 8px;
     box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.129);
 }
-.recap h1{
+
+.recap h1 {
     font-size: 24px;
     text-transform: uppercase;
 }
-.stats{
+
+.stats {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -258,39 +275,42 @@ h1{
     padding: 10px;
     margin-bottom: 30px;
 }
-.stats > div{
+
+.stats>div {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
 }
-.stats > div > p:nth-child(1){
-    font-weight: bold;
 
+.stats>div>p:nth-child(1) {
+    font-weight: bold;
 }
-.stats-xp div{
+
+.stats-xp div {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-.stats-xp img{
+
+.stats-xp img {
     height: 25px;
 }
 
-.recap-btns{
+.recap-btns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
     padding: 0 2vw;
-    
 }
 
 .recap-btns button a {
     color: white;
     text-decoration: none;
 }
-.recap-btns button{
+
+.recap-btns button {
     background-color: #766153;
     color: #F6F6F6;
     width: 150px;
@@ -303,7 +323,7 @@ h1{
     cursor: pointer;
 }
 
-.new-indice-btn{
+.new-indice-btn {
     background-color: #717744;
     color: white;
     font-family: 'League Spartan';
@@ -316,17 +336,20 @@ h1{
     justify-content: center;
     transition: transform 0.2s ease-in-out;
 }
-.new-indice-btn img{
+
+.new-indice-btn img {
     height: 45px;
 }
-.new-indice-btn:hover{
+
+.new-indice-btn:hover {
     transform: scale(1.08);
 }
-.new-indice-btn:active{
+
+.new-indice-btn:active {
     transform: scale(1);
 }
 
-.loader{
+.loader {
     display: none;
     position: absolute;
     top: 50%;
@@ -338,7 +361,8 @@ h1{
     border-top: 5px solid black;
     animation: spin 0.5s linear infinite;
 }
-.keyboard{
+
+.keyboard {
     margin: 60px 0 20px 0;
     display: flex;
     flex-wrap: wrap;
@@ -348,7 +372,8 @@ h1{
     gap: 10px;
     z-index: 9;
 }
-.key-letter{
+
+.key-letter {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -362,229 +387,242 @@ h1{
     padding: 2px 0 0 2px;
     transition: 0.3s;
 }
-.key-letter:hover{
+
+.key-letter:hover {
     cursor: pointer;
 }
-.key-letter:active{
+
+.key-letter:active {
     transform: scale(0.9);
 }
 
-
-.tablet-all{
+.tablet-all {
     flex-direction: column;
     justify-content: center;
     gap: 10%;
 }
-.tablet-svg{
+
+.tablet-svg {
     height: 30vh;
     width: 60vw;
     max-width: none;
     stroke-width: 24px;
 }
-.tablet-exit{
+
+.tablet-exit {
     top: 0;
     left: 10%;
 }
-.tablet-sep{
+
+.tablet-sep {
     display: none;
 }
-.tablet-hint{
+
+.tablet-hint {
     position: absolute;
     top: 10%;
     left: 10%;
 }
-.tablet-other{
+
+.tablet-other {
     height: auto;
     width: 80vw;
     max-width: none;
 }
-.tablet-kl{
+
+.tablet-kl {
     height: 100px;
     width: 100px;
     font-size: 30px;
 }
-.tablet-kb{
+
+.tablet-kb {
     width: 80vw;
 }
-.tablet-idc{
+
+.tablet-idc {
     width: 35vw;
 }
 
 @media screen and (max-width: 1330px) {
-    .figure-content{
+    .figure-content {
         width: 400px;
         height: 430px;
     }
 }
+
 @media screen and (max-height: 700px) {
-    .figure-content{
+    .figure-content {
         width: 400px;
         height: 430px;
     }
 }
+
 @media screen and (max-width: 1200px) {
-    .key-letter{
+    .key-letter {
         width: 30px;
         height: 30px;
     }
-    .tablet-kl{
+    .tablet-kl {
         width: 75px;
         height: 75px;
     }
-    
 }
+
 @media screen and (max-width: 1000px) and (max-height: 550px) {
-    .figure-content{
+    .figure-content {
         width: 300px;
         height: 320px;
     }
 }
+
 @media screen and (max-width: 950px) {
-    .svg{
+    .svg {
         height: 45vh;
     }
-    .indice-content{
+    .indice-content {
         transform: scale(0.7);
     }
-    .figure-content{
+    .figure-content {
         width: 200px;
         height: 320px;
     }
-    .info-content{
+    .info-content {
         font-size: 13px;
     }
-    .info-content img{
+    .info-content img {
         height: 25px;
     }
 }
 
-@media screen and (max-width: 850px){
-    .recap{
-        transform:translate(-50%, -50%) scale(0.7);
-    }
-}
-@media screen and (max-width: 650px){
-    .recap{
-        transform:translate(-50%, -50%) scale(0.5);
-    }
-}
-@media screen and (max-height: 500px){
-    .recap{
-        transform:translate(-50%, -50%) scale(0.7);
+@media screen and (max-width: 850px) {
+    .recap {
+        transform: translate(-50%, -50%) scale(0.7);
     }
 }
 
+@media screen and (max-width: 650px) {
+    .recap {
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+}
 
+@media screen and (max-height: 500px) {
+    .recap {
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+}
 
 @media screen and (max-width: 850px) {
-    .key-letter{
+    .key-letter {
         width: 30px;
         height: 30px;
     }
-    .tablet-kl{
+    .tablet-kl {
         width: 60px;
         height: 60px;
     }
 }
 
 @media screen and (max-width: 670px) {
-    .indices h1{
+    .indices h1 {
         margin-bottom: 10px;
     }
-    .separation-line{
+    .separation-line {
         display: none;
     }
-    .separation-line2{
+    .separation-line2 {
         display: none;
     }
-    .other{
+    .other {
         width: auto;
     }
-    .indices{
+    .indices {
         position: absolute;
         top: 10%;
         left: 10%;
     }
-    .all{
+    .all {
         justify-content: center;
     }
-    .new-indice-btn{
+    .new-indice-btn {
         width: 30px;
         height: 30px;
         margin-top: 0;
     }
-    .new-indice-btn img{
+    .new-indice-btn img {
         height: 25px;
     }
-    .figure-content{
-        stroke-width: 15px ;
+    .figure-content {
+        stroke-width: 15px;
         height: 30vh;
         width: 60vw;
     }
-    .exit img{
+    .exit img {
         height: 35px;
     }
-    .all{
+    .all {
         flex-direction: column;
         justify-content: center;
         gap: 10%;
     }
-    .exit{
+    .exit {
         left: 10%;
     }
-    .key-letter{
+    .key-letter {
         height: 40px;
         width: 40px;
         font-size: 20px;
     }
 }
+
 @media screen and (max-width: 490px) {
-    .keyboard{
+    .keyboard {
         width: 90vw;
     }
-    .key-letter{
+    .key-letter {
         width: 36px;
         height: 36px;
     }
 }
+
 @media screen and (max-width: 400px) {
-    .key-letter{
+    .key-letter {
         width: 32px;
         height: 32px;
     }
 }
+
 @media screen and (max-width: 340px) {
-    .key-letter{
+    .key-letter {
         width: 27px;
         height: 27px;
         font-size: 15px;
     }
-    .keyboard{
+    .keyboard {
         gap: 5px;
     }
-    .indices{
+    .indices {
         top: 20%;
     }
-    .indices h1{
+    .indices h1 {
         font-size: 15px;
     }
-    .counter{
+    .counter {
         gap: 10px;
     }
-    .info-content img{
+    .info-content img {
         height: 25px;
     }
-    #countdown-game{
+    #countdown-game {
         font-size: 12px;
     }
-    .letter{
+    .letter {
         font-size: 20px;
         height: 30px;
         width: 20px;
     }
 }
-
-
 
 @keyframes spin {
     0% {
@@ -596,52 +634,55 @@ h1{
 }
 
 @keyframes Xpanim {
-    0%{
-        transform:translate(-50%,-50%) scale(0.01) ;
+    0% {
+        transform: translate(-50%, -50%) scale(0.01);
     }
-    30%{
-        transform:translate(-50%,-50%) scale(1.2) ;
+    30% {
+        transform: translate(-50%, -50%) scale(1.2);
     }
-    50%{
-        transform:translate(-50%,-50%) scale(0.95) ;
+    50% {
+        transform: translate(-50%, -50%) scale(0.95);
     }
     60% {
-        transform:translate(-50%,-50%) scale(1.05) ;
+        transform: translate(-50%, -50%) scale(1.05);
     }
-    100%{
-        transform:translate(-50%,-50%) scale(1) ;
+    100% {
+        transform: translate(-50%, -50%) scale(1);
     }
 }
+
 @keyframes disapear {
-    from{
-        transform:translate(-50%,-50%) scale(1) ;
+    from {
+        transform: translate(-50%, -50%) scale(1);
     }
-    to{
-        transform:translate(-50%,-50%) scale(0.01) ;
+    to {
+        transform: translate(-50%, -50%) scale(0.01);
     }
 }
-@keyframes depophint{
-    from{
+
+@keyframes depophint {
+    from {
         transform: scale(1);
     }
-    to{
+    to {
         transform: scale(0.05);
     }
 }
+
 @keyframes indicanim {
-    0%{
-        transform: scale(0.01) ;
+    0% {
+        transform: scale(0.01);
     }
-    30%{
-        transform: scale(1.1) ;
+    30% {
+        transform: scale(1.1);
     }
-    50%{
-        transform: scale(0.95) ;
+    50% {
+        transform: scale(0.95);
     }
     60% {
-        transform: scale(1.05) ;
+        transform: scale(1.05);
     }
-    100%{
-        transform: scale(1) ;
+    100% {
+        transform: scale(1);
     }
 }

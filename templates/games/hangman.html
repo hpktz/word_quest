@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu du pendu | Word Quest</title>
+    <title>Jeu du Pendu - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
     <link rel="stylesheet" href="/static/styles/games/hangman/main.css">
-    <link rel="stylesheet" href="/static/styles/games/timer.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
 </head>
 
-<body>
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
     <section id="begining" class="begining">
         <div>
             <p id="begin"></p>
@@ -30,7 +31,7 @@
             <div class="bad-letter-content">
                 Mauvaise Lettre
                 <div id="bad-letter"></div>
-                
+
             </div>
             <svg height="500" width="600" class=figure-content id="svg">
 
@@ -42,21 +43,51 @@
 
                 <!--stickman-->
                 <!--head-->
-                <circle cx="75%" cy="34%" r="6%" class="figure-part" />
+                {% if bad_letters|length > 0 %}
+                <circle cx="75%" cy="34%" r="6%" class="figure-part" style="display: block;"/>
+                {% else %}
+                <circle cx="75%" cy="34%" r="6%" class="figure-part"/>
+                {% endif %}
 
                 <!--body-->
+                {% if bad_letters|length > 1 %}
+                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part" style="display: block;" />
+                {% else %}
                 <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part" />
+                {% endif %}
 
                 <!--arms-->
+                {% if bad_letters|length > 2 %}
+                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part" style="display: block;" />
+                {% else %}
                 <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part" />
+                {% endif %}
+                {% if bad_letters|length > 3 %}
+                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part" style="display: block;" />
+                {% else %}
                 <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part" />
-                
+                {% endif %}
+
                 <!--legs-->
+                {% if bad_letters|length > 4 %}
+                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part" style="display: block;" />
+                {% else %}
                 <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part" />
+                {% endif %}
+                {% if bad_letters|length > 5 %}
+                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part" style="display: block;" />
+                {% else %}
                 <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part" />
+                {% endif %}
+                
             </svg>
-            
+
             <div class="word" id="word">
+                {% for i in range(len_word) %} {% if word[i] in good_letters %}
+                <div class="letter">{{word[i]}}</div>
+                {% else %}
+                <div class="letter"></div>
+                {% endif %} {% endfor %}
             </div>
 
         </section>
@@ -71,7 +102,7 @@
 
         <!-- Notification-->
         <div class="notification-content" id="notification-content">
-            
+
             <p>Vous avez déja essayé cette lettre !</p>
         </div>
         <span class="separation-line" id="sep"></span>
@@ -85,69 +116,28 @@
                 </button>
             </div>
             <div class="keyboard" id="keyboard">
-
-                <div class="key-letter">a</div>
-                <div class="key-letter">b</div>
-                <div class="key-letter">c</div>
-                <div class="key-letter">d</div>
-                <div class="key-letter">e</div>
-                <div class="key-letter">f</div>
-                <div class="key-letter">g</div>
-                <div class="key-letter">h</div>
-                <div class="key-letter">i</div>
-                <div class="key-letter">j</div>
-                <div class="key-letter">k</div>
-                <div class="key-letter">l</div>
-                <div class="key-letter">m</div>
-                <div class="key-letter">n</div>
-                <div class="key-letter">o</div>
-                <div class="key-letter">p</div>
-                <div class="key-letter">q</div>
-                <div class="key-letter">r</div>
-                <div class="key-letter">s</div>
-                <div class="key-letter">t</div>
-                <div class="key-letter">u</div>
-                <div class="key-letter">v</div>
-                <div class="key-letter">w</div>
-                <div class="key-letter">x</div>
-                <div class="key-letter">y</div>
-                <div class="key-letter">z</div>
+                {% for letter in 'abcdefghijklmnopqrstuvwxyz' %} {% if letter in letters_used %}
+                <div class="key-letter" style="background: grey; color: white;">{{ letter }}</div>
+                {% else %}
+                <div class="key-letter">{{ letter }}</div>
+                {% endif %} {% endfor %}
             </div>
-            
+
             <span class="separation-line2"></span>
-            
+
             <div class="info-content">
                 <div class="counter">
                     <img src="/static/icons/games-icons/flash.png" alt="">
-                    <p id="xp">0Xp</p>
+                    <p id="xp">{{score}}Xp</p>
                 </div>
                 <div class="counter">
                     <img src="/static/icons/games-icons/timer-icon.png" alt="">
-                    <p id="countdown-game"></p>
+                    <p class="data" id="time">{{time}}</p>
                 </div>
             </div>
-            
+
         </section>
-        <section id="recap" class="recap">
-            <h1 id="remarque">Bravo !</h1>
-            <div class="stats">
-                <div class="stats-xp">
-                    <p>XP gagné:</p>
-                    <div>
-                        <p id="XP-final">+0XP</p>
-                        <img src="/static/icons/games-icons/flash.png" alt="">
-                    </div>
-                </div>
-                <div class="stats-word">
-                    <p>Mots trouvé</p>
-                    <p id="word-finded"></p>
-                </div>
-            </div>
-            <div class="recap-btns">
-                <button><a href="/dashboard">Retour au menu</a></button>
-                <button id="retry">Réessayer</button>
-            </div>
-        </section>
+        {% set popUpTitle = "Quiz" %} {% set popUpDesc = "Vous disposez de 2 minutes pour répondre à un maximum de question" %} {%set popUpGame = "hangman"%} {% include "games/popups.html" %}
     </div>
     <script src="/static/styles/games/hangman/main.js"></script>
     <script src="/static/styles/games/timer.js"></script>

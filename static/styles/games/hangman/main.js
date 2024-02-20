@@ -17,6 +17,8 @@ const loader = document.getElementById('loader')
 const addIndice = document.getElementById('add-indice');
 const indiceContainer = document.getElementById('indice-container');
 
+const sessionID = document.getElementsByTagName('body')[0].dataset.session_id;
+
 let nbrIndiceDiscover = 0
 
 
@@ -54,8 +56,8 @@ async function newIndice() {
         indice.classList.add('indice');
         indiceTitle.classList.add('name-indice');
         indiceContent.classList.add('indice-content');
-        indiceTitle.innerText = currentIndice["result"]["title"];
-        indiceContent.innerText = currentIndice["result"]["indice"];
+        indiceTitle.innerHTML = currentIndice["result"]["title"];
+        indiceContent.innerHTML = currentIndice["result"]["indice"];
         indice.appendChild(indiceTitle);
         indice.appendChild(indiceContent);
         indiceContainer.appendChild(indice);
@@ -73,8 +75,8 @@ async function newIndice() {
                 indice.style.display = 'none'
                 addIndice.style.display = 'flex'
             }, 600);
-        }, 3000);  
-        } catch (error) {
+        }, 3000);
+    } catch (error) {
 
     }
 }
@@ -88,111 +90,57 @@ addIndice.addEventListener('click', async() => {
     }
 })
 
-var word = '';
-async function getWord() {
-
-    try {
-        const getWord = await fetch(`/dashboard/games/hangman/session/ask_word`);
-
-        var selectWord = await getWord.json();
-        word = selectWord["result"];
-
-        console.log(selectWord["xptot"])
-        if (word['word'] != undefined) {
-            keyboard.forEach(e => {
-                e.style.background = '#ccd77c';
-                e.style.color = '#433831'
-            });
-            Wordslength++;
-            addIndice.style.pointerEvents = 'auto'
-            addIndice.innerHTML = '<img src="/static/icons/plus-30-white.png" alt="">'
-            wordEl.innerHTML = `
-                ${word['word']
-                    .split('')
-                    .map(
-                        // le ? permet de faire un if et le : permet de faire un else
-                        lettre => `
-                            <span class="letter">
-                                ${goodLetters.includes(lettre) ? lettre :
-                                '' }
-                            </span>
-                        `
-                    )
-                    .join('')
-                
-                }`;
-            const internalWord = wordEl.innerText.replace(/\n/g, '');
-                if(internalWord == word['word'].toUpperCase()) {
-                wordFind += 1
-                xpNotif.innerHTML = '+' + String(xpwin);
-                animXp.style.animation = 'Xpanim 1s ease-in-out forwards'
-                XpTotal += xpwin
-                xpCounter.innerHTML = String(XpTotal) + 'Xp';
-                nextWord();
-                }
+function showWord(data, letter) {
+    if (data.result.finished) {
+        for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
+            if (document.querySelectorAll('.letter')[i].innerHTML == '') {
+                document.querySelectorAll('.letter')[i].innerHTML = letter;
+            }
         }
-        else{
-            finish();
-        }
-    } catch(error){
-        finish();
-    }
-}
-
-function afficheMot() {
-    
-    wordEl.innerHTML = `
-        ${word['word']
-            .split('')
-            .map(
-                // le ? permet de faire un if et le : permet de faire un else
-                lettre => `
-                    <span class="letter">
-                        ${goodLetters.includes(lettre) ? lettre :
-                        '' }
-                    </span>
-                `
-            )
-            .join('')
-
-    }`;
-    
-    const internalWord = wordEl.innerText.replace(/\n/g, '');
-
-    if(internalWord == word['word'].toUpperCase()) {
         wordFind += 1
-        xpNotif.innerHTML = '+' + String(xpwin);
+        xpNotif.innerHTML = '+' + String(data.result.xp_won);
         animXp.style.animation = 'Xpanim 1s ease-in-out forwards'
-        badLetters = 0
-        XpTotal += xpwin
-        xpCounter.innerHTML = String(XpTotal) + 'Xp';
-        nextWord();
+        badLetters = [];
+        XpTotal += data.result.xp_won
+        xpCounter.innerHTML = String(data.result.total_xp) + 'Xp';
+        nextWord(data);
+    } else {
+        for (let i = 0; i < data.result.letter_position.length; i++) {
+            document.querySelectorAll('.letter')[data.result.letter_position[i]].innerText = letter;
+        }
     }
 }
 
-function updateBadLetter(letter) {
+function updateBadLetter(data, letter) {
     // afficher les mauvaises lettre
     badLetter.innerHTML = badLetter.innerHTML + `<span> ${letter}</span>` + ','
-    
+
     // Afficher le bonhomme
-    figurePart.forEach((partie, index) => {
-        const erreurs = badLetters.length;
-        if(index < erreurs) {
-            partie.style.display = 'block'
-        } else {
-            partie.style.display = 'None'
-        }
-    })
+
 
     //Verifier si on a perdu
 
-    if(badLetters.length == figurePart.length){
+    if (data.result.finished == true) {
         figurePart.forEach((e) => {
             e.style.stroke = "red"
         })
-        xpNotif.innerHTML = '+0';
-        animXp.style.animation = 'Xpanim 1s ease-in-out forwards'
-        nextWord()
+        xpNotif.innerHTML = '+' + String(data.result.xp_won);
+        animXp.style.animation = 'Xpanim 1s ease-in-out forwards';
+        figurePart.forEach((partie, index) => {
+            console.log(badLetter)
+            partie.style.display = 'block'
+        })
+        nextWord(data)
+    } else {
+        figurePart.forEach((partie, index) => {
+            console.log(badLetter)
+            const erreurs = badLetters.length;
+            if (index < erreurs) {
+                partie.style.display = 'block'
+            } else {
+                partie.style.display = 'None'
+            }
+        })
     }
 }
 
@@ -200,7 +148,7 @@ function updateBadLetter(letter) {
 
 function printNotification() {
     notif.classList.add('afficher');
-    
+
     setTimeout(() => {
         notif.classList.remove('afficher');
     }, 2000);
@@ -211,90 +159,94 @@ var isEventListener = true
 
 setTimeout(() => {
     window.addEventListener('keydown', async e => {
-        try{
+        try {
             if (isEventListener) {
-                if(badLetters.length < figurePart.length){
+                if (badLetters.length < figurePart.length) {
 
-                    if(e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54){
+                    if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54) {
                         isEventListener = false
                         loader.style.display = 'flex'
-                        const check = await fetch(`/dashboard/games/hangman/session/check_letter/${e.key}`);
+                        const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.key}`);
                         loader.style.display = 'none'
                         var checked = await check.json();
                         letter = e.key
                         keyboard.forEach(el => {
-                            if(el.innerHTML == letter){
+                            if (el.innerHTML == letter) {
                                 el.style.background = 'grey';
                                 el.style.color = 'white';
                             }
                         });
 
-                        if(checked["result"] == "already touch"){
-                            printNotification();
+                        if (checked.code == 200) {
+                            if (checked.message == "already touch") {
+                                printNotification();
+                            } else if (checked.result.correct == true) {
+                                goodLetters = checked.result.good
+                                showWord(checked, letter);
+                            } else {
+                                badLetters = checked.result.bad;
+                                xpwin = checked.result.xp;
+                                updateBadLetter(checked, e.innerHTML);
+                            }
+                            isEventListener = true
+                        } else if (checked.code == 201) {
+                            end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
                         }
-                        else if(checked["result"]["True"]){
-                            goodLetters = checked["result"]["good"]
-                            afficheMot();
-                        }
-                        else{
-                            badLetters = checked["result"]["bad"];
-                            xpwin = checked["result"]["xp"];
-                            updateBadLetter(letter);
-                        }
-                        isEventListener = true
                     }
                 }
             }
-        } catch(error){
-            finish();
+        } catch (error) {
+            console.log(error);
         }
     })
 }, 5200);
-keyboard.forEach(e => {
-    e.addEventListener('click',async () => {
-        try{    
-            if (isEventListener) {
-                if(badLetters.length < figurePart.length){
-                    isEventListener = false
-                    loader.style.display = 'flex'
-                    const check = await fetch(`/dashboard/games/hangman/session/check_letter/${e.innerHTML}`);
-                    loader.style.display = 'none'
-                    var checked = await check.json();
 
-                    if(checked["result"] == "already touch"){
+keyboard.forEach(e => {
+    e.addEventListener('click', async() => {
+        try {
+            if (isEventListener) {
+                isEventListener = false
+                loader.style.display = 'flex'
+                const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.innerHTML}`);
+                loader.style.display = 'none'
+                var checked = await check.json();
+                console.log(checked)
+
+                if (checked.code == 200) {
+                    if (checked.message == "already touch") {
                         printNotification();
-                    }
-                    else if(checked["result"]["True"]){
-                        goodLetters = checked["result"]["good"]
-                        afficheMot();
+                    } else if (checked.result.correct == true) {
+                        goodLetters = checked.result.good
+                        showWord(checked, e.innerHTML);
                         e.style.background = 'grey';
                         e.style.color = 'white';
-                    }
-                    else{
-                        badLetters = checked["result"]["bad"];
-                        xpwin = checked["result"]["xp"];
-                        updateBadLetter(e.innerHTML);
+                    } else {
+                        badLetters = checked.result.bad;
+                        xpwin = checked.result.xp;
+                        updateBadLetter(checked, e.innerHTML);
                         e.style.background = 'grey';
                         e.style.color = 'white';
                     }
                     isEventListener = true
-                    }
+                } else if (checked.code == 201) {
+                    end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
                 }
-        } catch(error){
-            finish();
+            }
+        } catch (error) {
+            console.log(error);
+            //window.location.href = '/dashboard/errors/500';
         }
-        }
-    )
+    })
 });
 
 replayBtn.addEventListener('click', () => {
     location.reload()
 })
-   
 
-function nextWord(){
-    setTimeout(async () => {
-        try{
+
+function nextWord(data) {
+    setTimeout(async() => {
+        try {
             indiceContainer.innerHTML = "";
             addIndice.style.display = 'flex'
             badLetter.innerHTML = null;
@@ -303,63 +255,68 @@ function nextWord(){
                 e.style.stroke = '#717744';
             })
             popup.style.display = 'none';
-            const resetletters = await fetch(`/dashboard/games/hangman/session/reset`);
-
-            reset = await resetletters.json()
-            goodLetters = reset["result"]["good"];
-            badLetters = reset["result"]["bad"];
+            goodLetters = [];
+            badLetters = [];
             nbrFaute = 0;
             xpwin = 5;
             nbrFaute = 0;
             animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
-            getWord(); 
-        } catch(error) {
-            finish();
+
+
+            keyboard.forEach(e => {
+                e.style.background = '#ccd77c';
+                e.style.color = '#433831'
+            });
+            Wordslength++;
+            addIndice.style.pointerEvents = 'auto'
+            addIndice.innerHTML = '<img src="/static/icons/plus-30-white.png" alt="">'
+
+            wordEl.innerHTML = "";
+            console.log(data.result.len_word)
+            for (let i = 0; i < data.result.len_word; i++) {
+                wordEl.innerHTML += '<span class="letter"></span>';
+            }
+        } catch (error) {
+            console.log(error);
         }
     }, 1000);
 }
 
-async function finish(xp = XpTotal) {
-    try {
-        const request = await fetch(`/dashboard/games/hangman/session/finish`);
-        const response = await request.json();
-        setTimeout(() => {
-            let xpinterval = setInterval(() => {
-                if(a == XpTotal){
-                    clearInterval(xpinterval);
-                    a -= 1
-                }
-                a += 1
-                xpFinal.innerHTML = '+' + String(a) + 'XP';    
-            }, (1200/XpTotal));
-            if (time < 0) {
-                remarque.innerText = 'le temps est écoulé...';
-            } else if(Wordslength*5 == XpTotal){
-                remarque.innerText = 'Wouah! Parfait!';
-            } else if(Wordslength*5 > XpTotal && XpTotal >= Wordslength*3){
-                remarque.innerText = 'Bravo !';
-            } else if(Wordslength*3 > XpTotal && XpTotal >= Wordslength*2){
-                remarque.innerText = 'Mmmm...';
-            } else {
-                remarque.innerText = 'Dommage... Réessaye';
+/**
+ * 
+ * This function is used to display the end pop-up
+ * 
+ * @function timer
+ * @param {Event} event - The event that triggered the function
+ * 
+ * @returns {void} - The result of the function
+ */
+var timer = setInterval(async() => {
+    // Get the time element
+    const time = document.getElementById('time');
+    // Decrease the time by 1
+    time.innerHTML = parseInt(time.innerHTML) - 1;
+
+    // If the timer is over
+    if (time.textContent == 0) {
+        clearInterval(timer);
+        try {
+            // Check the status of the game
+            const response = await fetch(`/dashboard/games/hangman/${document.querySelector('body').dataset.session_id}/check_status`);
+            const data = await response.json();
+            console.log(data);
+            // If the game is over
+            if (data.code == 201) {
+                // End the game
+                end_game(data.result.xp, data.result.time, data.result.lost_lives);
             }
-            recap.style.display='flex'
-            finding.innerHTML = String(wordFind) + '/' + String(Wordslength)
-        }, 100);
-    } catch (error) {
-        window.location.href = '/dashboard'
+        } catch (error) {
+            window.location.href = '/dashboard/errors/500';
+        }
     }
-}
-getWord();
+}, 1000);
 
-const retryBtn = document.getElementById('retry');
-
-retryBtn.addEventListener('click', () => {
-    location.reload()
-})
-
-
-
+timer;
 
 // RESPONSIVE -------------------------------------
 
@@ -373,36 +330,35 @@ const keyLetter = document.querySelectorAll('.key-letter');
 const keyb = document.getElementById('keyboard');
 
 setInterval(() => {
-    if(window.innerWidth < window.innerHeight){
+    if (window.innerWidth < window.innerHeight) {
         all.classList.add('tablet-all')
-        figureContent.classList.add('tablet-svg'); 
-        exit.classList.add('tablet-exit'); 
-        separationLine.classList.add('tablet-sep'); 
-        hints.classList.add('tablet-hint'); 
+        figureContent.classList.add('tablet-svg');
+        exit.classList.add('tablet-exit');
+        separationLine.classList.add('tablet-sep');
+        hints.classList.add('tablet-hint');
         other.classList.add('tablet-other');
         keyLetter.forEach(e => {
-            e.classList.add('tablet-kl'); 
+            e.classList.add('tablet-kl');
         });
         keyb.classList.add('tablet-kb');
         if (document.getElementById('newhint') != null) {
             document.getElementById('newhint').classList.add('tablet-idc');
         }
-    }
-    else{
+    } else {
         all.classList.remove('tablet-all')
-        figureContent.classList.remove('tablet-svg'); 
-        exit.classList.remove('tablet-exit'); 
-        separationLine.classList.remove('tablet-sep'); 
-        hints.classList.remove('tablet-hint'); 
-        other.classList.remove('tablet-other'); 
+        figureContent.classList.remove('tablet-svg');
+        exit.classList.remove('tablet-exit');
+        separationLine.classList.remove('tablet-sep');
+        hints.classList.remove('tablet-hint');
+        other.classList.remove('tablet-other');
         keyLetter.forEach(e => {
-            e.classList.remove('tablet-kl'); 
+            e.classList.remove('tablet-kl');
         });
         keyb.classList.remove('tablet-kb')
         if (document.getElementById('newhint') != null) {
             hint.classList.remove('tablet-idc');
         }
-        
+
     }
-    
+
 }, 200);

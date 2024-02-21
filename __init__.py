@@ -64,6 +64,9 @@ app.register_blueprint(typefast_bp)
 from games.quiz import quiz_bp
 app.register_blueprint(quiz_bp)
 
+from games.memory import memory_bp
+app.register_blueprint(memory_bp)
+
 @app.route('/')
 def index():
     user = None

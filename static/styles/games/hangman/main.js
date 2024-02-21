@@ -45,54 +45,51 @@ var indices = [
 
 async function newIndice() {
     try {
-        const getIndice = await fetch('/dashboard/games/hangman/session/askhint');
-
+        const getIndice = await fetch(`/dashboard/games/hangman/${sessionID}/askhint`);
         var currentIndice = await getIndice.json();
-        xpwin = currentIndice["result"]['xp']
+        console.log(currentIndice)
+        if (currentIndice.code == 200) {
+            xpwin = currentIndice["result"]['xp']
 
-        var indice = document.createElement("div");
-        var indiceTitle = document.createElement("p");
-        var indiceContent = document.createElement("p");
-        indice.classList.add('indice');
-        indiceTitle.classList.add('name-indice');
-        indiceContent.classList.add('indice-content');
-        indiceTitle.innerHTML = currentIndice["result"]["title"];
-        indiceContent.innerHTML = currentIndice["result"]["indice"];
-        indice.appendChild(indiceTitle);
-        indice.appendChild(indiceContent);
-        indiceContainer.appendChild(indice);
-        indice.style.animation = 'indicanim 1s ease-in-out forwards';
-        addIndice.style.display = 'none';
-        if (currentIndice["result"]["title"] == 'Le mot en francais') {
-            addIndice.innerHTML = "Plus d'indice";
-            addIndice.style.pointerEvents = 'none'
-            addIndice.style.width = 'auto'
-            addIndice.style.height = 'auto'
-        }
-        setTimeout(() => {
-            indice.style.animation = 'depophint 0.5s ease-in-out forwards';
+            var indice = document.createElement("div");
+            var indiceTitle = document.createElement("p");
+            var indiceContent = document.createElement("p");
+            indice.classList.add('indice');
+            indiceTitle.classList.add('name-indice');
+            indiceContent.classList.add('indice-content');
+            indiceTitle.innerHTML = currentIndice["result"]["title"];
+            indiceContent.innerHTML = currentIndice["result"]["hint"];
+            indice.appendChild(indiceTitle);
+            indice.appendChild(indiceContent);
+            indiceContainer.appendChild(indice);
+            indice.style.animation = 'indicanim 1s ease-in-out forwards';
+            addIndice.style.display = 'none';
             setTimeout(() => {
-                indice.style.display = 'none'
-                addIndice.style.display = 'flex'
-            }, 600);
-        }, 3000);
+                indice.style.animation = 'depophint 0.5s ease-in-out forwards';
+                setTimeout(() => {
+                    indice.style.display = 'none'
+                    addIndice.style.display = 'flex'
+                }, 600);
+            }, 3000);
+        } else {
+            addIndice.innerHTML = `Plus d'indices`
+            addIndice.style.pointerEvents = 'none'
+        }
     } catch (error) {
-
+        console.log(error);
     }
 }
 
 
 addIndice.addEventListener('click', async() => {
     newIndice();
-    if (nbrIndiceDiscover == 3) {
-        addIndice.innerHTML = `Plus d'indices`
-
-    }
 })
 
 function showWord(data, letter) {
-    if (data.result.finished) {
+    if (data.result.finished == true) {
+        console.log(document.querySelectorAll('.letter'))
         for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
+            console.log(document.querySelectorAll('.letter')[i].innerHTML, "letters")
             if (document.querySelectorAll('.letter')[i].innerHTML == '') {
                 document.querySelectorAll('.letter')[i].innerHTML = letter;
             }
@@ -127,13 +124,11 @@ function updateBadLetter(data, letter) {
         xpNotif.innerHTML = '+' + String(data.result.xp_won);
         animXp.style.animation = 'Xpanim 1s ease-in-out forwards';
         figurePart.forEach((partie, index) => {
-            console.log(badLetter)
             partie.style.display = 'block'
         })
         nextWord(data)
     } else {
         figurePart.forEach((partie, index) => {
-            console.log(badLetter)
             const erreurs = badLetters.length;
             if (index < erreurs) {
                 partie.style.display = 'block'
@@ -186,7 +181,7 @@ setTimeout(() => {
                             } else {
                                 badLetters = checked.result.bad;
                                 xpwin = checked.result.xp;
-                                updateBadLetter(checked, e.innerHTML);
+                                updateBadLetter(checked, letter);
                             }
                             isEventListener = true
                         } else if (checked.code == 201) {
@@ -268,6 +263,7 @@ function nextWord(data) {
                 e.style.color = '#433831'
             });
             Wordslength++;
+            xpCounter.innerHTML = String(data.result.total_xp) + 'Xp';
             addIndice.style.pointerEvents = 'auto'
             addIndice.innerHTML = '<img src="/static/icons/plus-30-white.png" alt="">'
 

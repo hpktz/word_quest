@@ -29,6 +29,10 @@ class hangman():
             self.xpTotal += xp
             word_choosen = random.choice(self.words_to_check)
             is_example = word_choosen["examples"] 
+            if self.current_word:
+                is_last_word_correct = True if self.current_word["remaining_letters"] == 1 else False
+            else:
+                is_last_word_correct = False
             self.current_word = {
                 "word": word_choosen,
                 "nb_hints": 0,
@@ -45,6 +49,7 @@ class hangman():
                     "total_xp": self.xpTotal,
                     "xp_won": xp,
                     "len_word": len(word_choosen["word"]),
+                    "correct": is_last_word_correct,
                     "finished": False if len(self.words_to_check) == len(self.words) else True
                 }
             })
@@ -128,13 +133,13 @@ class hangman():
                 })
             elif hintCount == 1:
                 self.current_word["max_xp"] = 3 if self.current_word["max_xp"] > 3 else self.current_word["max_xp"]
-                if self.current_word["word"]["example"]:
+                if self.current_word["word"]["examples"]:
                     return jsonify({
                         "code": 200,
                         "message": "hint",
                         "result": {
                             "title": "Un example en français",
-                            "hint": self.current_word["word"]["trans_example"][0]
+                            "hint": self.current_word["word"]["trans_examples"][0]
                         }
                     })
                 else:
@@ -158,7 +163,7 @@ class hangman():
                 })
         else:
             return jsonify({
-                "code": 200,
+                "code": 404,
                 "message": "no hint",
                 "result": []
             })
@@ -436,7 +441,7 @@ def check(session_id, l):
     return result
 
 @hangman_bp.route('/dashboard/games/hangman/<string:session_id>/askhint')
-def new_hint():
+def new_hint(session_id):
     game = hangman.from_json(session["game"])
     result = game.ask_hint()
     session["game"] = game.to_json()

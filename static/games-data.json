@@ -31,7 +31,7 @@
         "desc": "Le jeux du memory est un jeu dans lequel le joueur doit m&eacute;moriser l&apos;emplacement des mots et de leur traduction afin de les retrouver par paire.",
         "short_desc": "Retrouver les paires de mots et de leur traduction.",
         "img": "/static/icons/games-icons/memory-30-dark-grey.png",
-        "url": "memory.html",
+        "url": "/dashboard/games/memory",
         "difficulty": 1
     },
     {

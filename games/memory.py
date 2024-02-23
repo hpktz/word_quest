@@ -42,7 +42,7 @@ Attributes:
 Routes:
     - /dashboard/games/quiz/<int:list_id>: Initialize the game and redirect to the game interface
     - /dashboard/games/quiz/<string:session_id>: Start the game by displaying the game interface
-    - /dashboard/games/quiz/<string:session_id>/audio: Get the audio of the game
+    - /dashboard/games/memory/<int:list_id>/getCard: Get the cards of the game
     - /dashboard/games/quiz/<string:session_id>/check/<int:answer>: Check the answer of the game
     - /dashboard/games/quiz/<string:session_id>/check_status: Check if the game is still in progress
 """
@@ -81,9 +81,49 @@ class memory():
         self.lesson_id = lesson_id
         self.words = words
         self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=2))
+        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=20))
         self.start = str(datetime.datetime.now())
+        self.french_words = [word['trans_word'] for word in self.words]
+        self.english_words = [word['word'] for word in self.words]
+        self.cards = self.french_words + self.english_words
+        self.shuffle_cards = []
+        self.open_cards = []
+
+    def getWords(self):
+        liste = []
+        for i in range(len(self.cards)):
+            current_card = random.choice(self.cards)
+            for j in range(len(self.cards)):
+                if self.cards[j] == current_card:
+                    del(self.cards[j])
+                    break
+            self.shuffle_cards.append(current_card)
+        return jsonify({
+            'code': 200,
+            'message': 'ok',
+            'result': {'nbr_cards': len(self.french_words + self.english_words)}
+        })
+    def printWord(self, id):
+        el = self.shuffle_cards[id]
+
+        return jsonify({
+            'code': 200,
+            'message': 'ok',
+            'result': { 'innerHTML': self.shuffle_cards[id]}
+        })
+    
+    def checking_cards(self, new_card):
+        self.open_cards.append(new_card)
+        if len(self.open_cards) == 2:
+            for i in range(len(self.french_words)):
+                # conditions de bz
+                pass
+
         
+    # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
+    # si l'attribut a une longueur de 1, on attend
+    # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste
+
 
     def get_remaning_time(self):
         """
@@ -189,7 +229,7 @@ class memory():
                     "time": time_passed,
                     "xp": xp,
                     "lost_lives": lives_to_lose,
-                    "last_position": self.current_quiz["answer"],
+                    # "last_position": self.current_quiz["answer"],
                     "score": len(self.words) - len(self.words_to_check) - self.faults,
                     "remaining": len(self.words_to_check),
                     "total": len(self.words)
@@ -236,7 +276,10 @@ class memory():
         to_extract.id = json_dict["id"]
         to_extract.time = json_dict["time"]
         to_extract.words_to_check = json_dict["words_to_check"]
-        to_extract.start = json_dict["start"]
+        to_extract.french_words = json_dict["french_words"]
+        to_extract.english_words = json_dict["english_words"]
+        to_extract.cards = json_dict["cards"]
+        to_extract.shuffle_cards = json_dict["shuffle_cards"]
         return to_extract    
 
 
@@ -320,6 +363,34 @@ def index(list_id):
     
     # If the game is not available, return a 404 error
     abort(404)
+@memory_bp.route('/dashboard/games/memory/<string:session_id>')
+def start(session_id):
+    """
+    Start the game by displaying the game interface
+    
+    Args:
+        session_id (string): The unique identifier of the game
+        
+    Returns:
+        flask.redirect: 
+    """
+    if 'game' in session:
+        game = memory.from_json(session["game"])
+        # if not game.current_quiz:
+        #     game.ask_next_question()
+        
+        reloaded = True if game.get_remaning_time() < 118 else False
+        if session_id == game.id and game.time > str(datetime.datetime.now()):
+            session["game"] = game.to_json()
+            return render_template('games/memory.html', 
+                                   session_id=session_id, 
+                                   list_id=game.list_id,
+                                   time=game.get_remaning_time(),
+                                #    max_score=len(game.words),
+                                #    score=len(game.words) - len(game.words_to_check) - game.faults,
+                                   reloaded=reloaded)
+        return redirect(url_for('memory.index', list_id=game.list_id))
+    return redirect(url_for('main.index'))
 
 @memory_bp.route('/dashboard/games/memory/<string:session_id>/check_status')
 @check_game
@@ -343,3 +414,19 @@ def check_status(session_id):
         "message": "Le jeu est en cours!",
         "result": {}
     })
+
+@memory_bp.route('/dashboard/games/memory/<string:session_id>/getCard')
+@check_game
+def getCard(session_id):
+    game = memory.from_json(session["game"])
+    result = game.getWords()
+    session["game"] = game.to_json()
+    return result
+
+@memory_bp.route('/dashboard/games/memory/<string:session_id>/check_word/<int:boxId>')
+@check_game
+def test(session_id, boxId):
+    game = memory.from_json(session["game"])
+    result = game.printWord(boxId)
+    session["game"] = game.to_json()
+    return result

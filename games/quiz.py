@@ -33,6 +33,7 @@ from google_images_search import GoogleImagesSearch
 from gtts import gTTS
 from io import BytesIO
 import logging
+import linecache
 
 
 quiz_bp = Blueprint('quiz', __name__)
@@ -187,8 +188,7 @@ class quiz():
                 lesson_type = 1
         
             # Get all the english words
-            with open('static/words_alpha.txt', encoding='utf-8') as f:
-                words = f.readlines()
+            words = 'static/similar_words_levenshtein.txt'
             
             audio = ""
             image = ""
@@ -210,8 +210,7 @@ class quiz():
                     bad_answers = [word for word in types_of_word if word != word_choosen["type"]][0:3]
                 else:
                     # Get all the french words
-                    with open('static/mots_alpha.txt', encoding='utf-8') as f:
-                        words = f.readlines()
+                    words = 'static/similar_mots_levenshtein.txt'
             # If the question is an example question                   
             elif lesson_type == 2:
                 content = "Quel mot anglais constitue cet exemple « " + word_choosen["trans_examples"][0] + " » ?"
@@ -227,14 +226,41 @@ class quiz():
                 audio = word_choosen["examples"][0]
                 answer = word_choosen["word"]
                 
+            def get_similar_words(file_path, word, max_len):
+                """
+                Use the dichotomic search to find the word in the list of words
+                
+                Args:
+                    word (string): The word to search
+                    
+                Returns:
+                    string: The list of similar words
+                """
+                # Set the list of words
+                min_len = 0
+                max_len = max_len
+                while min_len < max_len:
+                    mid = (min_len + max_len) // 2
+                    line = linecache.getline(file_path, mid).split(":")
+                    if str(line[0]) == word:
+                        return line[1]
+                    elif str(line[0]) < word:
+                        min_len = mid + 1
+                    else:
+                        max_len = mid
+                return None
+            
             # If the bad answers are not set
             if not bad_answers:
-                # Calculate the Levenshtein distance between the word and the other words
-                distances = [(word[:-2] if word[-2:]== "\n" else word, Levenshtein.distance(word, answer)) for word in words]
-                # Sort the distances
-                distances_triees = sorted(distances, key=lambda x: x[1])
-                # Select the 3 first words
-                bad_answers = [word[0] for word in distances_triees[2:5]]
+                max_len = 370105 if words == 'static/similar_words_levenshtein.txt' else 336532
+                bad_answers = get_similar_words(words, answer, max_len)
+                if bad_answers:
+                    bad_answers = bad_answers.split(",")[0:3]
+                else:
+                    content = "Quel est le type du mot suivant: « "+word_choosen["word"]+" » ?"
+                    answer = word_choosen["type"]
+                    types_of_word = ["adjective", "adverb", "conjunction", "interjection", "noun", "preposition", "pronoun", "verb"]
+                    bad_answers = [word for word in types_of_word if word != word_choosen["type"]][0:3]
             
             # Set the HTML content of the question
             html = 'games/quiz-content/'+str(quiz_types[lesson_type-1]["type"])+'.html'

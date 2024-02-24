@@ -50,6 +50,7 @@ def discover():
             """, (current_user.id, current_user.id))
         columns = [column[0] for column in cursor.description]
         lists = cursor.fetchall()
+        print(lists)
         for lst in lists:
             result = dict(zip(columns, lst))
             result["words"] = json.loads(result["words"])

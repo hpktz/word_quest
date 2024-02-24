@@ -146,6 +146,14 @@
     width: 100%;
 }
 
+.discover-main-container .list-container .no-list {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin-top: 25px;
+}
+
 .discover-main-container .list-container .trend-list,
 .discover-main-container .list-container .word-quest-list {
     position: absolute;

@@ -161,7 +161,8 @@ def login_post():
                             session["2fa"]["delay"] =  time.time() + 60
                             
                             # Send the 2FA code to the user's email
-                            send_mail(email, "2FA code", f"Your 2FA code is: {totp.now()}")
+                            html = render_template('emails/2fa.html', name=data[1], code=totp.now())
+                            send_mail(email, "Code de vérification - WORD QUEST", html)
                             return redirect(url_for('auth.sys_2fa'))
                     else:
                         session["from_input"] = [email, password_input]
@@ -318,7 +319,8 @@ def register_post():
                     session["2fa"]["delay"] =  time.time() + 60
                     
                     # Send the 2FA code to the user's email
-                    send_mail(email, "2FA code", f"Your 2FA code is: {totp.now()}")
+                    html = render_template('emails/2fa.html', name=data[1], code=totp.now())
+                    send_mail(email, "Code de vérification - WORD QUEST", html)
                     return redirect(url_for('auth.sys_2fa'))
                 else:
                     return redirect(url_for('auth.sys_2fa'))
@@ -373,7 +375,8 @@ def sys_2fa_sendCodeAgain():
         session["2fa"]["expires"] = time.time() + 300
         session["2fa"]["delay"] =  time.time() + 60
 
-        send_mail(session["2fa"]["email"], "2FA code", f"Your 2FA code is: {totp.now()}")
+        html = render_template('emails/2fa.html', name="", code=totp.now())
+        send_mail(session["2fa"]["email"], "Code de vérification - WORD QUEST", html)
         flash("Nouveau code envoyé")
         return redirect(url_for('auth.sys_2fa'))
     else:

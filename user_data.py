@@ -190,8 +190,7 @@ def user_profile(id):
                 GROUP BY u.id, u.name ORDER BY total_xp DESC;")
             ranking = cursor.fetchall()
             
-            user_infos["rank"] = next((rank[3] for rank in ranking if rank[0] == user_id), 0)
-            
+            user_infos["rank"] = next((rank[3] for rank in ranking if int(rank[0]) == int(user_id)), 0)
             # Retrieve the user's lists from the database.
             user_infos["lists"] = []
             cursor.execute("SELECT id, initial_id, title, public, created_at FROM lists WHERE user_id = %s;", (user_id,))

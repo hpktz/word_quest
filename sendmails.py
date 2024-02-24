@@ -12,6 +12,7 @@ Functions:
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
 
 def send_mail(to, subject, body):
     """
@@ -28,12 +29,17 @@ def send_mail(to, subject, body):
     
     # Create the email message
     mess = MIMEMultipart()
-    mess['From'] = 'developement@glacka.dev'
+    mess['From'] = 'Word Quest <developement@glacka.dev>'
     mess['To'] = to
     mess['Subject'] = subject
 
     # Attach the body to the message
-    mess.attach(MIMEText(body, 'plain'))
+    mess.attach(MIMEText(body, 'html'))
+    
+    with open('static/imgs/app-main-logo.png', 'rb') as fp:
+        img = MIMEImage(fp.read())
+        img.add_header('Content-ID', '<{}>'.format('app-main-logo'))
+        mess.attach(img)
 
     try:
         # Send the email
@@ -46,3 +52,10 @@ def send_mail(to, subject, body):
         return False
     finally:
         server.quit()
+
+# Example usage
+# to_address = 'recipient@example.com'
+# email_subject = 'Test Email'
+# email_body = '<h1>This is a test email.</h1><p>It contains HTML content.</p>'
+
+# send_mail(to_address, email_subject, email_body)

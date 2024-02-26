@@ -29,7 +29,7 @@ def send_mail(to, subject, body):
     
     # Create the email message
     mess = MIMEMultipart()
-    mess['From'] = 'Word Quest <developement@glacka.dev>'
+    mess['From'] = 'Word Quest <no-reply@word-quest.com>'
     mess['To'] = to
     mess['Subject'] = subject
 
@@ -41,17 +41,20 @@ def send_mail(to, subject, body):
         img.add_header('Content-ID', '<{}>'.format('app-main-logo'))
         mess.attach(img)
 
+    server = None
     try:
         # Send the email
-        server = smtplib.SMTP('smtp.hostinger.com', 587)
+        server = smtplib.SMTP('smtp.ionos.fr', 587)
         server.starttls()
-        server.login('developement@glacka.dev', 'q!YSc*-YQM7.zFt')
+        server.login('no-reply@word-quest.com', 'q!YSc*-YQM7.zFt')
         server.sendmail(mess['From'], mess['To'], mess.as_string())
         return True    
     except Exception as e:
+        print(e)
         return False
     finally:
-        server.quit()
+        if server:
+            server.quit()
 
 # Example usage
 # to_address = 'recipient@example.com'

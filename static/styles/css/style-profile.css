@@ -585,8 +585,20 @@
         grid-column: 1;
         grid-row: 3;
     }
+    .info-section .search-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
     .info-section .search-container .search-icon {
-        top: calc(50% + 10px);
+        top: unset;
+        bottom: 0;
+    }
+    .info-section .search-container .search-input {
+        height: 33px;
+    }
+    .info-section .search-result .result-box {
+        height: 55px;
     }
 }
 

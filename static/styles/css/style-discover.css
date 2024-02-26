@@ -325,7 +325,8 @@
         grid-template-columns: 1fr 1fr;
     }
     body.info-section-phone-active header .infos-section .info-section {
-        grid-template-rows: 30px 1fr;
+        grid-template-rows: 35px 1fr;
+        gap: 25px;
     }
     body.info-section-phone-active header .infos-section .search-results {
         height: unset;

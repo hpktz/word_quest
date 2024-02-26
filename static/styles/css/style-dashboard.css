@@ -2019,7 +2019,7 @@ main {
         position: fixed;
     }
     header .infos-section {
-        grid-column: 2;
+        grid-column: 1 / span 2;
         grid-template-rows: 1fr 0;
         overflow: hidden;
     }
@@ -2033,6 +2033,8 @@ main {
         text-align: center;
         grid-template-columns: 1fr 40px;
         column-gap: 20px;
+        width: calc(100% - 75px);
+        margin-left: auto;
     }
     header .infos-section .info-section .title .info-section-phone-logo {
         display: block;
@@ -2042,9 +2044,6 @@ main {
         border-radius: 10px;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
-    }
-    header .infos-section .info-section .title .info-section-phone-logo:hover {
-        background-color: #333;
     }
     header .info-section .search-bar-container {
         height: 0;
@@ -2069,10 +2068,6 @@ main {
     body.info-section-phone-active header {
         height: calc(100% - 20px);
     }
-    body.info-section-phone-active header .infos-section .title {
-        width: calc(100% - 75px);
-        margin-left: auto;
-    }
     body.info-section-phone-active header .infos-section {
         grid-row: 1 / span 2;
         grid-column: 1 / span 2;
@@ -2081,7 +2076,7 @@ main {
     body.info-section-phone-active header .infos-section .info-section {
         height: 100%;
         display: grid;
-        grid-template-rows: 30px 100px 1fr;
+        grid-template-rows: 35px 100px 1fr;
         overflow: auto;
     }
     body.info-section-phone-active header .infos-section .search-bar-container {
@@ -2097,6 +2092,13 @@ main {
         pointer-events: all;
         margin-top: 0;
         transition: all 0.2s ease-in-out 0.4s;
+    }
+    body.info-section-phone-active header .infos-section .info-section .title .info-section-phone-logo img {
+        display: none;
+    }
+    body.info-section-phone-active header .infos-section .info-section .title .info-section-phone-logo {
+        background-image: url('/static/icons/close-30-white.png');
+        background-size: 30px;
     }
     body.phone-menu-open {
         transition: all 0.2s ease-in-out;
@@ -2116,6 +2118,7 @@ main {
         overflow: hidden;
     }
     body.phone-menu-open header .nav-bar>div {
+        grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         width: 100%;
     }
@@ -2131,8 +2134,68 @@ main {
         transform: translateX(0);
         pointer-events: all;
     }
-    body.phone-menu-open header .nav-bar .account-logo {
-        width: 100%;
+    body.phone-menu-open header .nav-bar .middle-logos {
+        height: 250px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logo a {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logo {
+        width: 250px;
+        height: 50px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logo img {
+        width: 50px;
+        height: 50px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logos .text {
+        display: block;
+        font-family: 'League Spartan', sans-serif;
+        font-size: 28px;
+    }
+    body.phone-menu-open header .nav-bar .account-logo,
+    body.phone-menu-open header .nav-bar .create-logo {
+        width: calc(100% - 20px);
+        height: 50px;
+    }
+    header .nav-bar .account-logo a,
+    header .nav-bar .create-logo a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    header .nav-bar .account-logo img,
+    header .nav-bar .create-logo img {
+        width: 30px;
+        height: 30px;
+    }
+    header .nav-bar .account-logo .text,
+    header .nav-bar .create-logo .text {
+        display: block;
+        font-family: 'League Spartan', sans-serif;
+        font-size: 22px;
+        color: white;
+        font-weight: 600;
+        width: 75px;
+    }
+    header .nav-bar .dynamic-pointer {
+        height: 70px;
+    }
+    header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer {
+        top: 90px
+    }
+    header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer {
+        top: 180px
+    }
+    body.phone-menu-open header .nav-bar .app-logos {
+        gap: 0;
+    }
+    body.phone-menu-open header .nav-bar .app-logo {
+        width: 40px;
+        height: 40px;
     }
     .dashboard-main-container .lists-container {
         max-height: none;

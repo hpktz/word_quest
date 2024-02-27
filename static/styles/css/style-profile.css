@@ -267,9 +267,8 @@
 }
 
 .profile-main-container .profile-content .lists-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    column-count: 2;
+    column-gap: 10px;
     margin-top: 25px;
 }
 
@@ -291,16 +290,36 @@
     text-align: center;
 }
 
-.profile-main-container .profile-content .lists-container .list-box:nth-child(3n-2) {
-    background: linear-gradient(134deg, #EDEDED 0% 0%, #a19186 100% 100%);
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-7) {
+    background: #bcbd8b;
 }
 
-.profile-main-container .profile-content .lists-container .list-box:nth-child(3n-1) {
-    background: linear-gradient(135deg, #EDEDED 0% 0%, #9fa189 100% 100%);
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-6) {
+    background: #c09575;
 }
 
-.profile-main-container .profile-content .lists-container .list-box:nth-child(3n) {
-    background: linear-gradient(135deg, #EDEDED 0% 0%, #6a704f 100% 100%);
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-5) {
+    background: #dac7aa;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-4) {
+    background: #E1F0DA;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-3) {
+    background: #eff1ed;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-2) {
+    background: #B3A398;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-1) {
+    background: #C6DCBA;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n) {
+    background: #aeb675;
 }
 
 .profile-main-container .profile-content .lists-container .list-box {
@@ -310,6 +329,8 @@
     display: block;
     text-decoration: none;
     height: fit-content;
+    margin-bottom: 10px;
+    break-inside: avoid;
 }
 
 .profile-main-container .profile-content .lists-container .list-box .title {
@@ -585,8 +606,20 @@
         grid-column: 1;
         grid-row: 3;
     }
+    .info-section .search-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
     .info-section .search-container .search-icon {
-        top: calc(50% + 10px);
+        top: unset;
+        bottom: 0;
+    }
+    .info-section .search-container .search-input {
+        height: 33px;
+    }
+    .info-section .search-result .result-box {
+        height: 55px;
     }
 }
 

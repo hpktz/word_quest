@@ -79,11 +79,20 @@ function responsive(el, event) {
 function open_menu_phone(el) {
     const body = document.querySelector('body');
 
-    if (body.classList.contains('phone-menu-open')) {
-        body.removeAttribute('class');
+    // check if the body contains any class
+    if (body.classList.length > 0) {
+        delay = 301;
     } else {
-        body.setAttribute('class', 'phone-menu-open');
+        delay = 0;
     }
+    contains_class = body.classList.contains('phone-menu-open');
+    body.removeAttribute('class');
+    setTimeout(function() {
+        if (contains_class == false) {
+            body.setAttribute('class', 'phone-menu-open');
+        }
+    }, delay);
+
 }
 
 /**

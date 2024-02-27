@@ -589,16 +589,12 @@ header {
 }
 
 @media screen and (max-width: 670px) {
-    header .nav-bar {
-        grid-template-rows: 75px 0 0;
-        align-items: center;
-        overflow: hidden;
-        height: 75px;
-        width: 75px;
-        transition: all 0.5s ease-in-out;
+    header {
+        background: transparent;
+        box-shadow: none;
     }
-    body.phone-menu-open header .infos-section {
-        display: none;
+    header .nav-bar {
+        grid-template-rows: 60px 0 0;
     }
     .settings-main-container {
         grid-column: 1 / span 2;
@@ -628,6 +624,12 @@ header {
     }
     .delete_account .body input {
         max-width: 100%;
+    }
+    .settings-main-container .user-infos .profile-picture.active {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    .settings-main-container .user-infos .profile-picture.active div input+label {
+        height: auto;
     }
 }
 

@@ -62,19 +62,27 @@
         </div>
         <div class="word-quest-list list-to-switch">
             {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] == 1 %}
-            <a href="/dashboard/profile/list/{{list['list_id']}}" onclick="redirect(this, event)" data-id="{{list['list_id']}}" class="list-container">
+            <a href="/dashboard/profile/list/{{list['list_id']}}" onclick="redirect(this, event)" data-id="{{list['list_id']}}" data-class="{{list['amount']}}" class="list-container">
                 <div class="title">{{list["list_title"]}}</div>
                 {% if list["is_owner"] %}
                 <div class="certification">
                     <img src="/static/icons/approval-30-dark-grey.png" class="img" alt="user">
                     <div class="certification-text ">Liste originale</div>
                 </div>
+                {% else %}
+                <div class="no-certification">Liste copiée</div>
                 {% endif %}
                 <div class="list-content">
                     {% for word in list["words"] %}
                     <div class="word">{{word["word"]}} - <span class="type">{{word["type"]}}</span></div>
                     {% endfor %}
                 </div>
+                {% if list['nb_words_not_displayed'] == 0 %}
+                <div class="more-words">Liste de {{list['amount']}} mots</div>
+                {% else %}
+                <div class="more-words">+ {{list['nb_words_not_displayed']}} {% if list['nb_words_not_displayed'] == 1 %} mot {% else %} mots {% endif %}
+                </div>
+                {% endif %}
                 <div class="action not-clickable-zone">
                     <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}" onclick="copy_list(this, event)">
                         <img src="/static/icons/copy-30-dark-grey.png" class="img not-clickable-zone" alt="copy">
@@ -93,6 +101,8 @@
         </div>
     </div>
     <script>
+        const main = document.querySelector('.discover-main-container');
+
         function switch_list(el, event) {
             let list = document.querySelectorAll('.list-to-switch');
             list.forEach((el) => {
@@ -100,6 +110,9 @@
             });
             let index = el.switch.value - 1;
             list[index].classList.add('active');
+            setInterval(() => {
+                main.dispatchEvent(new Event('scroll'));
+            }, 250);
         }
 
         async function copy_list(el, event) {
@@ -169,6 +182,25 @@
                 console.log(error);
                 container.innerHTML = "<div class='text'>Aucune liste n'a été trouvée</div>";
             }
+        }
+
+        main.addEventListener('scroll', function() {
+            let elements = document.querySelectorAll('.list-container');
+            elements.forEach((el) => {
+                var top = el.getBoundingClientRect().top;
+                var bottom = el.getBoundingClientRect().bottom;
+                var left = el.getBoundingClientRect().left;
+                var right = el.getBoundingClientRect().right;
+                if (top < window.innerHeight && bottom > 0 && left < window.innerWidth && right > 0) {
+                    el.classList.add('visible');
+                } else {
+                    el.classList.remove('visible');
+                }
+            });
+        });
+
+        window.onload = function() {
+            main.dispatchEvent(new Event('scroll'));
         }
     </script>
 </main>

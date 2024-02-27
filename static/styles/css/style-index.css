@@ -473,6 +473,7 @@ main .frth-section {
     align-items: start;
     gap: 50px;
     margin-top: 150px;
+    place-items: center;
 }
 
 main .frth-section .advice-box {

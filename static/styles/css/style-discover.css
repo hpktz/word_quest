@@ -103,7 +103,8 @@
 .discover-main-container {
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: 25px
+    gap: 25px;
+    padding-bottom: 25px;
 }
 
 .discover-main-container .main-infos .title {
@@ -160,14 +161,36 @@
     right: -150%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: minmax(22.5px, auto);
     gap: 20px;
     width: 100%;
     transition: all 0.3s;
+    padding-bottom: 15px;
 }
 
 .discover-main-container .list-container .trend-list.active,
 .discover-main-container .list-container .word-quest-list.active {
     right: 0;
+}
+
+.discover-main-container .list-container .list-container[data-class="3"] {
+    grid-row: span 9;
+}
+
+.discover-main-container .list-container .list-container[data-class="4"] {
+    grid-row: span 10;
+}
+
+.discover-main-container .list-container .list-container[data-class="5"] {
+    grid-row: span 11;
+}
+
+.discover-main-container .list-container .list-container[data-class="8"] {
+    grid-row: span 14;
+}
+
+.discover-main-container .list-container .list-container[data-class="10"] {
+    grid-row: span 16;
 }
 
 .discover-main-container .list-container .list-container {
@@ -177,18 +200,46 @@
     display: block;
     text-decoration: none;
     height: fit-content;
+    opacity: 0;
+    transform: scale(0.4);
 }
 
-.discover-main-container .list-container .list-container:nth-child(3n-2) {
-    background: linear-gradient(135deg, #EDEDED 0% 0%, #9fa189 100% 100%);
+.discover-main-container .list-container .list-container.visible {
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.5s;
 }
 
-.discover-main-container .list-container .list-container:nth-child(3n-1) {
-    background: linear-gradient(134deg, #EDEDED 0% 0%, #a19186 100% 100%);
+.discover-main-container .list-container .list-container:nth-child(8n-7) {
+    background: #bcbd8b;
 }
 
-.discover-main-container .list-container .list-container:nth-child(3n) {
-    background: linear-gradient(135deg, #EDEDED 0% 0%, #6a704f 100% 100%);
+.discover-main-container .list-container .list-container:nth-child(8n-6) {
+    background: #c09575;
+}
+
+.discover-main-container .list-container .list-container:nth-child(8n-5) {
+    background: #dac7aa;
+}
+
+.discover-main-container .list-container .list-container:nth-child(8n-4) {
+    background: #E1F0DA;
+}
+
+.discover-main-container .list-container .list-container:nth-child(8n-3) {
+    background: #eff1ed;
+}
+
+.discover-main-container .list-container .list-container:nth-child(8n-2) {
+    background: #B3A398;
+}
+
+.discover-main-container .list-container .list-container:nth-child(8n-1) {
+    background: #C6DCBA;
+}
+
+.discover-main-container .list-container .list-container:nth-child(8n) {
+    background: #aeb675;
 }
 
 .discover-main-container .list-container .list-container .title {
@@ -203,6 +254,14 @@
     justify-content: left;
     align-items: center;
     gap: 10px;
+    margin-top: 5px;
+}
+
+.discover-main-container .list-container .list-container .no-certification {
+    height: 15px;
+    font-family: "League Spartan", sans-serif;
+    font-size: 12px;
+    color: #333;
     margin-top: 5px;
 }
 
@@ -228,10 +287,19 @@
     margin-top: 7.5px;
 }
 
-.discover-main-container .list-container .list-container .list-content .word span {
+.discover-main-container .list-container .list-content .word span {
     font-size: 14px;
     color: #777;
     font-style: italic;
+}
+
+.discover-main-container .list-container .list-container .more-words {
+    font-family: "League Spartan", sans-serif;
+    font-size: 12px;
+    color: #333;
+    margin-top: 10.5px;
+    text-align: left;
+    font-weight: bold;
 }
 
 .discover-main-container .list-container .list-container .action {
@@ -325,7 +393,8 @@
         grid-template-columns: 1fr 1fr;
     }
     body.info-section-phone-active header .infos-section .info-section {
-        grid-template-rows: 30px 1fr;
+        grid-template-rows: 35px 1fr;
+        gap: 25px;
     }
     body.info-section-phone-active header .infos-section .search-results {
         height: unset;

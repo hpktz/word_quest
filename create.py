@@ -213,7 +213,7 @@ def search(x):
     url = f"https://api.collinsdictionary.com/api/v1/dictionaries/english-french/entries/{x}_1"
     headers = {
         "Accept": "application/json",
-        "accessKey": "LGkl9HMIG0q59zJBitg9FQz9LXMphajPH6dM4QNvMOO1rt7EHuyyWAm6CRQnveK3",
+        "accessKey": os.environ.get("COLLINS_API_KEY"),
     }
     if session['list_under_creation'] is None:
         return jsonify({"code": 403, "title": "Access forbidden", "result": []}), 403

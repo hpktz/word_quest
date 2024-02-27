@@ -50,10 +50,14 @@ def discover():
             """, (current_user.id, current_user.id))
         columns = [column[0] for column in cursor.description]
         lists = cursor.fetchall()
-        print(lists)
         for lst in lists:
             result = dict(zip(columns, lst))
+            if result["list_visibility"] == 0:
+                continue
             result["words"] = json.loads(result["words"])
+            result["amount"] = random.choice([5, 8, 10]) if len(result["words"]) > 10 else len(result["words"])
+            result["nb_words_not_displayed"] = len(result["words"]) - result["amount"]
+            result["words"] = result["words"][:result["amount"]]
             result["coef"] = 0
             for title in user_lists_title:
                 result["coef"] +=  SequenceMatcher(None, title, result["list_title"]).ratio() * 1
@@ -63,7 +67,6 @@ def discover():
             
             result["coef"] +=  result["like_count"] * 0.1
             result["coef"] +=  result["page_views"] * 0.05
-            print(int(result["list_id"]))
             result["is_owner"] = not result["list_initial"]
             
             all_lists.append(result)

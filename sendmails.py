@@ -5,6 +5,8 @@ Imports:
     - smtplib: SMTP protocol client.
     - MIMEText: Class for generating plain text email messages.
     - MIMEMultipart: Class for generating multipart email messages.
+    - MIMEImage: Class for generating image email messages.
+    - os: Miscellaneous operating system interfaces.
 
 Functions:
     - send_mail: Send an email.
@@ -13,6 +15,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
+import os
 
 def send_mail(to, subject, body):
     """
@@ -46,7 +49,7 @@ def send_mail(to, subject, body):
         # Send the email
         server = smtplib.SMTP('smtp.ionos.fr', 587)
         server.starttls()
-        server.login('no-reply@word-quest.com', 'q!YSc*-YQM7.zFt')
+        server.login('no-reply@word-quest.com', os.environ.get('EMAILING_SERVICE_PASSWORD'))
         server.sendmail(mess['From'], mess['To'], mess.as_string())
         return True    
     except Exception as e:

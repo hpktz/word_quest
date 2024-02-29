@@ -111,7 +111,7 @@ def user_profile(id):
         is_public = False if result[7] == 0 else True
         picture = result[8]
         name = result[1]
-        date = result[12].date()
+        date = result[13].date()
             
         # Retrieve the user's subscriptions and subscribers from the database.
         subscriptions = []
@@ -646,7 +646,7 @@ def change_user_infos():
         conn = create_connection()
         cursor = conn.cursor()
         picture = int(picture)
-        if not picture in range(1,12):
+        if not picture in range(1,13):
             return jsonify({
                 "code": 400,
                 "message": "Image de profil invalide."

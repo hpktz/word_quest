@@ -1,6 +1,7 @@
 from flask import Flask, session, render_template, request
 from flask_login import LoginManager, current_user, login_required
 from flask_session import Session
+from flask_talisman import Talisman
 
 from auth import auth_bp 
 from dashboard import main_bp
@@ -46,6 +47,32 @@ def load_user(user_id):
             cursor.close()
         if conn:
             conn.close()
+
+talisman = Talisman(app)
+csp = {
+    'default-src': [
+        '\'self\'',
+        'https://fonts.googleapis.com',
+        'https://fonts.gstatic.com',
+        'https://cdn.jsdelivr.net',
+        'https://code.jquery.com',
+    ]
+}
+# HTTP Strict Transport Security
+hsts = {
+    'max_age': 31536000,
+    'include_subdomains': True
+}
+talisman.force_https = True
+talisman.force_file_save = True
+talisman.x_xss_protection = True
+talisman.session_cookie_secure = True
+talisman.session_cookie_samesite = 'Lax'
+talisman.frame_options_allow_from = 'https://www.google.com'
+
+# Add the headers to Talisman
+talisman.content_security_policy = csp
+talisman.strict_transport_security = hsts
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)

@@ -231,7 +231,7 @@ def search(x):
 
         # Parse the response (HTML)
         dom = html.fromstring(resp_json["entryContent"])
-        
+        print(dom)
         # Start html code analysis
         entries = dom.xpath("//div[@class='hom']")
         senses = []
@@ -254,13 +254,9 @@ def search(x):
                     # Retrieve the french translation
                     word = sense.xpath("./span[@class='cit lang_fr']")
                     if word:
-                        if array["type"] == "noun":
-                            french_word = get_text_recursive(word[0])
-                            if french_word[-3:] == "fpl":
-                                array["french_translation"] = french_word[:-4]
-                            array["french_translation"] = get_text_recursive(word[0])[:-2]
-                        else:
-                            array["french_translation"] = get_text_recursive(word[0])
+                        word = word[0].xpath("./span[@class='quote']")
+                        word = ''.join(text for text in word[0].xpath(".//text()") if not text.strip() or not text.getparent().attrib.get('class') == 'hi')
+                        array["french_translation"] = word
                     else:
                         continue
                 else:
@@ -568,7 +564,7 @@ def copy_list(id):
         for word in result:
             word = dict(zip(columns, word))
             cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
-                            (word['word'], word['word_type'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
+                            (word['word'], word['word_type'], word['trans_word'], word['examples'], word['trans_examples'], list_id))
         
         user_level = current_user.lvl
         with open('static/games-data.json') as json_file:
@@ -672,7 +668,7 @@ def copy_list_link(token):
         for word in result:
             word = dict(zip(columns, word))
             cursor.execute("INSERT INTO list_content (word, word_type, trans_word, examples, trans_examples, list_id) VALUES (%s, %s, %s, %s, %s, %s)", 
-                            (word['word'], word['word_type'], word['trans_word'], json.dumps(word['examples']), json.dumps(word['trans_examples']), list_id))
+                            (word['word'], word['word_type'], word['trans_word'], word['examples'], word['trans_examples'], list_id))
         
         user_level = current_user.lvl
         with open('static/games-data.json') as json_file:

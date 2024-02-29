@@ -56,6 +56,7 @@ csp = {
         'https://fonts.gstatic.com',
         'https://cdn.jsdelivr.net',
         'https://code.jquery.com',
+        '\'unsafe-inline\''
     ]
 }
 # HTTP Strict Transport Security

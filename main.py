@@ -56,7 +56,21 @@ csp = {
         'https://fonts.gstatic.com',
         'https://cdn.jsdelivr.net',
         'https://code.jquery.com',
+        '\'unsafe-inline\''
+    ],
+    'img-src': [
+        '*'
+    ],
+    'script-src': [
+        '\'self\'',
+        'https://www.google.com/recaptcha/',
+        'https://www.gstatic.com/recaptcha/',
+    ],
+    'frame-src': [
+        'https://www.google.com/recaptcha/', 
+        'https://recaptcha.google.com/recaptcha/'
     ]
+        
 }
 # HTTP Strict Transport Security
 hsts = {
@@ -100,6 +114,41 @@ def index():
     if current_user.is_authenticated:
         user = current_user.name
     return render_template('index.html', user = user)
+
+@app.route('/privacy-policy')
+def privacy_policy():
+    user = None
+    if current_user.is_authenticated:
+        user = current_user.name
+    return render_template('privacy-policy.html', user = user)
+
+@app.route('/resources')
+def resources():
+    user = None
+    if current_user.is_authenticated:
+        user = current_user.name
+    return render_template('resources.html', user = user)
+
+@app.route('/contact')
+def contact():
+    user = None
+    if current_user.is_authenticated:
+        user = current_user.name
+    return render_template('contact.html', user = user)
+
+@app.route('/about')
+def about():
+    user = None
+    if current_user.is_authenticated:
+        user = current_user.name
+    return render_template('about.html', user = user)
+
+@app.route('/method')
+def method():
+    user = None
+    if current_user.is_authenticated:
+        user = current_user.name
+    return render_template('method.html', user = user)
 
 # Save data from routes (time passed, arrived at, etc.)
 @app.before_request

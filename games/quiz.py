@@ -317,6 +317,7 @@ class quiz():
             string: The URL of the image
         """
         # Set the Google API key and the search engine ID
+        print(os.environ.get('GOOGLE_SEARCH_API_KEY'))
         gis = GoogleImagesSearch(os.environ.get('GOOGLE_SEARCH_API_KEY'), os.environ.get('GOOGLE_SEARCH_ENGINE_ID'))
         # Set the search parameterss
         _search_params = {

@@ -115,6 +115,8 @@ header .menu {
 
 header .menu .item {
     font-family: "Bangers", cursive;
+    color: black;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -361,6 +363,7 @@ main .thd-section .carousel-container {
     height: 400px;
     position: relative;
     overflow: hidden;
+    margin-top: 25px;
 }
 
 main .thd-section .carousel-container.pos1 .content:nth-child(1) {
@@ -432,7 +435,8 @@ main .thd-section .carousel-container .content {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
     align-items: center;
     transform: translate(-50%, 0);
     transition: all 0.3s ease;
@@ -440,7 +444,7 @@ main .thd-section .carousel-container .content {
 
 main .thd-section .carousel-container .content .texts .title {
     font-family: "League Spartan", sans-serif;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 700;
     color: #eeeeee;
     margin-top: 25px;
@@ -449,7 +453,7 @@ main .thd-section .carousel-container .content .texts .title {
 
 main .thd-section .carousel-container .content .texts .text {
     font-family: "League Spartan", sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     color: lightgrey;
     margin-top: 25px;
     text-align: left;
@@ -457,14 +461,14 @@ main .thd-section .carousel-container .content .texts .text {
 
 main .thd-section .carousel-container .content .illustration {
     width: 100%;
-    height: 100%;
-    /** OPTIONAL **/
-    background-color: #333;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
 }
 
 main .thd-section .carousel-container .content .illustration .img {
     width: 100%;
     height: 100%;
+    border-radius: 10px;
 }
 
 main .frth-section {
@@ -635,6 +639,76 @@ main .fifth-section .carousel-infos .item:nth-child(3).active {
     background-color: #373D20;
     width: 50px;
 }
+
+.title-section .title {
+    font-family: "Bangers", cursive;
+    font-size: 45px;
+}
+
+main .text-container {
+    padding: 0 20px;
+}
+
+main .text-container h1 {
+    font-family: "League Spartan", sans-serif;
+    font-size: 30px;
+    color: #333;
+    margin: 50px 0;
+}
+
+main .text-container p {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #333;
+    margin-top: 25px;
+    line-height: 20px;
+}
+
+main .text-container ul {
+    margin-top: 25px;
+}
+
+main .text-container ul li {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+}
+
+main .text-container a {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #766153;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+main .text-container .github-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 25px;
+    width: 100%;
+    max-width: 350px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    padding: 10px
+}
+
+main .text-container .github-box img {
+    width: 50px;
+    height: 50px;
+}
+
+main .text-container .github-box .link {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #333;
+    font-weight: 700;
+}
+
+
+/***** FOOTER *****/
 
 footer {
     display: grid;
@@ -912,10 +986,16 @@ footer .help-box .btn .img {
     main .thd-section .menu-container .item {
         width: calc(50% - 10px);
     }
+    main .thd-section .carousel-container {
+        height: 600px;
+    }
     main .thd-section .carousel-container .content {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-rows: 1fr auto;
         gap: 25px;
+    }
+    main .thd-section .carousel-container .content .illustration {
+        margin: auto;
     }
     main .frth-section {
         grid-template-columns: 1fr;

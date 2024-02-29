@@ -1,242 +1,238 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Découvrez une nouvelle façon ludique et interactive d'apprendre l'anglais avec Word Quest ! Notre application web innovante vous propose un apprentissage basé sur des listes de vocabulaire, agrémenté de mini-jeux captivants">
-    <title>Word Quest - Apprendre l'anglais en s'amusant</title>
-    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
-    <link type="text/css" rel="stylesheet" href="/static/styles/css/style-index.css">
-</head>
-
-<body>
-    <div class="header-phone-button" onclick="header_menu_phone()">
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-    </div>
-    <div class="header-phone-logo">
-        <img src="/static/imgs/app-main-logo.png" alt="logo">
-    </div>
-    <header>
-        <div class="logo">
-            <img src="/static/imgs/app-main-logo.png" alt="logo">
+{% extends "header.html" %} {% block title %}Word Quest - Apprendre l'anglais en s'amusant{% endblock %} {% block desc %} Découvrez une nouvelle façon ludique et interactive d'apprendre l'anglais avec Word Quest ! Notre application web innovante vous
+propose un apprentissage basé sur des listes de vocabulaire, agrémenté de mini-jeux captivants {% endblock %} {% block content %}
+<main>
+    <section class="frst-section">
+        <div class="texts animate">
+            <div class="title">Explorez et apprenez<br/> l'anglais en vous amusant</div>
+            <div class="subtitle">Une liste de vocabulaire ? Trouvez le chemin de la réussite !</div>
+            <div class="text">Renseignez votre liste de vocabulaire et apprenez là grâce à de nombreux mini-jeux générés juste pour vous !</div>
+            <div class="btn">C'est parti !</div>
+            <div class="separate"></div>
+            <div class="more">
+                <img src="/static/icons/arrow-right-30-dark-grey.png" class="img" alt="arrow-bottom">
+                <div class="text">En savoir plus</div>
+            </div>
         </div>
-        <div class="menu">
-            <div class="item">Accueil</div>
-            <div class="item">Methode</div>
-            <div class="item">Forum</div>
-            <div class="item">A propos</div>
+        <div class="imgs animate">
+            <img src="/static/imgs/3d-globe.png" class="main-img" alt="globe">
         </div>
-        {% if user %}
-        <div class="account-menu">
-            <a href="/dashboard" class="item">
-                <img src="/static/icons/home-30-dark-grey.png" class="img" alt="home-icon">
-            </a>
-            <a href="/dashboard/settings" class="item">
-                <img src="/static/icons/settings-30-dark-grey.png" class="img" alt="settings-icon">
-            </a>
-            <a href="/dashboard/profile/user/0" class="item profile">
-                <img src="/static/icons/user-30-white.png" class="img" alt="account-icon">
-            </a>
+    </section>
+    <section class="main-container-section">
+        <div class="snd-section">
+            <div class="title ">Comment ça marche ?</div>
+            <div class="steps-container ">
+                <div class="step-box">
+                    <div class="nbr">1</div>
+                    <div class="text">Paramétrez vos objectifs journalier</div>
+                </div>
+                <div class="step-box ">
+                    <div class="nbr">2</div>
+                    <div class="text">Renseignez votre liste de vocabulaire</div>
+                </div>
+                <div class="step-box ">
+                    <div class="nbr">3</div>
+                    <div class="text">Apprenez comme un chef tout en vous amusant</div>
+                </div>
+            </div>
         </div>
-        {% else %}
-        <a href="/dashboard" class="dashboard-access-not-connected">
-            <div class="account-name">Me connecter</div>
-        </a>
-        {% endif %}
-        </div>
-    </header>
-    <main>
-        <section class="frst-section">
-            <div class="texts animate">
-                <div class="title">Explorez et apprenez<br/> l'anglais en vous amusant</div>
-                <div class="subtitle">Une liste de vocabulaire ? Trouvez le chemin de la réussite !</div>
-                <div class="text">Renseignez votre liste de vocabulaire et apprenez là grâce à de nombreux mini-jeux générés juste pour vous !</div>
-                <div class="btn">C'est parti !</div>
-                <div class="separate"></div>
-                <div class="more">
-                    <img src="/static/icons/arrow-right-30-dark-grey.png" class="img" alt="arrow-bottom">
-                    <div class="text">En savoir plus</div>
-                </div>
+        <div class="thd-section">
+            <div class="title  ">La magie en action</div>
+            <div class="menu-container  ">
+                <div class="item active" onclick="switch_carousel(this, 'pos1')">Le Snake</div>
+                <div class="item" onclick="switch_carousel(this, 'pos2')">Le Pendu</div>
+                <div class="item" onclick="switch_carousel(this, 'pos3')">Le Quiz</div>
+                <div class="item" onclick="switch_carousel(this, 'pos4')">Le Memory</div>
             </div>
-            <div class="imgs animate">
-                <img src="/static/imgs/3d-globe.png" class="main-img" alt="globe">
-            </div>
-        </section>
-        <section class="main-container-section">
-            <div class="snd-section">
-                <div class="title ">Comment ça marche ?</div>
-                <div class="steps-container ">
-                    <div class="step-box">
-                        <div class="nbr">1</div>
-                        <div class="text">Paramétrez vos objectifs journalier</div>
-                    </div>
-                    <div class="step-box ">
-                        <div class="nbr">2</div>
-                        <div class="text">Renseignez votre liste de vocabulaire</div>
-                    </div>
-                    <div class="step-box ">
-                        <div class="nbr">3</div>
-                        <div class="text">Apprenez comme un chef tout en vous amusant</div>
-                    </div>
-                </div>
-            </div>
-            <div class="thd-section">
-                <div class="title  ">La magie en action</div>
-                <div class="menu-container  ">
-                    <div class="item active" onclick="switch_carousel(this, 'pos1')">Snake</div>
-                    <div class="item" onclick="switch_carousel(this, 'pos2')">Hangman</div>
-                    <div class="item" onclick="switch_carousel(this, 'pos3')">Snake</div>
-                    <div class="item" onclick="switch_carousel(this, 'pos4')">Snake</div>
-                </div>
-                <div class="carousel-container pos1  ">
-                    <div class="content">
-                        <div class="texts">
-                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
-                        </div>
-                        <div class="illustration">
-                            <img src="" class="img" alt="snake-game-illustration">
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="texts">
-                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
-                        </div>
-                        <div class="illustration">
-                            <img src="" class="img" alt="hangman-game-illustration">
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="texts">
-                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
-                        </div>
-                        <div class="illustration">
-                            <img src="" class="img" alt="snake-game-illustration">
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="texts">
-                            <div class="title">Cultivez enfin le plaisir d'apprendre en jouant au ... snake !</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt adipisci molestias omnis autem debitis, aspernatur dolores totam quia, esse delectus placeat facilis deserunt vel tempore aperiam nihil eos aut nisi?</div>
-                        </div>
-                        <div class="illustration">
-                            <img src="" class="img" alt="snake-game-illustration">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="frth-section">
-                <div class="advice-box ">
-                    <img src="/static/imgs/3d-brown-leather-diary-with-yellow-bookmark.png" class="img" alt="brown-leather-diary">
-                    <div class="title">Mettez vous des barrières à franchir !</div>
-                    <div class="text">Fixez vous des objectifs clairs pour chacune de vos listes de vocabulaire. Un algorithme évaluera la difficulté de vos objectifs !</div>
-                </div>
-                <div class="advice-box ">
-                    <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="lightnings">
-                    <div class="title">Gagnez de l'expérience</div>
-                    <div class="text">Atteignez vos objectifs et gagnez de l'expériences. Plus vos objectifs sont compliqués, plus l'expérience gagné sera grande !</div>
-                </div>
-                <div class="advice-box ">
-                    <img src="/static/imgs/3d-space-rocket.png" class="img" alt="space-rocket">
-                    <div class="title">Montez dans le classement et améliorez vous !</div>
-                    <div class="text">L'éxpérience gagnée vous fait monter dans le classement et est assez significative pour voir où en sont vos progrets !</div>
-                </div>
-            </div>
-            <div class="fifth-section">
-                <div class="title ">Pour qui ?</div>
-                <div class="carousel-container pos1">
-                    <div class="slide">
-                        <div class="illustration">
-                            <img src="/static/imgs/3d-astronaut-standing-with-helmet-in-hand.png" class="img" alt="astronaut-illustration">
-                        </div>
-                        <div class="content">
-                            <div class="title">Les voyageurs</div>
-                            <div class="text">Vous voyagez souvent dans des pays anglophones ? Alors Word Quest vous aide à peaufiner votre anglais. Notez les mots que vous découvrez et appropriez les vous facilement !</div>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <div class="illustration">
-                            <img src="/static/imgs/3d-young-woman-standing-and-holding-her-head.png" class="img" alt="young-woman-illustration">
-                        </div>
-                        <div class="content">
-                            <div class="title">Les travailleurs</div>
-                            <div class="text">Vous devez concerver un certain niveau d'anglais pour votre travail ? Pas de problème, choisissez des mini-jeux parmis une selection de thème !</div>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <div class="illustration">
-                            <img src="/static/imgs/3d-graduated-student-holding-diploma.png" class="img" alt="graduated-student-illustration">
-                        </div>
-                        <div class="content">
-                            <div class="title">Les étudiants</div>
-                            <div class="text">Vous êtes étudiant et vous devez apprendre une liste en anglais ? C'est bien ici que vous pourrez le faire sans même vous ennuyer ! Une offre comme celle-ci, ça se saisit de suite !</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-infos ">
-                    <div class="item active" onclick="change_slide(this, 'pos1')"></div>
-                    <div class="item" onclick="change_slide(this, 'pos2')"></div>
-                    <div class="item" onclick="change_slide(this, 'pos3')"></div>
-                </div>
-            </div>
-        </section>
-        <footer>
-            <div>
-                <div class="main-title ">WORD QUEST</div>
-                <div class="infos-container">
-                    <div class="info-box ">
-                        <div class="title">Liens rapides</div>
-                        <a href="" class="link">Accueil</a>
-                        <a href="" class="link">Methode</a>
-                        <a href="" class="link">A propos</a>
-                    </div>
-                    <div class="info-box ">
-                        <div class="title">Ressources</div>
-                        <a href="" class="link">Ressources utilisées</a>
-                        <a href="" class="link">Politique de confidentialité</a>
-                        <a href="" class="link">Conditions d'utilisation</a>
-                    </div>
-                </div>
-                <a href="" aria-label="Redirection to our x account" class="social-media-link ">
-                    <img src="/static/icons/twitter-30-black.png" class="img" alt="twitter-icon">
-                </a>
-            </div>
-            <div class="separate "></div>
-            <div>
-                <div class="help-box ">
-                    <div class="img-container">
-                        <img src="/static/imgs/3d-young-people-in-casual-clothes-standing.png" class="img" alt="community-illustration">
-                    </div>
+            <div class="carousel-container pos1  ">
+                <div class="content">
                     <div class="texts">
-                        <div class="title">Rejoingnez notre communauté !</div>
-                        <div class="text">Notre communauté vous aidera et vous donnera des conseils pour progresser et plus encore !</div>
+                        <div class="title">
+                            Jouez au snake et apprenez en même temps !
+                        </div>
+                        <div class="text">
+                            Nous avons adapté le célèbre jeu du snake pour vous permettre d'apprendre en vous amusant. Mangez les lettres du mot qui apprait à l'écran pour gagner des points et apprendre en même temps !
+                        </div>
                     </div>
-                    <a href="" aria-label="Redirection to our discord forum" class="btn">
-                        <img src="/static/icons/arrow-right-30-dark-grey.png" class="img" alt="arrow-right">
-                    </a>
+                    <div class="illustration">
+                        <img src="/static/imgs/snake-illustration.png" class="img" alt="snake-game-illustration">
+                    </div>
                 </div>
-                <div class="help-box ">
-                    <div class="img-container">
-                        <img src="/static/imgs/3d-young-woman-waving-her-hand-while-sitting-at-the-computer.png" class="img" alt="community-illustration">
-                    </div>
+                <div class="content">
                     <div class="texts">
-                        <div class="title">Une question ? Notre équipe y répondra</div>
-                        <div class="text">Vous rencontrez un problème ou avez simplement une petite question en tête ? N'attendez plus !</div>
+                        <div class="title">
+                            Le pendu, un classique, ... mais pas que !
+                        </div>
+                        <div class="text">
+                            Le pendu est un jeu classique, mais nous l'avons adapté pour vous permettre d'apprendre en même temps. Trouvez les lettres du mot caché pour gagner des points. Moins vous avez d'essais, plus vous gagnez de points !
+                        </div>
                     </div>
-                    <a href="" aria-label="Redirection to our contact form" class="btn">
-                        <img src="/static/icons/arrow-right-30-dark-grey.png" class="img" alt="arrow-right">
-                    </a>
+                    <div class="illustration">
+                        <img src="/static/imgs/hangman-illustration.png" class="img" alt="hangman-game-illustration">
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="texts">
+                        <div class="title">
+                            Le quiz, un jeu de culture générale
+                        </div>
+                        <div class="text">
+                            A la façon "Question pour un champion", répondez à des questions de culture générale pour gagner des points. Plus vous avez de bonnes réponses, plus vous gagnez de points !
+                        </div>
+                    </div>
+                    <div class="illustration">
+                        <img src="/static/imgs/quiz-illustration.png" class="img" alt="snake-game-illustration">
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="texts">
+                        <div class="title">
+                            Le memory, un jeu de mémoire
+                        </div>
+                        <div class="text">
+                            Retrouvez les paires de mots pour gagner des points. Plus vous avez de bonnes réponses, plus vous gagnez de points !
+                        </div>
+                    </div>
+                    <div class="illustration">
+                        <img src="/static/imgs/memory-illustration.png" class="img" alt="snake-game-illustration">
+                    </div>
                 </div>
             </div>
-        </footer>
-    </main>
-    <script src="/static/styles/js/index.js"></script>
-</body>
+        </div>
+        <div class="frth-section">
+            <div class="advice-box ">
+                <img src="/static/imgs/3d-brown-leather-diary-with-yellow-bookmark.png" class="img" alt="brown-leather-diary">
+                <div class="title">Mettez vous des barrières à franchir !</div>
+                <div class="text">Fixez vous des objectifs clairs pour chacune de vos listes de vocabulaire. Un algorithme évaluera la difficulté de vos objectifs !</div>
+            </div>
+            <div class="advice-box ">
+                <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="lightnings">
+                <div class="title">Gagnez de l'expérience</div>
+                <div class="text">Atteignez vos objectifs et gagnez de l'expériences. Plus vos objectifs sont compliqués, plus l'expérience gagné sera grande !</div>
+            </div>
+            <div class="advice-box ">
+                <img src="/static/imgs/3d-space-rocket.png" class="img" alt="space-rocket">
+                <div class="title">Montez dans le classement et améliorez vous !</div>
+                <div class="text">L'éxpérience gagnée vous fait monter dans le classement et est assez significative pour voir où en sont vos progrets !</div>
+            </div>
+        </div>
+        <div class="fifth-section">
+            <div class="title ">Pour qui ?</div>
+            <div class="carousel-container pos1">
+                <div class="slide">
+                    <div class="illustration">
+                        <img src="/static/imgs/3d-astronaut-standing-with-helmet-in-hand.png" class="img" alt="astronaut-illustration">
+                    </div>
+                    <div class="content">
+                        <div class="title">Les voyageurs</div>
+                        <div class="text">Vous voyagez souvent dans des pays anglophones ? Alors Word Quest vous aide à peaufiner votre anglais. Notez les mots que vous découvrez et appropriez les vous facilement !</div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="illustration">
+                        <img src="/static/imgs/3d-young-woman-standing-and-holding-her-head.png" class="img" alt="young-woman-illustration">
+                    </div>
+                    <div class="content">
+                        <div class="title">Les travailleurs</div>
+                        <div class="text">Vous devez concerver un certain niveau d'anglais pour votre travail ? Pas de problème, choisissez des mini-jeux parmis une selection de thème !</div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="illustration">
+                        <img src="/static/imgs/3d-graduated-student-holding-diploma.png" class="img" alt="graduated-student-illustration">
+                    </div>
+                    <div class="content">
+                        <div class="title">Les étudiants</div>
+                        <div class="text">Vous êtes étudiant et vous devez apprendre une liste en anglais ? C'est bien ici que vous pourrez le faire sans même vous ennuyer ! Une offre comme celle-ci, ça se saisit de suite !</div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-infos ">
+                <div class="item active" onclick="change_slide(this, 'pos1')"></div>
+                <div class="item" onclick="change_slide(this, 'pos2')"></div>
+                <div class="item" onclick="change_slide(this, 'pos3')"></div>
+            </div>
+        </div>
+    </section>
+    {% include 'footer.html' %}
+    <script>
+        /**
+         * 
+         * This function is responsible for changing the carousel image
+         * 
+         * @function switch_carousel
+         * @param {HTMLElement} el - The element that was clicked
+         * @param {string} pos - The wanted position
+         * @returns {void}
+         * 
+         */
 
+        function switch_carousel(el, pos) {
+            let slidesContainer = document.getElementsByClassName('carousel-container')[0];
+            slidesContainer.setAttribute('class', 'carousel-container ' + pos);
 
-</html>
+            let items = document.querySelectorAll('.menu-container .item');
+            items.forEach(item => {
+                item.classList.remove('active');
+            });
+            el.classList.add('active');
+        }
+
+        /**
+         * 
+         * This function is responsible for changing the second carousel image
+         * 
+         * @function change_slide
+         * @param {HTMLElement} el - The element that was clicked
+         * @param {string} pos - The wanted position
+         * @returns {void}
+         * 
+         */
+        function change_slide(el, pos) {
+            let slidesContainer = document.getElementsByClassName('carousel-container')[1];
+            slidesContainer.setAttribute('class', 'carousel-container ' + pos);
+
+            let items = document.querySelectorAll('.carousel-infos .item');
+            items.forEach(item => {
+                item.classList.remove('active');
+            });
+            el.classList.add('active');
+        }
+
+        /**
+         * 
+         * This function is responsible for changing the second carousel image automatically
+         * 
+         * @function 
+         * @returns {void}
+         * 
+         */
+        setInterval(() => {
+            // Get the current position
+            let slidesContainer = document.getElementsByClassName('carousel-container')[1];
+            let pos = slidesContainer.getAttribute('class').split(' ')[1];
+            pos = pos.replace('pos', '');
+
+            // Change the position
+            if (Number(pos) === 3) {
+                pos = 1
+            } else {
+                pos = Number(pos) + 1;
+            }
+            pos = 'pos' + pos;
+
+            // Check the next item
+            let items = document.querySelectorAll('.carousel-infos .item');
+            let activeItem = document.querySelector('.carousel-infos .item.active');
+            let activeItemIndex = Array.prototype.indexOf.call(items, activeItem);
+            let nextItemIndex = activeItemIndex + 1;
+            // If the next item is the last one, go back to the first one
+            if (nextItemIndex > items.length - 1) {
+                nextItemIndex = 0;
+            }
+            let nextItem = items[nextItemIndex];
+            // Call the function to change the slide
+            change_slide(nextItem, pos);
+        }, 5000);
+    </script>
+</main>
+{% endblock %}

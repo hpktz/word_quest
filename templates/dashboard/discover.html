@@ -19,6 +19,7 @@
 </div>
 {% endblock %}{% block content %}
 <main class="discover-main-container">
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     <div class="main-infos">
         <div class="title entry-animation">Tendances</div>
         <form class="switch entry-animation" onchange="switch_list(this, event)">
@@ -139,7 +140,13 @@
             el.classList.toggle('active');
             let id = el.dataset.id;
             try {
-                let request = await fetch("/dashboard/list/like/" + id);
+                let request = await fetch("/dashboard/list/like/" + id, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.getElementById('csrf_token').value
+                    }
+                });
                 let response = await request.json();
                 if (response.code != 200) {
                     el.classList.toggle('active');

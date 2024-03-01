@@ -2,6 +2,7 @@ from flask import Flask, session, render_template, request
 from flask_login import LoginManager, current_user, login_required
 from flask_session import Session
 from flask_talisman import Talisman
+from flask_wtf.csrf import CSRFProtect
 
 from auth import auth_bp 
 from dashboard import main_bp
@@ -36,11 +37,11 @@ def load_user(user_id):
         cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
         result = cursor.fetchone()
         if not result:
+            # User not found in the database, disconnect the user
             return None
 
         return User(user_id, result[1], result[2], result[4], result[3], result[8], True if result[6] == 1 else False, True if result[7] == 1 else False)
     except mysql.connector.Error as e:
-        print(e)
         return None
     finally:
         if cursor:
@@ -51,27 +52,37 @@ def load_user(user_id):
 talisman = Talisman(app)
 csp = {
     'default-src': [
-        '\'self\'',
+        '\'self\'', 
         'https://fonts.googleapis.com',
         'https://fonts.gstatic.com',
-        'https://cdn.jsdelivr.net',
-        'https://code.jquery.com',
-        '\'unsafe-inline\''
-    ],
-    'img-src': [
-        '*'
+        'https://www.google.com/recaptcha/',
+        'https://www.gstatic.com/recaptcha/'
     ],
     'script-src': [
         '\'self\'',
         'https://www.google.com/recaptcha/',
-        'https://www.gstatic.com/recaptcha/',
+        'https://www.gstatic.com/recaptcha/'
+    ],
+    'style-src': [
+        '\'self\'',
+        'https://fonts.googleapis.com'
+    ],
+    'img-src': [
+        '*',
+        'data:'
     ],
     'frame-src': [
         'https://www.google.com/recaptcha/', 
         'https://recaptcha.google.com/recaptcha/'
+    ],
+    'form-action': [
+        '\'self\''
+    ],
+    'frame-ancestors': [
+        '\'self\''
     ]
-        
 }
+
 # HTTP Strict Transport Security
 hsts = {
     'max_age': 31536000,
@@ -87,6 +98,9 @@ talisman.frame_options_allow_from = 'https://www.google.com'
 # Add the headers to Talisman
 talisman.content_security_policy = csp
 talisman.strict_transport_security = hsts
+
+csrf = CSRFProtect(app)
+csrf.init_app(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)

@@ -55,6 +55,7 @@
                         {% endfor %}
                     </div>
                     <span class="separator"></span>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="submit-button" id="signup-submit-button">Inscription</button>
                 </div>
             </div>

@@ -141,7 +141,7 @@ def index():
         hearts_message=hearts_message
     )
     
-@main_bp.route('/dashboard/lives/purchase')
+@main_bp.route('/dashboard/lives/purchase', methods=['POST'])
 @login_required
 def purchase_lives():
     """
@@ -329,7 +329,7 @@ def update(list_id):
         if conn:
             conn.close()
 
-@main_bp.route('/dashboard/delete/<int:list_id>')
+@main_bp.route('/dashboard/delete/<int:list_id>', methods=['POST'])
 @login_required
 def delete(list_id):
     """Delete a list and its associated data from the database.

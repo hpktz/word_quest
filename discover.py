@@ -82,7 +82,7 @@ def discover():
         if conn:
             conn.close()
         
-@discover_bp.route('/dashboard/list/like/<int:list_id>')
+@discover_bp.route('/dashboard/list/like/<int:list_id>', methods=['POST'])
 @login_required
 def like_list(list_id):
     conn = None

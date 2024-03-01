@@ -1,3 +1,4 @@
+const csrf_token = document.getElementById("csrf_token").value;
 /**
  * 
  * @param {*} radio 
@@ -106,7 +107,8 @@ async function send_user_infos(form, event) {
         const response = await fetch("/dashboard/settings/change-user-infos", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrf_token
             },
             body: JSON.stringify({
                 username: username,
@@ -158,7 +160,8 @@ async function send_security_form(form, event) {
         const response = await fetch("/dashboard/settings/change-password", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrf_token
             },
             body: JSON.stringify({
                 old_password: old_password,
@@ -197,7 +200,13 @@ async function change_visibility(checkbox, event) {
     let visibility = checked ? 1 : 0;
 
     try {
-        const response = await fetch("/dashboard/settings/change-visibility/" + visibility);
+        const response = await fetch("/dashboard/settings/change-visibility/" + visibility, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrf_token
+            }
+        });
         const data = await response.json();
         if (data.code == 200) {
             if (checked) {
@@ -241,7 +250,13 @@ async function delete_account(button) {
     if (input.value === "supprimer mon compte") {
         button.innerHTML = "<div class='loader'></div>";
         try {
-            const response = await fetch("/dashboard/settings/delete-account");
+            const response = await fetch("/dashboard/settings/delete-account", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrf_token
+                }
+            });
             const data = await response.json();
             if (data.code == 200) {
                 window.location.href = "/dashboard/settings/delete-account";

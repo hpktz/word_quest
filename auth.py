@@ -146,7 +146,7 @@ def login_post():
                         # Check if 2FA is required
                         if data[6] == False:
                             user = User(data[0], data[1], data[2], data[4], data[3], data[8], True if data[6] == 1 else False, True if data[7] == 1 else False)
-                            login_user(user)
+                            login_user(user, remember=True)
                             session.pop("login_tries")
                             return redirect(url_for('main.index'))
                         else:
@@ -420,7 +420,7 @@ def sys_2fa_post():
             cursor.execute("SELECT * FROM users WHERE id=%s", (user_id,))
             data = cursor.fetchone()
             user = User(data[0], data[1], data[2], data[4], data[3], data[8], True if data[6] == 1 else False, True if data[7] == 1 else False)
-            login_user(user)
+            login_user(user, remember=True)
             session.pop("login_tries")
             session.pop("2fa")
             return redirect(url_for('main.index'))
@@ -457,7 +457,7 @@ def sys_2fa_post():
             cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
             data = cursor.fetchone()
             user = User(data[0], data[1], data[2], data[4], data[3], data[8], True if data[6] == 1 else False, True if data[7] == 1 else False)
-            login_user(user)
+            login_user(user, remember=True)
             session.pop("login_tries")
             session.pop("2fa")
             return redirect(url_for('main.index'))

@@ -2,6 +2,7 @@ Flask==3.0.0
 Flask-Login==0.6.3
 Flask-Session==0.5.0
 Flask-Talisman==1.1.0
+Flask-WTF==1.2.1
 bcrypt==4.1.2
 pyotp==2.9.0
 python-dotenv==1.0.0

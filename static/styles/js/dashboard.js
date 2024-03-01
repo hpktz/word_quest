@@ -261,7 +261,8 @@ async function update_list(el, event) {
         const response = await fetch(`/dashboard/manage/update/${list_id}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': el.csrf_token.value
             },
             body: JSON.stringify(list_data)
         });
@@ -410,7 +411,13 @@ async function purchase_lives(el, event) {
     event.preventDefault();
     // request to purchase lives
     document.getElementById('life-purchase-button').innerHTML = "<div class='loader'></div>";
-    const response = await fetch('/dashboard/lives/purchase');
+    const response = await fetch('/dashboard/lives/purchase', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.getElementById('csrf_token_purchase').value
+        }
+    });
     try {
         const data = await response.json();
         // if the request is successful, the lives counter is updated, and the UI is updated

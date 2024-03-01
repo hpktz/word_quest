@@ -31,6 +31,7 @@
                 <a href="password-recovery" class="password-recovery">Mot de passe oublié ?</a>
             -->
             <span class="separator"></span>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="submit-button" id="login-submit-button">Connexion</button>
         </form>
         <span class="separator snd-separator"></span>

@@ -27,7 +27,6 @@ from root import *
 import random as random
 import logging as logging
 from datetime import datetime, timedelta
-import locale
 import json
 import bcrypt
 import pyotp
@@ -765,7 +764,7 @@ def verify_email(code):
         if conn:
             conn.close()    
             
-@user_data_bp.route('/dashboard/settings/change-visibility/<int:visibility>')
+@user_data_bp.route('/dashboard/settings/change-visibility/<int:visibility>', methods = ['POST'])
 @login_required
 def change_visibility(visibility):
     """
@@ -809,7 +808,7 @@ def change_visibility(visibility):
         if conn:
             conn.close()
             
-@user_data_bp.route('/dashboard/settings/delete-account')
+@user_data_bp.route('/dashboard/settings/delete-account', methods = ['POST'])
 @login_required
 def delete_account():
     """

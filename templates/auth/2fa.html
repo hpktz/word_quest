@@ -26,6 +26,7 @@
             <span class="separator"></span>
             <a href="{{ url_for('auth.sys_2fa_sendCodeAgain')}}" class="send-code-button" id="2fa-check-send-code-button">Renvoyer le code</a>
             <span class="separator"></span>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="submit-button" id="2fa-check-submit-button">Connexion</button>
         </form>
     </section>

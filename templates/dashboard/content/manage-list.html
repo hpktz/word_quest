@@ -59,11 +59,15 @@
         <input type="checkbox" name="public" id="public-1" {{public}}>
         <label for="public-1"><span class="slider"></span></label>
     </div>
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     <button type="submit" class="button" name="button">Modifier</button>
 </form>
 <div class="delete-list-container">
     <div class="text">Supprimer la liste</div>
-    <div class="delete-button">
-        <a href="/dashboard/delete/{{list['id']}}" id="delete-list-redirect" onclick="redirect(this, event)">Supprimer</a>
+    <div>
+        <form action="/dashboard/delete/{{list['id']}}">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <input type="submit" value="Supprimer" class="delete-button" id="delete-list-button">
+        </form>
     </div>
 </div>

@@ -1,6 +1,7 @@
 {% extends "dashboard/main.html" %} {% block title %}Paramètres{% endblock %}{% block color %}quests-color{% endblock %} {% block css %}
 <link rel="stylesheet" href="/static/styles/css/style-settings.css">{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
 <main class="settings-main-container">
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     <section class="settings-section">
         <div class="title entry-animation">Paramètres</div>
         <div class="user-infos-section entry-animation">

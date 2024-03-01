@@ -51,12 +51,34 @@ def load_user(user_id):
 talisman = Talisman(app)
 csp = {
     'default-src': [
-        '\'self\'',
+        '\'self\'', 
         'https://fonts.googleapis.com',
         'https://fonts.gstatic.com',
-        'https://cdn.jsdelivr.net',
-        'https://code.jquery.com',
-        '\'unsafe-inline\''
+        'https://www.google.com/recaptcha/',
+        'https://www.gstatic.com/recaptcha/'
+    ],
+    'script-src': [
+        '\'self\'',
+        'https://www.google.com/recaptcha/',
+        'https://www.gstatic.com/recaptcha/'
+    ],
+    'style-src': [
+        '\'self\'',
+        'https://fonts.googleapis.com'
+    ],
+    'img-src': [
+        '*',
+        'data:'
+    ],
+    'frame-src': [
+        'https://www.google.com/recaptcha/', 
+        'https://recaptcha.google.com/recaptcha/'
+    ],
+    'form-action': [
+        '\'self\''
+    ],
+    'frame-ancestors': [
+        '\'self\''
     ]
 }
 # HTTP Strict Transport Security

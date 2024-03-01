@@ -98,7 +98,7 @@ def quests():
                 "day": day.strftime("%A").capitalize(),
                 "lesson_count": day_result[1] if day_result else 0,
                 "total_xp": day_result[2] if day_result else 0,
-                "total_time": day_result[3] if day_result else 0,
+                "total_time": day_result[3]//60  if day_result else 0,
                 "target_achieved": target_achieved
             })
         

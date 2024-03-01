@@ -87,7 +87,6 @@ header {
     padding: 0 10px;
     height: 60px;
     z-index: 100;
-    animation: smoothEntryHeader 0.75s ease-in-out;
 }
 
 @keyframes smoothEntryHeader {
@@ -707,6 +706,167 @@ main .text-container .github-box .link {
     font-weight: 700;
 }
 
+main .text-container .content-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 25px;
+}
+
+main .text-container .content-box img {
+    max-width: 300px;
+}
+
+main .text-container .content-box img.right-img {
+    margin-left: auto;
+}
+
+main .text-container .content-box h1 {
+    margin: 0;
+}
+
+main .text-container .games-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+    margin-top: 50px;
+    text-align: center;
+    padding: 25px;
+    background-color: #ededed;
+    border-radius: 20px;
+}
+
+main .text-container .games-box img {
+    width: 30px;
+    height: 30px;
+}
+
+main .text-container .games-box .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #333;
+    font-weight: 700;
+    margin-top: 25px;
+}
+
+main .text-container .games-box .desc {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    margin-top: 25px;
+}
+
+main .text-container .fidelity-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    gap: 25px;
+    margin-top: 50px;
+    text-align: start;
+    margin-bottom: 100px;
+}
+
+main .text-container .fidelity-box .item {
+    display: grid;
+    grid-template-rows: 100px 30px 80px 45px;
+    gap: 25px;
+    border: 2px solid #333;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    border-radius: 20px;
+    text-align: center;
+    padding: 10px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+main .text-container .fidelity-box .item:nth-child(1):hover {
+    border-color: #717744;
+    background-color: #717744;
+    color: white;
+}
+
+main .text-container .fidelity-box .item:nth-child(2):hover {
+    border-color: #766153;
+    background-color: #766153;
+    color: white;
+}
+
+main .text-container .fidelity-box .item:nth-child(3):hover {
+    border-color: #BCBD8B;
+    background-color: #BCBD8B;
+    color: white;
+}
+
+main .text-container .fidelity-box .item img {
+    height: 90px;
+    margin: auto;
+}
+
+main .text-container .fidelity-box .item .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+main .text-container .fidelity-box .item .desc {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    text-align: justify;
+}
+
+main .text-container .fidelity-box .item .info-box {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #ededed;
+    border-radius: 10px;
+    gap: 25px;
+}
+
+main .text-container .fidelity-box .item .info-box .number {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+main .text-container .fidelity-box .item .info-box .text {
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    color: #333;
+}
+
+main .text-container .versions-box {
+    width: 100%;
+    margin-left: 5px;
+    border-left: 2px solid #333;
+}
+
+main .text-container .versions-box .version {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: start;
+    gap: 10px;
+    margin-left: -7px;
+    margin-bottom: 25px;
+}
+
+main .text-container .versions-box .version .point {
+    width: 12px;
+    height: 12px;
+    border-radius: 12px;
+    background-color: #333;
+    margin-top: 2.5px;
+}
+
+main .text-container .versions-box .version h2 {
+    font-family: "League Spartan", sans-serif;
+    font-size: 20px;
+    color: #333;
+    margin-top: 0;
+}
+
 
 /***** FOOTER *****/
 
@@ -859,7 +1019,6 @@ footer .help-box .btn .img {
         place-items: center;
         align-items: center;
         transform: translateX(-50%);
-        animation: smoothEntryHeader 0.75s ease-in-out;
         z-index: 101;
     }
     .header-phone-button .item {
@@ -1018,5 +1177,20 @@ footer .help-box .btn .img {
     }
     main .fifth-section .slide .content {
         grid-column: 1;
+    }
+    main .text-container .content-box {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 25px;
+    }
+    main .text-container .games-box {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 25px;
+    }
+    main .text-container .fidelity-box {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 25px;
     }
 }

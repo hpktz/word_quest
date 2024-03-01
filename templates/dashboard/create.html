@@ -4,7 +4,7 @@
     <div class="title">
         <div>Création</div>
         <div class="info-section-phone-logo clickable-logo">
-            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+            <a href="" id="info-section-phone-button">
                 <img src="/static/icons/check-30-white.pnh.png" alt="logo">
             </a>
         </div>
@@ -65,9 +65,10 @@
             <input type="checkbox" name="public" id="public-1">
             <label for="public-1"><span class="slider"></span></label>
         </div>
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     </form>
 </div>
-<div class="create-button" onclick="create_list()">Créer</div>
+<div class="create-button" id="create-list-button">Créer</div>
 {% endblock %}{% block create %}selected{% endblock %} {% block content %}
 <main class="create-main-container">
     <div class="main-infos entry-animation">
@@ -81,14 +82,13 @@
     </div>
     <div class="search-words entry-animation">
         <div class="search-bar-box">
-            <input type="text" class="search-bar" placeholder="Rechercher..." onkeydown="check_key(event)">
+            <input type="text" class="search-bar" id="search-bar" placeholder="Rechercher...">
             <div class="search-logo clickable-logo">
-                <a onclick="search_word(event)">
+                <a id="search-button">
                     <img src="/static/icons/search-30-white.png" alt="logo">
                 </a>
             </div>
         </div>
-
         <div class="title">Définitions</div>
         <div class="text">Cliquez sur la défintion que vous souhaitez apprendre.</div>
         <div class="words-container">
@@ -107,11 +107,4 @@
 </main>
 <script src="/static/scripts/create/search.js"></script>
 <script src="/static/scripts/create/management.js"></script>
-<script>
-    window.addEventListener('beforeunload', function(event) {
-        const confirmationMessage = 'Êtes-vous sûr de vouloir quitter la page?';
-        event.returnValue = confirmationMessage;
-        return confirmationMessage;
-    });
-</script>
 {% endblock %}

@@ -7,6 +7,11 @@
  * @param {Event} event - The event object associated with the redirect.
  * @returns {void}
  */
+const redirectButtons = document.querySelectorAll('.redirect');
+redirectButtons.forEach((button) => {
+    button.addEventListener('click', (e) => redirect(button, e));
+});
+
 function redirect(el, event) {
     event.preventDefault();
     // Animate the page change.
@@ -57,6 +62,9 @@ function is_open() {
  * @param {Event} event - The event object.
  * @returns {void}
  */
+const responsiveButton = document.getElementById('responsive-button');
+responsiveButton.addEventListener('click', (e) => responsive(responsiveButton, e));
+
 function responsive(el, event) {
     event.preventDefault();
 
@@ -76,6 +84,9 @@ function responsive(el, event) {
  * @param {HTMLElement} el - The element that triggered the function.
  * @returns {void}
  */
+const phoneMenuButton = document.getElementById('phone-menu-button');
+phoneMenuButton.addEventListener('click', (e) => open_menu_phone(phoneMenuButton));
+
 function open_menu_phone(el) {
     const body = document.querySelector('body');
 
@@ -105,7 +116,8 @@ function open_menu_phone(el) {
  */
 function close_boxes(el, event) {
     event.preventDefault();
-    close_info_box(el, event);
+    const body = document.querySelector('body');
+    body.removeAttribute('class');
     close_lives(el, event);
 }
 
@@ -117,28 +129,14 @@ function close_boxes(el, event) {
  * @param {Event} event - The event object.
  * @returns {void}
  */
+const infoSectionPhoneButton = document.getElementById('info-section-phone-button');
+infoSectionPhoneButton.addEventListener('click', (e) => open_info_box(infoSectionPhoneButton, e));
+
 function open_info_box(el, event) {
     event.preventDefault();
-    el.setAttribute('onclick', 'close_info_box(this, event)');
     const body = document.querySelector('body');
-    body.setAttribute('class', 'info-section-phone-active');
+    body.classList.toggle('info-section-phone-active');
 }
-
-/**
- * Closes the info box and restores the default behavior of the phone button.
- * 
- * @function close_info_box
- * @param {HTMLElement} el - The element that triggered the event.
- * @param {Event} event - The event object.
- * @returns {void}
- */
-function close_info_box(el, event) {
-    event.preventDefault();
-    document.getElementById('info-section-phone-button').setAttribute('onclick', 'open_info_box(this, event)');
-    const body = document.querySelector('body');
-    body.removeAttribute('class');
-}
-
 
 /**
  * Reload the page when the back button is pressed.

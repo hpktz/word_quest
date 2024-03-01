@@ -4,7 +4,7 @@
     <div class="title">
         <div>Quêtes</div>
         <div class="info-section-phone-logo clickable-logo">
-            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+            <a href="" id="info-section-phone-button">
                 <img src="/static/icons/binoculars-30-white.png" alt="logo">
             </a>
         </div>
@@ -108,7 +108,7 @@
                 </div>
                 {% elif stats[-1]["target_achieved"] %}
                 <div class="chest">
-                    <a href="/dashboard/quests/reward" onclick="redirect(this, event)">
+                    <a href="/dashboard/quests/reward" class="redirect">
                         <img src="/static/imgs/closed-chest.png" alt="">
                     </a>
                 </div>

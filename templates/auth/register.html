@@ -14,7 +14,7 @@
 
 <body>
     <section class="signup-form-container" id="signup-form-container">
-        <form id="signup-form" method="POST" action="/auth/register" onsubmit="send_form(event)">
+        <form id="signup-form" method="POST" action="/auth/register">
             <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
             <h1>Inscription</h1>
             <div class="step-bar">
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <span class="separator"></span>
-                    <div class="submit-button" style="width: 100%; display:block;" onclick="changePage()">Continuer</div>
+                    <div class="submit-button" style="width: 100%; display:block;" id="continue-button">Continuer</div>
                 </div>
                 <div class="part-2">
                     <p class="title">Choisissez votre avatar</p>
@@ -65,40 +65,7 @@
             <a href="{{ url_for('auth.login') }}" class="create-account">J'ai déjà un compte</a>
         </div>
     </section>
-    <script>
-        function changePage() {
-            const form = document.getElementById("signup-form");
-            if (form.name.value === "" || form.birthday.value === "" || form.email.value === "" || form.password.value === "") {
-                if (!document.getElementById("login-form-main-alert")) {
-                    document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>Veuillez remplir tous les champs</p>";
-                    return;
-                } else {
-                    document.getElementById("login-form-main-alert").innerHTML = "Veuillez remplir tous les champs";
-                    return;
-                }
-            } else if (!form.conditions.checked) {
-                if (!document.getElementById("login-form-main-alert")) {
-                    document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>Veuillez accepter les conditions d'utilisation</p>";
-                    return;
-                } else {
-                    document.getElementById("login-form-main-alert").innerHTML = "Veuillez accepter les conditions d'utilisation";
-                    return;
-                }
-            }
-            if (document.getElementById("login-form-main-alert")) {
-                document.getElementById("login-form-main-alert").remove();
-            }
-            document.getElementsByClassName("step-bar-fill")[0].style.width = "66%";
-            document.getElementsByClassName("part-1")[0].style.left = "-150%";
-            document.getElementsByClassName("part-2")[0].style.left = "0";
-        }
-
-        function send_form(event) {
-            event.preventDefault();
-            document.getElementById("signup-submit-button").innerHTML = '<div class="loader"></div>';
-            document.getElementById("signup-form").submit();
-        }
-    </script>
+    <script src="/static/styles/js/auth-register.js"></script>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
     <div class="title">
         <div>Profil</div>
         <div class="info-section-phone-logo clickable-logo">
-            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+            <a href="" id="info-section-phone-button">
                 <img src="/static/icons/search-30-white.png" alt="logo">
             </a>
         </div>
@@ -78,7 +78,7 @@
         <div class="title" style="margin-top: 50px;">Listes</div>
         <div class="lists-container">
             {% if user_infos["lists"] %} {% for list in user_infos["lists"] %}
-            <a href="/dashboard/profile/list/{{list['id']}}" onclick="redirect(this, event)" class="list-box">
+            <a href="/dashboard/profile/list/{{list['id']}}" class="redirect list-box">
                 <div class="title">{{list["title"]}}</div>
                 <div class="list-of-words">
                     {% for word in list["words"] %}
@@ -120,7 +120,7 @@
         </div>
         <div class="content content_sub active">
             {% if subscriptions %} {% for subscription in subscriptions %}
-            <a href="/dashboard/profile/user/{{subscription[0]}}" onclick="redirect(this, event)" class="account-container">
+            <a href="/dashboard/profile/user/{{subscription[0]}}" class="redirect account-container">
                 <img src="/static/imgs/profiles/{{subscription[2]}}.png" class="account-picture" alt="profile-picture">
                 <div class="texts">
                     <div class="name">{{subscription[1]}}</div>
@@ -136,7 +136,7 @@
         </div>
         <div class="content content_sub">
             {% if subscribers and is_current_user %} {% for subscriber in subscribers %}
-            <a href="/dashboard/profile/user/{{subscriber[0]}}" onclick="redirect(this, event)" class="account-container">
+            <a href="/dashboard/profile/user/{{subscriber[0]}}" class="redirect account-container">
                 <img src="/static/imgs/profiles/{{ current_user.picture }}.png" class="account-picture" alt="profile-picture">
                 <div class="texts">
                     <div class="name">Hippouille</div>
@@ -153,7 +153,7 @@
                 {% endif %}
             </a>
             {%endfor%} {% elif subscribers %} {% for subscriber in subscribers %}
-            <a href="/dashboard/profile/user/{{subscriber[0]}}" onclick="redirect(this, event)" class="account-container">
+            <a href="/dashboard/profile/user/{{subscriber[0]}}" class="redirect account-container">
                 <img src="/static/imgs/profiles/{{subscriber[2]}}.png" class="account-picture" alt="profile-picture">
                 <div class="texts">
                     <div class="name">{{subscriber[1]}}</div>
@@ -169,114 +169,12 @@
         </div>
         {% if is_current_user %}
         <div class="separate"></div>
-        <a href="/dashboard/settings" class="settings-container" onclick="redirect(this,event)">
+        <a href="/dashboard/settings" class="settings-container redirect">
             <img src="/static/icons/settings-30-dark-grey.png" class="img" alt="logo">
             <div class="text">Paramètres</div>
         </a>
         {% endif %}
     </section>
-    <script>
-        function has_pressed_enter(event) {
-            if (event.keyCode == 13) {
-                search_user();
-            }
-        }
-
-        async function search_user() {
-            let search_input = document.getElementsByClassName("search-input")[0];
-            let search_result = document.getElementsByClassName("search-result")[0];
-            search_result.innerHTML = "<div class='loader'></div>";
-            let search_text = search_input.value;
-            if (search_text.length > 0) {
-                try {
-                    const request = await fetch("/dashboard/profile/user/search/" + search_text);
-                    const response = await request.json();
-                    if (response.code == 200) {
-                        let users = response.result;
-                        let html = "";
-                        for (let i = 0; i < users.length; i++) {
-                            html += "<a href='/dashboard/profile/user/" + users[i][0] + "' onclick='redirect(this,event)' class='result-box'>";
-                            html += "<img src='/static/imgs/profiles/" + users[i][2] + ".png' class='result-picture' alt='profile-picture'>";
-                            html += "<div class='result-texts'>";
-                            html += "<div class='name'>" + users[i][1] + "</div>";
-                            html += "<div class='xp'>" + users[i][3] + " XP</div>";
-                            html += "</div>";
-                            html += "</a>";
-                        }
-                        search_result.innerHTML = html;
-                    } else {
-                        search_result.innerHTML = "<div class='info'>Aucun utilisateur trouvé.</div>"
-                    }
-                } catch (error) {
-                    console.log(error);
-                    search_result.innerHTML = "<div class='info'>Une erreur s'est produite, veuillez réessayer plus tard.</div>"
-                }
-            } else {
-                search_result.innerHTML = "";
-            }
-        }
-
-        async function copy_list(el, event) {
-            event.preventDefault();
-            let id = el.dataset.id;
-            el.innerHTML = "<div class='loader'></div>"
-            el.removeAttribute("onclick");
-            await new Promise(r => setTimeout(r, 1000));
-            try {
-                let request = await fetch("/dashboard/list/copy/" + id);
-                let response = await request.json();
-                if (response.code == 200) {
-                    el.innerHTML = "<img src='/static/icons/done-30-grey.png' class='not-clickable-zone' alt='logo'>";
-                } else {
-                    el.innerHTML = "<img src='/static/icons/issue-100-red.png' class='not-clickable-zone' alt='logo'>";
-                }
-            } catch (error) {
-                el.innerHTML = "<img src='/static/icons/issue-100-red.png' class='not-clickable-zone' alt='logo'>";
-            }
-        }
-
-        async function subscribe(el) {
-            let container = document.getElementsByClassName("subscription-container")[0];
-            let id = el.dataset.id;
-            let request = await fetch("/dashboard/profile/user/subscribe/" + id);
-            let response = await request.json();
-            try {
-                if (response.code == 200) {
-                    container.innerHTML = `<div class="subscription"><div class="button"><div class="text"
-                        onclick="unsubscribe(this)" data-id="${id}">Se désabonner</div></div><div class="text">
-                            A l'instant</div></div>`;
-                }
-            } catch (error) {
-                console.log(error);
-                open_alert("Erreur", "Une erreur s'est produite, veuillez réessayer plus tard.");
-            }
-        }
-
-        async function unsubscribe(el) {
-            let container = document.getElementsByClassName("subscription-container")[0];
-            let id = el.dataset.id;
-            try {
-                let request = await fetch("/dashboard/profile/user/unsubscribe/" + id);
-                let response = await request.json();
-                if (response.code == 200) {
-                    container.innerHTML = `<div class="subscribe-button" onclick="subscribe(this)" data-id="${id}">
-                        <div class="text">S'abonner</div>
-                        </div>`;
-                }
-            } catch (error) {
-                console.log(error);
-                open_alert("Erreur", "Une erreur s'est produite, veuillez réessayer plus tard.");
-            }
-        }
-
-        function switch_friend_list() {
-            let menu_items = document.getElementsByClassName("item_sub");
-            let contents = document.getElementsByClassName("content_sub");
-            for (let i = 0; i < menu_items.length; i++) {
-                menu_items[i].classList.toggle("active");
-                contents[i].classList.toggle("active");
-            }
-        }
-    </script>
+    <script src="/static/scripts/profile/main.js"></script>
 </main>
 {% endblock %}

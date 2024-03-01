@@ -65,7 +65,8 @@ csp = {
     ],
     'style-src': [
         '\'self\'',
-        'https://fonts.googleapis.com'
+        'https://fonts.googleapis.com',
+        '\'unsafe-inline\''
     ],
     'img-src': [
         '*',
@@ -100,7 +101,6 @@ talisman.content_security_policy = csp
 talisman.strict_transport_security = hsts
 
 csrf = CSRFProtect(app)
-csrf.init_app(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)

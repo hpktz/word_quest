@@ -36,12 +36,12 @@ propose un apprentissage basé sur des listes de vocabulaire, agrémenté de min
             </div>
         </div>
         <div class="thd-section">
-            <div class="title  ">La magie en action</div>
-            <div class="menu-container  ">
-                <div class="item active" onclick="switch_carousel(this, 'pos1')">Le Snake</div>
-                <div class="item" onclick="switch_carousel(this, 'pos2')">Le Pendu</div>
-                <div class="item" onclick="switch_carousel(this, 'pos3')">Le Quiz</div>
-                <div class="item" onclick="switch_carousel(this, 'pos4')">Le Memory</div>
+            <div class="title">La magie en action</div>
+            <div class="menu-container" id="menu-container">
+                <div class="item active">Le Snake</div>
+                <div class="item">Le Pendu</div>
+                <div class="item">Le Quiz</div>
+                <div class="item">Le Memory</div>
             </div>
             <div class="carousel-container pos1  ">
                 <div class="content">
@@ -146,93 +146,14 @@ propose un apprentissage basé sur des listes de vocabulaire, agrémenté de min
                     </div>
                 </div>
             </div>
-            <div class="carousel-infos ">
-                <div class="item active" onclick="change_slide(this, 'pos1')"></div>
-                <div class="item" onclick="change_slide(this, 'pos2')"></div>
-                <div class="item" onclick="change_slide(this, 'pos3')"></div>
+            <div class="carousel-infos" id="carousel-infos">
+                <div class="item active"></div>
+                <div class="item"></div>
+                <div class="item"></div>
             </div>
         </div>
     </section>
     {% include 'footer.html' %}
-    <script>
-        /**
-         * 
-         * This function is responsible for changing the carousel image
-         * 
-         * @function switch_carousel
-         * @param {HTMLElement} el - The element that was clicked
-         * @param {string} pos - The wanted position
-         * @returns {void}
-         * 
-         */
-
-        function switch_carousel(el, pos) {
-            let slidesContainer = document.getElementsByClassName('carousel-container')[0];
-            slidesContainer.setAttribute('class', 'carousel-container ' + pos);
-
-            let items = document.querySelectorAll('.menu-container .item');
-            items.forEach(item => {
-                item.classList.remove('active');
-            });
-            el.classList.add('active');
-        }
-
-        /**
-         * 
-         * This function is responsible for changing the second carousel image
-         * 
-         * @function change_slide
-         * @param {HTMLElement} el - The element that was clicked
-         * @param {string} pos - The wanted position
-         * @returns {void}
-         * 
-         */
-        function change_slide(el, pos) {
-            let slidesContainer = document.getElementsByClassName('carousel-container')[1];
-            slidesContainer.setAttribute('class', 'carousel-container ' + pos);
-
-            let items = document.querySelectorAll('.carousel-infos .item');
-            items.forEach(item => {
-                item.classList.remove('active');
-            });
-            el.classList.add('active');
-        }
-
-        /**
-         * 
-         * This function is responsible for changing the second carousel image automatically
-         * 
-         * @function 
-         * @returns {void}
-         * 
-         */
-        setInterval(() => {
-            // Get the current position
-            let slidesContainer = document.getElementsByClassName('carousel-container')[1];
-            let pos = slidesContainer.getAttribute('class').split(' ')[1];
-            pos = pos.replace('pos', '');
-
-            // Change the position
-            if (Number(pos) === 3) {
-                pos = 1
-            } else {
-                pos = Number(pos) + 1;
-            }
-            pos = 'pos' + pos;
-
-            // Check the next item
-            let items = document.querySelectorAll('.carousel-infos .item');
-            let activeItem = document.querySelector('.carousel-infos .item.active');
-            let activeItemIndex = Array.prototype.indexOf.call(items, activeItem);
-            let nextItemIndex = activeItemIndex + 1;
-            // If the next item is the last one, go back to the first one
-            if (nextItemIndex > items.length - 1) {
-                nextItemIndex = 0;
-            }
-            let nextItem = items[nextItemIndex];
-            // Call the function to change the slide
-            change_slide(nextItem, pos);
-        }, 5000);
-    </script>
+    <script src="/static/styles/js/index.js"></script>
 </main>
 {% endblock %}

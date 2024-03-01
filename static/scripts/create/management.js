@@ -8,6 +8,13 @@
  * @returns {Promise<void>} - A promise that resolves when the word is successfully added to the list.
  * @throws {Error} - If an error occurs while adding the word to the list.
  */
+const definitionsContainer = document.querySelector('.words-container');
+definitionsContainer.addEventListener('click', (e) => {
+    if (e.target.closest('.word-box')) {
+        ad_to_list(e.target.closest('.word-box'));
+    }
+});
+
 async function ad_to_list(el) {
     try {
         el.classList.add('clicked');
@@ -30,7 +37,6 @@ async function ad_to_list(el) {
             wordInList.id = response.result.id;
             wordInList.getElementsByClassName('word')[0].innerHTML = '<span title="' + response.result.french_translation + '">' + response.result.word + '</span>';
             wordInList.getElementsByClassName('type')[0].innerHTML = response.result.type;
-            wordInList.getElementsByClassName('trash-logo-clickable-el')[0].setAttribute('onclick', 'remove_from_list(this,event, "' + response.result.id + '")');
 
             wordsBox.dataset.items_count = parseInt(wordsBox.dataset.items_count) + 1;
             wordsContainer.innerHTML = defContainerEmptyHtml;
@@ -58,7 +64,15 @@ async function ad_to_list(el) {
  * @returns {Promise<void>} - A promise that resolves when the word is successfully removed from the list.
  * @throws {Error} - If an error occurs while removing the word from the list.
  */
-
+const listContainer = document.querySelector('.list-container');
+listContainer.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log(e.target);
+    if (e.target.classList.contains('trash-logo-clickable-el') || e.target.classList.contains('trash-logo') || e.target.tagName === 'IMG') {
+        var word_id = e.target.closest('.word-in-list-box').id;
+        remove_from_list(e.target, e, word_id);
+    }
+});
 async function remove_from_list(el, e, wordId) {
     e.preventDefault();
     try {
@@ -94,6 +108,8 @@ async function remove_from_list(el, e, wordId) {
  * @returns {Promise<void>} A promise that resolves when the list is successfully created.
  * @throws {Error} If an error occurs during the creation process.
  */
+const createListButton = document.getElementById('create-list-button');
+createListButton.addEventListener('click', () => create_list());
 async function create_list() {
     try {
         const listInfos = document.getElementById('list-infos');
@@ -111,7 +127,10 @@ async function create_list() {
         // request to create the list with the provided information
         const request = await fetch('/dashboard/create/create-list', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': listInfos.csrf_token.value
+            },
             body: JSON.stringify(body)
         });
         const response = await request.json();
@@ -127,6 +146,13 @@ async function create_list() {
             open_alert('Problème', 'Un problème est survenu lors de la création de la liste. Veuillez réessayer plus tard.');
         }
     } catch (error) {
+        console.error(error);
         open_alert('Problème', 'Un problème est survenu lors de la création de la liste. Veuillez réessayer plus tard.');
     }
 }
+
+window.addEventListener('beforeunload', function(event) {
+    const confirmationMessage = 'Êtes-vous sûr de vouloir quitter la page?';
+    event.returnValue = confirmationMessage;
+    return confirmationMessage;
+});

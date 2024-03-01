@@ -7,27 +7,25 @@
     <title>{% block title %}Word Quest{% endblock %}</title>
     <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
     <link rel="stylesheet" href="/static/styles/css/style-dashboard.css"> {% block css %}{% endblock %}
-    <script src="/static/styles/js/main.js"></script>
-    <script src="/static/styles/js/alert.js"></script>
 </head>
 
 <body>
     <header class="{% block color %}{% endblock %}">
         <section class="nav-bar">
             <div>
-                <div class="phone-menu-logo" onclick="open_menu_phone(this)">
+                <div class="phone-menu-logo" id="phone-menu-button">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
                 </div>
                 <div class="account-logo clickable-logo">
-                    <a href="/dashboard/profile/user" onclick="redirect(this, event)">
+                    <a href="/dashboard/profile/user" class="redirect">
                         <img src="/static/icons/user-30-white.png" alt="logo">
                         <div class="text">Profile</div>
                     </a>
                 </div>
                 <div class="create-logo clickable-logo">
-                    <a href="/dashboard/create" onclick="redirect(this, event)">
+                    <a href="/dashboard/create" class="redirect">
                         <img src="/static/icons/plus-30-white.png" alt="logo">
                         <div class="text">Créer</div>
                     </a>
@@ -35,19 +33,19 @@
             </div>
             <div class="middle-logos">
                 <div class="middle-logo clickable-logo {% block dashboard %}{% endblock %}">
-                    <a href="/dashboard" onclick="redirect(this, event)">
+                    <a href="/dashboard" class="redirect">
                         <img src="/static/icons/home-30-dark-grey.png" alt="logo">
                         <div class="text">Dashboard</div>
                     </a>
                 </div>
                 <div class="middle-logo clickable-logo {% block quests %}{% endblock %}">
-                    <a href="/dashboard/quests" onclick="redirect(this, event)">
+                    <a href="/dashboard/quests" class="redirect">
                         <img src="/static/icons/quest-30-dark-grey.png" alt="logo">
                         <div class="text">Quêtes</div>
                     </a>
                 </div>
                 <div class="middle-logo clickable-logo {% block discover %}{% endblock %}">
-                    <a href="/dashboard/discover" onclick="redirect(this, event)">
+                    <a href="/dashboard/discover" class="redirect">
                         <img src="/static/icons/compass-30-dark-grey.png" alt="logo">
                         <div class="text">Découvertes</div>
                     </a>
@@ -61,7 +59,7 @@
                     </a>
                 </div>
                 <div class="responsive-logo clickable-logo">
-                    <a href="" onclick="responsive(this, event)">
+                    <a href="" id="responsive-button">
                         <img src="/static/icons/arrow-left-30-dark-grey.png" alt="logo">
                     </a>
                 </div>
@@ -76,7 +74,7 @@
         <div class="header">
             <div class="title">Erreur</div>
             <div class="close-logo clickable-logo">
-                <a href="" onclick="close_alert(this, event)">
+                <a href="" id="alert-button">
                     <img src="/static/icons/close.png" alt="logo">
                 </a>
             </div>
@@ -87,6 +85,8 @@
         </div>
     </section>
     <div class="main-loader"></div>
+    <script src="/static/styles/js/main.js"></script>
+    <script src="/static/styles/js/alert.js"></script>
 </body>
 
 </html>

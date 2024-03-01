@@ -4,13 +4,13 @@
     <div class="title">
         <div>Découverte</div>
         <div class="info-section-phone-logo clickable-logo">
-            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+            <a href="" id="info-section-phone-button">
                 <img src="/static/icons/search-30-white.png" alt="logo">
             </a>
         </div>
     </div>
     <div class="search-container">
-        <form method="POST" id="search-form" class="form" onsubmit="search_list(this, event)">
+        <form method="POST" id="search-form" class="form">
             <input type="text" name="search" id="search" placeholder="Rechercher une liste" required>
             <button type="submit" id="search-button" class="button"><img src="/static/icons/search-30-dark-grey.png" alt="search"></button>
         </form>
@@ -22,7 +22,7 @@
     <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     <div class="main-infos">
         <div class="title entry-animation">Tendances</div>
-        <form class="switch entry-animation" onchange="switch_list(this, event)">
+        <form class="switch entry-animation">
             <input type="radio" name="switch" id="switch-1" value="1" checked>
             <label for="switch-1">Recommandées</label>
             <input type="radio" name="switch" id="switch-2" value="2">
@@ -32,7 +32,7 @@
     <div class="list-container entry-animation">
         <div class="trend-list list-to-switch active">
             {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] != 1 %}
-            <a href="/dashboard/profile/list/{{list['list_id']}}" onclick="redirect(this, event)" data-id="{{list['list_id']}}" class="list-container">
+            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" class="redirect list-container">
                 <div class="title">{{list["list_title"]}}</div>
                 {% if list["is_owner"] %}
                 <div class="certification">
@@ -46,11 +46,11 @@
                     {% endfor %}
                 </div>
                 <div class="action not-clickable-zone">
-                    <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}" onclick="copy_list(this, event)">
+                    <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}">
                         <img src="/static/icons/copy-30-dark-grey.png" class="img not-clickable-zone" alt="copy">
                     </div>
                     {% set active = "" %} {% if list['user_in_like_list'] %} {% set active = "active" %} {% endif %}
-                    <div class="heart-container {{active}} not-clickable-zone" data-id="{{list['list_id']}}" onclick="like(this, event)">
+                    <div class="heart-container {{active}} not-clickable-zone" data-id="{{list['list_id']}}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="not-clickable-zone">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="#333" stroke-width="2" class="not-clickable-zone"/>
                         </svg>
@@ -63,7 +63,7 @@
         </div>
         <div class="word-quest-list list-to-switch">
             {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] == 1 %}
-            <a href="/dashboard/profile/list/{{list['list_id']}}" onclick="redirect(this, event)" data-id="{{list['list_id']}}" data-class="{{list['amount']}}" class="list-container">
+            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" data-class="{{list['amount']}}" class="redirect list-container">
                 <div class="title">{{list["list_title"]}}</div>
                 {% if list["is_owner"] %}
                 <div class="certification">
@@ -85,11 +85,11 @@
                 </div>
                 {% endif %}
                 <div class="action not-clickable-zone">
-                    <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}" onclick="copy_list(this, event)">
+                    <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}">
                         <img src="/static/icons/copy-30-dark-grey.png" class="img not-clickable-zone" alt="copy">
                     </div>
                     {% set active = "" %} {% if list['user_in_like_list'] %} {% set active = "active" %} {% endif %}
-                    <div class="heart-container {{active}} not-clickable-zone" data-id="{{list['list_id']}}" onclick="like(this, event)">
+                    <div class="heart-container {{active}} not-clickable-zone" data-id="{{list['list_id']}}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="not-clickable-zone">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="#333" stroke-width="2" class="not-clickable-zone"/>
                         </svg>
@@ -101,114 +101,6 @@
             {% endif %}
         </div>
     </div>
-    <script>
-        const main = document.querySelector('.discover-main-container');
-
-        function switch_list(el, event) {
-            let list = document.querySelectorAll('.list-to-switch');
-            list.forEach((el) => {
-                el.classList.remove('active');
-            });
-            let index = el.switch.value - 1;
-            list[index].classList.add('active');
-            setInterval(() => {
-                main.dispatchEvent(new Event('scroll'));
-            }, 250);
-        }
-
-        async function copy_list(el, event) {
-            event.preventDefault();
-            let id = el.dataset.id;
-            el.innerHTML = "<div class='loader'></div>"
-            el.removeAttribute("onclick");
-            await new Promise(r => setTimeout(r, 1000));
-            try {
-                let request = await fetch("/dashboard/list/copy/" + id);
-                let response = await request.json();
-                if (response.code == 200) {
-                    el.innerHTML = "<img src='/static/icons/done-30-grey.png' class='not-clickable-zone' alt='logo'>";
-                } else {
-                    el.innerHTML = "<img src='/static/icons/issue-100-red.png' class='not-clickable-zone' alt='logo'>";
-                }
-            } catch (error) {
-                el.innerHTML = "<img src='/static/icons/issue-100-red.png' class='not-clickable-zone' alt='logo'>";
-            }
-        }
-
-        async function like(el, event) {
-            event.preventDefault();
-            el.classList.toggle('active');
-            let id = el.dataset.id;
-            try {
-                let request = await fetch("/dashboard/list/like/" + id, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": document.getElementById('csrf_token').value
-                    }
-                });
-                let response = await request.json();
-                if (response.code != 200) {
-                    el.classList.toggle('active');
-                }
-            } catch (error) {
-                el.classList.toggle('active');
-            }
-        }
-
-        async function search_list(el, event) {
-            event.preventDefault();
-            let search = el.search.value;
-            let container = document.querySelector('.search-results');
-            container.innerHTML = "<div class='loader'></div>";
-            try {
-                let request = await fetch("/dashboard/list/search/" + search);
-                let response = await request.json();
-                if (response.code == 200) {
-                    container.innerHTML = "";
-                    console.log(response.data);
-                    response.data.forEach((el) => {
-                        let a = document.createElement('a');
-                        a.href = "/dashboard/profile/list/" + el.id;
-                        a.onclick = function(event) {
-                            redirect(this, event);
-                        }
-                        a.classList.add('search-result-container');
-                        words = "";
-                        for (let i = 0; i < el.first_three_words.length; i++) {
-                            words += el.first_three_words[i].word + ", ";
-                        }
-                        words += "..."
-                        a.innerHTML = "<div class='name'>" + el.list_title + "</div><div class='creator'>" + el.user_name + "</div><div class='list'>" + words + "</div>";
-                        container.appendChild(a);
-                    });
-                } else {
-                    container.innerHTML = "<div class='text'>Aucune liste n'a été trouvée</div>";
-                }
-            } catch (error) {
-                console.log(error);
-                container.innerHTML = "<div class='text'>Aucune liste n'a été trouvée</div>";
-            }
-        }
-
-        main.addEventListener('scroll', function() {
-            let elements = document.querySelectorAll('.list-container');
-            elements.forEach((el) => {
-                var top = el.getBoundingClientRect().top;
-                var bottom = el.getBoundingClientRect().bottom;
-                var left = el.getBoundingClientRect().left;
-                var right = el.getBoundingClientRect().right;
-                if (top < window.innerHeight && bottom > 0 && left < window.innerWidth && right > 0) {
-                    el.classList.add('visible');
-                } else {
-                    el.classList.remove('visible');
-                }
-            });
-        });
-
-        window.onload = function() {
-            main.dispatchEvent(new Event('scroll'));
-        }
-    </script>
+    <script src="/static/scripts/discover/main.js"></script>
 </main>
 {% endblock %}

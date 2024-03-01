@@ -3,13 +3,13 @@
     <div class="title">
         <div>Dashboard</div>
         <div class="info-section-phone-logo clickable-logo">
-            <a href="" id="info-section-phone-button" onclick="open_info_box(this, event)">
+            <a href="" id="info-section-phone-button">
                 <img src="/static/icons/search-30-white.png" alt="logo">
             </a>
         </div>
     </div>
     <div class="search-bar-container">
-        <input class="search-bar" type="text" placeholder="Votre recherche" onkeyup="search(this)">
+        <input class="search-bar" id="search-bar" type="text" placeholder="Votre recherche">
         <img src="/static/icons/search-30-dark-grey.png" class="img" alt="search-icon">
     </div>
     <div class="search-results"> </div>
@@ -21,7 +21,7 @@
 </div>
 {% endblock %} {% block daytime_tip %} {{daytime_tip}} {% endblock %} {% block content %}
 <main class="dashboard-main-container">
-    <section class="main-infos entry-animation" onclick="close_boxes(this, event)">
+    <section class="main-infos entry-animation">
         <div class="title">MES LISTES</div>
         <div class="user-infos">
             <div class="box">
@@ -32,7 +32,7 @@
                 <img src="/static/imgs/3d-flash-on.png" class="img" alt="medal-icon">
                 <div class="text">{{xp}}</div>
             </div>
-            <div class="box lives-zone" id="lives-box" onclick="open_lives(this)">
+            <div class="box lives-zone" id="lives-box">
                 <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
                 <div class="text lives-zone" id="lives-info">{{lives}}</div>
             </div>
@@ -40,13 +40,13 @@
         <div class="filters">
             <div class="creation-date">
                 <div class="date">
-                    <input type="date" class="date-start-input" value="{{start_date}}" onchange="change_time()">
+                    <input type="date" class="date-start-input" value="{{start_date}}">
                     <img src="/static/icons/arrow-right-30-dark-grey.png" alt="">
-                    <input type="date" class="date-end-input" value="{{end_date}}" onchange="change_time()">
+                    <input type="date" class="date-end-input" value="{{end_date}}">
                 </div>
                 <div class="filter">
                     <img src="/static/icons/menu-30-dark-grey.png" alt="">
-                    <select class="filter-select" onchange="filter_by(this)">
+                    <select class="filter-select" id="filter-select">
                         <option value="date-increasing">Date ↓</option>
                         <option value="date-decreasing">Date ↑</option>
                         <option value="name-increasing">A-Z</option>
@@ -56,9 +56,9 @@
             </div>
         </div>
     </section>
-    <section class="lists-container entry-animation" id="lists-container" onclick="close_boxes(this, event)">
+    <section class="lists-container entry-animation" id="lists-container">
         {% for list in lists %} {% if new_list_id == list['id'] %} {% set css_class = "new-list" %} {% else %} {% set css_class = "" %} {% endif %}
-        <div class="list-box {{ css_class }}" onclick="open_game_trail(this, event)" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
+        <div class="list-box {{ css_class }}" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
             <div class="infos">
                 <div class="creation">
                     <p>Créée le {{ list["created_at"] }}</p>
@@ -77,13 +77,13 @@
             </div>
             <div class="actions">
                 <div class="delete-logo clickable-logo delete-zone">
-                    <a href="" class="delete-zone" onclick="manage_list(this, event, {{list['id']}})">
+                    <a href="" class="delete-zone manage-list-button" data-list_id="{{list['id']}}">
                         <img src="/static/icons/settings-30-dark-grey.png" class="delete-zone" alt="delete-icon">
                     </a>
                 </div>
                 <!-- TODO -->
                 <div class="delete-logo clickable-logo delete-zone">
-                    <a href="" class="delete-zone" onclick="copy_list(this, event, {{list['id']}})">
+                    <a href="" class="delete-zone copy-list-button" data-list_id="{{list['id']}}">
                         <img src="/static/icons/share-30-dark-grey.png" class="delete-zone" alt="delete-icon">
                     </a>
                 </div>
@@ -101,7 +101,7 @@
         </div>
         {% endif %}
     </section>
-    <section class="games-trail entry-animation" data-color="1" onclick="close_boxes(this, event)">
+    <section class="games-trail entry-animation" id="game-trail" data-color="1">
         <div class="no-list-selected">
             <div>
                 <img src="/static/imgs/3d-black-cursor.png" class="img" alt="cursor-icon">
@@ -118,7 +118,7 @@
         <div class="header">
             <div class="title">Gestion de la liste</div>
             <div class="close-logo clickable-logo">
-                <a href="" onclick="close_manage_list(this, event)">
+                <a href="" id="close-manage-list-button">
                     <img src="/static/icons/close.png" alt="logo">
                 </a>
             </div>
@@ -129,7 +129,7 @@
         <div class="header">
             <div class="title">Partager la liste</div>
             <div class="close-logo clickable-logo">
-                <a href="" onclick="close_share_list(this, event)">
+                <a href="" id="close-copy-list-button">
                     <img src="/static/icons/close.png" alt="logo">
                 </a>
             </div>
@@ -139,7 +139,7 @@
         </div>
         <div class="share-box">
             <div class="link" id="link" data-link=""></div>
-            <div class="copy-button" onclick="copy_link(this,event)">
+            <div class="copy-button" id="copy-link-button">
                 Copier
             </div>
         </div>
@@ -155,7 +155,7 @@
             </div>
             <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}">Vous avez tout vos coeur</div>
             <input type="hidden" name="csrf_token" id="csrf_token_purchase" value="{{ csrf_token() }}">
-            <a href="" onclick="purchase_lives(this, event)" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
+            <a href="" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
         </div>
     </div>
     <script src="/static/scripts/dashboard/search.js"></script>

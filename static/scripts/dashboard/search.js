@@ -6,6 +6,11 @@
  * @param {HTMLInputElement} el - The input element containing the search value.
  * @returns {void}
  */
+const searchBar = document.getElementById('search-bar');
+searchBar.addEventListener('keyup', function() {
+    search(searchBar);
+});
+
 function search(el) {
     var search = el.value;
 

@@ -10,8 +10,8 @@
         </div>
     </div>
     <div class="search-container">
-        <input type="text" placeholder="Rechercher un utilisateur" onkeypress="has_pressed_enter(event)" class="search-input">
-        <img src="/static/icons/search-30-dark-grey.png" onclick="search_user()" class="search-icon" alt="logo">
+        <input type="text" placeholder="Rechercher un utilisateur" class="search-input">
+        <img src="/static/icons/search-30-dark-grey.png" id="search-button" class="search-icon" alt="logo">
     </div>
     <div class="search-result">
         <div class="info">Recherchez un utilisateur</div>
@@ -37,12 +37,12 @@
                 {% if are_you_subscribed and not is_current_user %}
                 <div class="subscription">
                     <div class="button">
-                        <div class="text" onclick="unsubscribe(this)" data-id="{{id}}">Se désabonner</div>
+                        <div class="text" id="unsubscribe-button" data-id="{{id}}">Se désabonner</div>
                     </div>
                     <div class="text">Depuis le {{subscribed_date}}</div>
                 </div>
                 {% elif not is_current_user %}
-                <div class="subscribe-button" onclick="subscribe(this)" data-id="{{id}}">
+                <div class="subscribe-button" id="subscribe-button" data-id="{{id}}">
                     <div class="text">S'abonner</div>
                 </div>
                 {% endif %}
@@ -92,7 +92,7 @@
                         <img src="/static/icons/done-30-grey.png" class="not-clickable-zone" alt="logo">
                     </div>
                     {% else %}
-                    <div onclick="copy_list(this,event)" data-id="{{list['id']}}" class="button not-clickable-zone">
+                    <div data-id="{{list['id']}}" class="copy-list-button button not-clickable-zone">
                         <img src="/static/icons/copy-30-dark-grey.png" class="not-clickable-zone" alt="logo">
                     </div>
                     {% endif %} {% endif %}
@@ -114,9 +114,9 @@
     </section>
     {% endif %}
     <section class="friends-list entry-animation">
-        <div class="menu">
-            <div class="item item_sub active" onclick="switch_friend_list()">Abonnements</div>
-            <div class="item item_sub" onclick="switch_friend_list()">Abonnés</div>
+        <div class="menu" id="friend-list">
+            <div class="item item_sub active">Abonnements</div>
+            <div class="item item_sub">Abonnés</div>
         </div>
         <div class="content content_sub active">
             {% if subscriptions %} {% for subscription in subscriptions %}

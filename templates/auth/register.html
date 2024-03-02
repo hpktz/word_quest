@@ -7,7 +7,7 @@
     <title>Inscription - WORD QUEST</title>
     <link rel="icon" href="{{ url_for('static', filename='imgs/app-main-logo.png') }}">
     <noscript>
-        <meta http-equiv="refresh" content="0; URL=../error/nojs.html">
+        <meta http-equiv="refresh" content="0; URL=../error/403.html">
     </noscript>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/css/style-account-forms.css') }}">
 </head>
@@ -15,7 +15,9 @@
 <body>
     <section class="signup-form-container" id="signup-form-container">
         <form id="signup-form" method="POST" action="/auth/register">
-            <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            <a href="/">
+                <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            </a>
             <h1>Inscription</h1>
             <div class="step-bar">
                 <div class="step-bar-fill" style="width: 33%;"></div>

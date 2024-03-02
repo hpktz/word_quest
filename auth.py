@@ -18,7 +18,7 @@ Blueprints:
     - auth_bp: The Blueprint for the authentication routes.
 """
 
-from flask import Blueprint, render_template, redirect, url_for, flash, session, request
+from flask import Blueprint, render_template, redirect, url_for, flash, session, request, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from models import User  # Assurez-vous d'importer votre classe User appropriée
 
@@ -27,6 +27,7 @@ import bcrypt
 import pyotp
 import re
 import random
+import jwt
 
 from root import *
 from sendmails import send_mail
@@ -524,3 +525,143 @@ def logout():
     session.clear()
     logout_user()
     return redirect(url_for('auth.login'))
+
+@auth_bp.route('/pass-recovery')
+def pass_recovery():
+    """
+    Displays the password recovery page.
+
+    Returns:
+        flask.render_template: The 'auth/pass-recovery.html' template.
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    return render_template('auth/password-recovery.html')
+
+@auth_bp.route('/pass-recovery/send-link', methods=['POST'])
+def pass_recovery_send_link():
+    """
+    Sends a password recovery link to the user's email address.
+
+    Args:
+        email (str): The user's email address.
+
+    Returns:
+        flask.redirect: A redirect response based on the email address.
+            - /auth/pass-recovery : If the user is already authenticated.
+            - /auth/pass-recovery : If the user's email is not found in the database.
+            - /auth/pass-recovery : If there is an error connecting to the database.
+            - /auth/pass-recovery : If the password recovery link has been sent successfully.
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    email = request.form.get('email')
+    conn = None
+    cursor = None
+    try:
+        conn = create_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        data = cursor.fetchone()
+        if data:
+            actual_token = data[12]
+            if actual_token and actual_token > datetime.datetime.utcnow():
+                flash("Un email de récupération de mot de passe a déjà été envoyé")
+                return redirect(url_for('auth.pass_recovery'))
+            
+            token = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)}, current_app.config['SECRET_KEY'], algorithm="HS256")
+            url = request.host_url + "auth/pass-recovery/reset-password/" + token
+            send_mail(email, "Récupération de mot de passe - WORD QUEST", render_template('emails/password-recovery.html', url=url))
+            flash("Un email de récupération de mot de passe a été envoyé")
+            return redirect(url_for('auth.pass_recovery'))
+        else:
+            flash("Email introuvable")
+            return redirect(url_for('auth.pass_recovery'))
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        logging.error("Error connecting to database: " + str(e))
+        flash('Erreur de connexion')
+        return redirect(url_for('auth.pass_recovery'))
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+@auth_bp.route('/pass-recovery/reset-password/<token>')
+def pass_recovery_reset_password(token):
+    """
+    Displays the password reset page.
+
+    Args:
+        token (str): The password recovery token.
+
+    Returns:
+        flask.render_template: The 'auth/password-reset.html' template.
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    try:
+        payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
+        print(payload)
+        print(datetime.datetime.utcnow())
+        if datetime.datetime.fromtimestamp(payload["exp"]) > datetime.datetime.utcnow():
+            return render_template('auth/password-reset.html', token=token)
+        else:
+            flash("Le lien a expiré")
+            return redirect(url_for('auth.pass_recovery'))
+    except Exception as e:
+        print(e)
+        flash("Le lien est invalide")
+        return redirect(url_for('auth.pass_recovery'))
+    
+@auth_bp.route('/pass-recovery/reset-password/<token>', methods=['POST'])
+def pass_recovery_reset_password_post(token):
+    """
+    Handles the POST request for password reset.
+
+    Args:
+        token (str): The password recovery token.
+        password (str): The new password.
+
+    Returns:
+        flask.redirect: A redirect response based on the password recovery token.
+            - /auth/pass-recovery/reset-password/<token> : If the password recovery token is invalid.
+            - /auth/login : If the password has been reset successfully.
+            - /auth/pass-recovery/reset-password/<token> : If there is an error connecting to the database.
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    password = request.form.get('password')
+    try:
+        payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
+        if datetime.datetime.fromtimestamp(payload["exp"]) > datetime.datetime.utcnow():
+            conn = create_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE email=%s", (payload["email"],))
+            data = cursor.fetchone()
+            if data:
+                password = password.encode('utf-8')
+                hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+                cursor.execute("UPDATE users SET password=%s, password_recovery_session=NULL WHERE email=%s", (hashed, payload["email"]))
+                conn.commit()
+                flash("Mot de passe modifié avec succès")
+                return redirect(url_for('auth.login'))
+            else:
+                flash("Email introuvable")
+                return redirect(url_for('auth.pass_recovery'))
+        else:
+            flash("Le lien a expiré")
+            return redirect(url_for('auth.pass_recovery'))
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        logging.error("Error connecting to database: " + str(e))
+        flash('Erreur de connexion')
+        return redirect(url_for('auth.pass_recovery'))
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

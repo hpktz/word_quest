@@ -16,10 +16,10 @@ import os
 import datetime
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = '/tmp'
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
 
 Session(app)
 
@@ -50,6 +50,7 @@ def load_user(user_id):
             conn.close()
 
 talisman = Talisman(app)
+# Content Security Policy
 csp = {
     'default-src': [
         '\'self\'', 
@@ -89,6 +90,14 @@ hsts = {
     'max_age': 31536000,
     'include_subdomains': True
 }
+# Permissions policy
+permissions_policy = {
+    'geolocation': '\'none\'',
+    'camera': '\'none\'',
+    'microphone': '\'self\'',
+    'fullscreen': '\'self\'',
+    'payment': '\'none\'',
+}
 talisman.force_https = True
 talisman.force_file_save = True
 talisman.x_xss_protection = True
@@ -99,6 +108,7 @@ talisman.frame_options_allow_from = 'https://www.google.com'
 # Add the headers to Talisman
 talisman.content_security_policy = csp
 talisman.strict_transport_security = hsts
+talisman.permissions_policy = permissions_policy
 
 csrf = CSRFProtect(app)
 

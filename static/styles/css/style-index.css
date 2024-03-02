@@ -207,6 +207,8 @@ main .frst-section .texts .text {
 main .frst-section .texts .btn {
     width: 150px;
     padding: 15px;
+    display: block;
+    text-decoration: none;
     text-align: center;
     font-family: "League Spartan", sans-serif;
     background-color: #766153;
@@ -234,6 +236,8 @@ main .frst-section .texts .more {
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    text-decoration: none;
+    color: #333;
 }
 
 main .frst-section .texts .more .img {

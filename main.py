@@ -10,6 +10,7 @@ from create import create_bp
 from quests import quests_bp
 from discover import discover_bp
 from user_data import user_data_bp
+from emailing import emailing_bp
 from models import User
 from root import *
 import os
@@ -118,6 +119,8 @@ app.register_blueprint(create_bp)
 app.register_blueprint(quests_bp)
 app.register_blueprint(discover_bp)
 app.register_blueprint(user_data_bp)
+app.register_blueprint(emailing_bp)
+csrf.exempt(emailing_bp)
 
 # Importation of games blueprints
 from games.hangman import hangman_bp

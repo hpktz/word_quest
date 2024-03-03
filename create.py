@@ -299,8 +299,11 @@ def search(x):
         else:
             return jsonify({"code": 200, "title": "Word found", "result": senses})
     except requests.exceptions.HTTPError as err:
-        logging.error("Error while fetching word: " + str(err), exc_info=True)
+            return jsonify({"code": 404, "title": "Word not found", "result": []})
+    except Exception as e:
+        logging.error("Error while searching word: " + str(e), exc_info=True)
         abort(500)
+
         
 @create_bp.route('/dashboard/create/add/<string:id>')
 @login_required
@@ -430,7 +433,7 @@ def create_list():
             return jsonify({"code": 400, "title": "Bad request", "message": "Nom invalide"})
         
         # Check if time, xp and game are valid
-        if time not in [5, 10, 15] or xp not in [10, 20, 30] or game not in [1, 2, 3]:
+        if int(time) not in [5, 10, 15] or int(xp) not in [10, 20, 30] or int(game) not in [1, 2, 3]:
             time = 5
             xp = 10
             game = 1

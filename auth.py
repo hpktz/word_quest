@@ -278,7 +278,7 @@ def register_post():
                 flash("Email déjà utilisé")
                 return redirect(url_for('auth.register'))
             else:
-                if session["2fa"]["email"] != email:
+                if session["2fa"] is None or session["2fa"]["email"] != email:
                     # Check if the user's email is invalid
                     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
                         flash("Email invalide")
@@ -320,7 +320,7 @@ def register_post():
                     session["2fa"]["delay"] =  time.time() + 60
                     
                     # Send the 2FA code to the user's email
-                    html = render_template('emails/2fa.html', name=data[1], code=totp.now())
+                    html = render_template('emails/2fa.html', name=name, code=totp.now())
                     send_mail(email, "Code de vérification - WORD QUEST", html)
                     return redirect(url_for('auth.sys_2fa'))
                 else:

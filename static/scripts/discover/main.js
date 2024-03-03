@@ -169,7 +169,3 @@ main.addEventListener('scroll', function() {
         }
     });
 });
-
-window.onload = function() {
-    main.dispatchEvent(new Event('scroll'));
-}

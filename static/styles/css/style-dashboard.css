@@ -1344,7 +1344,8 @@ main {
     opacity: 1;
     border-radius: 0;
     pointer-events: all;
-    z-index: 4;
+    z-index: 1000;
+    top: 0;
     background-color: white;
 }
 

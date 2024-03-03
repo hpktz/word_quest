@@ -135,24 +135,7 @@
             {% endif %}
         </div>
         <div class="content content_sub">
-            {% if subscribers and is_current_user %} {% for subscriber in subscribers %}
-            <a href="/dashboard/profile/user/{{subscriber[0]}}" class="redirect account-container">
-                <img src="/static/imgs/profiles/{{ current_user.picture }}.png" class="account-picture" alt="profile-picture">
-                <div class="texts">
-                    <div class="name">Hippouille</div>
-                    <div class="xp">1900 XP</div>
-                </div>
-                {% if subscriber[4] %}
-                <div class="manage-friendship added">
-                    <img src="/static/icons/add-friend-30-brown.png" class="img" alt="">
-                </div>
-                {% else %}
-                <div class="manage-friendship">
-                    <img src="/static/icons/done-30-grey.png" class="img" alt="">
-                </div>
-                {% endif %}
-            </a>
-            {%endfor%} {% elif subscribers %} {% for subscriber in subscribers %}
+            {% if subscribers %} {% for subscriber in subscribers %}
             <a href="/dashboard/profile/user/{{subscriber[0]}}" class="redirect account-container">
                 <img src="/static/imgs/profiles/{{subscriber[2]}}.png" class="account-picture" alt="profile-picture">
                 <div class="texts">

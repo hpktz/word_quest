@@ -231,7 +231,6 @@ def search(x):
 
         # Parse the response (HTML)
         dom = html.fromstring(resp_json["entryContent"])
-        print(dom)
         # Start html code analysis
         entries = dom.xpath("//div[@class='hom']")
         senses = []
@@ -459,7 +458,6 @@ def create_list():
             
         # Get the user level
         user_level = current_user.lvl
-        print(user_level)
         with open('static/games-data.json') as json_file:
             levels = json.load(json_file)
         
@@ -611,7 +609,6 @@ def copy_list(id):
         return jsonify({"code": 200, "title": "List copied"}), 200
         
     except Exception as e:
-        print(e)
         if conn:
             conn.rollback()
         logging.error("Error while copying list: " + str(e), exc_info=True)
@@ -715,7 +712,6 @@ def copy_list_link(token):
         return redirect(url_for('main.index', new_list=True))
         
     except Exception as e:
-        print(e)
         if conn:
             conn.rollback()
         logging.error("Error while copying list: " + str(e), exc_info=True)

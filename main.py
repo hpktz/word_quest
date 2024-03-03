@@ -1,3 +1,40 @@
+"""
+####################################################
+#        #     #    ###     ####     ####          #
+#        #     #   #   #    #   #    #   #         #
+#         # # #    #   #    ####     #   #         #
+#          # #      ###     #   #    ####          #
+#                                                  #
+#      ###      #   #    ####     ####   #####     #
+#     #   #     #   #    #__     #         #       #
+#     #   #     #   #    #        ####     #       #
+#      ### #     ###     #####    ____#    #       #
+####################################################
+
+Author: Abel Haller, Hippolyte Pankutz
+
+Main file of the application. It contains the main routes and the configuration of the application.
+
+Imports:
+    - flask: For handling the web application
+    - flask_login: For handling the user sessions
+    - flask_session: For handling the user sessions
+    - flask_talisman: For adding security headers to the application
+    - flask_wtf.csrf: For adding CSRF protection to the application
+    
+    - auth: The blueprint for the authentication routes
+    - dashboard: The blueprint for the dashboard routes
+    - create: The blueprint for the creation routes
+    - quests: The blueprint for the quests routes
+    - discover: The blueprint for the discover routes
+    - user_data: The blueprint for the user data routes
+    - emailing: The blueprint for the emailing routes
+    - models: The User model
+    - root: The root of the application
+    - os: For handling the environment variables
+    - datetime: For handling the date and time
+"""
+
 from flask import Flask, session, render_template, request
 from flask_login import LoginManager, current_user, login_required
 from flask_session import Session
@@ -17,17 +54,20 @@ import os
 import datetime
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_FILE_DIR'] = '/tmp'
-app.config['SESSION_PERMANENT'] = True
+# Configuration of the application
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY') # Secret key for the application
+app.config['SESSION_TYPE'] = 'filesystem' # Type of session
+app.config['SESSION_FILE_DIR'] = '/tmp' # Directory for the session files (Value for google cloud)
+app.config['SESSION_PERMANENT'] = True # Session is permanent - it will be stored until the user logs out
 
 Session(app)
 
+# Configuration of the login manager
 login_manager = LoginManager(app)
-login_manager.login_view = 'auth.login'
-login_manager.login_message = 'Vous devez vous connecter pour accéder à cette page.'
+login_manager.login_view = 'auth.login' # The view to redirect to when the user is not logged in
+login_manager.login_message = 'Vous devez vous connecter pour accéder à cette page.' # The message to display when the user is not logged in
 
+# The logic to load a user from the database
 @login_manager.user_loader
 def load_user(user_id):
     conn = None
@@ -41,6 +81,7 @@ def load_user(user_id):
             # User not found in the database, disconnect the user
             return None
 
+        # Create a User object from the database result
         return User(user_id, result[1], result[2], result[4], result[3], result[8], True if result[6] == 1 else False, True if result[7] == 1 else False)
     except mysql.connector.Error as e:
         return None
@@ -50,6 +91,7 @@ def load_user(user_id):
         if conn:
             conn.close()
 
+# Security headers
 talisman = Talisman(app)
 # Content Security Policy
 csp = {
@@ -68,10 +110,10 @@ csp = {
     'style-src': [
         '\'self\'',
         'https://fonts.googleapis.com',
-        '\'unsafe-inline\''
+        '\'unsafe-inline\'' # Low security, but necessary for the use of the library 'typeit'
     ],
     'img-src': [
-        '*',
+        '*', # Super low security, but necessary for the use of the quiz game that looks for images on the web
         'data:'
     ],
     'frame-src': [
@@ -95,24 +137,27 @@ hsts = {
 permissions_policy = {
     'geolocation': '\'none\'',
     'camera': '\'none\'',
-    'microphone': '\'self\'',
+    'microphone': '\'self\'', # Necessary for the use of the microphone in one of the games
     'fullscreen': '\'self\'',
     'payment': '\'none\'',
 }
-talisman.force_https = True
-talisman.force_file_save = True
-talisman.x_xss_protection = True
-talisman.session_cookie_secure = True
-talisman.session_cookie_samesite = 'Lax'
-talisman.frame_options_allow_from = 'https://www.google.com'
+# Add the headers to Talisman
+talisman.force_https = True # Force the use of HTTPS
+talisman.force_file_save = True # Force the use of HTTPS for file saving
+talisman.x_xss_protection = True # Enable the XSS protection
+talisman.session_cookie_secure = True # Secure the session cookie
+talisman.session_cookie_samesite = 'Lax' # Set the SameSite attribute of the session cookie to Lax
+talisman.frame_options_allow_from = 'https://www.google.com' # Allow the use of iframes from Google
 
 # Add the headers to Talisman
 talisman.content_security_policy = csp
 talisman.strict_transport_security = hsts
 talisman.permissions_policy = permissions_policy
 
+# CSRF protection
 csrf = CSRFProtect(app)
 
+# Importation of blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)
 app.register_blueprint(create_bp)
@@ -120,7 +165,7 @@ app.register_blueprint(quests_bp)
 app.register_blueprint(discover_bp)
 app.register_blueprint(user_data_bp)
 app.register_blueprint(emailing_bp)
-csrf.exempt(emailing_bp)
+csrf.exempt(emailing_bp) # Exempt the emailing blueprint from CSRF protection because it uses a POST request from an external source
 
 # Importation of games blueprints
 from games.hangman import hangman_bp
@@ -225,6 +270,10 @@ def forbidden(e):
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    return render_template('errors/500.html'), 500
+
+@app.errorhandler(Exception)
+def handle_exception(e):
     return render_template('errors/500.html'), 500
 
 @app.route('/dashboard/errors/500')

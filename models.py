@@ -6,11 +6,13 @@ Imports:
     - root: For the create_connection function.
     - json: For the json.loads function.
     - datetime: For the datetime class.
+    - logging: For logging errors.
 """
 from flask_login import UserMixin, AnonymousUserMixin
 from root import *
 import json
 from datetime import datetime
+import logging
 
 class User(UserMixin):
     """ 
@@ -93,7 +95,7 @@ class User(UserMixin):
                 results.append(result)
             return results # Return the user's lists.
         except Exception as e:
-            print(e)
+            logging.error(e)    
             return []
         finally:
             if cursor:
@@ -117,7 +119,7 @@ class User(UserMixin):
             lists = cursor.fetchall()
             return [lst[0] for lst in lists] # Return the lists the user has liked.
         except Exception as e:
-            print(e)
+            logging.error(e)
             return []
         finally:
             if cursor:
@@ -142,7 +144,7 @@ class User(UserMixin):
             lives = cursor.fetchone()
             return lives[0] # Return the user's lives.
         except Exception as e:
-            print(e)
+            logging.error(e)
             return 0
         finally:
             if cursor:

@@ -120,7 +120,7 @@ def user_profile(id):
                 JOIN user_statements ON users.id = user_statements.user_id WHERE \
                 subscriptions.user_id = %s;", (user_id,))
         result = cursor.fetchall()
-        
+    
         for row in result:
             if row[0] is None:
                 continue
@@ -150,7 +150,6 @@ def user_profile(id):
         is_subscribed = False
         if not is_public and not is_current_user:
             for sub in subscriptions:
-                print(sub)
                 if int(sub[0]) == int(current_user.id):
                     is_subscribed = True
                     break
@@ -445,7 +444,6 @@ def profile_list(id):
         list_owner_name = cursor.fetchone()[0]
         is_public = False if result[4] == 0 else True
         is_yours = str(list_owner) == str(current_user.id)
-        print(is_yours)
         
         if not is_public and not is_yours:
             cursor.execute("SELECT * FROM subscriptions WHERE user_id = %s AND subscribed_to=%s;", (list_owner,current_user.id))
@@ -471,9 +469,7 @@ def profile_list(id):
         total_xp = sum([row[1] for row in result]) if result else 0
         
         days = [[(datetime.now() - timedelta(days=i)).day, 0] for i in range(14)]
-        print(days)
         result = [[row[0].day, row[1]] for row in result]
-        print(result)
         for day in days:
             for row in result:
                 if day[0] == row[0]:

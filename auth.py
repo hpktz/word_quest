@@ -563,15 +563,17 @@ def pass_recovery_send_link():
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
         data = cursor.fetchone()
+        # Check if the user's email is found in the database
         if data:
-            actual_token = data[12]
+            actual_token = data[12] # Check if a password recovery email has already been sent
             if actual_token and actual_token > datetime.datetime.utcnow():
                 flash("Un email de récupération de mot de passe a déjà été envoyé")
                 return redirect(url_for('auth.pass_recovery'))
             
+            # Otherwise, generate a new password recovery token and send the link to the user's email
             token = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)}, current_app.config['SECRET_KEY'], algorithm="HS256")
-            url = request.host_url + "auth/pass-recovery/reset-password/" + token
-            send_mail(email, "Récupération de mot de passe - WORD QUEST", render_template('emails/password-recovery.html', url=url))
+            url = request.host_url + "auth/pass-recovery/reset-password/" + token # Generate the password recovery link
+            send_mail(email, "Récupération de mot de passe - WORD QUEST", render_template('emails/password-recovery.html', url=url)) # Send the password recovery link to the user's email
             flash("Un email de récupération de mot de passe a été envoyé")
             return redirect(url_for('auth.pass_recovery'))
         else:
@@ -603,16 +605,15 @@ def pass_recovery_reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     try:
+        # Decode the password recovery token
         payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
-        print(payload)
-        print(datetime.datetime.utcnow())
-        if datetime.datetime.fromtimestamp(payload["exp"]) > datetime.datetime.utcnow():
-            return render_template('auth/password-reset.html', token=token)
+        if datetime.datetime.fromtimestamp(payload["exp"]) > datetime.datetime.utcnow(): # Check if the token has expired
+            return render_template('auth/password-reset.html', token=token) # Render the password reset page
         else:
             flash("Le lien a expiré")
             return redirect(url_for('auth.pass_recovery'))
     except Exception as e:
-        print(e)
+        logging.error("Error decoding token: " + str(e))
         flash("Le lien est invalide")
         return redirect(url_for('auth.pass_recovery'))
     
@@ -636,6 +637,7 @@ def pass_recovery_reset_password_post(token):
     password = request.form.get('password')
     try:
         payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
+        # Check if the token has expired
         if datetime.datetime.fromtimestamp(payload["exp"]) > datetime.datetime.utcnow():
             conn = create_connection()
             cursor = conn.cursor()
@@ -644,7 +646,7 @@ def pass_recovery_reset_password_post(token):
             if data:
                 password = password.encode('utf-8')
                 hashed = bcrypt.hashpw(password, bcrypt.gensalt())
-                cursor.execute("UPDATE users SET password=%s, password_recovery_session=NULL WHERE email=%s", (hashed, payload["email"]))
+                cursor.execute("UPDATE users SET password=%s, password_recovery_session=NULL WHERE email=%s", (hashed, payload["email"])) # Update the user's password
                 conn.commit()
                 flash("Mot de passe modifié avec succès")
                 return redirect(url_for('auth.login'))

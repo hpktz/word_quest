@@ -32,7 +32,7 @@
     <div class="list-container entry-animation">
         <div class="trend-list list-to-switch active">
             {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] != 1 %}
-            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" class="redirect list-container">
+            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" class="redirect list-container visible">
                 <div class="title">{{list["list_title"]}}</div>
                 {% if list["is_owner"] %}
                 <div class="certification">

@@ -96,10 +96,10 @@
         <table style="width: 100%; margin-top: 50px;">
             <tbody style="text-align: center;">
                 <tr>
-                    {% set color = "green" if rank
+                    {% set color = "green" if user_rank
                     < 10 else "red" %} <td>
                         <div style="width: 100px; height: 100px; border: 2px solid {{color}}; border-radius: 100px; margin: auto;">
-                            <p style="font-size: 20px; font-weight: bold; margin-top: 40px;">1</p>
+                            <p style="font-size: 20px; font-weight: bold; margin-top: 40px;">{{user_rank}}</p>
                         </div>
                         </td>
                 </tr>

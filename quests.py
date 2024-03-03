@@ -74,7 +74,7 @@ def quests():
         result = cursor.fetchall()
         
         # Get the user's ranking
-        cursor.execute("SELECT u.id as user_id, u.name as username, SUM(ll.xp) as total_xp, \
+        cursor.execute("SELECT u.id as user_id, u.picture as user_picture, u.name as username, SUM(ll.xp) as total_xp, \
             RANK() OVER (ORDER BY SUM(ll.xp) DESC) as user_rank FROM users u JOIN lessons_log ll ON u.id = ll.user_id \
             GROUP BY u.id, u.name ORDER BY total_xp DESC;")
         ranking = cursor.fetchall()

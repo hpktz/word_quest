@@ -118,7 +118,7 @@ def user_profile(id):
                 SUM(CASE WHEN user_statements.transaction_type = 'xp' THEN user_statements.transaction ELSE 0 END) \
                 AS sum_xp FROM subscriptions JOIN users ON users.id = subscriptions.subscribed_to \
                 JOIN user_statements ON users.id = user_statements.user_id WHERE \
-                subscriptions.user_id = %s;", (user_id,))
+                subscriptions.user_id = %s GROUP BY users.id, users.name, users.picture;", (user_id,))
         result = cursor.fetchall()
     
         for row in result:
@@ -131,7 +131,7 @@ def user_profile(id):
                 SUM(CASE WHEN user_statements.transaction_type = 'xp' THEN user_statements.transaction ELSE 0 END) \
                 AS sum_xp, false AS is_subscribed, subscriptions.created_at  FROM subscriptions JOIN users ON users.id = subscriptions.user_id \
                 JOIN user_statements ON users.id = user_statements.user_id WHERE \
-                subscriptions.subscribed_to = %s;", (user_id,))
+                subscriptions.subscribed_to = %s GROUP BY users.id, users.name, users.picture;", (user_id,))
         result = cursor.fetchall()
         for row in result:
             if row[0] is None:

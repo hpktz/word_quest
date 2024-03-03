@@ -237,6 +237,8 @@ header .infos-section::-webkit-scrollbar-thumb {
     font-size: 25px;
     color: #b4b4b4;
     margin: auto;
+    text-decoration: none;
+    color: #333;
 }
 
 .quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box {
@@ -245,6 +247,8 @@ header .infos-section::-webkit-scrollbar-thumb {
     align-items: center;
     gap: 30px;
     margin: 20px 0;
+    text-decoration: none;
+    color: #333;
 }
 
 .quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .rank {
@@ -278,7 +282,6 @@ header .infos-section::-webkit-scrollbar-thumb {
     border-radius: 5px;
     height: 35px;
     width: 35px;
-    padding: 5px;
 }
 
 .quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .picture img {

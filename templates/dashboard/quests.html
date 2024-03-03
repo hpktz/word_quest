@@ -130,23 +130,22 @@
             <div class="ranking-position">{{user_rank}}</div>
             <div class="ranking-container">
                 {% if top_ranking %} {% for rank in top_ranking %}
-                <div class="ranking-box">
-                    <div class="rank">{{rank[3]}}</div>
+                <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
+                    <div class="rank">{{rank[4]}}</div>
                     <div class="picture">
-                        <img src="/static/icons/user-30-white.png" alt="">
+                        <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
                     </div>
-                    <div class="name">{{rank[1]}}</div>
-                </div>
-                {% endfor %}
+                    <div class="name">{{rank[2]}}</div>
+                </a> {% endfor %}
                 <div class="separate"></div>
                 {% endif %} {% for rank in arround_ranking %}
-                <div class="ranking-box">
-                    <div class="rank">{{rank[3]}}</div>
+                <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
+                    <div class="rank">{{rank[4]}}</div>
                     <div class="picture">
-                        <img src="/static/icons/user-30-white.png" alt="">
+                        <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
                     </div>
-                    <div class="name">{{rank[1]}}</div>
-                </div>
+                    <div class="name">{{rank[2]}}</div>
+                </a>
                 {% endfor %} {% if arround_ranking|length == 0 %}
                 <div class="empty-ranking-box">Pas de données</div>
                 {% endif %}

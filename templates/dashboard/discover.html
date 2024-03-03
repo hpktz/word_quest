@@ -32,19 +32,27 @@
     <div class="list-container entry-animation">
         <div class="trend-list list-to-switch active">
             {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] != 1 %}
-            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" class="redirect list-container visible">
+            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" data-class="{{list['amount']}}" class="visible redirect list-container">
                 <div class="title">{{list["list_title"]}}</div>
                 {% if list["is_owner"] %}
                 <div class="certification">
                     <img src="/static/icons/approval-30-dark-grey.png" class="img" alt="user">
                     <div class="certification-text ">Liste originale</div>
                 </div>
+                {% else %}
+                <div class="no-certification">Liste copiée</div>
                 {% endif %}
                 <div class="list-content">
                     {% for word in list["words"] %}
                     <div class="word">{{word["word"]}} - <span class="type">{{word["type"]}}</span></div>
                     {% endfor %}
                 </div>
+                {% if list['nb_words_not_displayed'] == 0 %}
+                <div class="more-words">Liste de {{list['amount']}} mots</div>
+                {% else %}
+                <div class="more-words">+ {{list['nb_words_not_displayed']}} {% if list['nb_words_not_displayed'] == 1 %} mot {% else %} mots {% endif %}
+                </div>
+                {% endif %}
                 <div class="action not-clickable-zone">
                     <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}">
                         <img src="/static/icons/copy-30-dark-grey.png" class="img not-clickable-zone" alt="copy">

@@ -28,6 +28,7 @@
 .rules{
     font-family: 'League Spartan';
     font-size: 22px;
+    text-align: center;
 }
 .game{
     width: 80vw;
@@ -49,11 +50,12 @@
     background-color: #BCBD8B;
     display: flex;
     align-items: center;
-    font-size: 40px;
+    font-size: clamp(18px, 2vw, 34px);
     font-family: 'League Spartan', sans-serif;
     justify-content: center;
+    text-align: center;
     transform: rotateY(180deg);
-    transition: 0.25s;
+    transition: 0.3s;
 }
 .item.box_open{
     transform: rotateY(0deg);
@@ -84,10 +86,24 @@
 
 .box_match{
     animation: match 0.3s;
+    pointer-events: none;
     transform: rotateY(0deg);
 }
 .box_match::after{
     opacity: 0;
+}
+
+.time{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.time .icon {
+    width: 30px;
+}
+.time .data{
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
 }
 
 
@@ -149,6 +165,9 @@
     }
 }
 @media screen and (max-width: 1000px) {
+    .game{
+        gap: 10px;
+    }
     .item{
         width: 30vw;
         height: 10vh;
@@ -160,13 +179,21 @@
 
 
 @media screen and (max-width: 730px) {
+    .separation{
+        display: none;
+    }
+    .time{
+        position: absolute;
+        top: 15px;
+        right: 25px ;
+    }
     .item{
         width: 45vw;
-        height: 6vh;
+        height: 10vh;
     }
     .rules{
         margin-top: 20px;
-        font-size: 16px;
+        font-size: 18px;
     }
     .container{
         gap: 20px;

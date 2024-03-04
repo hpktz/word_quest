@@ -161,9 +161,9 @@ setTimeout(() => {
                     if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54) {
                         isEventListener = false
                         loader.style.display = 'flex'
-                        const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.key}`);
+                        // const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.key}`);
                         loader.style.display = 'none'
-                        var checked = await check.json();
+                        // var checked = await check.json();
                         letter = e.key
                         keyboard.forEach(el => {
                             if (el.innerHTML == letter) {

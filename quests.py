@@ -130,7 +130,7 @@ def quests():
         
         for item, rank in enumerate(ranking):
             if int(rank[0]) == int(current_user.id):
-                user_rank = int(rank[3])
+                user_rank = int(rank[4])
                 break   
         
         # Set the top and arround ranking for the UI

@@ -74,7 +74,7 @@ def quests():
         result = cursor.fetchall()
         
         # Get the user's ranking
-        cursor.execute("SELECT u.id as user_id, u.name as username, SUM(ll.xp) as total_xp, \
+        cursor.execute("SELECT u.id as user_id, u.picture as user_picture, u.name as username, SUM(ll.xp) as total_xp, \
             RANK() OVER (ORDER BY SUM(ll.xp) DESC) as user_rank FROM users u JOIN lessons_log ll ON u.id = ll.user_id \
             GROUP BY u.id, u.name ORDER BY total_xp DESC;")
         ranking = cursor.fetchall()
@@ -98,7 +98,7 @@ def quests():
                 "day": day.strftime("%A").capitalize(),
                 "lesson_count": day_result[1] if day_result else 0,
                 "total_xp": day_result[2] if day_result else 0,
-                "total_time": day_result[3] if day_result else 0,
+                "total_time": day_result[3]//60  if day_result else 0,
                 "target_achieved": target_achieved
             })
         
@@ -130,7 +130,7 @@ def quests():
         
         for item, rank in enumerate(ranking):
             if int(rank[0]) == int(current_user.id):
-                user_rank = int(rank[3])
+                user_rank = int(rank[4])
                 break   
         
         # Set the top and arround ranking for the UI

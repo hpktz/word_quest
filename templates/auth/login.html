@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -14,8 +14,10 @@
 
 <body>
     <section class="login-form-container" id="login-form-container">
-        <form id="login-form" method="POST" action="/auth/login" onsubmit="send_form(event)">
-            <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+        <form id="login-form" method="POST" action="/auth/login">
+            <a href="/">
+                <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            </a>
             <h1>Connexion</h1>
             {% with messages = get_flashed_messages() %} {% if messages %}
             <p id="login-form-main-alert">{{ messages[0] }}</p>
@@ -26,11 +28,10 @@
                 <img src="{{ url_for('static', filename='icons/hide-password.png') }}" style="z-index: 15;" class="hidden-password-img" id="hidden-password-img">
                 <span class="hidden-password-asset hidden" id="hidden-password-asset"></span>
             </div>
-            <!--
-                <span class="separator"></span>
-                <a href="password-recovery" class="password-recovery">Mot de passe oublié ?</a>
-            -->
             <span class="separator"></span>
+            <a href="/auth/pass-recovery" class="password-recovery">Mot de passe oublié ?</a>
+            <span class="separator"></span>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="submit-button" id="login-submit-button">Connexion</button>
         </form>
         <span class="separator snd-separator"></span>
@@ -38,26 +39,7 @@
             <a href="{{ url_for('auth.register') }}" class="create-account">Je n'ai pas encore de compte</a>
         </div>
     </section>
-    <script>
-        var barre = document.getElementById("hidden-password-asset");
-        var oeil = document.getElementById("hidden-password-img");
-        var password = document.getElementById("login-password-input");
-
-        oeil.addEventListener("click", function() {
-            if (password.type == "text") {
-                password.type = "password"
-            } else {
-                password.type = "text"
-            }
-            barre.classList.toggle("hidden");
-        })
-
-        function send_form(event) {
-            event.preventDefault();
-            document.getElementById("login-submit-button").innerHTML = '<div class="loader"></div>';
-            document.getElementById("login-form").submit();
-        }
-    </script>
+    <script src="/static/styles/js/auth-login.js"></script>
 </body>
 
 </html>

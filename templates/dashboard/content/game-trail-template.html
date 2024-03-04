@@ -1,14 +1,15 @@
-<div class="game-trail" onclick="close_level_popup(this, event)">
+<div class="game-trail">
     <div class="list-header">
         <p class="title">{{list['title']}}</p>
         <div class="close-logo clickable-logo">
-            <a href="/" onclick="close_game_trail(this, event)">
+            <a href="/" class="close-game-rail-button">
                 <img src="/static/icons/close.png" alt="logo">
             </a>
         </div>
     </div>
-    {% for game in games %} {% if game["status"] == "blocked" %} {% set game = {'id': game['id'], 'ord': game['ord'], 'name': "", 'short_desc': "", 'img': '/static/icons/games-icons/padlock-30-dark-grey.png', 'status': 'blocked', 'completed': 0} %} {% endif %}
-    <div class="level {{game['status']}}" onclick="open_game_info(this)" data-game_infos="[{{game}}]">
+    {% for game in games %} {% if game["status"] == "blocked" %} {% set game = {'id': game['id'], 'ord': game['ord'], 'name': "", 'short_desc': "", 'img': '/static/icons/games-icons/padlock-30-dark-grey.png', 'status': 'blocked', 'completed': 0} %} {% endif
+    %}
+    <div class="level level-box {{game['status']}}" data-game_infos="[{{game}}]">
         <img class="level-img" src="{{game['img']}}">
     </div>
     {% endfor %}

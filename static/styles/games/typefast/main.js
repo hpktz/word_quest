@@ -12,6 +12,8 @@
  * 
  * @returns {Promise<void>} - The result of the request 
  */
+const form = document.getElementById('check-form');
+form.addEventListener('submit', (event) => check_word(form, event));
 
 async function check_word(form, event) {
     // Cancel the default action, if needed

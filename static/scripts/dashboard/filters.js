@@ -5,10 +5,17 @@
  * @function change_time
  * @returns {void}
  */
-function change_time() {
-    const start = document.getElementsByClassName('date-start-input')[0];
-    const end = document.getElementsByClassName('date-end-input')[0];
+const start = document.getElementsByClassName('date-start-input')[0];
+const end = document.getElementsByClassName('date-end-input')[0];
+start.addEventListener('change', function() {
+    change_time();
+});
+end.addEventListener('change', function() {
+    change_time();
+});
 
+function change_time() {
+    console.log(start.value);
     var isThere = false;
     for (let i = 0; i < document.getElementsByClassName('list-box').length; i++) {
         // get the creation date of the list box
@@ -52,6 +59,11 @@ function change_time() {
  * @param {HTMLInputElement} el - The HTML input element representing the filter.
  * @returns {void}
  */
+const filterSelect = document.getElementById('filter-select');
+filterSelect.addEventListener('change', function() {
+    filter_by(filterSelect);
+});
+
 function filter_by(el) {
     var filter = el.value;
     var emptybox = document.getElementsByClassName('list-box-empty')[0];

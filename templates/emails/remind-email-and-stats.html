@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        * {
+            font-family: Verdana;
+        }
+        
+        body {
+            background-color: #f6f6f6;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            margin: 25px auto;
+            background-color: #fff;
+            box-shadow: 8px 0px 24px 0 #959da54d;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        tfoot {
+            border-top: 2px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <table style="width: 100%; background-color: #717744; padding: 10px; border-radius: 5px;">
+            <tbody>
+                <tr>
+                    <td style="color: lightgrey; font-weight: bold; width: 100%">
+                        Word Quest
+                    </td>
+                    <td>
+                        <img src="cid:app-main-logo" width="30px" alt="word-quest-logo">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%; margin-top: 25px;">
+            <tbody style="text-align: center;">
+                <tr>
+                    <td>
+                        <img src="cid:main-picture" width="75px" alt="main-illustration" />
+                    </td>
+                </tr>
+                <tr style="margin-top: 25px;">
+                    <td style="color: #333333; font-weight: bold; font-size: 30px;">
+                        {{main_title}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% if notif_remind and not got_rewards %}
+        <table style="width: 100%; margin-top: 25px;">
+            <tbody style="text-align: left;">
+                <tr>
+                    <td style="width: 50%; text-align:center;">
+                        <img src="cid:chest-illustration" width="175px" alt="chest-illustration" />
+                    </td>
+                    <td style="width: 50%;">
+                        <p style="font-weight: bold;">Ton coffre t'attend encore !</p>
+                        <p>Réalise tes objectifs quotidiens et fonce l'ouvrir !</p>
+                        <a href="https://word-quest.com/dashboard" style="color: white; background-color:#766153; padding: 10px; border-radius: 5px; text-decoration:none;">C'est par ici !</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %} {% if notif_stats %}
+        <table style="width: 80%; margin: auto; margin-top: 50px;border: 2px solid grey; border-radius: 10px; padding: 10px;">
+            <tbody style="text-align: left;">
+                <tr>
+                    <td style="width: 50%; text-align:center;">
+                        <img src="cid:lightnings-illustration" height="50px" alt="lightnings-illustration" />
+                        <p style="font-size: 20px; font-weight: bold;">{{xp}}XP</p>
+                        <p>Gagnés aujourd'hui</p>
+                    </td>
+                    <td style="width: 50%; text-align:center;">
+                        <img src="cid:red-clock-illustration" height="50px" alt="red-clock-illustration" />
+                        <p style="font-size: 20px; font-weight: bold;">{{time}}</p>
+                        <p>Secondes passées</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%; margin-top: 50px;">
+            <tbody style="text-align: center;">
+                <tr>
+                    {% set color = "green" if user_rank
+                    < 10 else "red" %} <td>
+                        <div style="width: 100px; height: 100px; border: 2px solid {{color}}; border-radius: 100px; margin: auto;">
+                            <p style="font-size: 20px; font-weight: bold; margin-top: 40px;">{{user_rank}}</p>
+                        </div>
+                        </td>
+                </tr>
+                <tr style="margin-top: 25px;">
+                    <td>
+                        <p style="font-style: italic;">Votre classement cette semaine</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%; margin-top: 50px;">
+            <tbody style="text-align: center;">
+                <tr>
+                    <td>
+                        <p>{{final_sentence}}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="margin-top: 50px; text-align: center; width: 100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="https://word-quest.com/dashboard" style="color: white; background-color:#766153; padding: 10px; border-radius: 5px; text-decoration:none;">Commencer une leçon !</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+        <table style="margin-top: 50px; border-top: 2px solid lightgrey; width: 100%;">
+            <tbody>
+                <tr>
+                    <td>
+                        <p style="font-size: 12px; color: grey;">
+                            Si vous ne souhaitez plus recevoir de mails de notre part, vous pouvez vous désinscrire dans les paramètres de vos listes.
+                        </p>
+                        <p style="font-size: 12px; color: grey;">
+                            WORD QUEST, 2024
+                        </p>
+                    </td>
+                    <td>
+                        <a href="https://twitter.com/wordquest_dev" alt="">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" width="30px" alt="">
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

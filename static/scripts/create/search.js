@@ -10,9 +10,11 @@
  * @returns {Promise<void>} - A promise that resolves once the search results are displayed.
  * @throws {Error} - If an error occurs during the search process.
  */
+const searchButton = document.getElementById('search-button');
+searchButton.addEventListener('click', (e) => search_word(e));
 async function search_word(e) {
     e.preventDefault();
-    
+
     const definitionsContainer = document.querySelector('.words-container');
     definitionsContainer.innerHTML = '<div class="load"><div class="loader"></div></div>';
 
@@ -34,9 +36,8 @@ async function search_word(e) {
                 definitionsContainer.innerHTML += defContainerHtml;
 
                 const wordBox = document.getElementsByClassName('word-box')[i];
-                wordBox.setAttribute('onclick', `ad_to_list(this)`);
                 wordBox.setAttribute('data-word_id', `${searchResponse.result[i].id}`);
-                
+
                 document.getElementsByClassName('type')[i].innerHTML = searchResponse.result[i].type;
                 document.getElementsByClassName('translation')[i].innerHTML = searchResponse.result[i].french_translation;
 
@@ -62,6 +63,9 @@ async function search_word(e) {
  * @param {Event} e - The event object.
  * @returns {void}
  */
+const searchBar = document.getElementById('search-bar');
+searchBar.addEventListener('keypress', (e) => check_key(e));
+
 function check_key(e) {
     if (e.keyCode === 13) {
         search_word(e);

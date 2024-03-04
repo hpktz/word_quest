@@ -1344,7 +1344,8 @@ main {
     opacity: 1;
     border-radius: 0;
     pointer-events: all;
-    z-index: 4;
+    z-index: 1000;
+    top: 0;
     background-color: white;
 }
 
@@ -1930,6 +1931,7 @@ main {
         animation: entry-header-phone 0.5s ease-in-out;
     }
     main {
+        padding: 50px 10px 0 10px;
         grid-row: 2;
         animation: main-entry-phone 0.5s ease-in-out;
     }

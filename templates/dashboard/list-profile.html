@@ -80,35 +80,11 @@
         </div>
         {% if not is_yours %}
         <div class="separate"></div>
-        <div class="copy-button" onclick="copy_list(this)">
+        <div class="copy-button" id="copy-button" data-id="{{id}}">
             Copier la liste
         </div>
         {% endif %}
     </section>
-    <script>
-        async function copy_list(el) {
-            el.innerHTML = "<div class='loader'></div>"
-            try {
-                let response = await fetch('/dashboard/list/copy/{{id}}');
-                let data = await response.json();
-                if (data.code == 200) {
-                    el.innerHTML = "Liste copiée"
-                    el.onclick = null
-                    el.style.cursor = "default"
-                    el.style.backgroundColor = "#555"
-                } else {
-                    el.classList.add("pulse")
-                    setTimeout(() => {
-                        el.classList.remove("pulse")
-                    }, 250)
-                }
-            } catch (error) {
-                el.classList.add("pulse")
-                setTimeout(() => {
-                    el.classList.remove("pulse")
-                }, 250)
-            }
-        }
-    </script>
+    <script src="/static/scripts/profile/list-profile-main.js"></script>
 </main>
 {% endblock %}

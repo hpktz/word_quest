@@ -1,3 +1,18 @@
+const mainSection = document.getElementsByClassName('main-infos')[0];
+mainSection.addEventListener('click', function(event) {
+    close_boxes(this, event);
+});
+
+const listsContainer = document.getElementById('lists-container');
+listsContainer.addEventListener('click', function(event) {
+    close_boxes(this, event);
+});
+
+const gamesTrail = document.getElementsByClassName('games-trail')[0];
+gamesTrail.addEventListener('click', function(event) {
+    close_boxes(this, event);
+});
+
 /**
  * Opens the game information and updates the UI based on the provided game information.
  * 
@@ -32,7 +47,14 @@ function open_game_info(el) {
         levelInfoSubmitButton.classList.add('start')
         levelInfoTitle.innerHTML = gameInfos[0].name;
         levelInfoText.innerHTML = gameInfos[0].short_desc;
-        levelInfoSubmitButton.innerHTML = "<a href='" + gameInfos[0].url + "/" + gameInfos[0].list_id + "' onclick='open_game(this, event)'>Rejouer</a>";
+        let a = document.createElement('a');
+        a.href = gameInfos[0].url + "/" + gameInfos[0].list_id;
+        a.innerHTML = "Rejouer";
+        a.onclick = function(event) {
+            open_game(this, event);
+        }
+        levelInfoSubmitButton.innerHTML = "";
+        levelInfoSubmitButton.appendChild(a);
     } else if (gameInfos[0].status == "blocked") {
         levelInfoTitle.innerHTML = "Niveau bloqué";
         levelInfoText.innerHTML = "Terminez le niveau précédent pour débloquer ce niveau";
@@ -42,7 +64,14 @@ function open_game_info(el) {
         levelInfoSubmitButton.classList.add('start')
         levelInfoTitle.innerHTML = gameInfos[0].name;
         levelInfoText.innerHTML = gameInfos[0].short_desc;
-        levelInfoSubmitButton.innerHTML = "<a href='" + gameInfos[0].url + "/" + gameInfos[0].list_id + "' onclick='open_game(this, event)'>Jouer</a>";
+        let a = document.createElement('a');
+        a.href = gameInfos[0].url + "/" + gameInfos[0].list_id;
+        a.innerHTML = "Jouer";
+        a.onclick = function(event) {
+            open_game(this, event);
+        }
+        levelInfoSubmitButton.innerHTML = "";
+        levelInfoSubmitButton.appendChild(a);
     }
 
     // update the position of the game information popup
@@ -107,6 +136,13 @@ function open_game(el, event) {
  * @param {Event} event - The event object triggered by the user action.
  * @returns {Promise<void>} - A promise that resolves when the game trail is opened and the game data is loaded.
  */
+const listBoxes = document.getElementsByClassName('list-box');
+for (let i = 0; i < listBoxes.length; i++) {
+    listBoxes[i].addEventListener('click', function(event) {
+        open_game_trail(this, event);
+    });
+}
+
 async function open_game_trail(el, event) {
     if (event.target.classList.contains('delete-zone')) {
         return;
@@ -142,6 +178,18 @@ async function open_game_trail(el, event) {
         const gamesTrail = document.getElementsByClassName('games-trail')[0];
         gamesTrail.innerHTML = data;
         gamesTrail.dataset.color = color;
+        gamesTrail.getElementsByClassName('game-trail')[0].addEventListener('click', function(event) {
+            close_level_popup(this, event);
+        });
+        gamesTrail.getElementsByClassName('close-game-rail-button')[0].addEventListener('click', function(event) {
+            close_game_trail(this, event);
+        });
+        var levelBoxes = gamesTrail.getElementsByClassName('level-box');
+        for (let i = 0; i < levelBoxes.length; i++) {
+            levelBoxes[i].addEventListener('click', function(event) {
+                open_game_info(this);
+            });
+        }
     } catch (e) {
         open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard");
     }
@@ -202,6 +250,12 @@ function close_level_popup(el, event) {
  * @param {Event} event - The event object.
  * @param {number} id - The ID of the list to be deleted.
  */
+const manageListButtons = document.getElementsByClassName('manage-list-button');
+for (let i = 0; i < manageListButtons.length; i++) {
+    manageListButtons[i].addEventListener('click', function(event) {
+        manage_list(this, event, this.dataset.list_id);
+    });
+}
 async function manage_list(el, event, id) {
     event.preventDefault();
 
@@ -218,6 +272,9 @@ async function manage_list(el, event, id) {
             open_alert("Erreur", "Une erreur est survenue, veuillez réessayer plus tard");
         } else {
             manageListContent.innerHTML = data;
+            manageListContent.getElementsByClassName('manage-list-form')[0].addEventListener('submit', function(event) {
+                update_list(this, event);
+            });
         }
     } catch (e) {
         close_manage_list(el, event);
@@ -233,6 +290,11 @@ async function manage_list(el, event, id) {
  * @param {Event} event - The event object.
  * @returns {void}
  */
+const closeManageListButton = document.getElementById('close-manage-list-button');
+closeManageListButton.addEventListener('click', function(event) {
+    close_manage_list(this, event);
+});
+
 function close_manage_list(el, event) {
     event.preventDefault();
 
@@ -261,7 +323,8 @@ async function update_list(el, event) {
         const response = await fetch(`/dashboard/manage/update/${list_id}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': el.csrf_token.value
             },
             body: JSON.stringify(list_data)
         });
@@ -306,6 +369,13 @@ async function update_list(el, event) {
  * @param {HTMLElement} el - The element that triggered the opening of the lives pop-up.
  * @returns {void}
  */
+const livesContainer = document.getElementById('lives-box')
+if (livesContainer) {
+    livesContainer.addEventListener('click', function(event) {
+        open_lives(this, event);
+    });
+}
+
 function open_lives(el) {
     const livesContainer = document.getElementsByClassName('lives-pop-up')[0];
     if (window.matchMedia("(max-width: 670px)").matches) {
@@ -406,11 +476,23 @@ async function lives_counter() {
  * @param {Event} event - The event object.
  * @returns {Promise<void>} - A promise that resolves when the function completes.
  */
+const lifePurchaseButton = document.getElementById('life-purchase-button');
+if (lifePurchaseButton) {
+    lifePurchaseButton.addEventListener('click', function(event) {
+        purchase_lives(this, event);
+    });
+}
 async function purchase_lives(el, event) {
     event.preventDefault();
     // request to purchase lives
-    document.getElementById('life-purchase-button').innerHTML = "<div class='loader'></div>";
-    const response = await fetch('/dashboard/lives/purchase');
+    el.innerHTML = "<div class='loader'></div>";
+    const response = await fetch('/dashboard/lives/purchase', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.getElementById('csrf_token_purchase').value
+        }
+    });
     try {
         const data = await response.json();
         // if the request is successful, the lives counter is updated, and the UI is updated
@@ -433,17 +515,17 @@ async function purchase_lives(el, event) {
             const gemsInfo = document.getElementById('gems-info');
             gemsInfo.innerHTML = data.gems;
             userInfos.getElementsByClassName('box')[0].classList.add('pulse');
-            document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
+            el.innerHTML = "Acheter (200 gemmes)";
             setTimeout(function() {
                 userInfos.getElementsByClassName('box')[0].classList.remove('pulse');
                 userInfos.getElementsByClassName('box')[2].classList.remove('pulse');
             }, 500);
         } else {
             // if the request is not successful, an alert box is displayed
-            document.getElementById('life-purchase-button').innerHTML = "Acheter (200 gemmes)";
-            document.getElementById('life-purchase-button').classList.add('pulse');
+            el.innerHTML = "Acheter (200 gemmes)";
+            el.classList.add('pulse');
             setTimeout(function() {
-                document.getElementById('life-purchase-button').classList.remove('pulse');
+                el.classList.remove('pulse');
             }, 250);
         }
     } catch (e) {
@@ -454,7 +536,12 @@ async function purchase_lives(el, event) {
 
 window.onload = lives_counter();
 
-
+const copyListButtons = document.getElementsByClassName('copy-list-button');
+for (let i = 0; i < copyListButtons.length; i++) {
+    copyListButtons[i].addEventListener('click', function(event) {
+        copy_list(this, event, this.dataset.list_id);
+    });
+}
 async function copy_list(el, event, list_id) {
     event.preventDefault();
 
@@ -473,10 +560,14 @@ async function copy_list(el, event, list_id) {
             document.getElementById('link').innerHTML = window.location.protocol + "//" + window.location.hostname + window.location.hostname + data.link;
         }
     } catch (e) {
-        console.log(e);
         document.getElementById('link').innerHTML = "Erreur";
     }
 }
+
+const copyLinkButtons = document.getElementById('copy-link-button');
+copyLinkButtons.addEventListener('click', function(event) {
+    copy_link(this, event);
+});
 
 function copy_link(el, event) {
     event.preventDefault();
@@ -495,6 +586,11 @@ function copy_link(el, event) {
         }, 2000);
     }
 }
+
+const closeCopyListButtons = document.getElementById('close-copy-list-button');
+closeCopyListButtons.addEventListener('click', function(event) {
+    close_share_list(this, event);
+});
 
 function close_share_list(el, event) {
     event.preventDefault();

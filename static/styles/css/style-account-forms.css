@@ -413,6 +413,14 @@ input:focus {
     background: white;
 }
 
+.text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #333333;
+    text-align: left;
+    margin-top: 15px;
+}
+
 @keyframes loader-animation {
     0% {
         transform: rotateZ(0deg);

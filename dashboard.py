@@ -141,7 +141,7 @@ def index():
         hearts_message=hearts_message
     )
     
-@main_bp.route('/dashboard/lives/purchase')
+@main_bp.route('/dashboard/lives/purchase', methods=['POST'])
 @login_required
 def purchase_lives():
     """
@@ -307,9 +307,6 @@ def update(list_id):
         xp_normalized = [10,20,30]
         game_normalized = [1,2,3]
         
-        print(isinstance(reminder, bool), isinstance(stats, bool), isinstance(public, bool)\
-        , time in time_normalized, xp in xp_normalized, game in game_normalized)
-        
         if not isinstance(reminder, bool) or not isinstance(stats, bool) or not isinstance(public, bool)\
         or not time in time_normalized or not xp in xp_normalized or not game in game_normalized:
             return jsonify({"code": 400, "message": "Les valeurs ne sont pas valides. Veuillez réessayer."})
@@ -329,7 +326,7 @@ def update(list_id):
         if conn:
             conn.close()
 
-@main_bp.route('/dashboard/delete/<int:list_id>')
+@main_bp.route('/dashboard/delete/<int:list_id>', methods=['POST'])
 @login_required
 def delete(list_id):
     """Delete a list and its associated data from the database.

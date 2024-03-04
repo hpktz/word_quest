@@ -27,7 +27,6 @@ from root import *
 import random as random
 import logging as logging
 from datetime import datetime, timedelta
-import locale
 import json
 import bcrypt
 import pyotp
@@ -111,7 +110,7 @@ def user_profile(id):
         is_public = False if result[7] == 0 else True
         picture = result[8]
         name = result[1]
-        date = result[12].date()
+        date = result[13].date()
             
         # Retrieve the user's subscriptions and subscribers from the database.
         subscriptions = []
@@ -119,9 +118,9 @@ def user_profile(id):
                 SUM(CASE WHEN user_statements.transaction_type = 'xp' THEN user_statements.transaction ELSE 0 END) \
                 AS sum_xp FROM subscriptions JOIN users ON users.id = subscriptions.subscribed_to \
                 JOIN user_statements ON users.id = user_statements.user_id WHERE \
-                subscriptions.user_id = %s;", (user_id,))
+                subscriptions.user_id = %s GROUP BY users.id, users.name, users.picture;", (user_id,))
         result = cursor.fetchall()
-        
+    
         for row in result:
             if row[0] is None:
                 continue
@@ -132,7 +131,7 @@ def user_profile(id):
                 SUM(CASE WHEN user_statements.transaction_type = 'xp' THEN user_statements.transaction ELSE 0 END) \
                 AS sum_xp, false AS is_subscribed, subscriptions.created_at  FROM subscriptions JOIN users ON users.id = subscriptions.user_id \
                 JOIN user_statements ON users.id = user_statements.user_id WHERE \
-                subscriptions.subscribed_to = %s;", (user_id,))
+                subscriptions.subscribed_to = %s GROUP BY users.id, users.name, users.picture;", (user_id,))
         result = cursor.fetchall()
         for row in result:
             if row[0] is None:
@@ -151,7 +150,6 @@ def user_profile(id):
         is_subscribed = False
         if not is_public and not is_current_user:
             for sub in subscriptions:
-                print(sub)
                 if int(sub[0]) == int(current_user.id):
                     is_subscribed = True
                     break
@@ -446,7 +444,6 @@ def profile_list(id):
         list_owner_name = cursor.fetchone()[0]
         is_public = False if result[4] == 0 else True
         is_yours = str(list_owner) == str(current_user.id)
-        print(is_yours)
         
         if not is_public and not is_yours:
             cursor.execute("SELECT * FROM subscriptions WHERE user_id = %s AND subscribed_to=%s;", (list_owner,current_user.id))
@@ -472,9 +469,7 @@ def profile_list(id):
         total_xp = sum([row[1] for row in result]) if result else 0
         
         days = [[(datetime.now() - timedelta(days=i)).day, 0] for i in range(14)]
-        print(days)
         result = [[row[0].day, row[1]] for row in result]
-        print(result)
         for day in days:
             for row in result:
                 if day[0] == row[0]:
@@ -646,7 +641,7 @@ def change_user_infos():
         conn = create_connection()
         cursor = conn.cursor()
         picture = int(picture)
-        if not picture in range(1,12):
+        if not picture in range(1,13):
             return jsonify({
                 "code": 400,
                 "message": "Image de profil invalide."
@@ -765,7 +760,7 @@ def verify_email(code):
         if conn:
             conn.close()    
             
-@user_data_bp.route('/dashboard/settings/change-visibility/<int:visibility>')
+@user_data_bp.route('/dashboard/settings/change-visibility/<int:visibility>', methods = ['POST'])
 @login_required
 def change_visibility(visibility):
     """
@@ -809,7 +804,7 @@ def change_visibility(visibility):
         if conn:
             conn.close()
             
-@user_data_bp.route('/dashboard/settings/delete-account')
+@user_data_bp.route('/dashboard/settings/delete-account', methods = ['POST'])
 @login_required
 def delete_account():
     """

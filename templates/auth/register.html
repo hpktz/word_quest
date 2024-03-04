@@ -7,15 +7,17 @@
     <title>Inscription - WORD QUEST</title>
     <link rel="icon" href="{{ url_for('static', filename='imgs/app-main-logo.png') }}">
     <noscript>
-        <meta http-equiv="refresh" content="0; URL=../error/nojs.html">
+        <meta http-equiv="refresh" content="0; URL=../error/403.html">
     </noscript>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/css/style-account-forms.css') }}">
 </head>
 
 <body>
     <section class="signup-form-container" id="signup-form-container">
-        <form id="signup-form" method="POST" action="/auth/register" onsubmit="send_form(event)">
-            <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+        <form id="signup-form" method="POST" action="/auth/register">
+            <a href="/">
+                <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            </a>
             <h1>Inscription</h1>
             <div class="step-bar">
                 <div class="step-bar-fill" style="width: 33%;"></div>
@@ -31,7 +33,7 @@
                     <input type="email" name="email" class="email-input" id="signup-email-input" placeholder="Adresse e-mail" required>
                     <input type="password" name="password" class="password-input" id="signup-password-input" placeholder="Mot de passe" required>
                     <div class="conditions-container">
-                        <p class="conditions">En cliquant sur "Inscription", vous acceptez les <a href="/conditions" class="conditions-link">conditions d'utilisation</a></p>
+                        <p class="conditions">En cliquant sur "Inscription", vous acceptez la <a href="/privacy-policy" class="conditions-link">politique de confidentialité</a></p>
                         <div>
                             <input type="checkbox" name="conditions" id="conditions" class="conditions-checkbox" required>
                             <label for="conditions" class="toggle">
@@ -40,7 +42,7 @@
                         </div>
                     </div>
                     <span class="separator"></span>
-                    <div class="submit-button" style="width: 100%; display:block;" onclick="changePage()">Continuer</div>
+                    <div class="submit-button" style="width: 100%; display:block;" id="continue-button">Continuer</div>
                 </div>
                 <div class="part-2">
                     <p class="title">Choisissez votre avatar</p>
@@ -55,6 +57,7 @@
                         {% endfor %}
                     </div>
                     <span class="separator"></span>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="submit-button" id="signup-submit-button">Inscription</button>
                 </div>
             </div>
@@ -64,41 +67,7 @@
             <a href="{{ url_for('auth.login') }}" class="create-account">J'ai déjà un compte</a>
         </div>
     </section>
-    <script>
-        function changePage() {
-            const form = document.getElementById("signup-form");
-            if (form.name.value === "" || form.birthday.value === "" || form.email.value === "" || form.password.value === "") {
-                if (!document.getElementById("login-form-main-alert")) {
-                    document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>Veuillez remplir tous les champs</p>";
-                    return;
-                } else {
-                    document.getElementById("login-form-main-alert").innerHTML = "Veuillez remplir tous les champs";
-                    return;
-                }
-            } else if (!form.conditions.checked) {
-                if (!document.getElementById("login-form-main-alert")) {
-                    document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>Veuillez accepter les conditions d'utilisation</p>";
-                    return;
-                } else {
-                    document.getElementById("login-form-main-alert").innerHTML = "Veuillez accepter les conditions d'utilisation";
-                    return;
-                }
-            }
-            if (document.getElementById("login-form-main-alert")) {
-                document.getElementById("login-form-main-alert").remove();
-            }
-            document.getElementsByClassName("step-bar-fill")[0].style.width = "66%";
-            document.getElementsByClassName("part-1")[0].style.left = "-150%";
-            document.getElementsByClassName("part-2")[0].style.left = "0";
-        }
-
-        function send_form(event) {
-            event.preventDefault();
-            document.getElementById("signup-submit-button").innerHTML = '<div class="loader"></div>';
-            document.getElementById("signup-form").submit();
-        }
-    </script>
-    <script src="scripts/signup.js"></script>
+    <script src="/static/styles/js/auth-register.js"></script>
 </body>
 
 </html>

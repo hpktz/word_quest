@@ -81,13 +81,17 @@ class memory():
         self.lesson_id = lesson_id
         self.words = words
         self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=20))
+        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
         self.start = str(datetime.datetime.now())
         self.french_words = [word['trans_word'] for word in self.words]
         self.english_words = [word['word'] for word in self.words]
+        while len(self.french_words) > 7:
+            self.french_words.pop()
+            self.english_words.pop()
         self.cards = self.french_words + self.english_words
         self.shuffle_cards = []
         self.open_cards = []
+        self.nbr_try = 0
 
     def getWords(self):
         liste = []
@@ -105,21 +109,36 @@ class memory():
         })
     def printWord(self, id):
         el = self.shuffle_cards[id]
-
+        checking = self.checking_cards(el)
+        if(len(self.cards) == len(self.shuffle_cards)):
+            return self._end_game(checking, id)
         return jsonify({
             'code': 200,
             'message': 'ok',
-            'result': { 'innerHTML': self.shuffle_cards[id]}
+            'result': { 'innerHTML': self.shuffle_cards[id],
+                       'checking': checking}
         })
     
     def checking_cards(self, new_card):
         self.open_cards.append(new_card)
         if len(self.open_cards) == 2:
+            self.nbr_try += 1
+            if new_card in self.french_words:
+                current_french_word = new_card
+                current_english_word = self.open_cards[0]
+            else:
+                current_french_word = self.open_cards[0]
+                current_english_word = new_card
             for i in range(len(self.french_words)):
-                # conditions de bz
-                pass
+                if current_french_word == self.french_words[i] and current_english_word == self.english_words[i]:
+                    self.cards += self.open_cards
+                    self.open_cards = []
+                    return True
+            self.open_cards = []
+            
+            return False
+        return None
 
-        
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
     # si l'attribut a une longueur de 1, on attend
     # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste
@@ -174,7 +193,7 @@ class memory():
             if conn:
                 conn.close()
         
-    def _end_game(self):
+    def _end_game(self, last_answer, last_id):
         """
         End the game and save the results
         
@@ -197,44 +216,62 @@ class memory():
         try:
             conn = create_connection()  
             cursor = conn.cursor()
-            # Update the lesson as completed
-            cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
             
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
 
-            # TO CHANGE
-            xp = round((len(self.words)-self.faults-len(self.words_to_check))/len(self.words) * 20)
+            if last_id == None:
+                xp = 0
+            elif self.nbr_try > len(self.french_words)*1.5:
+                xp = 20 - round(self.nbr_try - len(self.french_words)*1.5)
+                xp = xp if xp > 0 else 0
+            else:
+                xp = 20
                 
             # Lose a life if there are remaining words
-            # TO CHANGE
             lives_to_lose = 1 if xp < 15 else 0
             while lives_to_lose > 0:
                 self._lose_life()
                 lives_to_lose -= 1
             
             lives_to_lose = 1 if xp < 15 else 0
+
+            # Update the lesson as completed
+            if lives_to_lose == 0:
+                cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
                         
             # Save the results in the database
             cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.lesson_id, xp, lives_to_lose, time_passed))
             cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, xp))
             conn.commit()
-            
-            response = jsonify({
+            if last_id == None:
+                response = jsonify({
                 "code": 201,
                 "message": "Le jeu est terminé!",
                 "result": {
-                    "remaining": len(self.words_to_check),
                     "time": time_passed,
-                    "xp": xp,
                     "lost_lives": lives_to_lose,
-                    # "last_position": self.current_quiz["answer"],
-                    "score": len(self.words) - len(self.words_to_check) - self.faults,
-                    "remaining": len(self.words_to_check),
+                    "xp": xp,
+                    "score": len(self.cards)//2,
                     "total": len(self.words)
                 }
             })
+            else:
+                response = jsonify({
+                    "code": 201,
+                    "message": "Le jeu est terminé!",
+                    "result": {
+                        "remaining": len(self.words_to_check),
+                        "time": time_passed,
+                        "lost_lives": lives_to_lose,
+                        "xp": xp,
+                        'innerHTML': self.shuffle_cards[last_id],
+                        'checking': last_answer,
+                        "score": len(self.cards)//2,
+                        "total": len(self.words)
+                    }
+                })
             response = make_response(response, 201)
             return response
         except Exception as e:
@@ -276,10 +313,13 @@ class memory():
         to_extract.id = json_dict["id"]
         to_extract.time = json_dict["time"]
         to_extract.words_to_check = json_dict["words_to_check"]
+        to_extract.start = json_dict["start"]
         to_extract.french_words = json_dict["french_words"]
         to_extract.english_words = json_dict["english_words"]
         to_extract.cards = json_dict["cards"]
         to_extract.shuffle_cards = json_dict["shuffle_cards"]
+        to_extract.open_cards = json_dict["open_cards"]
+        to_extract.nbr_try = json_dict["nbr_try"]
         return to_extract    
 
 
@@ -307,7 +347,7 @@ def check_game(func):
             game = memory.from_json(session["game"])
             # Check if the game is still in progress
             if session_id != game.id or game.time < str(datetime.datetime.now()):
-                response = game._end_game()
+                response = game._end_game(None,None)
                 session["game"] = game.to_json()
                 return response
             else:
@@ -379,7 +419,7 @@ def start(session_id):
         # if not game.current_quiz:
         #     game.ask_next_question()
         
-        reloaded = True if game.get_remaning_time() < 118 else False
+        reloaded = True if game.get_remaning_time() < 58 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
             return render_template('games/memory.html', 

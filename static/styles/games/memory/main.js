@@ -6,33 +6,111 @@ async function getCard() {
 
     console.log(cardContent);
 
-    shuf_emoji = cardContent['result']['nbr_cards'];
+    nbrCards = cardContent['result']['nbr_cards'];
 
-    for (var i = 0; i < shuf_emoji; i++) {
+    for (var i = 0; i < nbrCards; i++) {
         let box = document.createElement('div');
         box.className = 'item';
         box.id = i
         document.getElementById('game').appendChild(box);
-
-        box.onclick = async function() {
-            this.classList.add('box_open');
-            console.log(document.querySelectorAll('.box_open'));
-            var boxId = this.id;
-            
-            const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
-            var checked = await check_word.json();
-            
-            this.innerText = checked['result']['innerHTML'] 
-
-
-
-        }
+        setTimeout(() => {
+            box.onclick = async function() {
+                this.classList.add('box_open');
+                var boxId = this.id;
+                const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
+                var checked = await check_word.json();
+                console.log(checked)
+                this.innerText = checked['result']['innerHTML']
+                if(document.querySelectorAll('.box_open').length == 2){
+                    document.querySelectorAll('.item').forEach(element => {
+                        element.style.pointerEvents = 'none'
+                    });
+                    setTimeout(() => {
+                        document.querySelectorAll('.item').forEach(element => {
+                            if(element.classList[1] == 'box_open'){
+                                element.style.pointerEvents = 'none'
+                            }
+                            else{
+                                element.style.pointerEvents = 'auto'
+                            }
+                            
+                        });
+                        if(checked['result']['checking']){
+                            document.querySelectorAll('.box_open').forEach(element => {
+                                element.classList.add('box_match')
+                            });
+    
+                            document.querySelectorAll('.box_open')[1].classList.remove
+                            ('box_open')
+                            document.querySelectorAll('.box_open')[0].classList.remove
+                            ('box_open')
+                        } else{
+                            document.querySelectorAll('.box_open').forEach(element => {
+                                element.style.pointerEvents = 'auto'
+                            });
+                            document.querySelectorAll('.box_open')[1].innerHTML = ""
+                            document.querySelectorAll('.box_open')[0].innerHTML = ""
+                            document.querySelectorAll('.box_open')[1].classList.remove
+                            ('box_open')
+                            document.querySelectorAll('.box_open')[0].classList.remove
+                            ('box_open')
+                        }
+                        document.querySelectorAll('.item').forEach(element => {
+                            if (element.classList[1] == 'box_match') {
+                                element.style.pointerEvents = 'none'
+                            }
+                            
+                        });
+                    }, 500); 
+                }
+                if(checked.code == 201){
+                    end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
+                }
+    
+    
+    
+            }
+        }, 5000);
     }
 }
 
 getCard();
 
-const cardContent = ["1","1","2","2","3","3","4","4","5","5","6","6","7","7","8","8"]
+/**
+ * 
+ * This function is used to display the end pop-up
+ * 
+ * @function timer
+ * @param {Event} event - The event that triggered the function
+ * 
+ * @returns {void} - The result of the function
+ */
+var timer = setInterval(async() => {
+    // Get the time element
+    const time = document.getElementById('time');
+    // Decrease the time by 1
+    time.innerHTML = parseInt(time.innerHTML) - 1;
+
+    // If the timer is over
+    if (time.textContent == 0) {
+        clearInterval(timer);
+        try {
+            // Check the status of the game
+            const response = await fetch(`/dashboard/games/memory/${session_id}/check_status`);
+            const data = await response.json();
+            console.log(data);
+            // If the game is over
+            if (data.code == 201) {
+                // End the game
+                end_game(data.result.xp, data.result.time, data.result.lost_lives);
+            }
+        } catch (error) {
+            window.location.href = '/dashboard/errors/500';
+        }
+    }
+}, 1000);
+
+timer;
 
 
 

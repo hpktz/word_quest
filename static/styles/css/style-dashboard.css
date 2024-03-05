@@ -135,7 +135,7 @@ header {
     display: grid;
     grid-template-columns: 75px 1fr;
     border-radius: 10px;
-    background-color: var(--header-background);
+    background: linear-gradient(90deg, white 0%, var(--header-background) 10%, var(--header-background) 100%);
     box-shadow: 8px 0px 24px 0 #959da54d;
     max-height: 100%;
     overflow-y: auto;
@@ -2069,6 +2069,7 @@ main {
     }
     body.info-section-phone-active header {
         height: calc(100% - 20px);
+        background: var(--header-background);
     }
     body.info-section-phone-active header .infos-section {
         grid-row: 1 / span 2;

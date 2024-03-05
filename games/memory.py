@@ -416,8 +416,8 @@ def start(session_id):
     """
     if 'game' in session:
         game = memory.from_json(session["game"])
-        # if not game.current_quiz:
-        #     game.ask_next_question()
+        if game.shuffle_cards:
+            return redirect(url_for('memory.index', list_id=game.list_id))
         
         reloaded = True if game.get_remaning_time() < 58 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):

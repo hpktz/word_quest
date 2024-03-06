@@ -4,7 +4,7 @@
         "desc": "Le jeu du snake est un jeu de serpent dans lequel le joueur doit manger les lettres composant le mot &agrave; trouver afin de gagner des points.",
         "short_desc": "Manger les lettres composant le mot &agrave; trouver pour gagner.",
         "img": "/static/icons/games-icons/snake-30-dark-grey.png",
-        "url": "snake.html",
+        "url": "/dashboard/games/snake",
         "difficulty": 1
     },
     {

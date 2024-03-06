@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/snake/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <div class="game-container">
+        <canvas width="400" height="400"></canvas>
+        <div class="word" id="word">
+        </div>
+    </div>
+
+    {% set popUpTitle = "Snake" %} {% set popUpDesc = "Vous disposez de 1 minutes pour reconstituer les mots avec le serpent" %} {%set popUpGame = "snake"%} {% include "games/popups.html" %}
+    <script src="/static/styles/games/snake/main.js"></script>
+</body>
+</html>
+

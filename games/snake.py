@@ -32,7 +32,7 @@ from functools import wraps
 import logging
 
 
-memory_bp = Blueprint('memory', __name__)
+snake_bp = Blueprint('snake', __name__)
 """
 The blueprint of the quiz game
 
@@ -48,11 +48,11 @@ Routes:
 """
 
 # The id of the quiz lesson
-memory_id = 4
+snake_id = 1
 
-class memory():
+class snake():
     """
-    Represents a quiz game
+    Represents a snake game
     
     Attributes:
         - id (string): The unique identifier of the game
@@ -69,7 +69,6 @@ class memory():
         - check_answer: Check the answer of the user
         - ask_next_question: Ask the next question
         - get_remaning_time: Get the remaining time
-        - get_words_checked: Get the words that have been checked
         - _lose_life: Lose a life
         - _end_game: End the game and save the results
         - to_json: Convert the object to a JSON string
@@ -80,66 +79,24 @@ class memory():
         self.list_id = list_id
         self.lesson_id = lesson_id
         self.words = words
-        while len(self.words) > 7:
-            self.words.pop(random.randint(0, len(words)-1))
         self.words_to_check = words
         self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
         self.start = str(datetime.datetime.now())
-        self.french_words = [word['trans_word'] for word in self.words]
-        self.english_words = [word['word'] for word in self.words]
-        while len(self.french_words) > 7:
-            self.french_words.pop()
-            self.english_words.pop()
-        self.cards = self.french_words + self.english_words
-        self.shuffle_cards = []
-        self.open_cards = []
-        self.nbr_try = 0
 
-    def getWords(self):
-        liste = []
-        for i in range(len(self.cards)):
-            current_card = random.choice(self.cards)
-            for j in range(len(self.cards)):
-                if self.cards[j] == current_card:
-                    del(self.cards[j])
-                    break
-            self.shuffle_cards.append(current_card)
-        return jsonify({
-            'code': 200,
-            'message': 'ok',
-            'result': {'nbr_cards': len(self.french_words + self.english_words)}
-        })
-    def printWord(self, id):
-        el = self.shuffle_cards[id]
-        checking = self.checking_cards(el)
-        if(len(self.cards) == len(self.shuffle_cards)):
-            return self._end_game(checking, id)
-        return jsonify({
-            'code': 200,
-            'message': 'ok',
-            'result': { 'innerHTML': self.shuffle_cards[id],
-                       'checking': checking}
-        })
-    
-    def checking_cards(self, new_card):
-        self.open_cards.append(new_card)
-        if len(self.open_cards) == 2:
-            self.nbr_try += 1
-            if new_card in self.french_words:
-                current_french_word = new_card
-                current_english_word = self.open_cards[0]
-            else:
-                current_french_word = self.open_cards[0]
-                current_english_word = new_card
-            for i in range(len(self.french_words)):
-                if current_french_word == self.french_words[i] and current_english_word == self.english_words[i]:
-                    self.cards += self.open_cards
-                    self.open_cards = []
-                    return True
-            self.open_cards = []
-            
-            return False
-        return None
+    # def getWords(self):
+    #     liste = []
+    #     for i in range(len(self.cards)):
+    #         current_card = random.choice(self.cards)
+    #         for j in range(len(self.cards)):
+    #             if self.cards[j] == current_card:
+    #                 del(self.cards[j])
+    #                 break
+    #         self.shuffle_cards.append(current_card)
+    #     return jsonify({
+    #         'code': 200,
+    #         'message': 'ok',
+    #         'result': {'nbr_cards': len(self.french_words + self.english_words)}
+    #     })
 
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
     # si l'attribut a une longueur de 1, on attend
@@ -154,19 +111,6 @@ class memory():
             int: The remaining time in seconds
         """
         return round((datetime.datetime.strptime(self.time, '%Y-%m-%d %H:%M:%S.%f') - datetime.datetime.now()).total_seconds())
-       
-    def get_words_checked(self):
-        """
-        Get the words that have been checked
-        
-        Returns:
-            list: The words that have been checked
-        """
-        words = []
-        for word in self.words:
-            if word not in self.words_to_check:
-                words.append(word)
-        return words
     
     def _lose_life(self):
         """
@@ -316,12 +260,6 @@ class memory():
         to_extract.time = json_dict["time"]
         to_extract.words_to_check = json_dict["words_to_check"]
         to_extract.start = json_dict["start"]
-        to_extract.french_words = json_dict["french_words"]
-        to_extract.english_words = json_dict["english_words"]
-        to_extract.cards = json_dict["cards"]
-        to_extract.shuffle_cards = json_dict["shuffle_cards"]
-        to_extract.open_cards = json_dict["open_cards"]
-        to_extract.nbr_try = json_dict["nbr_try"]
         return to_extract    
 
 
@@ -346,7 +284,7 @@ def check_game(func):
             function: The function to execute
         """
         if 'game' in session:
-            game = memory.from_json(session["game"])
+            game = snake.from_json(session["game"])
             # Check if the game is still in progress
             if session_id != game.id or game.time < str(datetime.datetime.now()):
                 response = game._end_game(None,None)
@@ -362,7 +300,7 @@ def check_game(func):
     # Return the wrapper function
     return wrapper_function
 
-@memory_bp.route('/dashboard/games/memory/<int:list_id>')
+@snake_bp.route('/dashboard/games/snake/<int:list_id>')
 @login_required
 def index(list_id):
     """ 
@@ -392,20 +330,20 @@ def index(list_id):
 
     # Check if the game exists and if it is available
     for index, game in enumerate(list_result["lessons"]):
-        if index == 0 and game["lesson_id"] == memory_id:
-            game = memory(list_result["id"], game["id"], list_result["words"])
+        if index == 0 and game["lesson_id"] == snake_id:
+            game = snake(list_result["id"], game["id"], list_result["words"])
             id = game.id
             session['game'] = game.to_json()
-            return redirect(url_for('memory.start', session_id=id))
-        elif index > 0 and list_result["lessons"][index-1]["completed"] == 1 and game["lesson_id"] == memory_id:
-            game = memory(list_result["id"], game["id"], list_result["words"])
+            return redirect(url_for('snake.start', session_id=id))
+        elif index > 0 and list_result["lessons"][index-1]["completed"] == 1 and game["lesson_id"] == snake_id:
+            game = snake(list_result["id"], game["id"], list_result["words"])
             id = game.id
             session['game'] = game.to_json()
-            return redirect(url_for('memory.start', session_id=id))
+            return redirect(url_for('snake.start', session_id=id))
     
     # If the game is not available, return a 404 error
     abort(404)
-@memory_bp.route('/dashboard/games/memory/<string:session_id>')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>')
 def start(session_id):
     """
     Start the game by displaying the game interface
@@ -417,24 +355,24 @@ def start(session_id):
         flask.redirect: 
     """
     if 'game' in session:
-        game = memory.from_json(session["game"])
+        game = snake.from_json(session["game"])
         if game.shuffle_cards:
-            return redirect(url_for('memory.index', list_id=game.list_id))
+            return redirect(url_for('snake.index', list_id=game.list_id))
         
         reloaded = True if game.get_remaning_time() < 58 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
-            return render_template('games/memory.html', 
+            return render_template('games/snake.html', 
                                    session_id=session_id, 
                                    list_id=game.list_id,
                                    time=game.get_remaning_time(),
                                 #    max_score=len(game.words),
                                 #    score=len(game.words) - len(game.words_to_check) - game.faults,
                                    reloaded=reloaded)
-        return redirect(url_for('memory.index', list_id=game.list_id))
+        return redirect(url_for('snake.index', list_id=game.list_id))
     return redirect(url_for('main.index'))
 
-@memory_bp.route('/dashboard/games/memory/<string:session_id>/check_status')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/check_status')
 @check_game
 def check_status(session_id):
     """
@@ -450,25 +388,25 @@ def check_status(session_id):
             - message (string): The message of the request
             - result (dict): The result of the request
     """
-    game = memory.from_json(session["game"])
+    game = snake.from_json(session["game"])
     return jsonify({
         "code": 200,
         "message": "Le jeu est en cours!",
         "result": {}
     })
 
-@memory_bp.route('/dashboard/games/memory/<string:session_id>/getCard')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/getCard')
 @check_game
 def getCard(session_id):
-    game = memory.from_json(session["game"])
+    game = snake.from_json(session["game"])
     result = game.getWords()
     session["game"] = game.to_json()
     return result
 
-@memory_bp.route('/dashboard/games/memory/<string:session_id>/check_word/<int:boxId>')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/check_word/<int:boxId>')
 @check_game
 def test(session_id, boxId):
-    game = memory.from_json(session["game"])
+    game = snake.from_json(session["game"])
     result = game.printWord(boxId)
     session["game"] = game.to_json()
     return result

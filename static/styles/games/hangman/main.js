@@ -103,7 +103,7 @@ function showWord(data, letter) {
         nextWord(data);
     } else {
         for (let i = 0; i < data.result.letter_position.length; i++) {
-            document.querySelectorAll('.letter')[data.result.letter_position[i]].innerText = letter;
+            document.querySelectorAll('.letter')[data.result.letter_position[i]].innerHTML = letter;
         }
     }
 }
@@ -152,49 +152,47 @@ function printNotification() {
 // Event listeners
 var isEventListener = true
 
-setTimeout(() => {
-    window.addEventListener('keydown', async e => {
-        try {
-            if (isEventListener) {
-                if (badLetters.length < figurePart.length) {
+window.addEventListener('keydown', async e => {
+    try {
+        if (isEventListener) {
+            if (badLetters.length < figurePart.length) {
 
-                    if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54) {
-                        isEventListener = false
-                        loader.style.display = 'flex'
-                        // const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.key}`);
-                        loader.style.display = 'none'
-                        // var checked = await check.json();
-                        letter = e.key
-                        keyboard.forEach(el => {
-                            if (el.innerHTML == letter) {
-                                el.style.background = 'grey';
-                                el.style.color = 'white';
-                            }
-                        });
-
-                        if (checked.code == 200) {
-                            if (checked.message == "already touch") {
-                                printNotification();
-                            } else if (checked.result.correct == true) {
-                                goodLetters = checked.result.good
-                                showWord(checked, letter);
-                            } else {
-                                badLetters = checked.result.bad;
-                                xpwin = checked.result.xp;
-                                updateBadLetter(checked, letter);
-                            }
-                            isEventListener = true
-                        } else if (checked.code == 201) {
-                            end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
+                if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54) {
+                    isEventListener = false
+                    loader.style.display = 'flex'
+                    const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.key}`);
+                    loader.style.display = 'none'
+                    var checked = await check.json();
+                    letter = e.key
+                    keyboard.forEach(el => {
+                        if (el.innerHTML == letter) {
+                            el.style.background = 'grey';
+                            el.style.color = 'white';
                         }
+                    });
+
+                    if (checked.code == 200) {
+                        if (checked.message == "already touch") {
+                            printNotification();
+                        } else if (checked.result.correct == true) {
+                            goodLetters = checked.result.good
+                            showWord(checked, letter);
+                        } else {
+                            badLetters = checked.result.bad;
+                            xpwin = checked.result.xp;
+                            updateBadLetter(checked, letter);
+                        }
+                        isEventListener = true
+                    } else if (checked.code == 201) {
+                        end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
                     }
                 }
             }
-        } catch (error) {
-            console.log(error);
         }
-    })
-}, 5200);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 keyboard.forEach(e => {
     e.addEventListener('click', async() => {

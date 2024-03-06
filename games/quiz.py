@@ -188,7 +188,7 @@ class quiz():
                 lesson_type = 1
         
             # Get all the english words
-            words = 'static/similar_words_levenshtein.txt'
+            words = 'static/similar_words_levenshtein'
             
             audio = ""
             image = ""
@@ -210,7 +210,7 @@ class quiz():
                     bad_answers = [word for word in types_of_word if word != word_choosen["type"]][0:3]
                 else:
                     # Get all the french words
-                    words = 'static/similar_mots_levenshtein.txt'
+                    words = 'static/similar_mots_levenshtein'
             # If the question is an example question                   
             elif lesson_type == 2:
                 content = "Quel mot anglais constitue cet exemple « " + word_choosen["trans_examples"][0] + " » ?"
@@ -239,9 +239,21 @@ class quiz():
                 # Set the list of words
                 min_len = 0
                 max_len = max_len
+                if file_path == "static/similar_words_levenshtein":
+                    if word < "micronization":
+                        file_path = file_path + "_1.txt"
+                    else:
+                        file_path = file_path + "_2.txt"
+                else:
+                    if word < "grand-mamans":
+                        file_path = file_path + "_1.txt"
+                    else:
+                        file_path = file_path + "_2.txt"
+                print(file_path)
                 while min_len < max_len:
                     mid = (min_len + max_len) // 2
                     line = linecache.getline(file_path, mid).split(":")
+                    print(line, mid)
                     if str(line[0]) == word:
                         return line[1]
                     elif str(line[0]) < word:
@@ -252,7 +264,7 @@ class quiz():
             
             # If the bad answers are not set
             if not bad_answers:
-                max_len = 370105 if words == 'static/similar_words_levenshtein.txt' else 336532
+                max_len = 185052 if words == 'static/similar_words_levenshtein' else 168266
                 bad_answers = get_similar_words(words, answer, max_len)
                 if bad_answers:
                     bad_answers = bad_answers.split(",")[0:3]

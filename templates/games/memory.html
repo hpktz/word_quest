@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="/static/styles/games/memory/main.css">
     <link rel="stylesheet" href="/static/styles/games/main.css">
 </head>
+
 <body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
     <section id="begining" class="begining">
         <div>
@@ -17,7 +19,7 @@
     <section class="memories">
         <div class="container">
             <div class="rules">Trouve les doublets de mots anglais/francais !</div>
-            <div id="game"class="game"></div>
+            <div id="game" class="game"></div>
             <span class="separation"></span>
             <div class="time">
                 <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
@@ -25,8 +27,9 @@
             </div>
         </div>
     </section>
-    
+
     {% set popUpTitle = "Memory" %} {% set popUpDesc = "Vous disposez de 2 minutes pour trouver les duos de motq Francais/ Anglais" %} {%set popUpGame = "memory"%} {% include "games/popups.html" %}
     <script src="/static/styles/games/memory/main.js"></script>
 </body>
+
 </html>

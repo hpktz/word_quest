@@ -11,7 +11,10 @@ html {
 }
 
 input {
-    all: unset;
+    border: unset;
+    outline: unset;
+    background-color: unset;
+    display: block;
 }
 
 body {

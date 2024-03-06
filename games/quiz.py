@@ -247,6 +247,7 @@ class quiz():
                 else:
                     if word < "grand-mamans":
                         file_path = file_path + "_1.txt"
+                        max_len = 185053
                     else:
                         file_path = file_path + "_2.txt"
                 print(file_path)

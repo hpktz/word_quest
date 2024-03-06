@@ -80,6 +80,8 @@ class memory():
         self.list_id = list_id
         self.lesson_id = lesson_id
         self.words = words
+        while len(self.words) > 7:
+            self.words.pop(random.randint(0, len(words)-1))
         self.words_to_check = words
         self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
         self.start = str(datetime.datetime.now())

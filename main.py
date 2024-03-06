@@ -180,6 +180,9 @@ app.register_blueprint(quiz_bp)
 from games.memory import memory_bp
 app.register_blueprint(memory_bp)
 
+from games.snake import snake_bp
+app.register_blueprint(snake_bp)
+
 @app.route('/')
 def index():
     user = None

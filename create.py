@@ -254,7 +254,9 @@ def search(x):
                     word = sense.xpath("./span[@class='cit lang_fr']")
                     if word:
                         word = word[0].xpath("./span[@class='quote']")
-                        word = ''.join(text for text in word[0].xpath(".//text()") if not text.strip() or not text.getparent().attrib.get('class') == 'hi')
+                        
+                        word = ''.join(text for text in word[0].xpath(".//text()[not(parent::*[@class='hi' or @class='lbl'])]"))
+                        word = re.sub(r'[^a-zA-ZÀ-ÿ\s-]', '', word)
                         array["french_translation"] = word
                     else:
                         continue

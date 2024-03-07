@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link  type="text/css" rel="stylesheet" href="/static/styles/css/style-reward.css">
+    <title>Récompense - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link type="text/css" rel="stylesheet" href="/static/styles/css/style-reward.css">
 </head>
+
 <body>
     <div class="chest-container">
         <div class="chest-top">
@@ -41,17 +44,7 @@
         <div class="reward-container">+&nbsp;{{reward}}</div>
     </div>
     <div class="overlay"></div>
-    <script>
-        const chest = document.querySelector('.chest-container');
-        const overlay = document.querySelector('.overlay');
-        chest.addEventListener('click', () => {
-            overlay.classList.add('active');
-            chest.classList.add('active');
-
-            setTimeout(() => {
-                window.location.href = "/dashboard/quests";
-            }, 6000);
-        });
-    </script>
+    <script src="/static/styles/js/reward.js"></script>
 </body>
+
 </html>

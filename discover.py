@@ -88,7 +88,6 @@ def discover():
             result["words"] = json.loads(result["words"])
             result["amount"] = random.choice([5, 8, 10]) if len(result["words"]) > 10 else len(result["words"]) # Get the amount of words to display.
             result["nb_words_not_displayed"] = len(result["words"]) - result["amount"] # Get the number of words not displayed.
-            result["words"] = result["words"][:result["amount"]] # Get the words to display.
             
             ############################
             # RECOMMENDATION ALGORITHM #
@@ -105,7 +104,8 @@ def discover():
                 # Compare the list's words with the user's words.
                 # Get the ratio of similarity between the list's words and the user's words.
                 result["coef"] +=  2 if word['word'] in user_words else 0
-            
+                
+            result["words"] = result["words"][:result["amount"]] # Get the words to display.            
             result["coef"] +=  result["like_count"] * 0.1 # Add the list's like count to the coefficient.
             result["coef"] +=  result["page_views"] * 0.05 # Add the list's page views to the coefficient.
             result["is_owner"] = not result["list_initial"]

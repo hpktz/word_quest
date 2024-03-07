@@ -47,7 +47,6 @@ async function newIndice() {
     try {
         const getIndice = await fetch(`/dashboard/games/hangman/${sessionID}/askhint`);
         var currentIndice = await getIndice.json();
-        console.log(currentIndice)
         if (currentIndice.code == 200) {
             xpwin = currentIndice["result"]['xp']
 
@@ -76,7 +75,7 @@ async function newIndice() {
             addIndice.style.pointerEvents = 'none'
         }
     } catch (error) {
-        console.log(error);
+        window.location.href = '/dashboard/errors/500';
     }
 }
 
@@ -87,9 +86,7 @@ addIndice.addEventListener('click', async() => {
 
 function showWord(data, letter) {
     if (data.result.finished == true) {
-        console.log(document.querySelectorAll('.letter'))
         for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
-            console.log(document.querySelectorAll('.letter')[i].innerHTML, "letters")
             if (document.querySelectorAll('.letter')[i].innerHTML == '') {
                 document.querySelectorAll('.letter')[i].innerHTML = letter;
             }
@@ -184,13 +181,18 @@ window.addEventListener('keydown', async e => {
                         }
                         isEventListener = true
                     } else if (checked.code == 201) {
+                        for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
+                            if (document.querySelectorAll('.letter')[i].innerHTML == '') {
+                                document.querySelectorAll('.letter')[i].innerHTML = letter;
+                            }
+                        }
                         end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
                     }
                 }
             }
         }
     } catch (error) {
-        console.log(error);
+        window.location.href = '/dashboard/errors/500';
     }
 })
 
@@ -203,7 +205,6 @@ keyboard.forEach(e => {
                 const check = await fetch(`/dashboard/games/hangman/${sessionID}/check_letter/${e.innerHTML}`);
                 loader.style.display = 'none'
                 var checked = await check.json();
-                console.log(checked)
 
                 if (checked.code == 200) {
                     if (checked.message == "already touch") {
@@ -222,12 +223,16 @@ keyboard.forEach(e => {
                     }
                     isEventListener = true
                 } else if (checked.code == 201) {
+                    for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
+                        if (document.querySelectorAll('.letter')[i].innerHTML == '') {
+                            document.querySelectorAll('.letter')[i].innerHTML = letter;
+                        }
+                    }
                     end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
                 }
             }
         } catch (error) {
-            console.log(error);
-            //window.location.href = '/dashboard/errors/500';
+            window.location.href = '/dashboard/errors/500';
         }
     })
 });
@@ -266,12 +271,11 @@ function nextWord(data) {
             addIndice.innerHTML = '<img src="/static/icons/plus-30-white.png" alt="">'
 
             wordEl.innerHTML = "";
-            console.log(data.result.len_word)
             for (let i = 0; i < data.result.len_word; i++) {
                 wordEl.innerHTML += '<span class="letter"></span>';
             }
         } catch (error) {
-            console.log(error);
+            window.location.href = '/dashboard/errors/500';
         }
     }, 1000);
 }
@@ -298,7 +302,6 @@ var timer = setInterval(async() => {
             // Check the status of the game
             const response = await fetch(`/dashboard/games/hangman/${document.querySelector('body').dataset.session_id}/check_status`);
             const data = await response.json();
-            console.log(data);
             // If the game is over
             if (data.code == 201) {
                 // End the game

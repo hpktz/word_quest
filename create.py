@@ -39,7 +39,9 @@ Routes:
     - /dashboard/create/add/<string:id>: To add a word to the list under creation.
     - /dashboard/create/remove/<string:id>: To remove a word from the list under creation.
     - /dashboard/create/word-in-list: To display the word in list.
-    - /dashboard/create/create-list: To create a list. 
+    - /dashboard/create/create-list: To create a list.
+    - /dashboard/list/copy/<int:id>: To copy a list.
+    - /dashboard/list/copy_link/<string:token>: To copy a list from a link.
 """
 
 class WordList:

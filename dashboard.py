@@ -39,6 +39,7 @@ Routes:
     - /dashboard/manage/<int:list_id>: To render the manage page for a given list ID.
     - /dashboard/manage/update/<int:list_id>: To update list information in the database.
     - /dashboard/delete/<int:list_id>: To delete a list and its associated data from the database.    
+    - /dashboard/list/get_link/<int:list_id>: To get the link to a list.
 """
 
 @main_bp.route('/dashboard')
@@ -103,8 +104,10 @@ def index():
         if lives != 5:
             life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
             life_time = life_time + timedelta(minutes=15)
+            print(life_time, datetime.now())
             while life_time < datetime.now() and lives < 5:
-                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', 1);", (current_user.id,))
+                cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction)\
+                    VALUES (%s, 'lives', 1);", (current_user.id,))
                 lives += 1
                 life_time = life_time + timedelta(minutes=15)
                 lives_time = datetime.now()

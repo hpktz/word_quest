@@ -30,7 +30,7 @@ class hangman():
             word_choosen = random.choice(self.words_to_check)
             is_example = word_choosen["examples"] 
             if self.current_word:
-                is_last_word_correct = True if self.current_word["remaining_letters"] == 1 else False
+                is_last_word_correct = True if self.current_word["remaining_letters"] in [0, 1] else False
             else:
                 is_last_word_correct = False
             self.current_word = {
@@ -92,8 +92,18 @@ class hangman():
                         "finished": False
                     }
                 })
-        print(self.current_word["remaining_letters"], self.current_word["remaining_letters"] == 1)
-        if self.current_word["remaining_letters"] == 1 or stop:
+                
+        def next_step():
+            """
+            Go to the next step
+            
+            Returns:
+                dict: The response of the request
+                    - code (int): The status code of the request
+                        -> 200: The request is successful
+                    - message (string): The message of the request
+                    - result (dict): The result of the request
+            """
             for index, word_to_check in enumerate(self.words_to_check):
                 if word_to_check["word"] == self.current_word["word"]["word"]:
                     self.words_to_check.pop(index)
@@ -101,9 +111,14 @@ class hangman():
                         return self._end_game()
                     else:       
                         return self.new_word(self.current_word["max_xp"])
+                    
+        if self.current_word["remaining_letters"] == 1 or stop:
+            return next_step()
         else:
             self.current_word["good_letter"].append(letter)
             self.current_word["remaining_letters"]-= sum([1 for i in self.current_word["word"]["word"] if i == letter])
+            if self.current_word["remaining_letters"] == 0:
+                return next_step()
             letter_position = [i for i, l in enumerate(self.current_word["word"]["word"]) if l == letter]
             return jsonify({
                 "code": 200,
@@ -208,6 +223,7 @@ class hangman():
             if current_user.get_lives() > 0:
                 cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction) VALUES (%s, 'lives', -1);", (current_user.id,))
                 conn.commit()
+                pass
 
         except Exception as e:
             logging.error("An error has occured: " + str(e))
@@ -269,6 +285,7 @@ class hangman():
                 }
             })
             response = make_response(response, 201)
+            session.pop('game', None)
             return response
         except Exception as e:
             logging.error("An error has occured: " + str(e))
@@ -408,7 +425,6 @@ def start(session_id):
     Returns:
         flask.redirect: 
     """
-    print("ok")
     if 'game' in session:
         game = hangman.from_json(session["game"])
         if not game.current_word:
@@ -437,7 +453,6 @@ def check(session_id, l):
     game = hangman.from_json(session["game"])
     result = game.checking_letter(l)
     session["game"] = game.to_json()
-    print(result)
     return result
 
 @hangman_bp.route('/dashboard/games/hangman/<string:session_id>/askhint')

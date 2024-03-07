@@ -161,7 +161,7 @@ def user_profile(id):
             if int(sub[0]) == int(current_user.id):
                 are_you_subscribed = True
                 subscribed_date = sub[5] 
-                # transforme into datetime
+                # Transform into datetime
                 subscribed_date = convert_date(sub[5].date())
                 break
             

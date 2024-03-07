@@ -459,40 +459,19 @@ def create_list():
                             (word['word'], word['type'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
             
         # Get the user level
-        user_level = current_user.lvl
         with open('static/games-data.json') as json_file:
             levels = json.load(json_file)
-        
-        # Set the levels difficulty according to the user level
-        if user_level == 1:
-            levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
-        elif user_level == 5:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level, user_level]
-        else:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
-            
+
+        levels_difficulty = [1, 1, 2, 2, 3]
         # Choose the levels according to the levels difficulty
         data_levels = []
         for levelnb, level in enumerate(levels_difficulty):
-            while len(data_levels) < 6 and level > 0:
-                # Select the possible levels
-                possible_levels = []
-                for key, value in enumerate(levels):
-                    for data_level in data_levels:
-                        if data_level["name"] == value["name"]:
-                            break
-                    if value["difficulty"] == level:
-                            possible_levels.append(value)
-
-                # Select a random level among the possible levels
-                if len(possible_levels) > 0:
-                    data_levels.append(random.choice(possible_levels))
-
-                level -= 1
-
-        # Reverse the levels
-        data_levels = list(reversed(data_levels))
-        
+            possible_levels = []
+            for key, value in enumerate(levels):
+                if value["difficulty"] == level and value not in data_levels:
+                    possible_levels.append(value)
+            data_levels.append(random.choice(possible_levels))
+                    
         # Add the levels to the list
         for key, level in enumerate(data_levels):
             cursor.execute("INSERT INTO lessons (list_id, lesson_id, odr) VALUES (%s, %s, %s)", 
@@ -573,35 +552,15 @@ def copy_list(id):
         with open('static/games-data.json') as json_file:
             levels = json.load(json_file)
         
-        # Set the levels difficulty according to the user level
-        if user_level == 1:
-            levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
-        elif user_level == 5:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level, user_level]
-        else:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
-            
+        levels_difficulty = [1, 1, 2, 2, 3]
         # Choose the levels according to the levels difficulty
         data_levels = []
         for levelnb, level in enumerate(levels_difficulty):
-            while len(data_levels) < 6 and level > 0:
-                # Select the possible levels
-                possible_levels = []
-                for key, value in enumerate(levels):
-                    for data_level in data_levels:
-                        if data_level["name"] == value["name"]:
-                            break
-                    if value["difficulty"] == level:
-                            possible_levels.append(value)
-
-                # Select a random level among the possible levels
-                if len(possible_levels) > 0:
-                    data_levels.append(random.choice(possible_levels))
-
-                level -= 1
-
-        # Reverse the levels
-        data_levels = list(reversed(data_levels))
+            possible_levels = []
+            for key, value in enumerate(levels):
+                if value["difficulty"] == level and value not in data_levels:
+                    possible_levels.append(value)
+            data_levels.append(random.choice(possible_levels))
         
         # Add the levels to the list
         for key, level in enumerate(data_levels):
@@ -676,35 +635,15 @@ def copy_list_link(token):
         with open('static/games-data.json') as json_file:
             levels = json.load(json_file)
         
-        # Set the levels difficulty according to the user level
-        if user_level == 1:
-            levels_difficulty = [user_level, user_level, user_level, user_level, user_level+1, user_level+1]
-        elif user_level == 5:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level, user_level]
-        else:
-            levels_difficulty = [user_level-1, user_level, user_level, user_level, user_level+1, user_level+1]
-            
+        levels_difficulty = [1, 1, 2, 2, 3]
         # Choose the levels according to the levels difficulty
         data_levels = []
         for levelnb, level in enumerate(levels_difficulty):
-            while len(data_levels) < 6 and level > 0:
-                # Select the possible levels
-                possible_levels = []
-                for key, value in enumerate(levels):
-                    for data_level in data_levels:
-                        if data_level["name"] == value["name"]:
-                            break
-                    if value["difficulty"] == level:
-                            possible_levels.append(value)
-
-                # Select a random level among the possible levels
-                if len(possible_levels) > 0:
-                    data_levels.append(random.choice(possible_levels))
-
-                level -= 1
-
-        # Reverse the levels
-        data_levels = list(reversed(data_levels))
+            possible_levels = []
+            for key, value in enumerate(levels):
+                if value["difficulty"] == level and value not in data_levels:
+                    possible_levels.append(value)
+            data_levels.append(random.choice(possible_levels))
         
         # Add the levels to the list
         for key, level in enumerate(data_levels):

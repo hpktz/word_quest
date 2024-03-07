@@ -5,7 +5,7 @@
         "short_desc": "Manger les lettres composant le mot &agrave; trouver pour gagner.",
         "img": "/static/icons/games-icons/snake-30-dark-grey.png",
         "url": "/dashboard/games/snake",
-        "difficulty": 1
+        "difficulty": 2
     },
     {
         "id": 2,
@@ -14,7 +14,7 @@
         "short_desc": "Essayer de deviner le mot cach&eacute; pour gagner",
         "img": "/static/icons/games-icons/hangman-30-dark-grey.png",
         "url": "/dashboard/games/hangman",
-        "difficulty": 1
+        "difficulty": 3
     },
     {
         "id": 3,
@@ -41,7 +41,7 @@
         "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
         "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
         "url": "assimilation.html",
-        "difficulty": 3
+        "difficulty": 2
     },
     {
         "id": 6,
@@ -50,7 +50,7 @@
         "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
         "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
         "url": "assimilation.html",
-        "difficulty": 5
+        "difficulty": 2
     },
     {
         "id": 7,
@@ -59,7 +59,7 @@
         "short_desc": "Taper le plus rapidement possible les mots de la liste.",
         "img": "/static/icons/games-icons/typefast-30-dark-grey.png",
         "url": "/dashboard/games/typefast",
-        "difficulty": 5
+        "difficulty": 3
     },
     {
         "id": 8,
@@ -68,6 +68,6 @@
         "short_desc": "R&eacute;pondre &agrave; un maximum de questions dans un temps imparti.",
         "img": "/static/icons/games-icons/quiz-30-dark-grey.png",
         "url": "/dashboard/games/quiz",
-        "difficulty": 2
+        "difficulty": 1
     }
 ]

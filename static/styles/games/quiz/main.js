@@ -74,6 +74,11 @@ async function check_answer(answer) {
             document.querySelector('.progress-inner').style.width = `${((parseInt(data.result.total) - parseInt(data.result.remaining))/parseInt(data.result.total)*100)}%`;
             setTimeout(() => {
                 document.getElementById("question").innerHTML = data.result.html;
+                if (document.getElementById('audio-container')) {
+                    document.getElementById('audio-container').onclick = () => {
+                        play(document.getElementById('audio-container'));
+                    }
+                }
                 for (let i = 0; i < answers.length; i++) {
                     answers[i].innerHTML = data.result.answers[i];
                     answers[i].classList.remove('correct');
@@ -91,6 +96,7 @@ async function check_answer(answer) {
             end_game(data.result.xp, data.result.time, data.result.lost_lives);
         }
     } catch (error) {
+        console.log(error);
         window.location.href = '/dashbaord/errors/500';
     }
 }

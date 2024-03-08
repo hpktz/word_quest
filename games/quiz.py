@@ -271,6 +271,7 @@ class quiz():
                     bad_answers = bad_answers.split(",")[0:3]
                 else:
                     content = "Quel est le type du mot suivant: « "+word_choosen["word"]+" » ?"
+                    lesson_type = 1
                     answer = word_choosen["type"]
                     types_of_word = ["adjective", "adverb", "conjunction", "interjection", "noun", "preposition", "pronoun", "verb"]
                     bad_answers = [word for word in types_of_word if word != word_choosen["type"]][0:3]

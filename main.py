@@ -286,4 +286,4 @@ def error_500():
     return render_template('errors/500.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)

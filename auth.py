@@ -497,7 +497,7 @@ def sys_2fa_post():
     if session["2fa"]["trials"] >= 3 and session["2fa"]["delay"] > time.time():
         flash("Trop de tentatives de connexion, veuillez réessayer dans " + str(int(session["2fa"]["delay"] - time.time())) + " secondes")
         return redirect(url_for('auth.sys_2fa'))
-    elif pyotp.TOTP(session["2fa"]["secret_key"]).verify(code, valid_window=1): # Check if the 2FA code is correct
+    elif pyotp.TOTP(session["2fa"]["secret_key"]).verify(code, valid_window=2): # Check if the 2FA code is correct
         if session["2fa"]["action"] == "login":
             return _login(session["2fa"]["id"])
         elif session["2fa"]["action"] == "register":

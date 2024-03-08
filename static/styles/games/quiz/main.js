@@ -54,15 +54,13 @@ async function check_answer(answer) {
         const answer_html = document.getElementById('answer-' + answer);
         const answer_content = answer_html.innerHTML;
         answer_html.innerHTML = "<div class='loader'></div>"
+        answers.forEach(answer => {
+            answer.style.pointerEvents = 'none';
+        });
         const response = await fetch(`/dashboard/games/quiz/${session_id}/check/${answer}`);
         const data = await response.json();
         if (data.code == 200 || data.code == 201) {
             answer_html.innerHTML = answer_content;
-            answers.forEach(answer => {
-                answer.removeEventListener('click', () => {
-                    return;
-                });
-            });
             if (data.message == "correct" ||
                 data.result.last_position == answer) {
                 document.getElementById('data-score').textContent = data.result.score;
@@ -85,9 +83,7 @@ async function check_answer(answer) {
                     answers[i].classList.remove('wrong');
                 }
                 answers.forEach(answer => {
-                    answer.removeEventListener('click', () => {
-                        check_answer(answer.id.split('-')[1]);
-                    });
+                    answer.style.pointerEvents = 'auto';
                 });
             }, 1000);
         }

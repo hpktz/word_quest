@@ -217,6 +217,16 @@ body {
     cursor: pointer;
 }
 
+.main-game-section .content .quiz-container .answers .answer.wrong:hover {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.main-game-section .content .quiz-container .answers .answer.correct:hover {
+    background-color: #899e35;
+    color: #fff;
+}
+
 .main-game-section .content .quiz-container .answers .answer:hover .loader {
     border-top: 2px solid #fff;
 }

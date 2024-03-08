@@ -3,6 +3,14 @@
 * {
     margin: 0;
     padding: 0;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body,
@@ -49,6 +57,18 @@ section {
     height: fit-content;
     padding-top: 50px;
     padding-bottom: 50px;
+    animation: entry-animation 0.5s ease-in-out;
+}
+
+@keyframes entry-animation {
+    0% {
+        transform: translateY(-100px) scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 form {
@@ -396,6 +416,7 @@ input:focus {
     box-sizing: border-box;
     padding: 2.5px;
     transition: all 0.3s;
+    position: relative;
 }
 
 .conditions-container input[type="checkbox"]+label .toggle-button {
@@ -405,6 +426,9 @@ input:focus {
     border-radius: 25px;
     background: #333;
     transition: all 0.3s;
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
 }
 
 .conditions-container input[type="checkbox"]:checked+label {
@@ -412,7 +436,7 @@ input:focus {
 }
 
 .conditions-container input[type="checkbox"]:checked+label .toggle-button {
-    transform: translateX(25px);
+    left: 27.5px;
     background: white;
 }
 

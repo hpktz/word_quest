@@ -112,7 +112,7 @@
                 <div id="indice-container" class="container">
                 </div>
                 <button id="add-indice" class="new-indice-btn">
-                    <img src="/static/icons/plus-30-white.png" alt="">
+                    <img src="/static/icons/plus-60-white.png" alt="">
                 </button>
             </div>
             <div class="keyboard" id="keyboard">
@@ -137,7 +137,8 @@
             </div>
 
         </section>
-        {% set popUpTitle = "Quiz" %} {% set popUpDesc = "Vous disposez de 2 minutes pour répondre à un maximum de question" %} {%set popUpGame = "hangman"%} {% include "games/popups.html" %}
+        {% set popUpImage = '/static/icons/games-icons/hangman-30-dark-grey.png' %} {% set popUpTitle = "Le Pendu" %} {% set popUpDesc = "Vous avez 6 chances pour trouver le mot caché. Trouvez le plus de mots en un minimum de temps"%} {%set popUpGame = "hangman"%}
+        {% include "games/popups.html" %}
     </div>
     <script src="/static/styles/games/hangman/main.js"></script>
     <script src="/static/styles/games/timer.js"></script>

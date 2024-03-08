@@ -461,7 +461,7 @@ def sys_2fa_post():
             login_user(user, remember=True)
             session.pop("login_tries")
             session.pop("2fa")
-            return redirect(url_for('main.index'))
+            return redirect(url_for('help.index'))
         except Exception as e:
             if conn:
                 conn.rollback()

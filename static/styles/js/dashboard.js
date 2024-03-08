@@ -425,9 +425,11 @@ function close_lives(el, e) {
  */
 async function lives_counter() {
     const counter = document.getElementById('lives-counter');
+    console.log(counter.dataset.lives);
     const lives = counter.dataset.lives;
     const start_date = new Date(counter.dataset.time);
     const end_date = new Date(start_date.getTime() + 15 * 60 * 1000);
+
 
     // if the user has all his lives, the lives counter is updated and the function is stopped    
     if (parseInt(lives) == 5) {
@@ -444,7 +446,12 @@ async function lives_counter() {
             return clearInterval(interval);
         }
 
-        var now = new Date();
+        if (window.location.hostname == "word-quest.com") {
+            // Date actuelle UTC +0
+            var now = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000);
+        } else {
+            var now = new Date();
+        }
         var diff = end_date - now;
 
         // if the time is up, the lives counter is updated and the function is stopped

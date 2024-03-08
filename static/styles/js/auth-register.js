@@ -17,6 +17,14 @@ function changePage() {
             document.getElementById("login-form-main-alert").innerHTML = "Veuillez remplir tous les champs";
             return;
         }
+    } else if (form.birthday.value < "1920-01-01" || form.birthday.value > "2018-12-31") {
+        if (!document.getElementById("login-form-main-alert")) {
+            document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>La date de naissance n'est pas valide</p>";
+            return;
+        } else {
+            document.getElementById("login-form-main-alert").innerHTML = "La date de naissance n'est pas valide";
+            return;
+        }
     } else if (!form.conditions.checked) {
         if (!document.getElementById("login-form-main-alert")) {
             document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>Veuillez accepter les conditions d'utilisation</p>";
@@ -49,3 +57,17 @@ function send_form(event) {
     document.getElementById("signup-submit-button").innerHTML = '<div class="loader"></div>';
     document.getElementById("signup-form").submit();
 }
+
+const dateInput = document.getElementById("signup-birthday-input");
+dateInput.addEventListener("focus", () => {
+    dateInput.type = "date";
+    if (dateInput.value === "") {
+        dateInput.value = "2000-01-01";
+    }
+});
+dateInput.addEventListener("blur", () => {
+    if (dateInput.value === "2000-01-01") {
+        dateInput.value = "";
+        dateInput.type = "text";
+    }
+});

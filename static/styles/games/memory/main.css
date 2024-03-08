@@ -1,19 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-
-*,*::before,*::after{
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
 }
-*{
+
+* {
     box-sizing: border-box;
     transition: all 0.2s;
     font-family: 'League Spartan';
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-
-.container{
+.container {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -24,13 +32,13 @@
     gap: 20px;
 }
 
-
-.rules{
+.rules {
     font-family: 'League Spartan';
     font-size: 22px;
     text-align: center;
 }
-.game{
+
+.game {
     width: 80vw;
     display: flex;
     flex-wrap: wrap;
@@ -41,8 +49,7 @@
     perspective: 500px;
 }
 
-
-.item{
+.item {
     border-radius: 10px;
     position: relative;
     width: calc(17vw - 10px);
@@ -57,10 +64,12 @@
     transform: rotateY(180deg);
     transition: 0.3s;
 }
-.item.box_open{
+
+.item.box_open {
     transform: rotateY(0deg);
 }
-.item::after{
+
+.item::after {
     content: url("Word Quest");
     font-family: 'Bangers', cursive;
     color: white;
@@ -78,185 +87,182 @@
     opacity: 1;
 }
 
-
-.box_open:after{
+.box_open:after {
     opacity: 0;
 }
 
-
-.box_match{
+.box_match {
     animation: match 0.3s;
     pointer-events: none;
     transform: rotateY(0deg);
 }
-.box_match::after{
+
+.box_match::after {
     opacity: 0;
 }
 
-.time{
+.time {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 .time .icon {
     width: 30px;
 }
-.time .data{
+
+.time .data {
     font-family: "League Spartan", sans-serif;
     font-size: 18px;
 }
 
-
 @keyframes match {
-    0%{
+    0% {
         transform: scale(1.2);
     }
-    30%{
+    30% {
         transform: scale(0.9);
     }
-    60%{
+    60% {
         transform: scale(1.05);
     }
-    90%{
+    90% {
         transform: scale(0.95);
     }
-    100%{
+    100% {
         transform: scale(1);
     }
 }
-@keyframes wrong{
-    0%{
+
+@keyframes wrong {
+    0% {
         transform: translateX(0);
     }
-    30%{
+    30% {
         transform: translateX(5px);
     }
-    60%{
+    60% {
         transform: translateX(-5px);
     }
-    70%{
+    70% {
         transform: translateX(5px);
     }
-    80%{
+    80% {
         transform: translateX(-5px);
     }
-    100%{
+    100% {
         transform: translateX(0);
     }
 }
 
-
-.separation{
+.separation {
     width: 70%;
     height: 1px;
     background-color: #333333;
     margin: 10px;
 }
 
-
-
-
-@media screen and (max-width: 1200px){
-    .game{
+@media screen and (max-width: 1200px) {
+    .game {
         width: 95vw;
     }
-    .item{
+    .item {
         width: 22vw;
     }
 }
+
 @media screen and (max-width: 1000px) {
-    .game{
+    .game {
         gap: 10px;
     }
-    .item{
+    .item {
         width: 30vw;
         height: 10vh;
     }
-    .rules{
+    .rules {
         margin-top: 50px
     }
 }
 
-
 @media screen and (max-width: 730px) {
-    .separation{
+    .separation {
         display: none;
     }
-    .time{
+    .time {
         position: absolute;
         top: 15px;
-        right: 25px ;
+        right: 25px;
     }
-    .item{
+    .item {
         width: 45vw;
         height: 10vh;
     }
-    .rules{
+    .rules {
         margin-top: 20px;
         font-size: 18px;
     }
-    .container{
+    .container {
         gap: 20px;
     }
-   
 }
 
-
-.end{
+.end {
     display: none;
 }
 
-
-.display-block{
+.display-block {
     display: block;
     opacity: 0;
     animation: appear 0.5s forwards;
 }
-.display-block .end-container{
+
+.display-block .end-container {
     animation: bounce 0.6s forwards ease-in-out;
 }
-.display-block-win{
+
+.display-block-win {
     display: block;
     opacity: 0;
     animation: appear 0.5s forwards;
 }
-.display-block-win .end-container{
+
+.display-block-win .end-container {
     animation: bounce 0.6s forwards ease-in-out;
 }
-
 
 @keyframes appear {
-    from{
+    from {
         opacity: 0;
     }
-    to{
+    to {
         opacity: 1;
     }
-   
 }
+
 @keyframes bounce {
-    0%{
+    0% {
         width: 1000px;
         height: 700px;
     }
-    40%{
+    40% {
         width: 450px;
         height: 250px;
     }
-    65%{
+    65% {
         width: 630px;
-        height: 320px;        
+        height: 320px;
     }
-    90%{
+    90% {
         width: 480px;
         height: 290px;
     }
-    100%{
+    100% {
         width: 500px;
         height: 300px;
     }
 }
-.end > div{
+
+.end>div {
     width: 100%;
     height: 100vh;
     background-color: #373d208c;
@@ -264,12 +270,11 @@
     top: 0;
 }
 
-
-.end-container{
+.end-container {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: #373D20;
     box-shadow: 2px 2px 24px 5px #131313;
     border-radius: 15px;
@@ -282,27 +287,32 @@
     align-items: center;
     justify-content: space-evenly;
 }
-.end-container > div:nth-child(1){
+
+.end-container>div:nth-child(1) {
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 20px;
 }
-.end-container > div .end-message{
+
+.end-container>div .end-message {
     font-size: 30px;
     font-weight: bold;
 }
-.end-container > div .time-down{
+
+.end-container>div .time-down {
     font-size: 20px;
 }
-.buttons-end{
+
+.buttons-end {
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: space-evenly;
     align-items: center;
 }
-.buttons-end > button{
+
+.buttons-end>button {
     all: unset;
     text-align: center;
     height: 50px;
@@ -311,15 +321,15 @@
     color: #333333;
     border-radius: 15px;
 }
-.buttons-end > button:hover{
+
+.buttons-end>button:hover {
     background-color: #373D20;
     box-sizing: border-box;
     border: 1px solid #BCBD8B;
     color: #BCBD8B;
 }
 
-
-.recap{
+.recap {
     width: 400px;
     height: 380px;
     display: none;
@@ -329,18 +339,20 @@
     justify-content: space-between;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: #c1c286;
     color: black;
     padding: 50px 0;
     border-radius: 8px;
     box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.129);
 }
-.recap h1{
+
+.recap h1 {
     font-size: 24px;
     text-transform: uppercase;
 }
-.stats{
+
+.stats {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -349,27 +361,29 @@
     padding: 10px;
     margin-bottom: 30px;
 }
-.stats > div{
+
+.stats>div {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
 }
-.stats > div > p:nth-child(1){
+
+.stats>div>p:nth-child(1) {
     font-weight: bold;
-
-
 }
-.stats-xp div{
+
+.stats-xp div {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-.stats-xp img{
+
+.stats-xp img {
     height: 25px;
 }
 
-.recap-btns{
+.recap-btns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -377,10 +391,12 @@
     padding: 0 2vw;
     cursor: pointer;
 }
-.recap-btns button{
+
+.recap-btns button {
     cursor: pointer;
 }
-.recap-btns button{
+
+.recap-btns button {
     background-color: #766153;
     color: #F6F6F6;
     width: 150px;

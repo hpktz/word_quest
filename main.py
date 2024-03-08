@@ -48,6 +48,7 @@ from quests import quests_bp
 from discover import discover_bp
 from user_data import user_data_bp
 from emailing import emailing_bp
+from help import help_bp
 from models import User
 from root import *
 import os
@@ -165,6 +166,7 @@ app.register_blueprint(quests_bp)
 app.register_blueprint(discover_bp)
 app.register_blueprint(user_data_bp)
 app.register_blueprint(emailing_bp)
+app.register_blueprint(help_bp)
 csrf.exempt(emailing_bp) # Exempt the emailing blueprint from CSRF protection because it uses a POST request from an external source
 
 # Importation of games blueprints
@@ -284,4 +286,4 @@ def error_500():
     return render_template('errors/500.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

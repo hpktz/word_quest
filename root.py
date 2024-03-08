@@ -32,7 +32,7 @@ _dbname = os.getenv('DB_NAME')
 # Create a connection to the database
 def create_connection() -> mysql.connector.connection.MySQLConnection:
     conn = mysql.connector.connect(host=_dbserver, database=_dbname, user=_dbuser, password=_dbpass)
-    conn.time_zone = '+00:00'
+    conn.time_zone = '+01:00'
     return conn
 
 # Close a connection to the database

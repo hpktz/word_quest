@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
-
 html,
 body {
     height: 100%;
@@ -7,6 +6,14 @@ body {
 
 * {
     box-sizing: border-box;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body {
@@ -18,6 +25,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 
 /******* CHEST *******/
 
@@ -32,7 +40,7 @@ body {
     cursor: pointer;
     animation: entry 1.5s ease, shake 3s ease-in-out infinite 3s;
 }
- 
+
 @keyframes entry {
     0% {
         transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-200%) scale(0.9);
@@ -83,6 +91,7 @@ body {
         transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
     }
 }
+
 .chest-container.active {
     animation: shake-infinite 0.1s 29 ease-in-out 0s;
     cursor: default;
@@ -111,7 +120,7 @@ body {
     height: 20px;
     transform-style: preserve-3d;
     transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
-}   
+}
 
 .chest-container.active .chest-top {
     animation: open-chest 3s ease-in forwards 0.5s;
@@ -218,12 +227,12 @@ body {
     position: absolute;
     bottom: 7.5px;
     left: calc(50% - 7px);
-    display : inline-block;
-    height : 0;
-    width : 0;
-    border-right : 7px solid transparent;
-    border-bottom : 15px solid #333;
-    border-left : 7px solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0;
+    border-right: 7px solid transparent;
+    border-bottom: 15px solid #333;
+    border-left: 7px solid transparent;
 }
 
 .corner-top-right {
@@ -255,6 +264,7 @@ body {
     border-radius: 20px;
     background-color: rgb(221, 151, 0);
 }
+
 .corner-bottom-left {
     position: absolute;
     bottom: -5px;
@@ -296,7 +306,7 @@ body {
     width: 300px;
     height: 30px;
     background-color: #BCBD8B;
-    border-radius:100%;
+    border-radius: 100%;
     transform: translateX(-50%) translateY(-50%);
 }
 
@@ -375,7 +385,6 @@ body {
 
 .chest-container.active .reward-container {
     animation: entry-reward 2s ease-in forwards 4s;
-
 }
 
 .overlay {
@@ -386,7 +395,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255, 243, 78, 0.644) 78%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0) 0%, rgba(255, 243, 78, 0.644) 78%);
     opacity: 0;
     z-index: -1;
 }

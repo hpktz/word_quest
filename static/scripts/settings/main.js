@@ -351,7 +351,7 @@ async function change_visibility(checkbox, event) {
  * 
  */
 const popupDeleteButton = document.getElementById("popup-delete-button");
-popupDeleteButton.addEventListener("click", () => delete_account(popupDeleteButton));
+popupDeleteButton.addEventListener("click", () => popup_delete());
 
 function popup_delete() {
     const popup = document.querySelector(".pop-up.delete_account");

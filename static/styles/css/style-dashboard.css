@@ -8,7 +8,13 @@
     padding: 0;
     box-sizing: border-box;
     outline: none;
+    outline: none !important;
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -147,7 +153,7 @@ header .nav-bar {
     background-color: white;
     border-radius: 10px;
     display: grid;
-    grid-template-rows: 140px 1fr 55px;
+    grid-template-rows: 140px 1fr 95px;
     place-items: center;
     max-height: 100%;
     overflow-y: auto;
@@ -161,6 +167,12 @@ header .nav-bar .phone-menu-logo {
 header .nav-bar .app-logo {
     width: 30px;
     height: 30px;
+}
+
+header .nav-bar .help-logo {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
 }
 
 header .nav-bar .responsive-logo {
@@ -1775,7 +1787,7 @@ main {
         animation: none;
     }
     header .nav-bar {
-        grid-template-rows: 140px 1fr 90px;
+        grid-template-rows: 140px 1fr 135px;
     }
     header .nav-bar .app-logos {
         display: grid;
@@ -1784,6 +1796,9 @@ main {
     header .nav-bar .app-logo {
         width: 30px;
         height: 30px;
+    }
+    header .nav-bar .help-logo {
+        margin: 0;
     }
     header .nav-bar .responsive-logo {
         display: block;
@@ -1929,6 +1944,7 @@ main {
         margin-bottom: 0;
         border-radius: 5px;
         animation: entry-header-phone 0.5s ease-in-out;
+        background: var(--header-background);
     }
     main {
         padding: 50px 10px 0 10px;
@@ -1961,7 +1977,7 @@ main {
         height: 60px;
         width: 60px;
         border-radius: 4px;
-        transition: all 0.5s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
     header .nav-bar>div {
         height: 100%;
@@ -2127,6 +2143,15 @@ main {
     }
     body.phone-menu-open header .nav-bar .app-logos {
         grid-template-rows: 1fr 0;
+        grid-template-columns: 1fr 40px 40px 1fr;
+    }
+    body.phone-menu-open header .nav-bar .app-logos .app-logo {
+        width: 40px;
+        height: 40px;
+        grid-column: 2;
+    }
+    body.phone-menu-open header .nav-bar .app-logos .help-logo {
+        grid-column: 3;
     }
     body.phone-menu-open header .nav-bar .account-logo,
     body.phone-menu-open header .nav-bar .create-logo,

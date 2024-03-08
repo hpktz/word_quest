@@ -104,7 +104,6 @@ def index():
         if lives != 5:
             life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
             life_time = life_time + timedelta(minutes=15)
-            print(life_time, datetime.now())
             while life_time < datetime.now() and lives < 5:
                 cursor.execute("INSERT INTO user_statements (user_id, transaction_type, transaction)\
                     VALUES (%s, 'lives', 1);", (current_user.id,))

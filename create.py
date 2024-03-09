@@ -190,9 +190,9 @@ def empty_word_box():
     """
     return render_template('dashboard/content/empty-word-box.html')
 
-@create_bp.route('/dashboard/create/search/<string:x>')
+@create_bp.route('/dashboard/create/search/<string:language>/<string:x>')
 @login_required
-def search(x): 
+def search(language, x): 
     """
     Search a word in the Collins API.
 
@@ -212,7 +212,12 @@ def search(x):
         500: If an error occurs while searching the word.
     """
     # Call the Collins API
-    url = f"https://api.collinsdictionary.com/api/v1/dictionaries/english-french/entries/{x}_1"
+    if language == "fr":
+        language = "french-english"
+    else:
+        language = "english-french"
+        
+    url = f"https://api.collinsdictionary.com/api/v1/dictionaries/{language}/entries/{x}_1"
     headers = {
         "Accept": "application/json",
         "accessKey": os.environ.get("COLLINS_API_KEY"),
@@ -244,22 +249,28 @@ def search(x):
 
                 # Create the array with basic informations
                 if sense.get("class") == "sense":
+                    type = entry.xpath(".//span[@class='pos']/text()")[0]
+                    if type == "masculine noun" or type == "feminine noun":
+                        type = "noun"
                     array = {
                         "id": str(uuid.uuid4()),
-                        "type": entry.xpath(".//span[@class='pos']/text()")[0],
-                        "word": x,
+                        "type": type,
+                        "word": x if language == "english-french" else "",
                         "french_translation": "",
                         "examples": [],
                         "french_translation_examples": []
                     }
                     # Retrieve the french translation
-                    word = sense.xpath("./span[@class='cit lang_fr']")
+                    word = sense.xpath("./span[@class='cit lang_fr']") if language == "english-french" else sense.xpath("./span[@class='cit lang_en-gb']")
                     if word:
                         word = word[0].xpath("./span[@class='quote']")
                         
                         word = ''.join(text for text in word[0].xpath(".//text()[not(parent::*[@class='hi' or @class='lbl'])]"))
                         word = re.sub(r'[^a-zA-ZÀ-ÿ\s-]', '', word)
-                        array["french_translation"] = word
+                        if language == "english-french":
+                            array["french_translation"] = word
+                        else:
+                            array["word"] = word
                     else:
                         continue
                 else:
@@ -270,25 +281,46 @@ def search(x):
                     # Skip if not an HtmlElement
                     if not isinstance(example, html.HtmlElement):
                         continue
-                    if example.get("id", "").split(".")[0] == f"{x}_1":
-                        # Select all the french elements
-                        french_examples = example.xpath(".//span[@class='cit lang_fr']")
-                        for f in french_examples:
-                            # Check if there is many french examples for one english example
+                    if language == "english-french":
+                        if example.get("id", "").split(".")[0] == f"{x}_1":
+                            # Select all the french elements
+                            french_examples = example.xpath(".//span[@class='cit lang_fr']")
+                            for f in french_examples:
+                                # Check if there is many french examples for one english example
+                                if get_text_recursive(f.getprevious()).encode("utf-8") == b', ':
+                                    continue
+                                array["french_translation_examples"].append(get_text_recursive(f))
+
+                            # Explore all the english elements
+                            english1 = example.xpath(".//span[@class='orth']/text()")
+                            if english1:
+                                array["examples"].append(english1[0])
+                            english2 = example.xpath("./span[@class='quote']/text()")
+                            if english2:
+                                array["examples"].append(english2[0])
+                            english3 = example.xpath(".//span[@class='cit']/span[@class='quote']/text()")
+                            for e in english3:
+                                array["examples"].append(e)
+                    else:
+                        # Select all the english elements
+                        english_examples = example.xpath(".//span[@class='cit lang_en-gb']")
+                        for f in english_examples:
+                            # Check if there is many english examples for one french example
                             if get_text_recursive(f.getprevious()).encode("utf-8") == b', ':
                                 continue
-                            array["french_translation_examples"].append(get_text_recursive(f))
+                            array["examples"].append(get_text_recursive(f))
 
-                        # Explore all the english elements
-                        english1 = example.xpath(".//span[@class='orth']/text()")
-                        if english1:
-                            array["examples"].append(english1[0])
-                        english2 = example.xpath("./span[@class='quote']/text()")
-                        if english2:
-                            array["examples"].append(english2[0])
-                        english3 = example.xpath(".//span[@class='cit']/span[@class='quote']/text()")
-                        for e in english3:
-                            array["examples"].append(e)
+                        # Explore all the french elements
+                        french1 = example.xpath(".//span[@class='orth']/text()")
+                        if french1:
+                            array["french_translation_examples"].append(french1[0])
+                        french2 = example.xpath("./span[@class='quote']/text()")
+                        if french2:
+                            array["french_translation_examples"].append(french2[0])
+                        french3 = example.xpath(".//span[@class='cit']/span[@class='quote']/text()")
+                        for e in french3:
+                            array["french_translation_examples"].append(e)
+                        
 
                 senses.append(array)
 
@@ -306,7 +338,7 @@ def search(x):
     except Exception as e:
         logging.error("Error while searching word: " + str(e), exc_info=True)
         abort(500)
-
+    
         
 @create_bp.route('/dashboard/create/add/<string:id>')
 @login_required

@@ -1,4 +1,12 @@
 const session_id = document.body.dataset.session_id;
+const successAudioUrl = '/static/sounds/success-sound-effect.mp3';
+const successAudio = new Audio(successAudioUrl);
+successAudio.volume = 1;
+successAudio.load();
+const flipCardAudioUrl = '/static/sounds/flip-card-sound-effect.mp3';
+const flipCardAudio = new Audio(flipCardAudioUrl);
+flipCardAudio.volume = 1;
+flipCardAudio.load();
 
 async function getCard() {
     const getCards = await fetch(`/dashboard/games/memory/${session_id}/getCard`);
@@ -16,59 +24,53 @@ async function getCard() {
         setTimeout(() => {
             box.onclick = async function() {
                 this.classList.add('box_open');
+                flipCardAudio.play();
                 var boxId = this.id;
                 const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
                 var checked = await check_word.json();
-                console.log(checked)
                 this.innerText = checked['result']['innerHTML']
-                if(document.querySelectorAll('.box_open').length == 2){
+                if (document.querySelectorAll('.box_open').length == 2) {
                     document.querySelectorAll('.item').forEach(element => {
                         element.style.pointerEvents = 'none'
                     });
                     setTimeout(() => {
                         document.querySelectorAll('.item').forEach(element => {
-                            if(element.classList[1] == 'box_open'){
+                            if (element.classList[1] == 'box_open') {
                                 element.style.pointerEvents = 'none'
-                            }
-                            else{
+                            } else {
                                 element.style.pointerEvents = 'auto'
                             }
-                            
+
                         });
-                        if(checked['result']['checking']){
+                        if (checked['result']['checking']) {
                             document.querySelectorAll('.box_open').forEach(element => {
                                 element.classList.add('box_match')
+                                successAudio.play();
                             });
-    
-                            document.querySelectorAll('.box_open')[1].classList.remove
-                            ('box_open')
-                            document.querySelectorAll('.box_open')[0].classList.remove
-                            ('box_open')
-                        } else{
+
+                            document.querySelectorAll('.box_open')[1].classList.remove('box_open')
+                            document.querySelectorAll('.box_open')[0].classList.remove('box_open')
+                            flipCardAudio.play();
+                        } else {
                             document.querySelectorAll('.box_open').forEach(element => {
                                 element.style.pointerEvents = 'auto'
                             });
                             document.querySelectorAll('.box_open')[1].innerHTML = ""
                             document.querySelectorAll('.box_open')[0].innerHTML = ""
-                            document.querySelectorAll('.box_open')[1].classList.remove
-                            ('box_open')
-                            document.querySelectorAll('.box_open')[0].classList.remove
-                            ('box_open')
+                            document.querySelectorAll('.box_open')[1].classList.remove('box_open')
+                            document.querySelectorAll('.box_open')[0].classList.remove('box_open')
+                            flipCardAudio.play();
                         }
                         document.querySelectorAll('.item').forEach(element => {
                             if (element.classList[1] == 'box_match') {
                                 element.style.pointerEvents = 'none'
                             }
-                            
                         });
-                    }, 500); 
+                    }, 500);
                 }
-                if(checked.code == 201){
+                if (checked.code == 201) {
                     end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
                 }
-    
-    
-    
             }
         }, 5000);
     }
@@ -119,12 +121,12 @@ timer;
 //     box.className = 'item';
 //     box.innerHTML = shuf_emoji[i];
 //     document.getElementById('game').appendChild(box);
-   
+
 //     box.onclick = function() {
 //     this.classList.add('box_open')
-   
-   
-   
+
+
+
 //         if(document.querySelectorAll('.box_open').length > 1){
 //             setTimeout(function(){
 //                 if(document.querySelectorAll('.box_open')[0].innerHTML ==
@@ -144,7 +146,7 @@ timer;
 //                     }
 //                 }
 //                 else{
-                   
+
 //                     document.querySelectorAll('.box_open')[1].classList.remove
 //                     ('box_open')
 //                     document.querySelectorAll('.box_open')[0].classList.remove
@@ -152,7 +154,7 @@ timer;
 //                 }
 //             }, 400);
 //         }
-   
+
 //     }
 //     document.getElementById('game').appendChild(box);
 // }
@@ -166,7 +168,7 @@ const remarque = document.getElementById('remarque')
 
 function finish() {
     recap.style.display = 'flex'
-    if(time < 0){
+    if (time < 0) {
         remarque.innerText = 'Le temps est écoulé...'
     }
 }

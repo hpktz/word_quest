@@ -25,24 +25,29 @@
             <div class="face bottom"></div>
         </div>
         <div class="chest-body">
-            <div class="lock-container">
-                <div class="lock-top"></div>
-                <div class="lock-bottom"></div>
+            <div class="face front">
+                <div class="lock-container">
+                    <div class="lock-top"></div>
+                    <div class="lock-bottom"></div>
+                </div>
+                <div class="corner-top-right"></div>
+                <div class="corner-top-left"></div>
+                <div class="corner-bottom-right"></div>
+                <div class="corner-bottom-left"></div>
+                <div class="strip-1"></div>
+                <div class="strip-2"></div>
+                <div class="strip-3"></div>
             </div>
-            <div class="corner-top-right"></div>
-            <div class="corner-top-left"></div>
-            <div class="corner-bottom-right"></div>
-            <div class="corner-bottom-left"></div>
-            <div class="strip-1"></div>
-            <div class="strip-2"></div>
-            <div class="strip-3"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face bottom"></div>
         </div>
-        <div class="chest-bottom"></div>
         <div class="reward-type-container">
             <img src="/static/imgs/3d-pink-gemstone.png" class="img">
         </div>
-        <div class="reward-container">+&nbsp;{{reward}}</div>
     </div>
+    <div class="reward-container">+&nbsp;<span id="reward-amount">{{reward}}</span></div>
     <div class="overlay"></div>
     <script src="/static/styles/js/reward.js"></script>
 </body>

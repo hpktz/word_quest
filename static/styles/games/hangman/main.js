@@ -36,6 +36,15 @@ var xpwin = 5;
 var goodLetters = [''];
 var badLetters = [];
 
+const successAudioUrl = '/static/sounds/success-sound-effect.mp3';
+const successAudio = new Audio(successAudioUrl);
+successAudio.volume = 1;
+successAudio.load();
+const failAudioUrl = '/static/sounds/fail-sound-effect.mp3';
+const failAudio = new Audio(failAudioUrl);
+failAudio.volume = 0.4;
+failAudio.load();
+
 // Ajout des Indices en appuyant sur le + -------------------------------------------------------------------------------------
 var indices = [
     { title: "Indice Rigolo", indice: "eh regarde comme cet indice est fou" },
@@ -86,6 +95,7 @@ addIndice.addEventListener('click', async() => {
 
 function showWord(data, letter) {
     if (data.result.finished == true) {
+        successAudio.play();
         for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
             if (document.querySelectorAll('.letter')[i].innerHTML == '') {
                 document.querySelectorAll('.letter')[i].innerHTML = letter;
@@ -111,10 +121,10 @@ function updateBadLetter(data, letter) {
 
     // Afficher le bonhomme
 
-
     //Verifier si on a perdu
 
     if (data.result.finished == true) {
+        failAudio.play();
         figurePart.forEach((e) => {
             e.style.stroke = "red"
         })
@@ -152,6 +162,7 @@ var isEventListener = true
 window.addEventListener('keydown', async e => {
     try {
         if (isEventListener) {
+            console.log(figurePart, badLetters)
             if (badLetters.length < figurePart.length) {
 
                 if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 54) {
@@ -268,7 +279,7 @@ function nextWord(data) {
             Wordslength++;
             xpCounter.innerHTML = String(data.result.total_xp) + 'Xp';
             addIndice.style.pointerEvents = 'auto'
-            addIndice.innerHTML = '<img src="/static/icons/plus-30-white.png" alt="">'
+            addIndice.innerHTML = '<img src="/static/icons/plus-60-white.png" alt="">'
 
             wordEl.innerHTML = "";
             for (let i = 0; i < data.result.len_word; i++) {
@@ -308,7 +319,8 @@ var timer = setInterval(async() => {
                 end_game(data.result.xp, data.result.time, data.result.lost_lives);
             }
         } catch (error) {
-            window.location.href = '/dashboard/errors/500';
+            //         window.location.href = '/dashboard/errors/500';
+            console.log(error)
         }
     }
 }, 1000);

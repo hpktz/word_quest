@@ -11,6 +11,7 @@
  * @throws {Error} - If an error occurs during the search process.
  */
 const searchButton = document.getElementById('search-button');
+const languageSwitch = document.getElementById('language-switch');
 searchButton.addEventListener('click', (e) => search_word(e));
 async function search_word(e) {
     e.preventDefault();
@@ -24,7 +25,9 @@ async function search_word(e) {
 
     const searchInput = document.querySelector('.search-bar').value.toLowerCase();
     // get the search results (by making a request to the server)
-    const searchRequest = await fetch(`/dashboard/create/search/${searchInput}`);
+
+    const language = languageSwitch.language.value;
+    const searchRequest = await fetch(`/dashboard/create/search/${language}/${searchInput}`);
 
     try {
         const searchResponse = await searchRequest.json();
@@ -39,10 +42,14 @@ async function search_word(e) {
                 wordBox.setAttribute('data-word_id', `${searchResponse.result[i].id}`);
 
                 document.getElementsByClassName('type')[i].innerHTML = searchResponse.result[i].type;
-                document.getElementsByClassName('translation')[i].innerHTML = searchResponse.result[i].french_translation;
+                document.getElementsByClassName('translation')[i].innerHTML = language == 'en' ? searchResponse.result[i].french_translation : searchResponse.result[i].word;
 
                 if (searchResponse.result[i].examples.length > 0) {
-                    document.getElementsByClassName('example')[i].innerHTML = `${searchResponse.result[i].examples[0]} - ${searchResponse.result[i].french_translation_examples[0]}`;
+                    if (language == 'en') {
+                        document.getElementsByClassName('example')[i].innerHTML = `${searchResponse.result[i].examples[0]} - ${searchResponse.result[i].french_translation_examples[0]}`;
+                    } else {
+                        document.getElementsByClassName('example')[i].innerHTML = `${searchResponse.result[i].french_translation_examples[0]} - ${searchResponse.result[i].examples[0]}`;
+                    }
                 }
             }
         } else {

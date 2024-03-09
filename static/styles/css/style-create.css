@@ -219,6 +219,7 @@ header .infos-section .create-button:hover {
     outline: none;
     border: none;
     transition: all 250ms;
+    grid-column: 1;
 }
 
 .create-main-container .search-words .search-bar-box .search-bar:focus {
@@ -232,10 +233,55 @@ header .infos-section .create-button:hover {
     background-color: #333;
     border-radius: 5px;
     transition: all 250ms;
+    grid-column: 2;
 }
 
 .create-main-container .search-words .search-bar-box .search-logo:hover {
     background-color: #555;
+}
+
+.create-main-container .search-words .language-switch p {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.create-main-container .search-words .language-switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    grid-column: 1/ span 2;
+}
+
+.create-main-container .search-words .language-switch>div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.create-main-container .search-words .language-switch input[type="radio"] {
+    display: none;
+}
+
+.create-main-container .search-words .language-switch label {
+    display: block;
+    width: 75px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 250ms;
+    background-color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+}
+
+.create-main-container .search-words .language-switch input[type="radio"]:checked+label {
+    background-color: #ebebeb;
+    color: #333;
+    font-weight: 600;
 }
 
 .create-main-container .search-words .title {

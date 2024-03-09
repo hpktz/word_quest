@@ -17,13 +17,28 @@ body {
 }
 
 body {
-    background-color: #717744;
+    background-color: hsla(0, 0%, 95%, 1);
+    background-image: radial-gradient(at 80% 100%, hsla(31, 55%, 27%, 0.37) 0px, transparent 50%), radial-gradient(at 0% 0%, hsla(95, 14%, 41%, 0.45) 0px, transparent 50%);
+    background-size: 200% 200%;
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     font-weight: 400;
     color: #000000;
     margin: 0;
     padding: 0;
+    animation: background 12s linear infinite;
+}
+
+@keyframes background {
+    0% {
+        background-position: 0% 0%, 0% 0%, 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%, 100% 100%, 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%, 0% 0%, 0% 0%;
+    }
 }
 
 
@@ -32,11 +47,12 @@ body {
 .chest-container {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: calc(50% - 100px);
     width: 200px;
     height: 200px;
     transform-style: preserve-3d;
-    transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+    perspective: 1000px;
+    transform: rotateX(-0deg) rotateY(-0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
     cursor: pointer;
     animation: entry 1.5s ease, shake 3s ease-in-out infinite 3s;
 }
@@ -55,60 +71,64 @@ body {
 
 @keyframes shake {
     0% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(0deg) translateX(-50%) translateY(-50%);
     }
     2% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(7.5deg) translateX(-50%) translateY(-50%);
     }
     4% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(-2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(-7.5deg) translateX(-50%) translateY(-50%);
     }
     6% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(7.5deg) translateX(-50%) translateY(-50%);
     }
     8% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(-2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(-7.5deg) translateX(-50%) translateY(-50%);
     }
     10% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(7.5deg) translateX(-50%) translateY(-50%);
     }
     12% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(-2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(-7.5deg) translateX(-50%) translateY(-50%);
     }
     14% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(7.5deg) translateX(-50%) translateY(-50%);
     }
     16% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(-2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(-7.5deg) translateX(-50%) translateY(-50%);
     }
     18% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(2.5deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(7.5deg) translateX(-50%) translateY(-50%);
     }
     20% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(0deg) translateX(-50%) translateY(-50%);
     }
     100% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateZ(0deg) rotateY(0deg) translateX(-50%) translateY(-50%);
     }
 }
 
 .chest-container.active {
-    animation: shake-infinite 0.1s 29 ease-in-out 0s;
+    animation: shake-infinite 4s ease-in-out forwards 0s;
     cursor: default;
 }
 
 @keyframes shake-infinite {
     0% {
         transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        perspective: 1000px;
     }
-    33% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(2.5deg) translateX(-50%) translateY(-50%);
+    5% {
+        perspective: 10000px;
     }
-    66% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(-2.5deg) translateX(-50%) translateY(-50%);
+    50% {
+        transform: rotateX(-0deg) rotateY(3600deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        perspective: 10000px;
     }
     100% {
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        left: 25%;
+        transform: rotateX(-0deg) rotateY(3620deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        perspective: 1000px;
     }
 }
 
@@ -119,27 +139,23 @@ body {
     width: 200px;
     height: 20px;
     transform-style: preserve-3d;
-    transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+    transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-10px) translateZ(100px);
 }
 
 .chest-container.active .chest-top {
-    animation: open-chest 3s ease-in forwards 0.5s;
+    animation: open-chest 4s ease-in forwards 0.5s;
 }
 
 @keyframes open-chest {
     0% {
-        top: 50%;
-        height: 20px;
-        transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(-0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-10px) translateZ(100px);
     }
     100% {
-        top: calc(50% - 125px);
-        height: 100px;
-        transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(-50%) translateY(-50%);
+        transform: rotateX(120deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-10px) translateZ(100px);
     }
 }
 
-.face {
+.chest-top .face {
     position: absolute;
     width: 200px;
     height: 200px;
@@ -151,36 +167,36 @@ body {
     font-weight: bold;
 }
 
-.face.front {
+.chest-top .face.front {
     height: 25px;
     width: 200px;
 }
 
-.face.back {
+.chest-top .face.back {
     height: 25px;
     width: 200px;
     transform: rotateY(180deg) translateZ(100px);
 }
 
-.face.left {
+.chest-top .face.left {
     height: 25px;
     width: 100px;
     transform: rotateY(90deg) translateX(50px) translateZ(-50px);
 }
 
-.face.right {
+.chest-top .face.right {
     height: 25px;
     width: 100px;
     transform: rotateY(-90deg) translateX(-50px) translateZ(-150px);
 }
 
-.face.top {
+.chest-top .face.top {
     height: 100px;
     width: 200px;
     transform: rotateX(90deg) translateY(-50px) translateZ(50px);
 }
 
-.face.bottom {
+.chest-top .face.bottom {
     height: 100px;
     width: 200px;
     transform: rotateX(-90deg) translateY(50px) translateZ(-35px);
@@ -191,12 +207,53 @@ body {
     position: absolute;
     top: calc(50% + 75px);
     left: 50%;
+    width: 200px;
+    height: 125px;
+    transform-style: preserve-3d;
+    transform: translateX(0px) translateY(-50%) translateZ(100px);
+}
+
+.chest-body .face {
+    position: absolute;
+    width: 200px;
+    height: 125px;
+    background-color: #766153;
+    border: 5px solid #dd9700;
+    line-height: 200px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.chest-body .face.front {
     height: 125px;
     width: 200px;
-    background: #766153;
-    transform: translateX(-50%) translateY(-50%);
-    border: 5px solid rgb(221, 151, 0);
-    z-index: 1;
+}
+
+.chest-body .face.back {
+    height: 125px;
+    width: 200px;
+    transform: translateZ(-100px)
+}
+
+.chest-body .face.left {
+    height: 125px;
+    width: 100px;
+    transform: rotateY(90deg) translateX(50px) translateZ(-50px);
+}
+
+.chest-body .face.right {
+    height: 125px;
+    width: 100px;
+    transform: rotateY(-90deg) translateX(-50px) translateZ(-150px);
+}
+
+.chest-body .face.bottom {
+    height: 100px;
+    width: 200px;
+    background-color: #5a493e;
+    transform: rotateX(90deg) translateY(-50px) translateZ(-75px);
+    box-shadow: 0px 20px 100px 10px #333;
 }
 
 .chest-body .lock-container {
@@ -299,17 +356,6 @@ body {
     background-color: #33333398;
 }
 
-.chest-bottom {
-    position: absolute;
-    top: calc(50% + 140px);
-    left: 50%;
-    width: 300px;
-    height: 30px;
-    background-color: #BCBD8B;
-    border-radius: 100%;
-    transform: translateX(-50%) translateY(-50%);
-}
-
 .reward-type-container {
     position: absolute;
     top: calc(50% + 40px);
@@ -325,44 +371,45 @@ body {
 }
 
 .chest-container.active .reward-type-container {
-    animation: entry-reward 2s ease-in forwards 3s;
+    animation: entry-reward 1.2s ease-in forwards 5s;
+}
+
+.chest-container.active .reward-type-container img {
+    animation: subliminal 1.2s ease-in-out infinite 5s;
+}
+
+@keyframes subliminal {
+    0% {
+        filter: drop-shadow(0px 0px 20px #dd9700);
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0px 0px 20px #f0ff1f);
+        transform: scale(1.05);
+    }
+    100% {
+        filter: drop-shadow(0px 0px 20px #dd9700);
+        transform: scale(1);
+    }
 }
 
 @keyframes entry-reward {
     0% {
-        top: calc(50% + 40px);
-        left: 50%;
+        top: 90%;
+        left: 100%;
         width: 40px;
         height: 30px;
-        transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%) scale(0.5);
         opacity: 1;
-    }
-    50% {
-        top: calc(50% - 50px);
-        left: 50%;
-        width: 40px;
-        height: 40px;
-        transform: translateX(-50%) translateY(-50%) scale(4);
-        opacity: 1;
-        z-index: 3;
-    }
-    75% {
-        top: calc(50%);
-        left: 50%;
-        width: 40px;
-        height: 40px;
-        transform: translateX(-50%) translateY(-50%) scale(3.5);
-        opacity: 1;
-        z-index: 3;
     }
     100% {
-        top: calc(50%);
-        left: 50%;
+        top: 10%;
+        left: 100%;
         width: 40px;
         height: 40px;
-        transform: translateX(-50%) translateY(-50%) scale(1);
+        transform: translateX(-50%) translateY(-50%) scale(3);
         z-index: 3;
-        opacity: 0;
+        opacity: 1;
     }
 }
 
@@ -372,47 +419,33 @@ body {
 }
 
 .reward-container {
-    position: absolute;
-    top: calc(50% + 40px);
-    left: 50%;
-    width: 40px;
-    height: 30px;
-    transform: translateX(-50%) translateY(-50%);
-    font-family: 'Bangers', cursive;
-    font-size: 20px;
-    opacity: 0;
-}
-
-.chest-container.active .reward-container {
-    animation: entry-reward 2s ease-in forwards 4s;
-}
-
-.overlay {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0) 0%, rgba(255, 243, 78, 0.644) 78%);
+    top: 50%;
+    right: 100px;
+    height: 130px;
+    transform: translateY(-100px) rotateX(-50deg);
+    font-family: 'Bangers', cursive;
     opacity: 0;
-    z-index: -1;
+    transition: all 0.5s ease-in-out 2s;
 }
 
-.overlay.active {
-    z-index: 2;
-    animation: overlay 1.5s 2 ease-in forwards 3s;
+body.active .reward-container {
+    opacity: 1;
+    transform: translateY(-50%) rotateX(0deg);
+    font-size: 130px;
 }
 
-@keyframes overlay {
-    0% {
-        opacity: 0;
+@media screen and (max-width: 678px) {
+    .chest-container {
+        top: 40%;
     }
-    50% {
-        opacity: 1;
+    .reward-container {
+        top: 70%;
+        right: 50%;
+        transform: translateY(-100px) rotateX(-50deg);
     }
-    100% {
-        opacity: 0;
+    body.active .reward-container {
+        transform: translateY(-50%) translateX(50%) rotateX(0deg);
+        font-size: 100px;
     }
 }

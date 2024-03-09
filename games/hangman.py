@@ -33,6 +33,7 @@ class hangman():
                 is_last_word_correct = True if self.current_word["remaining_letters"] in [0, 1] else False
             else:
                 is_last_word_correct = False
+            bad_letters = self.current_word["bad_letter"] if self.current_word else []
             self.current_word = {
                 "word": word_choosen,
                 "nb_hints": 0,
@@ -46,6 +47,7 @@ class hangman():
                 "code": 200,
                 "message": "word_finished",
                 "result": {
+                    "bad": bad_letters,
                     "total_xp": self.xpTotal,
                     "xp_won": xp,
                     "len_word": len(word_choosen["word"]),
@@ -66,7 +68,7 @@ class hangman():
                     "result": []
                 })
         
-        stop = True if len(self.current_word["bad_letter"]) == 6 else False
+        stop = True if len(self.current_word["bad_letter"]) == 5 and not letter in self.current_word["word"]["word"] else False
         if not letter in self.current_word["word"]["word"]:
             if len(self.current_word["bad_letter"]) < 2:
                 self.current_word["max_xp"] = 5
@@ -112,7 +114,7 @@ class hangman():
                     else:       
                         return self.new_word(self.current_word["max_xp"])
                     
-        if self.current_word["remaining_letters"] == 1 or stop:
+        if stop:
             return next_step()
         else:
             self.current_word["good_letter"].append(letter)

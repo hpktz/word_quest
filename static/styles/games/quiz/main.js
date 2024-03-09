@@ -1,4 +1,12 @@
 const session_id = document.body.dataset.session_id;
+const successAudioUrl = '/static/sounds/success-sound-effect.mp3';
+const successAudio = new Audio(successAudioUrl);
+successAudio.volume = 1;
+successAudio.load();
+const failAudioUrl = '/static/sounds/fail-sound-effect.mp3';
+const failAudio = new Audio(failAudioUrl);
+failAudio.volume = 0.4;
+failAudio.load();
 
 /**
  * 
@@ -65,9 +73,11 @@ async function check_answer(answer) {
                 data.result.last_position == answer) {
                 document.getElementById('data-score').textContent = data.result.score;
                 document.getElementById('answer-' + answer).classList.add('correct');
+                successAudio.play();
             } else {
                 document.getElementById('answer-' + answer).classList.add('wrong');
                 document.getElementById('answer-' + data.result.last_position).classList.add('correct');
+                failAudio.play();
             }
             document.querySelector('.progress-inner').style.width = `${((parseInt(data.result.total) - parseInt(data.result.remaining))/parseInt(data.result.total)*100)}%`;
             setTimeout(() => {

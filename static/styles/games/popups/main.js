@@ -1,3 +1,12 @@
+const victoryAudioUrl = '/static/sounds/victory-sound-effect.mp3';
+const victoryAudio = new Audio(victoryAudioUrl);
+victoryAudio.volume = 1;
+victoryAudio.load();
+const failureAudioUrl = '/static/sounds/failure-sound-effect.mp3';
+const failureAudio = new Audio(failureAudioUrl);
+failureAudio.volume = 1;
+failureAudio.load();
+
 /**
  * 
  * This function is used to start the game
@@ -31,6 +40,12 @@ function end_game(xp, time, life) {
     const end_pop_up = document.querySelector('.end-pop-up');
     end_pop_up.classList.add('active');
     clearInterval(timer);
+    if (life > 0) {
+        failureAudio.play();
+    } else {
+        victoryAudio.play();
+    }
+
     // Display the experience points, the time and the number of lives lost by the user
     var xp_interval_nb = (1 / xp) * 1000;
     var xp_count = 0;

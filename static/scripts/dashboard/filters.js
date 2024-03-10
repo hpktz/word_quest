@@ -15,7 +15,6 @@ end.addEventListener('change', function() {
 });
 
 function change_time() {
-    console.log(start.value);
     var isThere = false;
     for (let i = 0; i < document.getElementsByClassName('list-box').length; i++) {
         // get the creation date of the list box
@@ -74,15 +73,15 @@ function filter_by(el) {
     // filter the list boxes based on the selected filter
     if (filter == "date-increasing") {
         lists.sort(function(a, b) {
-            var aDate = Date(Date.parse(a.dataset.list_creation.split('/').reverse().join('-')));
-            var bDate = Date(Date.parse(b.dataset.list_creation.split('/').reverse().join('-')));
+            var aDate = new Date(a.dataset.list_creation.split('/').reverse().join('-'));
+            var bDate = new Date(b.dataset.list_creation.split('/').reverse().join('-'));
 
             return aDate - bDate;
         });
     } else if (filter == "date-decreasing") {
         lists.sort(function(a, b) {
-            var aDate = Date(Date.parse(a.dataset.list_creation.split('/').reverse().join('-')));
-            var bDate = Date(Date.parse(b.dataset.list_creation.split('/').reverse().join('-')));
+            var aDate = new Date(Date.parse(a.dataset.list_creation.split('/').reverse().join('-')));
+            var bDate = new Date(Date.parse(b.dataset.list_creation.split('/').reverse().join('-')));
 
             return bDate - aDate;
         });

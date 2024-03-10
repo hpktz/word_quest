@@ -256,7 +256,7 @@ def search(language, x):
                         "id": str(uuid.uuid4()),
                         "type": type,
                         "word": x if language == "english-french" else "",
-                        "french_translation": "",
+                        "french_translation": x if language == "french-english" else "",
                         "examples": [],
                         "french_translation_examples": []
                     }
@@ -458,7 +458,10 @@ def create_list():
         cursor = conn.cursor()    
         # Check if the list name and description are valid
         regex = re.compile(r'^[a-zA-Z0-9#\'\s,.!?À-ÿ]+$')
-        if not regex.match(name) or not regex.match(desc):
+        if not regex.match(name):
+            return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
+        
+        if len(desc) > 0 and not regex.match(desc):
             return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
         
         if len(name) > 50 or len(desc) > 500:

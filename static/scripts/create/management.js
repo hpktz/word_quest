@@ -112,6 +112,7 @@ const createListButton = document.getElementById('create-list-button');
 createListButton.addEventListener('click', () => create_list());
 async function create_list() {
     try {
+        window.removeEventListener('beforeunload', leave_page);
         const listInfos = document.getElementById('list-infos');
         const body = {
             name: listInfos.name.value,
@@ -151,8 +152,10 @@ async function create_list() {
     }
 }
 
-window.addEventListener('beforeunload', function(event) {
+window.addEventListener('beforeunload', );
+
+function leave_page(event) {
     const confirmationMessage = 'Êtes-vous sûr de vouloir quitter la page?';
     event.returnValue = confirmationMessage;
     return confirmationMessage;
-});
+}

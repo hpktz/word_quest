@@ -939,6 +939,13 @@ main {
     position: relative;
 }
 
+.dashboard-main-container .games-trail .game-trail.victory {
+    background-image: url('/static/imgs/fireworks-animation.gif');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
 .dashboard-main-container .games-trail .game-trail .list-header {
     display: none;
 }

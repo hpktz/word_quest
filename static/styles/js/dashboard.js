@@ -640,14 +640,36 @@ function close_share_list(el, event) {
     document.getElementById('link').innerHTML = "";
 }
 
+/**
+ * 
+ * This function is used to animate following get elements in the url
+ * 
+ */
 window.onload = async function() {
+    setTimeout(function() {
+        // Get the new list
+        const newList = document.getElementsByClassName('new-list');
+        if (newList.length > 0) {
+            // Remove the new-list class
+            newList[0].classList.remove('new-list');
+            // Delete the URL parameters
+            var url = window.location.href;
+            var urlParts = url.split('?');
+            window.history.replaceState({}, document.title, urlParts[0]);
+        }
+    }, 1500);
+
+    // Get the gems, xp and lives info
     const gemsInfo = document.getElementById('gems-info');
     const xpInfo = document.getElementById('xp-info');
     const livesInfo = document.getElementById('lives-info');
 
+    // Update the UI based on the gems
     gemsInfo.innerHTML = gemsInfo.dataset.value;
 
+    // Check if there are URL parameters
     var params = new URLSearchParams(window.location.search);
+    // If there are URL parameters
     if (params.has('end_lesson')) {
         if (params.has('xp') && params.has('lives')) {
             let xp = parseInt(params.get('xp'));
@@ -658,6 +680,7 @@ window.onload = async function() {
             var urlParts = url.split('?');
             window.history.replaceState({}, document.title, urlParts[0]);
 
+            // Update the UI based on the xp and lives
             xpInfo.parentElement.classList.add('pulse');
             if (lives > 0) {
                 livesInfo.parentElement.classList.add('pulse');
@@ -669,12 +692,14 @@ window.onload = async function() {
             let total_xp = actual_xp + xp;
             let total_lives = actual_lives - lives;
 
+            // Calculate the time between each xp and lives update
             let delay_xp = 1500 / xp;
             let delay_lives = 1500 / lives;
 
             xpInfo.innerHTML = actual_xp;
             livesInfo.innerHTML = actual_lives;
 
+            // Increase the counter of xp and lives
             var interval_xp = setInterval(() => {
                 actual_xp++;
                 xpInfo.innerHTML = actual_xp;
@@ -695,31 +720,48 @@ window.onload = async function() {
                 }, delay_lives);
             }
         }
+
+        // Open the game trail
         const listContainer = document.querySelector('[data-list_id="' + params.get('list_id') + '"]');
         await open_game_trail(listContainer);
 
         if (window.matchMedia("(max-width: 670px)").matches) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 750));
         }
 
+        // Get the path of the user's list
         const pathPart = document.getElementsByClassName('path');
-        var position = 0;
+        var position = null;
         for (let i = 0; i < pathPart.length; i++) {
             if (pathPart[i].classList.contains('completed') == false) {
                 if (i > 0) {
                     position = i;
+
+                    // Add the animation class to path that allow access to the next level
                     pathPart[i - 1].classList.add('animation');
                     break;
                 }
             }
         }
 
+        if (position == null) {
+            const gameTrail = document.getElementsByClassName('game-trail')[0];
+            gameTrail.setAttribute('class', 'game-trail victory');
+            setTimeout(function() {
+                gameTrail.classList.remove('victory');
+            }, 5000);
+            const victorySound = new Audio('/static/sounds/victory-sound-effect.mp3');
+            victorySound.play();
+            return;
+        }
+
+        // Get the level box
+        // Add animation to the level box
         const levelBox = document.getElementsByClassName('level-box')[position];
         levelBox.classList.remove('waiting');
         levelBox.classList.add('blocked');
 
         await new Promise(resolve => setTimeout(resolve, 500));
-        console.log(levelBox);
         levelBox.classList.remove('blocked');
         levelBox.classList.add('waiting');
 

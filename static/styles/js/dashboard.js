@@ -698,6 +698,10 @@ window.onload = async function() {
         const listContainer = document.querySelector('[data-list_id="' + params.get('list_id') + '"]');
         await open_game_trail(listContainer);
 
+        if (window.matchMedia("(max-width: 670px)").matches) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
         const pathPart = document.getElementsByClassName('path');
         var position = 0;
         for (let i = 0; i < pathPart.length; i++) {

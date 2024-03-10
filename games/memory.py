@@ -239,6 +239,11 @@ class memory():
             
             lives_to_lose = 1 if xp < 15 else 0
 
+            is_already_completed = cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
+            is_already_completed = cursor.fetchall()
+            if is_already_completed:
+                xp = xp//2
+
             # Update the lesson as completed
             if lives_to_lose == 0:
                 cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))

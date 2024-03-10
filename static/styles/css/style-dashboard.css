@@ -462,6 +462,11 @@ main {
     animation: pulse 2s;
 }
 
+.dashboard-main-container .main-infos .user-infos .box:nth-child(2).pulse {
+    --background-animation: #ededb9;
+    animation: pulse 2s;
+}
+
 .dashboard-main-container .main-infos .user-infos .box:nth-child(3).pulse {
     --background-animation: #f7d9d9;
     animation: pulse 2s infinite;
@@ -470,12 +475,15 @@ main {
 @keyframes pulse {
     0% {
         background-color: rgba(255, 255, 255, 0);
+        transform: scale(1);
     }
     50% {
         background-color: var(--background-animation);
+        transform: scale(1.25);
     }
     100% {
         background-color: rgba(255, 255, 255, 0);
+        transform: scale(1);
     }
 }
 
@@ -1013,6 +1021,18 @@ main {
     transform: rotateX(2.5deg);
 }
 
+@keyframes pusle-level {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(2.5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
 .dashboard-main-container .games-trail .game-trail .path {
     position: absolute;
     pointer-events: none;
@@ -1040,6 +1060,8 @@ main {
     left: 0px;
     width: 140px;
     height: 150px;
+    --path-width: 140px;
+    --path-height: 150px;
     border-top: 3px solid var(--path-color);
     border-left: 3px solid var(--path-color);
     border-top-left-radius: 10px;
@@ -1063,6 +1085,8 @@ main {
     left: 70px;
     width: 210px;
     height: 150px;
+    --path-width: 210px;
+    --path-height: 150px;
     border-top: 3px solid var(--path-color);
     border-right: 3px solid var(--path-color);
     border-top-right-radius: 10px;
@@ -1073,6 +1097,8 @@ main {
     left: 162.5px;
     width: 117.5px;
     height: 150px;
+    --path-width: 117.5px;
+    --path-height: 150px;
     border-bottom: 3px solid var(--path-color);
     border-right: 3px solid var(--path-color);
     border-bottom-right-radius: 10px;
@@ -1083,19 +1109,102 @@ main {
     left: 65px;
     width: 112.5px;
     height: 150px;
+    --path-width: 112.5px;
+    --path-height: 150px;
     border-top: 3px solid var(--path-color);
     border-left: 3px solid var(--path-color);
     border-top-left-radius: 10px;
 }
 
-.dashboard-main-container .games-trail .game-trail .path.step-5 {
-    top: 635px;
-    left: 65px;
-    width: 215px;
-    height: 150px;
-    border-top: 3px solid var(--path-color);
-    border-right: 3px solid var(--path-color);
-    border-top-right-radius: 10px;
+.dashboard-main-container .games-trail .game-trail .path.step-1.animation {
+    animation: path-entry-1 0.5s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-2.animation {
+    animation: path-entry-2 0.5s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-3.animation {
+    animation: path-entry-3 0.5s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-4.animation {
+    animation: path-entry-4 0.5s ease-in-out;
+}
+
+@keyframes path-entry-1 {
+    0% {
+        width: 0;
+        height: 2x;
+        border-width: 10px;
+    }
+    50% {
+        width: var(--path-width);
+        height: 2px
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 3px;
+    }
+}
+
+@keyframes path-entry-2 {
+    0% {
+        width: 0;
+        height: 2px;
+        border-width: 10px;
+    }
+    50% {
+        width: var(--path-width);
+        height: 2px;
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 3px;
+    }
+}
+
+@keyframes path-entry-3 {
+    0% {
+        width: var(--path-width);
+        height: 0px;
+        border-width: 10px;
+        border-bottom: 0px solid var(--path-color);
+    }
+    50% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 10px;
+        border-bottom: 0px solid var(--path-color);
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-bottom: 3px solid var(--path-color);
+        border-width: 3px;
+    }
+}
+
+@keyframes path-entry-4 {
+    0% {
+        width: 0;
+        height: 2px;
+        left: 177.5px;
+        border-width: 3px;
+    }
+    50% {
+        left: 65px;
+        width: var(--path-width);
+        height: 2px;
+        border-width: 10px;
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 3px;
+    }
 }
 
 .dashboard-main-container .games-trail .game-trail .path.step-6 {

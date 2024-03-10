@@ -21,6 +21,10 @@
     user-select: none;
 }
 
+.back img {
+    width: 45px;
+}
+
 .container {
     position: relative;
     display: flex;

@@ -143,9 +143,11 @@ for (let i = 0; i < listBoxes.length; i++) {
     });
 }
 
-async function open_game_trail(el, event) {
-    if (event.target.classList.contains('delete-zone')) {
-        return;
+async function open_game_trail(el, event = undefined) {
+    if (event) {
+        if (event.target.classList.contains('delete-zone')) {
+            return;
+        }
     }
 
     // close all the different popups
@@ -542,7 +544,17 @@ async function purchase_lives(el, event) {
 }
 
 window.onload = lives_counter();
-
+/**
+ * 
+ * This function is used to generate a link to share a list
+ * 
+ * @function copy_list
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * @param {number} list_id - The ID of the list to be shared.
+ * 
+ * @returns {void}
+ */
 const copyListButtons = document.getElementsByClassName('copy-list-button');
 for (let i = 0; i < copyListButtons.length; i++) {
     copyListButtons[i].addEventListener('click', function(event) {
@@ -564,13 +576,23 @@ async function copy_list(el, event, list_id) {
             document.getElementById('link').innerHTML = "Erreur";
         } else {
             document.getElementById('link').dataset.link = window.location.protocol + "//" + window.location.hostname + data.link;
-            document.getElementById('link').innerHTML = window.location.protocol + "//" + window.location.hostname + window.location.hostname + data.link;
+            document.getElementById('link').innerHTML = window.location.protocol + "//" + window.location.hostname + data.link;
         }
     } catch (e) {
         document.getElementById('link').innerHTML = "Erreur";
     }
 }
 
+/**
+ * 
+ * This function is used to copy the link to the clipboard
+ * 
+ * @function copy_link
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * 
+ * @returns {void}
+ */
 const copyLinkButtons = document.getElementById('copy-link-button');
 copyLinkButtons.addEventListener('click', function(event) {
     copy_link(this, event);
@@ -594,6 +616,16 @@ function copy_link(el, event) {
     }
 }
 
+/**
+ * 
+ * This function is used to close the share list pop-up
+ * 
+ * @function close_share_list
+ * @param {HTMLElement} el - The element that triggered the event.
+ * @param {Event} event - The event object.
+ * 
+ * @returns {void}
+ */
 const closeCopyListButtons = document.getElementById('close-copy-list-button');
 closeCopyListButtons.addEventListener('click', function(event) {
     close_share_list(this, event);
@@ -606,4 +638,91 @@ function close_share_list(el, event) {
 
     document.getElementById('link').dataset.link = "";
     document.getElementById('link').innerHTML = "";
+}
+
+window.onload = async function() {
+    const gemsInfo = document.getElementById('gems-info');
+    const xpInfo = document.getElementById('xp-info');
+    const livesInfo = document.getElementById('lives-info');
+
+    gemsInfo.innerHTML = gemsInfo.dataset.value;
+
+    var params = new URLSearchParams(window.location.search);
+    if (params.has('end_lesson')) {
+        if (params.has('xp') && params.has('lives')) {
+            let xp = parseInt(params.get('xp'));
+            let lives = parseInt(params.get('lives'));
+
+            // Delete the URL parameters
+            var url = window.location.href;
+            var urlParts = url.split('?');
+            window.history.replaceState({}, document.title, urlParts[0]);
+
+            xpInfo.parentElement.classList.add('pulse');
+            if (lives > 0) {
+                livesInfo.parentElement.classList.add('pulse');
+            }
+
+            let actual_xp = parseInt(xpInfo.dataset.value) - xp;
+            let actual_lives = parseInt(livesInfo.dataset.value) + lives;
+
+            let total_xp = actual_xp + xp;
+            let total_lives = actual_lives - lives;
+
+            let delay_xp = 1500 / xp;
+            let delay_lives = 1500 / lives;
+
+            xpInfo.innerHTML = actual_xp;
+            livesInfo.innerHTML = actual_lives;
+
+            var interval_xp = setInterval(() => {
+                actual_xp++;
+                xpInfo.innerHTML = actual_xp;
+                if (actual_xp === total_xp) {
+                    clearInterval(interval_xp);
+                    xpInfo.parentElement.classList.remove('pulse');
+                }
+            }, delay_xp);
+
+            if (lives > 0) {
+                var interval_lives = setInterval(() => {
+                    actual_lives--;
+                    livesInfo.innerHTML = actual_lives;
+                    if (actual_lives === total_lives) {
+                        clearInterval(interval_lives);
+                        livesInfo.parentElement.classList.remove('pulse');
+                    }
+                }, delay_lives);
+            }
+        }
+        const listContainer = document.querySelector('[data-list_id="' + params.get('list_id') + '"]');
+        await open_game_trail(listContainer);
+
+        const pathPart = document.getElementsByClassName('path');
+        var position = 0;
+        for (let i = 0; i < pathPart.length; i++) {
+            if (pathPart[i].classList.contains('completed') == false) {
+                if (i > 0) {
+                    position = i;
+                    pathPart[i - 1].classList.add('animation');
+                    break;
+                }
+            }
+        }
+
+        const levelBox = document.getElementsByClassName('level-box')[position];
+        levelBox.classList.remove('waiting');
+        levelBox.classList.add('blocked');
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log(levelBox);
+        levelBox.classList.remove('blocked');
+        levelBox.classList.add('waiting');
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+        levelBox.click();
+    } else {
+        xpInfo.innerHTML = xpInfo.dataset.value;
+        livesInfo.innerHTML = livesInfo.dataset.value;
+    }
 }

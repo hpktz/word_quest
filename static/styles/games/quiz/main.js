@@ -26,6 +26,13 @@ async function play(element) {
         audio_el.classList.remove('active');
     }
 }
+window.onload = () => {
+    if (document.getElementById('audio-container')) {
+        document.getElementById('audio-container').onclick = () => {
+            play(document.getElementById('audio-container'));
+        }
+    }
+}
 
 
 /**
@@ -96,6 +103,8 @@ async function check_answer(answer) {
                     answer.style.pointerEvents = 'auto';
                 });
             }, 1000);
+        } else {
+            window.location.href = '/dashboard/errors/500';
         }
         if (data.code == 201) {
             console.log(data.result.time);

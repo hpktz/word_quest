@@ -88,7 +88,14 @@
 }
 
 .pop-up.end-pop-up .title {
-    margin-bottom: 50px;
+    margin-bottom: 25px;
+}
+
+.pop-up .message {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #333;
 }
 
 .pop-up .data-box {

@@ -195,9 +195,7 @@ class typeFast():
         try:
             conn = create_connection()  
             cursor = conn.cursor()
-            # Update the lesson as completed
-            cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
-            
+                        
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = time_passed.total_seconds()
@@ -210,6 +208,16 @@ class typeFast():
                 lives_to_lose -= 1
             
             lives_to_lose = 1 if len(self.words_to_check) > 0 else 0
+            
+            is_already_completed = cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
+            is_already_completed = cursor.fetchall()
+            if is_already_completed:
+                xp = xp//2
+                
+            
+            # Update the lesson as completed
+            if lives_to_lose == 0:
+                cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
             
             # Save the results in the database
             cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.lesson_id, xp, lives_to_lose, time_passed))

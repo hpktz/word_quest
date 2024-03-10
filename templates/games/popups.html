@@ -14,6 +14,7 @@
 </section>
 <section class="end-pop-up pop-up">
     <div class="title">Vos résultats</div>
+    <div class="message" id="end-message"></div>
     <div>
         <div class="data-box">
             <img src="/static/imgs/3d-three-yelow-lightnings.png" class="icon" alt="">
@@ -33,7 +34,7 @@
     </div>
     <div class="button-container">
         <div class="button try-again" data-url="/dashboard/games/{{popUpGame}}/{{list_id}}">Rejouer</div>
-        <div class="button leave" data-url="/dashboard">Quitter</div>
+        <div class="button leave" id="leave-button" data-url="/dashboard?end_lesson=True&list_id={{list_id}}&success=">Suivant</div>
     </div>
 </section>
 <script src="/static/styles/games/popups/main.js"></script>

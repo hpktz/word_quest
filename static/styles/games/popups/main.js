@@ -39,13 +39,32 @@ const start_countdown = setInterval(() => {
 function end_game(xp, time, life) {
     const end_pop_up = document.querySelector('.end-pop-up');
     end_pop_up.classList.add('active');
+    const leaveButton = document.getElementById('leave-button');
     clearInterval(timer);
     if (life > 0) {
+        leaveButton.dataset.url = leaveButton.dataset.url + "False&xp=" + xp + "&lives=" + life;
+        possiblesMessages = [
+            "Vous pouvez faire mieux !",
+            "Retentez votre chance pour améliorer votre score !",
+            "Vous avez perdu une bataille, mais pas la guerre !",
+            "Relevez vous et retentez votre chance !",
+            "Vous avez perdu, mais vous pouvez faire mieux !"
+        ];
         failureAudio.play();
     } else {
+        leaveButton.dataset.url = leaveButton.dataset.url + "True&xp=" + xp + "&lives=" + life;
+        possiblesMessages = [
+            "Félicitations ! Vous avez gagné !",
+            "Bravo ! Vous avez réussi !",
+            "Vous avez gagné !",
+            "Vous êtes un champion !",
+            "Vous avez gagné ! Vous êtes le meilleur !"
+        ];
         victoryAudio.play();
     }
 
+    const message = possiblesMessages[Math.floor(Math.random() * possiblesMessages.length)];
+    document.getElementById('end-message').innerHTML = message;
     // Display the experience points, the time and the number of lives lost by the user
     var xp_interval_nb = (1 / xp) * 1000;
     var xp_count = 0;

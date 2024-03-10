@@ -250,11 +250,9 @@ class quiz():
                         max_len = 185053
                     else:
                         file_path = file_path + "_2.txt"
-                print(file_path)
                 while min_len < max_len:
                     mid = (min_len + max_len) // 2
                     line = linecache.getline(file_path, mid).split(":")
-                    print(line, mid)
                     if str(line[0]) == word:
                         return line[1]
                     elif str(line[0]) < word:
@@ -331,7 +329,6 @@ class quiz():
             string: The URL of the image
         """
         # Set the Google API key and the search engine ID
-        print(os.environ.get('GOOGLE_SEARCH_API_KEY'))
         gis = GoogleImagesSearch(os.environ.get('GOOGLE_SEARCH_API_KEY'), os.environ.get('GOOGLE_SEARCH_ENGINE_ID'))
         # Set the search parameterss
         _search_params = {
@@ -420,8 +417,6 @@ class quiz():
         try:
             conn = create_connection()  
             cursor = conn.cursor()
-            # Update the lesson as completed
-            cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
             
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
@@ -433,9 +428,17 @@ class quiz():
             while lives_to_lose > 0:
                 self._lose_life()
                 lives_to_lose -= 1
-            
             lives_to_lose = 1 if xp < 15 else 0
-                        
+            
+            cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
+            is_already_completed = cursor.fetchall()
+            if is_already_completed:
+                xp = xp//2
+            
+            if lives_to_lose == 0:    
+                # Update the lesson as completed
+                cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
+
             # Save the results in the database
             cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.lesson_id, xp, lives_to_lose, time_passed))
             cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, xp))

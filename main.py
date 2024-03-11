@@ -40,6 +40,7 @@ from flask_login import LoginManager, current_user, login_required
 from flask_session import Session
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
+import logging
 
 from auth import auth_bp 
 from dashboard import main_bp
@@ -185,6 +186,9 @@ app.register_blueprint(memory_bp)
 from games.snake import snake_bp
 app.register_blueprint(snake_bp)
 
+from games.memowordrize import memowordrize_bp
+app.register_blueprint(memowordrize_bp)
+
 @app.route('/')
 def index():
     user = None
@@ -267,18 +271,22 @@ def before_request():
 # Errors handling
 @app.errorhandler(404)
 def page_not_found(e):
+    logging.error('Page not found: %s', (request.path))
     return render_template('errors/404.html'), 404
 
 @app.errorhandler(403)
 def forbidden(e):
+    logging.error('Forbidden: %s', (request.path))
     return render_template('errors/403.html'), 403
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    logging.error('Server error: %s', (request.path))
     return render_template('errors/500.html'), 500
 
 @app.errorhandler(Exception)
 def handle_exception(e):
+    logging.error('Exception: %s', (request.path))
     return render_template('errors/500.html'), 500
 
 @app.route('/dashboard/errors/500')

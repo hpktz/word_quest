@@ -23,12 +23,18 @@ async function getCard() {
         document.getElementById('game').appendChild(box);
         setTimeout(() => {
             box.onclick = async function() {
-                this.classList.add('box_open');
                 flipCardAudio.play();
                 var boxId = this.id;
+                document.querySelectorAll('.item').forEach(element => {
+                    element.style.pointerEvents = 'none'
+                });
                 const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
                 var checked = await check_word.json();
+                this.classList.add('box_open');
                 this.innerText = checked['result']['innerHTML']
+                document.querySelectorAll('.item').forEach(element => {
+                    element.style.pointerEvents = 'auto'
+                });
                 if (document.querySelectorAll('.box_open').length == 2) {
                     document.querySelectorAll('.item').forEach(element => {
                         element.style.pointerEvents = 'none'

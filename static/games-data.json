@@ -17,15 +17,6 @@
         "difficulty": 3
     },
     {
-        "id": 3,
-        "name": "Subway Surfers",
-        "desc": "Subway Surfers est un jeu de course dans lequel le joeur doit choisir la voie avec la bonne traduction du mot affich&eacute;.",
-        "short_desc": "Choisir la voie avec la bonne traduction du mot affich&eacute;.",
-        "img": "/static/icons/games-icons/subway-30-dark-grey.png",
-        "url": "subway.html",
-        "difficulty": 2
-    },
-    {
         "id": 4,
         "name": "Jeux du memory",
         "desc": "Le jeux du memory est un jeu dans lequel le joueur doit m&eacute;moriser l&apos;emplacement des mots et de leur traduction afin de les retrouver par paire.",
@@ -45,12 +36,12 @@
     },
     {
         "id": 6,
-        "name": "Jeux d&apos;assimilation",
-        "desc": "Le jeu d&apos;assimilation est un jeu dans lequel le joueur doit cliquer sur les bonnes paires le plus rapidement possible alors que ces derni&egrave;re tombent.",
-        "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
-        "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
-        "url": "assimilation.html",
-        "difficulty": 2
+        "name": "MemoWordRize",
+        "desc": "Le jeu MemoWordRize est un jeu dans lequel le joueur doit m&eacute;moriser le parcours et les mots prononc&eacute;s, et ensuite le refaire.",
+        "short_desc": "M&eacute;moriser le chemin et les mots prononc&eacute;s, puis le refaire.",
+        "img": "/static/icons/games-icons/memowordrize-30-dark-grey.png",
+        "url": "/dashboard/games/memowordrize",
+        "difficulty": 3
     },
     {
         "id": 7,

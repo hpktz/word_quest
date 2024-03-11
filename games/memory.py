@@ -87,9 +87,6 @@ class memory():
         self.start = str(datetime.datetime.now())
         self.french_words = [word['trans_word'] for word in self.words]
         self.english_words = [word['word'] for word in self.words]
-        while len(self.french_words) > 7:
-            self.french_words.pop()
-            self.english_words.pop()
         self.cards = self.french_words + self.english_words
         self.shuffle_cards = []
         self.open_cards = []

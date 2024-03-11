@@ -30,8 +30,8 @@ async function getCard() {
                 });
                 const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
                 var checked = await check_word.json();
-                this.classList.add('box_open');
                 this.innerText = checked['result']['innerHTML']
+                this.classList.add('box_open');
                 document.querySelectorAll('.item').forEach(element => {
                     element.style.pointerEvents = 'auto'
                 });

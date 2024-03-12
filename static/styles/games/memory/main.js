@@ -33,12 +33,14 @@ async function getCard() {
                 this.innerText = checked['result']['innerHTML']
                 this.classList.add('box_open');
                 document.querySelectorAll('.item').forEach(element => {
-                    if (element.classList[1] != '.box_open') {
+                    if (element.classList[1] != 'box_match') {
                         element.style.pointerEvents = 'auto'
                     }
                 });
                 if (document.querySelectorAll('.box_open').length == 2) {
+                    document.querySelectorAll('.item').forEach(element => {
                         element.style.pointerEvents = 'none'
+                    });
                     setTimeout(() => {
                         document.querySelectorAll('.item').forEach(element => {
                             if (element.classList[1] == 'box_open') {

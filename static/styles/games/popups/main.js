@@ -110,3 +110,16 @@ button.forEach(btn => {
         window.location.href = btn.dataset.url;
     });
 });
+
+/**
+ * 
+ * This function is used to skip the introduction
+ * 
+ * @function skipButton
+ * @returns {void} - The result of the function
+ */
+const skipButton = document.getElementById('skip-intro');
+skipButton.addEventListener('click', () => {
+    document.querySelector('.start-pop-up').classList.remove('active');
+    clearInterval(start_countdown);
+});

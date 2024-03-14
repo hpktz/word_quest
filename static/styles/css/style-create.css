@@ -317,9 +317,8 @@ header .infos-section .create-button:hover {
     width: 40px;
     height: 40px;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
     border: 2px solid #fff;
     border-top: 2px solid #333;
     border-radius: 50%;

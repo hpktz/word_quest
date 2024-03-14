@@ -367,7 +367,7 @@ header .infos-section::-webkit-scrollbar-thumb {
         grid-row: 1;
     }
     body.info-section-phone-active header .infos-section .info-section {
-        grid-template-rows: 30px 140px;
+        grid-template-rows: 30px 140px 106px 106px;
     }
     header .info-section .stat-box:nth-child(2) {
         margin-top: 50px;

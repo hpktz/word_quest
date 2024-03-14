@@ -1,13 +1,21 @@
 const session_id = document.body.dataset.session_id;
 
 const canvas = document.querySelector("canvas");
-
-
 const context = canvas.getContext('2d');
+
+const animXp = document.getElementById('animation-xp');
+const xpWin = document.getElementById('xpnotif');
+const frWord = document.getElementById('frensh-word')
 
 let box = 56
 
-let snake = [{ x: 4*box, y:4*box}];
+
+const score = document.getElementById('xp')
+var xpTotal = 0
+
+score.innerHTML = xpTotal + ' Xp'
+
+var snake = [{ x: 4*box, y:4*box}];
 
 snake[0] = { x: 4*box, y:4*box}
 // place le serpent au centre
@@ -20,7 +28,6 @@ const totalLetterArea = document.getElementById('word');
 
 nbrLettreTrouve = 0;    
 function updateWord(){
-    
     totalLetterArea.innerHTML = '';
     wordStyle.forEach((element,index) => {
         if(index < nbrLettreTrouve){
@@ -32,19 +39,21 @@ function updateWord(){
 }
 var isEventListener = false
 var letterPositions = [{x: 0, y:0}];
-var co2python = []
+var co2python = ['vide']
 // alreadyPos = false
 async function getPosition() {
+    wordStyle = []
     r = await fetch(`/dashboard/games/snake/${session_id}/getCard`)
     response = await r.json();
-    letterPositions = response.result
+    letterPositions = response.result.coo
+    frWord.innerHTML = response.result.frensh
     for (let i = 0; i < letterPositions.length; i++) {
         word.push(letterPositions[i].letter);
         wordStyle.push(letterPositions[i].letter)
     }
+    console.log(wordStyle)
     isEventListener = true
 }
-let score = 0;
 
 let d;
 
@@ -92,16 +101,6 @@ window.addEventListener("touchend", function mobiletouch(evt) {
 }, false);
 document.addEventListener('keydown', direction);
 function direction(event) {
-    // for (let index = 0; index < 20; index++) {
-    //     if (!Number.isInteger(snakeX/56)) {
-    //         console.log(snakeX)
-    //     }
-        
-    // } 
-    // (!Number.isInteger(snakeX/56) ) {
-    //     console.log(snakeX)
-    //     snakeX = snakeX;
-    // }
 
     if (!Number.isInteger(snakeY/56) || !Number.isInteger(snakeX/56)) {
         setTimeout(() => {
@@ -123,21 +122,8 @@ function direction(event) {
         }
     }
 
-    // let key = event.keyCode;
-    // if(key == 37 && d != "RIGHT"){
-
-    //     d = "LEFT";;
-    // } else if(key == 38 && d !="DOWN"){
-    //     d = "UP";
-    // } else if(key == 39 && d != "LEFT"){
-    //     d = "RIGHT";
-    // } else if(key == 40 && d !="UP"){
-    //     let t = snakeX%56
-    //     console.log(t)
-    //     d = "DOWN";
-    // }  
-
 }
+var fin = 0
 function draw() {
     let cool = setInterval(() => {
         if(isEventListener == true){
@@ -168,7 +154,7 @@ function draw() {
             }
             var letterIndex = 0;
             letterPositions.forEach(e => {
-                context.fillStyle = "red";
+                context.fillStyle = "#373D20";
                 context.font = "30px League Spartan";
                 context.fillText(e.letter, letterPositions[letterIndex].x, letterPositions[letterIndex].y);
                 letterIndex++; 
@@ -179,7 +165,6 @@ function draw() {
                     context.beginPath();
                     context.lineWidth="2";
                     context.arc(snake[i].x + 28, snake[i].y + 28, 13, 0, 2 * Math.PI)
-                    // console.log(snake[i].x, snake[i].y)
                     context.fill();
                 }
                 else {
@@ -207,13 +192,13 @@ function draw() {
             var l = false
             for(let i = 0; i < letterPositions.length; i++){
                 if(snakeX == letterPositions[i].x - 19  && snakeY == letterPositions[i].y - 37){
-                    console.log(wordStyle)
                     if (letterPositions[i].letter != word[0]) {
                         l = true
                     } else{
-                        // co2python.push({x: letterPositions[i].x, y: letterPositions[i].y})
+                        if (co2python[0] =='vide') {
+                            co2python.shift()
+                        }
                         co2python.push(letterPositions[i].x,letterPositions[i].y)
-                        score++;
                         letterFind = true;
                         word.shift();
                         letterPositions.splice(i, 1);
@@ -227,35 +212,54 @@ function draw() {
             let newHead = {
                 x: snakeX,
                 y: snakeY
-                } ;   
+                } ;
             
             
             if(snakeX < 0 || snakeY < 0 || snakeX > 8*box || snakeY > 8*box || collision(newHead, snake) || l){
-                clearInterval(game);
-                // defeat();
+                if (fin == 0) {
+                    clearInterval(game)
+                    checkingCoo()
+                    fin+=1
+                }
             };
-            if(word.length == 0){
-                checkingCoo()
-                // setTimeout(() => {
-                //     console.log(co2python)
-                    
-                // }, 200);
-            }
-            snake.unshift(newHead);
             
+            if(word.length == 0){
+                if (fin == 0) {
+                    clearInterval(game)
+                    checkingCoo()
+                    fin+=1
+                }
+            } 
+            snake.unshift(newHead);
             updateWord();
-
-            context.fillStyle = "red";
-            context.font = "30px Arial";
-            context.fillText(score, 2*box, 1.6*box);
         }
     }, 50);
 }
 async function checkingCoo() {
-    console.log(co2python)
     r = await fetch(`/dashboard/games/snake/${session_id}/${co2python}/check_coo`)
     response = await r.json()
-    console.log(response)
+    xpTotal = response.result.xpTot
+    score.innerHTML = xpTotal + ' Xp'
+    if (response.message == 'Le jeu est terminé!'){
+        end_game(response.result.xp, response.result.time, response.result.lost_lives)
+    } else if (response.message == 'ok') {
+        animXp.style.animation = 'Xpanim 1s ease-in-out forwards';
+        word = []
+        var xp = response.result.xp
+        xpWin.innerHTML = `+${xp}`
+        setTimeout(() => {
+            snake = [{ x: 4*box, y:4*box}]
+            d = undefined
+            nbrLettreTrouve = 0
+            co2python = ['vide']
+            snakeX = snake[0].x;
+            snakeY = snake[0].y;
+            animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
+            getPosition() 
+            game = setInterval(draw,35)
+            fin = 0
+        }, 1000);
+    }
 }
 function collision(head, array){
     for(let g = 0;g < array.length; g++){
@@ -268,9 +272,46 @@ function collision(head, array){
 
 
 getPosition()
-var game = setInterval(draw, 40);
-    
+var game = setInterval(draw, 35);
+
+
+/**
+ * 
+ * This function is used to display the end pop-up
+ * 
+ * @function timer
+ * @param {Event} event - The event that triggered the function
+ * 
+ * @returns {void} - The result of the function
+ */
+var timer = setInterval(async() => {
+    // Get the time element
+    const time = document.getElementById('time');
+    // Decrease the time by 1
+    time.innerHTML = parseInt(time.innerHTML) - 1;
+
+    // If the timer is over
+    if (time.textContent == 0) {
+        clearInterval(timer);
+        try {
+            // Check the status of the game
+            const response = await fetch(`/dashboard/games/memory/${session_id}/check_status`);
+            const data = await response.json();
+            console.log(data);
+            // If the game is over
+            if (data.code == 201) {
+                // End the game
+                end_game(data.result.xp, data.result.time, data.result.lost_lives);
+            }
+        } catch (error) {
+            window.location.href = '/dashboard/errors/500';
+        }
+    }
+}, 1000);
+
+timer;
 
 
 
-
+// animXp.style.animation = 'Xpanim 1s ease-in-out forwards';
+// animXp.style.animation = 'disapear 0.5s ease-in-out forwards';

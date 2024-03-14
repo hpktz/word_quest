@@ -6,7 +6,10 @@ body{
     box-sizing: border-box;
 }
 .game-container{
-    margin-top: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,6 +24,7 @@ canvas{
 
 .word{
     display: flex;
+    font-family: 'League Spartan';
 }
 .letter{
     border-bottom: 3px solid black;
@@ -32,4 +36,78 @@ canvas{
     height: 50px;
     width: 30px;
     text-transform: uppercase;
+}
+
+.XP {
+    font-family: 'League Spartan';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.01);
+                /* scale(0.1) */
+    font-size: 64px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+}
+
+.XP p {
+    transform: translateY(5px);
+    background: linear-gradient(to bottom, #FEDE00, #F5AA00);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.XP img {
+    height: 84px;
+}
+
+.info-content{
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    font-family: 'League Spartan';
+
+}
+
+.frensh-word{
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.counter{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.counter img{
+    height: 25px;
+}
+
+@keyframes Xpanim {
+    0% {
+        transform: translate(-50%, -50%) scale(0.01);
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes disapear {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(0.01);
+    }
 }

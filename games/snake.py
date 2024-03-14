@@ -81,22 +81,32 @@ class snake():
         self.lesson_id = lesson_id
         self.words = words
         self.shuffle = random.sample(self.words, len(self.words))
-        self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
+        self.words_to_check = []
+        self.current_word = {}
+        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=3))
         self.start = str(datetime.datetime.now())
         self.finalChecking = []
+        self.xp = 0
+        self.allLetters = ""
+        for i in self.shuffle:
+            self.allLetters += i['word']
+
 
 
     def newWord(self):
         coLetters = []
-        current_word = self.shuffle.pop()["word"]
-        for letter in current_word:
-            coLetters.append(self.getcoordinate(coLetters, letter))
+        self.current_word = self.shuffle.pop()
+        french_word = self.current_word['trans_word']
+        self.current_word = self.current_word['word']
+        self.words_to_check += self.current_word
+        for letter in self.current_word:
+            coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
         return jsonify({
             'code': 200,
             'message': 'ok',
-            'result': coLetters
+            'result': {'coo': coLetters,
+                       'frensh': french_word}
         })
     
     def getcoordinate(self,list, l):
@@ -123,20 +133,36 @@ class snake():
             
 
     def checkingCoo(self,list):
-        for i in range(len(self.finalChecking)):
-            if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
-                return jsonify({
-                    'code': 404,
-                    'message': 'triche',
-                    'result': 'tu te prend pour qui'
-                })
+        xpWord = 0
+        if list != 'vide':
+            for i in range(len(list)):
+                if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
+                    faute = False
+                    for j in range(len(list)):
+                        if self.finalChecking[j]['x'] == int(list[i]['x']) and self.finalChecking[j]['y'] == int(list[i]['y']) and self.finalChecking[j]['letter'] == self.finalChecking[i]['letter']:
+                            faute = True
+                            break
+                    if not faute:
+                        return jsonify({
+                            'code': 404,
+                            'message': 'error',
+                            'result': 'triche'
+                        })
+                xpWord += 1
+            if (xpWord//2 + 1) > 6:
+                xpWord = 11
+            self.xp += xpWord//2 + 1
+        if(len(self.shuffle) == 0):
+            return self._end_game(xpWord)
         return jsonify({
             'code': 200,
             'message': 'ok',
-            'result': 'tout est bon'
+            'result': {'xp': 0 if list == 'vide' else xpWord//2 + 1,
+                       'xpTot': self.xp}
         })
 
-
+    def reset(self):
+        self.words.append(self.current_word)
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
     # si l'attribut a une longueur de 1, on attend
     # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste
@@ -178,7 +204,7 @@ class snake():
             if conn:
                 conn.close()
         
-    def _end_game(self, last_answer, last_id):
+    def _end_game(self, xp_last_word):
         """
         End the game and save the results
         
@@ -205,41 +231,32 @@ class snake():
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
-
-            if last_id == None:
-                xp = 0
-            elif self.nbr_try > len(self.french_words)*1.5:
-                xp = 20 - round(self.nbr_try - len(self.french_words)*1.5)
-                xp = xp if xp > 0 else 0
-            else:
-                xp = 20
                 
             # Lose a life if there are remaining words
-            lives_to_lose = 1 if xp < 15 else 0
+            lives_to_lose = 1 if self.xp < len(self.allLetters)//4 else 0
             while lives_to_lose > 0:
                 self._lose_life()
                 lives_to_lose -= 1
             
-            lives_to_lose = 1 if xp < 15 else 0
-
+            lives_to_lose = 1 if self.xp < len(self.allLetters)//4 + len(self.current_word) else 0
             # Update the lesson as completed
             if lives_to_lose == 0:
                 cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
                         
             # Save the results in the database
-            cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.lesson_id, xp, lives_to_lose, time_passed))
-            cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, xp))
+            cursor.execute("INSERT INTO lessons_log (user_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s)", (current_user.id, self.lesson_id, self.xp, lives_to_lose, time_passed))
+            cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, self.xp))
             conn.commit()
-            if last_id == None:
+            if True == None:
                 response = jsonify({
                 "code": 201,
                 "message": "Le jeu est terminé!",
                 "result": {
                     "time": time_passed,
                     "lost_lives": lives_to_lose,
-                    "xp": xp,
-                    # "score": len(self.cards)//2,
-                    # "total": len(self.words)
+                    "xp": self.xp,
+                    "xpAnim": xp_last_word,
+                    "xpTot": self.xp
                 }
             })
             else:
@@ -247,14 +264,11 @@ class snake():
                     "code": 201,
                     "message": "Le jeu est terminé!",
                     "result": {
-                        "remaining": len(self.words_to_check),
                         "time": time_passed,
                         "lost_lives": lives_to_lose,
-                        "xp": xp,
-                        'innerHTML': self.shuffle_cards[last_id],
-                        'checking': last_answer,
-                        "score": len(self.cards)//2,
-                        "total": len(self.words)
+                        "xp": self.xp,
+                        "xpAnim": xp_last_word,
+                        "xpTot": self.xp
                     }
                 })
             response = make_response(response, 201)
@@ -301,6 +315,8 @@ class snake():
         to_extract.start = json_dict["start"]
         to_extract.shuffle = json_dict["shuffle"]
         to_extract.finalChecking = json_dict["finalChecking"]
+        to_extract.current_word = json_dict["current_word"]
+        to_extract.xp = json_dict["xp"]
         return to_extract    
 
 
@@ -397,7 +413,7 @@ def start(session_id):
     """
     if 'game' in session:
         game = snake.from_json(session["game"])
-        reloaded = True if game.get_remaning_time() < 58 else False
+        reloaded = True if game.get_remaning_time() < 178 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
             return render_template('games/snake.html', 
@@ -447,9 +463,18 @@ def endChecking(session_id, co2python):
     n = co2python.split(',')
     coo = []
     for i in range(len(n)):
-        if i % 2 == 0:
+        if n[i] == 'vide':
+            coo = 'vide'
+        elif i % 2 == 0:
             coo.append({'x': n[i] , 'y': n[i+1]})
     game = snake.from_json(session["game"])
     result = game.checkingCoo(coo)
     session["game"] = game.to_json()
     return result
+
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/reset')
+@check_game
+def resetwords(session_id):
+    game = snake.from_json(session["game"])
+    result = game.reset()
+    session["game"] = game.to_json()

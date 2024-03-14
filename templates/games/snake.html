@@ -12,8 +12,26 @@
 
 <body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
     <div class="game-container">
+        <div class="info-content">
+            <div class="counter">
+                <img src="/static/icons/games-icons/flash.png" alt="">
+                <p id="xp">{{score}}Xp</p>
+            </div>
+            <div class="frensh-word" id="frensh-word">Mot</div>
+            <div class="counter">
+                <img src="/static/icons/games-icons/timer-icon.png" alt="">
+                <p class="data" id="time">{{time}}</p>
+            </div>
+        </div>
+
         <canvas width="504" height="504"></canvas>
         <div class="word" id="word">
+        </div>
+        <div id="animation-xp" class="XP">
+            <p id="xpnotif">+0</p>
+            <img src="/static/icons/games-icons/big-flash.png" alt="">
+        </div>
+            
         </div>
     </div>
 

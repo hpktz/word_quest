@@ -127,6 +127,9 @@ csp = {
     ],
     'frame-ancestors': [
         '\'self\''
+    ],
+    'media-src': [
+        '\'self\''
     ]
 }
 
@@ -231,43 +234,6 @@ def method():
         user = current_user.name
     return render_template('method.html', user = user)
 
-# Save data from routes (time passed, arrived at, etc.)
-@app.before_request
-def before_request():
-    if not request.path.startswith('/static') and current_user.is_authenticated:
-        current_route = request.path
-        if 'user_data' not in session:
-            session['user_data'] = {
-                'route': current_route, 
-                'time': str(datetime.datetime.now())
-            }
-        if current_route != session['user_data']['route'] and session['user_data']['time'] != 0:
-            conn = None
-            cursor = None
-            try:
-                conn = create_connection()
-                cursor = conn.cursor()
-                arrived_at = datetime.datetime.strptime(session['user_data']['time'], '%Y-%m-%d %H:%M:%S.%f')
-                time_passed = datetime.datetime.now() - arrived_at
-                route = session['user_data']['route']
-                
-                # Convert time_passed to seconds
-                time_passed = time_passed.total_seconds()
-                cursor.execute("INSERT INTO routes_log (user_id, route, time_passed, created_at) VALUES (%s, %s, %s, %s)", (current_user.id, route, time_passed, arrived_at))
-                
-                
-                conn.commit()
-            except mysql.connector.Error as e:
-                print(e)
-            finally:
-                if cursor:
-                    cursor.close()
-                if conn:
-                    conn.close()
-            
-            session['user_data']['route'] = current_route
-            session['user_data']['time'] = str(datetime.datetime.now())
-
 # Errors handling
 @app.errorhandler(404)
 def page_not_found(e):
@@ -284,14 +250,9 @@ def internal_server_error(e):
     logging.error('Server error: %s', (request.path))
     return render_template('errors/500.html'), 500
 
-@app.errorhandler(Exception)
-def handle_exception(e):
-    logging.error('Exception: %s', (request.path))
-    return render_template('errors/500.html'), 500
-
 @app.route('/dashboard/errors/500')
 def error_500():
     return render_template('errors/500.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

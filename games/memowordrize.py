@@ -34,7 +34,12 @@ from gtts import gTTS
 from io import BytesIO
 import logging
 import linecache
-
+import speech_recognition as sr
+import io
+import soundfile as sf
+import io
+import soundfile as sf
+import speech_recognition as sr
 
 memowordrize_bp = Blueprint('memowordrize', __name__)
 """
@@ -55,10 +60,12 @@ class memowordrize():
         self.lesson_id = lesson_id
         self.words = words
         self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(hours=2))
+        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=3))
         self.start = str(datetime.datetime.now())
         self.current_path = None
+        self.xp = 0
         self.faults = 0
+        self.game_count = 0
         
     def see_path(self):
         """
@@ -75,24 +82,38 @@ class memowordrize():
                     - path (list): The path of the game
         """
         if self.current_path:
-            self.current_path["tries"] += 1
-            return jsonify({
-                "code": 200,
-                "message": "Le jeu est prêt!",
-                "result": {
-                    "tries": self.current_path["tries"],
-                    "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in self.current_path["path"]]
-                }
-            })
+            if self.current_path["tries"] < 3:
+                self.current_path["tries"] += 1
+                words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
+                words = [item["word"]["word"] for item in words]
+                words = random.sample(words, len(words))
+                return jsonify({
+                    "code": 200,
+                    "message": "Voici le chemin!",
+                    "result": {
+                        "tries": self.current_path["tries"],
+                        "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in self.current_path["path"]],
+                        "words": words
+                    }
+                })
+            else:
+                return jsonify({
+                    "code": 403,
+                    "message": "Chemin vu trop de fois!",
+                    "result": []
+                })
         return self.next_path()
         
     def next_path(self):
         """
         Generate the next path
         """
+        if self.game_count > 3:
+            return self._end_game()
         starting_position = random.randint(1, 5)
         positions = [starting_position]
-        for i in range(1, 7):
+        self.game_count += 1
+        for i in range(1, 6):
             next_positions = [positions[-1]]
             next_positions.append(positions[-1] + 1 if positions[-1] < 5 else 5)
             next_positions.append(positions[-1] - 1 if positions[-1] > 1 else 1)
@@ -117,14 +138,94 @@ class memowordrize():
             "tries": 0,
             "path": path
         }
+        xp_won = 5 - self.faults * 0.3 if 5 - self.faults * 0.3 > 0 else 0
+        self.xp += round(xp_won, 2)
+        
+        words = [{key: value for key, value in item.items() if key in ["word"]} for item in path]
+        words = [item["word"]["word"] for item in words]
+        words = random.sample(words, len(words))
         
         return jsonify({
             "code": 200,
             "message": "Le jeu est prêt!",
             "result": {
+                "finished": True,
+                "xp": round(xp_won),
                 "tries": 0,
-                "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in path]
+                "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in path],
+                "words": words
             }})
+        
+    def check_case(self, position, word):
+        """
+        Try a case
+        
+        Args:
+            position (int): The position of the case
+            word (string): The word to check
+        
+        Returns:
+            dict: The response of the request
+                - code (int): The status code of the request
+                    -> 200: The game is ready
+                    -> 500: An error has occured
+                - message (string): The message of the request
+                - result (dict): The result of the request
+                    - tries (int): The number of tries
+                    - path (list): The path of the game
+        """
+        if self.current_path:
+            check_position = None
+            for index, el in enumerate(self.current_path["path"]):
+                if el["position"] == int(position):
+                    check_position = index
+                    break
+            if check_position is not None:
+                if self.current_path["path"][check_position]["word"]["word"].lower() == word.lower():
+                    self.current_path["path"][check_position]["checked"] = True
+                    if all([item["checked"] for item in self.current_path["path"]]):
+                        return self.next_path()
+                    else:
+                        return jsonify({
+                            "code": 200,
+                            "message": "Le mot est correct!",
+                            "result": {
+                                "finished": False,
+                                "tries": self.current_path["tries"],
+                                "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in self.current_path["path"]]
+                            }
+                        })
+                else:
+                    self.faults += 1
+                    words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
+                    words = [item["word"]["word"] for item in words]
+                    words = random.sample(words, len(words))
+                    return jsonify({
+                        "code": 403,
+                        "message": "Le mot est incorrect!",
+                        "result": {
+                            "tries": self.current_path["tries"],
+                            "words": words
+                        }
+                    })
+            else:
+                self.faults += 1
+                words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
+                words = [item["word"]["word"] for item in words]
+                words = random.sample(words, len(words))
+                return jsonify({
+                    "code": 403,
+                    "message": "Le mot est incorrect!",
+                    "result": {
+                        "tries": self.current_path["tries"],
+                        "words": words
+                    }
+                })
+        return jsonify({
+            "code": 404,
+            "message": "Le chemin n'a pas été trouvé!",
+            "result": []
+        })
     
     def get_remaning_time(self):
         """
@@ -202,7 +303,7 @@ class memowordrize():
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
-            xp = round((len(self.words)-self.faults-len(self.words_to_check))/len(self.words) * 20)
+            xp = self.xp
                 
             # Lose a life if there are remaining words
             lives_to_lose = 1 if xp < 15 else 0
@@ -229,13 +330,9 @@ class memowordrize():
                 "code": 201,
                 "message": "Le jeu est terminé!",
                 "result": {
-                    "remaining": len(self.words_to_check),
                     "time": time_passed,
                     "xp": xp,
-                    "lost_lives": lives_to_lose,
-                    "score": len(self.words) - len(self.words_to_check) - self.faults,
-                    "remaining": len(self.words_to_check),
-                    "total": len(self.words)
+                    "lost_lives": lives_to_lose
                 }
             })
             response = make_response(response, 201)
@@ -282,6 +379,8 @@ class memowordrize():
         to_extract.start = json_dict["start"]
         to_extract.current_path = json_dict["current_path"]
         to_extract.faults = json_dict["faults"]
+        to_extract.game_count = json_dict["game_count"]
+        to_extract.xp = json_dict["xp"]
         return to_extract    
 
 
@@ -380,24 +479,22 @@ def start(session_id):
     try:
         if 'game' in session:
             game = memowordrize.from_json(session["game"])
-            # if not game.current_path:
-            #     current_path = None
-            # else:
-            #     current_path = game.current_path  
+            if not game.current_path:
+                current_path = None
+            else:
+                current_path = game.current_path  
             
             current_path = None
         
-            # game.current_path["tries"] += 1 if game.current_path["tries"] == 0 else 0
-            reloaded = True if game.get_remaning_time() < 100000 else False
+            reloaded = True if game.get_remaning_time() < 178 else False
             if session_id == game.id and game.time > str(datetime.datetime.now()):
                 session["game"] = game.to_json()
                 return render_template('games/memowordrize.html', 
                                     session_id=session_id, 
                                     list_id=game.list_id,
                                     time=game.get_remaning_time(),
-                                    max_score=len(game.words),
+                                    xp=game.xp,
                                     current_path=current_path,
-                                    score=len(game.words) - len(game.words_to_check) - game.faults,
                                     reloaded=reloaded)
             return redirect(url_for('memowordrize.index', list_id=game.list_id))
         return redirect(url_for('main.index'))
@@ -479,3 +576,68 @@ def audio(session_id, id):
             "message": "Une erreur s'est produite!",
             "result": []
         }), 500
+        
+@memowordrize_bp.route('/dashboard/games/memowordrize/<string:session_id>/try_case', methods=['POST'])
+@check_game
+def try_case(session_id):
+    """
+    Try a case
+    
+    Args:
+        session_id (string): The unique identifier of the game
+        
+    Returns:
+        dict: The response of the request
+            - code (int): The status code of the request
+                -> 200: The game is ready
+                -> 500: An error has occured
+            - message (string): The message of the request
+            - result (dict): The result of the request
+                - tries (int): The number of tries
+                - path (list): The path of the game
+    """
+    try:
+        game = memowordrize.from_json(session["game"])
+        data = request.get_json()
+        position = data["position"]
+        word = data["word"]
+        response = game.check_case(position, word)
+        session["game"] = game.to_json()
+        return response
+    except Exception as e:
+        logging.error("An error has occured: " + str(e))
+        return jsonify({
+            "code": 500,
+            "message": "Une erreur s'est produite!",
+            "result": []
+        }), 500
+        
+@memowordrize_bp.route('/dashboard/games/memowordrize/<string:session_id>/check_status')
+@check_game
+def check_status(session_id):
+    """
+    Check the status of the game
+    
+    Args:
+        session_id (string): The unique identifier of the game
+    
+    Returns:
+        dict: The response of the request
+            - code (int): The status code of the request
+                -> 200: The game is in progress
+            - message (string): The message of the request
+            - result (dict): The result of the request
+                - remaining (int): The number of remaining words
+                - time (string): The time when the game started
+                - words (list): The words that have been checked
+    """
+    game = memowordrize.from_json(session["game"])
+    return jsonify({
+        "code": 200,
+        "message": "Le jeu est en cours!",
+        "result": {
+            "remaining": len(game.words_to_check),
+            "time": game.get_remaning_time(),
+            "words": game.get_words_checked()
+        }
+    })

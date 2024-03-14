@@ -11,23 +11,29 @@
 </head>
 
 <body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
-    <section class="main-game-section">
-        <a href="/dashboard" class="back">
-            <img src="/static/icons/games-icons/exit.png" alt="">
-        </a>
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <section class="game-section">
         <div class="content">
-            <div class="header">
-                <div class="time">
-                    <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
-                    <div class="data" id="time">{{time}}</div>
+            <div class="main-infos">
+                <a href="/dashboard" class="back">
+                    <img src="/static/icons/games-icons/exit.png" alt="">
+                </a>
+                <div class="header">
+                    <div class="time">
+                        <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
+                        <div class="data" id="time">{{time}}</div>
+                    </div>
+                    {% if not current_path %}{% set infoButton = "active pulse" %}{% else %}{% set infoButton = "disabled" %}{% endif %}
+                    <div class="info-button {{infoButton}}" id="show-path">
+                        <span class="text">Voir le parcours</span> (<span class="amount" id="tries-amount">{% if current_path %}{{3 - current_path["tries"]}}{% else %}3{%endif%}</span>)
+                    </div>
+                    <div class="xp-container">
+                        <img src="/static/icons/games-icons/big-flash.png" class="icon" alt="">
+                        <div class="data"><span id="xp">{{xp}}</span> XP</div>
+                    </div>
                 </div>
-                {% if not current_path %}{% set infoButton = "active" %}{% else %}{% set infoButton = "disabled" %}{% endif %}
-                <div class="info-button {{infoButton}}" id="show-path">
-                    <span class="text">Voir le parcours</span> (<span class="amount">{% if current_path %}{{3 - current_path["tries"]}}{% else %}3{%endif%}</span>)
-                </div>
-                <div class="xp-container">
-                    <img src="/static/icons/games-icons/big-flash.png" class="icon" alt="">
-                    <div class="data"><span id="xp">{{xp}}</span> XP</div>
+                <div class="words-container" id="words-container">
+                    <div class="mess">Cliquez sur "Voir le parcours"</div>
                 </div>
             </div>
             <div class="path-container">
@@ -86,7 +92,12 @@
             </div>
         </div>
     </section>
-
+    <div class="xp-message">
+        <img src="/static/icons/games-icons/big-flash.png" alt="">
+        <p>+<span id="xp-message-data">5</span></p>
+    </div>
+    {% set popUpImage = '/static/icons/games-icons/memowordrize-30-dark-grey.png' %} {% set popUpTitle = "MemoWordRize" %} {% set popUpDesc = "Ecoutez les mots prononcés, et reconstituez le chemin le plus rapidement possible !" %} {%set popUpGame = "memowordrize"%}
+    {% include "games/popups.html" %}
     <script src="/static/styles/games/memowordrize/main.js"></script>
 </body>
 

@@ -9,7 +9,9 @@ continueButton.addEventListener("click", () => changePage());
  */
 function changePage() {
     const form = document.getElementById("signup-form");
-    if (form.name.value === "" || form.birthday.value === "" || form.email.value === "" || form.password.value === "") {
+    var birthday = form.year.value + "-" + form.month.value + "-" + form.day.value;
+    console.log(birthday);
+    if (form.name.value === "" || form.day.value === "" || form.month.value === "" || form.year.value === "" || form.email.value === "" || form.password.value === "") {
         if (!document.getElementById("login-form-main-alert")) {
             document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>Veuillez remplir tous les champs</p>";
             return;
@@ -17,7 +19,7 @@ function changePage() {
             document.getElementById("login-form-main-alert").innerHTML = "Veuillez remplir tous les champs";
             return;
         }
-    } else if (form.birthday.value < "1920-01-01" || form.birthday.value > "2018-12-31") {
+    } else if (birthday < "1920-01-01" || birthday > "2018-12-31") {
         if (!document.getElementById("login-form-main-alert")) {
             document.getElementById("front-alert").innerHTML = "<p id='login-form-main-alert'>La date de naissance n'est pas valide</p>";
             return;
@@ -54,6 +56,7 @@ form.addEventListener("submit", (event) => send_form(event));
  */
 function send_form(event) {
     event.preventDefault();
+    document.getElementById("birthday").value = form.year.value + "-" + form.month.value + "-" + form.day.value;
     document.getElementById("signup-submit-button").innerHTML = '<div class="loader"></div>';
     document.getElementById("signup-form").submit();
 }

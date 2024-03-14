@@ -200,6 +200,8 @@ class memowordrize():
                     words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
                     words = [item["word"]["word"] for item in words]
                     words = random.sample(words, len(words))
+                    for path in self.current_path["path"]:
+                        path["checked"] = False
                     return jsonify({
                         "code": 403,
                         "message": "Le mot est incorrect!",
@@ -213,6 +215,8 @@ class memowordrize():
                 words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
                 words = [item["word"]["word"] for item in words]
                 words = random.sample(words, len(words))
+                for path in self.current_path["path"]:
+                    path["checked"] = False
                 return jsonify({
                     "code": 403,
                     "message": "Le mot est incorrect!",

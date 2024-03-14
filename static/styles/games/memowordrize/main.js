@@ -1,4 +1,12 @@
 const sessionID = document.getElementsByTagName('body')[0].dataset.session_id;
+const successAudioUrl = '/static/sounds/success-sound-effect.mp3';
+const successAudio = new Audio(successAudioUrl);
+successAudio.volume = 1;
+successAudio.load();
+const failAudioUrl = '/static/sounds/fail-sound-effect.mp3';
+const failAudio = new Audio(failAudioUrl);
+failAudio.volume = 0.2;
+failAudio.load();
 const pathContainer = document.getElementsByClassName('path-container')[0];
 const items = document.getElementsByClassName('item');
 const wordsContainer = document.getElementById('words-container');
@@ -175,6 +183,7 @@ async function try_case(draggableEl, max) {
             draggableEl.style.height = max.getBoundingClientRect().height + 'px';
             draggableEl.style.transform = 'translate(-50%, -50%) scale(1)';
             draggableEl.style.lineHeight = max.getBoundingClientRect().height + 'px';
+            successAudio.play(); // Play the success audio
             max.classList.add('correct'); // Add the correct class to the case
             max.innerHTML = `<p class="word">${draggableEl.innerHTML}</p>`; // Set the innerHTML of the case to the word
             var parent = max.parentElement; // Get the parent of the case
@@ -200,6 +209,7 @@ async function try_case(draggableEl, max) {
             draggableEl.style.transform = 'translate(-50%, -50%) scale(1)';
             draggableEl.style.lineHeight = max.getBoundingClientRect().height + 'px';
             max.classList.add('wrong'); // Add the wrong class to the case
+            failAudio.play(); // Play the fail audio
             await new Promise(resolve => setTimeout(resolve, 500));
             draggableEl.style.opacity = 0; // Hide the word
             draggableEl.style.width = 'auto';

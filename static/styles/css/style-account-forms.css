@@ -127,6 +127,48 @@ input:focus {
     border-bottom: 3px solid #5f4e43;
 }
 
+input::placeholder {
+    color: #333333;
+}
+
+.date-text {
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    color: #333;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.date-container {
+    display: grid;
+    grid-template-columns: 50px 1fr 50px;
+    gap: 10px;
+}
+
+.date-container input {
+    margin-top: 0;
+}
+
+.date-container input::placeholder {
+    color: grey;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+select {
+    padding: 15px 0 15px 0;
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    color: black;
+    border: 0;
+    border-bottom: 3px solid #766153;
+    transition: all 0.3s;
+}
+
 #2fa-form-main-alert {
     margin: 15px 0 10px 0;
     font-family: 'League Spartan', sans-serif;
@@ -221,8 +263,7 @@ input:focus {
 }
 
 .pictures-container .profile-picture-radio:checked+label {
-    border: 2px solid #ededed;
-    outline: 2px solid #555;
+    border: 2px solid #555;
 }
 
 @keyframes alert-animation {

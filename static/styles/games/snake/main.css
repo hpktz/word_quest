@@ -13,8 +13,10 @@ body{
     
 }
 canvas{
-    border: 2px solid black;
-    background-color: #c1c286;
+    background-color: #766153;
+    border-radius: 15px;
+    padding: 15px;
+    /* transform: scale(0.5); */
 }
 
 .word{

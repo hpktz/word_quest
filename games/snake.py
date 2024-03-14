@@ -25,6 +25,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from root import *
 import random as random
 import datetime as datetime
+import math as math
 import uuid as uuid
 import json
 from functools import wraps
@@ -79,24 +80,62 @@ class snake():
         self.list_id = list_id
         self.lesson_id = lesson_id
         self.words = words
+        self.shuffle = random.sample(self.words, len(self.words))
         self.words_to_check = words
         self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
         self.start = str(datetime.datetime.now())
+        self.finalChecking = []
 
-    # def getWords(self):
-    #     liste = []
-    #     for i in range(len(self.cards)):
-    #         current_card = random.choice(self.cards)
-    #         for j in range(len(self.cards)):
-    #             if self.cards[j] == current_card:
-    #                 del(self.cards[j])
-    #                 break
-    #         self.shuffle_cards.append(current_card)
-    #     return jsonify({
-    #         'code': 200,
-    #         'message': 'ok',
-    #         'result': {'nbr_cards': len(self.french_words + self.english_words)}
-    #     })
+
+    def newWord(self):
+        coLetters = []
+        current_word = self.shuffle.pop()["word"]
+        for letter in current_word:
+            coLetters.append(self.getcoordinate(coLetters, letter))
+        self.finalChecking = coLetters
+        return jsonify({
+            'code': 200,
+            'message': 'ok',
+            'result': coLetters
+        })
+    
+    def getcoordinate(self,list, l):
+        xpos = math.floor(random.random() * 9) * 56 + 19
+        ypos = math.floor(random.random() * 7 + 1) * 56 + 37
+        alreadyPos = True
+        if list == []:
+            return {'letter': l,'x': xpos, 'y': ypos}
+        else:
+            for Letter in list:
+                if xpos == Letter['x'] and ypos == Letter['y'] or xpos == 243 and ypos == 261:
+                    alreadyPos = False
+                    break
+                else:
+                    alreadyPos = True
+        
+
+        if alreadyPos:
+            return {'letter': l, 'x': xpos, 'y': ypos}
+        
+        else:
+            return self.getcoordinate(list, l)
+
+            
+
+    def checkingCoo(self,list):
+        for i in range(len(self.finalChecking)):
+            if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
+                return jsonify({
+                    'code': 404,
+                    'message': 'triche',
+                    'result': 'tu te prend pour qui'
+                })
+        return jsonify({
+            'code': 200,
+            'message': 'ok',
+            'result': 'tout est bon'
+        })
+
 
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
     # si l'attribut a une longueur de 1, on attend
@@ -199,8 +238,8 @@ class snake():
                     "time": time_passed,
                     "lost_lives": lives_to_lose,
                     "xp": xp,
-                    "score": len(self.cards)//2,
-                    "total": len(self.words)
+                    # "score": len(self.cards)//2,
+                    # "total": len(self.words)
                 }
             })
             else:
@@ -260,6 +299,8 @@ class snake():
         to_extract.time = json_dict["time"]
         to_extract.words_to_check = json_dict["words_to_check"]
         to_extract.start = json_dict["start"]
+        to_extract.shuffle = json_dict["shuffle"]
+        to_extract.finalChecking = json_dict["finalChecking"]
         return to_extract    
 
 
@@ -356,9 +397,6 @@ def start(session_id):
     """
     if 'game' in session:
         game = snake.from_json(session["game"])
-        if game.shuffle_cards:
-            return redirect(url_for('snake.index', list_id=game.list_id))
-        
         reloaded = True if game.get_remaning_time() < 58 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
@@ -399,14 +437,19 @@ def check_status(session_id):
 @check_game
 def getCard(session_id):
     game = snake.from_json(session["game"])
-    result = game.getWords()
+    result = game.newWord()
     session["game"] = game.to_json()
     return result
 
-@snake_bp.route('/dashboard/games/snake/<string:session_id>/check_word/<int:boxId>')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/<string:co2python>/check_coo')
 @check_game
-def test(session_id, boxId):
+def endChecking(session_id, co2python):
+    n = co2python.split(',')
+    coo = []
+    for i in range(len(n)):
+        if i % 2 == 0:
+            coo.append({'x': n[i] , 'y': n[i+1]})
     game = snake.from_json(session["game"])
-    result = game.printWord(boxId)
+    result = game.checkingCoo(coo)
     session["game"] = game.to_json()
     return result

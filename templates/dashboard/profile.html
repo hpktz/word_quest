@@ -78,7 +78,7 @@
         <div class="title" style="margin-top: 50px;">Listes</div>
         <div class="lists-container">
             {% if user_infos["lists"] %} {% for list in user_infos["lists"] %}
-            <a href="/dashboard/profile/list/{{list['id']}}" class="redirect list-box">
+            <a href="/dashboard/profile/list/{{list['id']}}" class="list-box">
                 <div class="title">{{list["title"]}}</div>
                 <div class="list-of-words">
                     {% for word in list["words"] %}
@@ -158,6 +158,18 @@
         </a>
         {% endif %}
     </section>
+    <div class="pop-up" id="list-pop-up">
+        <div class="header">
+            <div class="title" id="list-title-pop-up">Partager la liste</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="close-list-pop-up-button">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div id="list-content-pop-up"></div>
+    </div>
+    <script src="/static/scripts/profile/list-profile-main.js"></script>
     <script src="/static/scripts/profile/main.js"></script>
 </main>
 {% endblock %}

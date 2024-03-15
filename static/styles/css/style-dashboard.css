@@ -1517,7 +1517,7 @@ main {
     position: fixed;
     top: 200%;
     left: 50%;
-    width: 300px;
+    width: 400px;
     max-height: calc(100% - 50px);
     overflow: auto;
     background-color: white;

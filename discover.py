@@ -58,21 +58,19 @@ def discover():
                 lists.public AS list_visibility, 
                 lists.user_id AS list_user, 
                 JSON_ARRAYAGG(JSON_OBJECT('word', list_content.word, 'type', list_content.word_type)) AS words, 
-                COALESCE(like_counts.like_count, 0) AS like_count, 
-                COALESCE(COUNT(DISTINCT routes_log.id), 0) AS page_views, 
+                COALESCE(like_counts.like_count, 0) AS like_count,
                 CASE WHEN list_likes.user_id IS NULL THEN FALSE ELSE TRUE END AS user_in_like_list 
             FROM 
                 lists 
             LEFT JOIN 
                 list_content ON lists.id = list_content.list_id 
             LEFT JOIN 
-                (SELECT route, COUNT(DISTINCT id) AS id FROM routes_log GROUP BY route) AS routes_log ON routes_log.route = CONCAT('/dashboard/profile/list/', lists.id)
-            LEFT JOIN 
                 (SELECT list_id, COUNT(DISTINCT id) AS like_count FROM list_likes GROUP BY list_id) AS like_counts ON lists.id = like_counts.list_id 
             LEFT JOIN 
                 list_likes ON lists.id = list_likes.list_id AND list_likes.user_id = %s 
             WHERE 
                 lists.user_id != %s 
+                AND lists.initial_id IS NULL
             GROUP BY 
                 lists.id, lists.title;
             """, (current_user.id, current_user.id)) # Execute the SQL query to get all the lists from the database.
@@ -107,7 +105,6 @@ def discover():
                 
             result["words"] = result["words"][:result["amount"]] # Get the words to display.            
             result["coef"] +=  result["like_count"] * 0.1 # Add the list's like count to the coefficient.
-            result["coef"] +=  result["page_views"] * 0.05 # Add the list's page views to the coefficient.
             result["is_owner"] = not result["list_initial"]
             
             all_lists.append(result)
@@ -190,6 +187,7 @@ def search_list(search):
         cursor = conn.cursor()
         cursor.execute("""
             SELECT 
+                lists.id AS list_id,
                 lists.title AS list_title, 
                 users.name AS user_name,
                 JSON_ARRAYAGG(
@@ -204,6 +202,7 @@ def search_list(search):
             WHERE 
                 lists.title LIKE %s 
                 AND lists.public = 1 
+                AND lists.initial_id IS NULL
             GROUP BY 
                 lists.id, users.name 
             ORDER BY 

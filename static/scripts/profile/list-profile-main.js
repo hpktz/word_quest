@@ -1,10 +1,4 @@
-const copyButton = document.getElementById("copy-button");
-if (copyButton) {
-    copyButton.addEventListener("click", function() {
-        copy_list(copyButton);
-    });
-}
-async function copy_list(el) {
+async function copy_list_frompopup(el) {
     el.innerHTML = "<div class='loader'></div>"
     var id = el.dataset.id;
     try {
@@ -27,4 +21,15 @@ async function copy_list(el) {
             el.classList.remove("pulse")
         }, 250)
     }
+}
+
+function close_pop_up(e) {
+    e.preventDefault();
+    document.getElementById('list-content-pop-up').innerHTML = "";
+    popUp.classList.remove('active');
+}
+
+async function see_more(seeMoreButton, listContainerPopup) {
+    seeMoreButton.classList.toggle("active");
+    listContainerPopup.classList.toggle("active");
 }

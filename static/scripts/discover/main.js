@@ -1,4 +1,5 @@
 const main = document.querySelector('.discover-main-container');
+const popUp = document.getElementById('list-pop-up');
 
 /**
  * 
@@ -122,15 +123,43 @@ async function search_list(el, event) {
         let response = await request.json();
         if (response.code == 200) {
             container.innerHTML = "";
+            console.log(response.data);
             response.data.forEach((el) => {
                 let a = document.createElement('a');
-                a.href = "/dashboard/profile/list/" + el.id;
-                a.onclick = function(event) {
-                    redirect(this, event);
+                a.onclick = async function() {
+                    try {
+                        event.preventDefault();
+                        popUp.classList.add('active');
+                        document.getElementById('list-title-pop-up').innerText = el.list_title;
+
+                        document.getElementById('list-content-pop-up').innerHTML = "<div class='loader'><div class='load'></div></div>";
+                        const response = await fetch('/dashboard/profile/list/' + el.list_id + '');
+                        const list = await response.text();
+                        document.getElementById('list-content-pop-up').innerHTML = list;
+                        const copyButton = document.getElementById("copy-button");
+                        if (copyButton) {
+                            copyButton.addEventListener("click", function() {
+                                copy_list_frompopup(copyButton);
+                            });
+                        }
+                        const seeMoreButton = document.getElementById("see-more-button");
+                        const listContainerPopup = document.getElementsByClassName("list-container-popup")[0];
+                        if (seeMoreButton) {
+                            seeMoreButton.addEventListener("click", function() {
+                                see_more(seeMoreButton, listContainerPopup);
+                            });
+                        }
+                        const closePopUp = document.getElementById('close-list-pop-up-button');
+                        closePopUp.addEventListener('click', function(event) {
+                            close_pop_up(event);
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
                 a.classList.add('search-result-container');
                 words = "";
-                for (let i = 0; i < el.first_three_words.length; i++) {
+                for (let i = 0; i < 3; i++) {
                     words += el.first_three_words[i].word + ", ";
                 }
                 words += "..."
@@ -169,3 +198,77 @@ main.addEventListener('scroll', function() {
         }
     });
 });
+
+
+window.onload = function() {
+    const lists = document.getElementsByClassName('list-container-box');
+    for (let i = 0; i < lists.length; i++) {
+        lists[i].addEventListener('click', function(event) {
+            display_pop_up(lists[i], event);
+        });
+    }
+}
+
+/**
+ * 
+ * This function is used to display a pop-up when a list is clicked.
+ * 
+ * @function display_pop_up
+ * @param {HTMLElement} el - The element that triggered the function.
+ * @param {Event} event - The event object.
+ * @returns {void}
+ * 
+ */
+async function display_pop_up(el, event) {
+    try {
+        event.preventDefault();
+        let elCenterX = el.getBoundingClientRect().left + el.offsetWidth / 2;
+        let elCenterY = el.getBoundingClientRect().top + el.offsetHeight / 2;
+        popUp.style.transition = "0s";
+        popUp.style.opacity = 0;
+        popUp.style.left = elCenterX + "px";
+        popUp.style.top = elCenterY + "px";
+        popUp.style.width = el.offsetWidth + "px";
+        popUp.style.height = el.offsetHeight + "px";
+        popUp.style.transform = "translate(-50%, -50%)";
+        popUp.style.zIndex = -1;
+        el.style.transform = "scale(0.5)";
+        await new Promise(r => setTimeout(r, 50));
+        popUp.style.transition = "0.25s";
+        popUp.style.opacity = 1;
+        popUp.style.transform = "translate(-50%, -50%) scale(1)";
+        popUp.style.zIndex = 1;
+        el.style.transform = "scale(1)";
+        await new Promise(r => setTimeout(r, 250));
+        popUp.removeAttribute('style');
+        popUp.classList.add('active');
+        const listTitle = el.getElementsByClassName('title')[0].innerText;
+        document.getElementById('list-title-pop-up').innerText = listTitle;
+
+        const listUrl = el.href;
+        document.getElementById('list-content-pop-up').innerHTML = "<div class='loader'><div class='load'></div></div>";
+        const response = await fetch(listUrl);
+        const list = await response.text();
+        document.getElementById('list-content-pop-up').innerHTML = list;
+        const copyButton = document.getElementById("copy-button");
+        if (copyButton) {
+            copyButton.addEventListener("click", function() {
+                copy_list_frompopup(copyButton);
+            });
+        }
+        const seeMoreButton = document.getElementById("see-more-button");
+        const listContainerPopup = document.getElementsByClassName("list-container-popup")[0];
+        if (seeMoreButton) {
+            seeMoreButton.addEventListener("click", function() {
+                see_more(seeMoreButton, listContainerPopup);
+            });
+        }
+        const closePopUp = document.getElementById('close-list-pop-up-button');
+        closePopUp.addEventListener('click', function(event) {
+            close_pop_up(event);
+        });
+    } catch (error) {
+        popUp.classList.remove('active');
+        console.log(error);
+    }
+}

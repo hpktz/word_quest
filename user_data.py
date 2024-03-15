@@ -289,7 +289,7 @@ def search_user(name):
                 SUM(CASE WHEN user_statements.transaction_type = 'xp' THEN user_statements.transaction ELSE 0 END) \
                 AS sum_xp FROM users \
                 JOIN user_statements ON users.id = user_statements.user_id WHERE \
-                users.name LIKE  %s;", ('%' + name,))
+                users.name LIKE  %s;", (name+ '%',))
         result = cursor.fetchall()
         if not result or result[0][0] is None:
             return jsonify({

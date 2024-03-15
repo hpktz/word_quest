@@ -9,16 +9,7 @@ header {
 }
 
 .list-main-container {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    grid-template-rows: auto 1fr;
-    gap: 25px;
     padding-bottom: 15px;
-}
-
-.list-main-container .header {
-    grid-column: 1 / span 2;
-    grid-row: 1;
 }
 
 .list-main-container .header .title {
@@ -26,39 +17,41 @@ header {
     font-size: 36px;
 }
 
-.list-main-container .header .desc {
+.list-main-container .header-list .desc {
     font-family: "League Spartan", sans-serif;
     max-width: 450px;
     margin-top: 15px;
     font-size: 16px;
     color: #333;
+    text-align: left;
 }
 
-.list-main-container .header .mains-infos {
+.list-main-container .header-list .mains-infos {
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
-}
-
-.list-main-container .header .mains-infos .box {
-    display: flex;
-    gap: 5px;
-    align-items: center;
     margin-top: 15px;
 }
 
-.list-main-container .header .mains-infos .box .icon {
+.list-main-container .header-list .mains-infos .box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.list-main-container .header-list .mains-infos .box .icon {
     width: 20px;
     height: 20px;
 }
 
-.list-main-container .header .mains-infos .box .text {
+.list-main-container .header-list .mains-infos .box .text {
     font-family: "League Spartan", sans-serif;
     font-size: 16px;
     color: #333;
+    margin: 0;
 }
 
-.list-main-container .header .mains-infos .box .text a {
+.list-main-container .header-list .mains-infos .box .text a {
     color: #333;
     font-weight: 600;
     text-decoration: none;
@@ -68,6 +61,10 @@ header {
     font-family: "League Spartan", sans-serif;
     font-size: 18px;
     font-weight: 600;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid lightgrey;
+    text-align: left;
 }
 
 .list-main-container .stats-section .title:nth-child(3) {
@@ -96,6 +93,7 @@ header {
 
 .list-main-container .stats-section .stats-container .box .img {
     width: 35px;
+    margin: 0;
 }
 
 .list-main-container .stats-section .stats-container .box .texts .number {
@@ -103,12 +101,14 @@ header {
     font-size: 20px;
     font-weight: 600;
     color: #333;
+    text-align: left;
 }
 
 .list-main-container .stats-section .stats-container .box .texts .text {
     font-family: "League Spartan", sans-serif;
     font-size: 15px;
     color: #555;
+    text-align: left;
 }
 
 .list-main-container .graph {
@@ -168,6 +168,44 @@ header {
     font-family: "League Spartan", sans-serif;
     font-size: 18px;
     font-weight: 600;
+    text-align: left;
+}
+
+.see-more-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid lightgrey;
+}
+
+.see-more-box .img {
+    text-align: right;
+    margin: 0;
+}
+
+.see-more-box #see-more-button {
+    width: 30px;
+    height: 30px;
+    transform: rotate(-90deg);
+    cursor: pointer;
+}
+
+.see-more-box #see-more-button.active {
+    transform: rotate(90deg);
+}
+
+.list-container-popup {
+    opacity: 0;
+    height: 10px;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.list-container-popup.active {
+    opacity: 1;
+    height: auto;
 }
 
 .list-main-container .list-section .box {
@@ -189,6 +227,7 @@ header {
     font-family: "League Spartan", sans-serif;
     font-size: 14px;
     color: #555;
+    text-align: left;
 }
 
 .list-main-container .list-section .box .example {
@@ -197,6 +236,7 @@ header {
     color: #333;
     font-style: italic;
     grid-column: 1 / span 2;
+    text-align: left;
 }
 
 .list-main-container .separate {
@@ -287,13 +327,13 @@ header {
     .list-main-container .stats-section {
         grid-row: 3;
     }
-    .list-main-container .list-container {
+    .list-main-container .list-container-popup {
         display: flex;
         flex-direction: column;
         gap: 15px;
         margin-top: 20px;
     }
-    .list-main-container .list-container .box {
+    .list-main-container .list-container-popup .box {
         padding: 10px;
         background-color: #ededed;
         border-radius: 10px;

@@ -1,8 +1,6 @@
-{% extends "dashboard/main.html" %} {% block title %}Liste - {{name}}{% endblock %}{% block css %}
-<link rel="stylesheet" href="/static/styles/css/style-list-profile.css">{% endblock %}{% block content %}
-<main class="list-main-container">
-    <section class="header">
-        <div class="title">{{name}}</div>
+<link rel="stylesheet" href="/static/styles/css/style-list-profile.css">
+<section class="list-main-container">
+    <section class="header-list">
         <div class="desc">{{desc}}</div>
         <div class="mains-infos">
             <div class="box">
@@ -66,8 +64,13 @@
         </div>
     </section>
     <section class="list-section">
-        <div class="title">Contenu de la liste</div>
-        <div class="list-container">
+        <div class="see-more-box">
+            <div class="title">Contenu de la liste</div>
+            <div class="img">
+                <img src="/static/icons/arrow-left-60-dark-grey.png" class="img" id="see-more-button" alt="">
+            </div>
+        </div>
+        <div class="list-container-popup">
             {% for word in words %}
             <div class="box">
                 <div class="word">{{word[2]}} ({{word[5]}})</div>
@@ -85,6 +88,4 @@
         </div>
         {% endif %}
     </section>
-    <script src="/static/scripts/profile/list-profile-main.js"></script>
-</main>
-{% endblock %}
+</section>

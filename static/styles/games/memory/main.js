@@ -21,66 +21,64 @@ async function getCard() {
         box.className = 'item';
         box.id = i
         document.getElementById('game').appendChild(box);
-        setTimeout(() => {
-            box.onclick = async function() {
-                flipCardAudio.play();
-                var boxId = this.id;
+        box.onclick = async function() {
+            flipCardAudio.play();
+            var boxId = this.id;
+            document.querySelectorAll('.item').forEach(element => {
+                element.style.pointerEvents = 'none'
+            });
+            const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
+            var checked = await check_word.json();
+            this.innerText = checked['result']['innerHTML']
+            this.classList.add('box_open');
+            document.querySelectorAll('.item').forEach(element => {
+                if (element.classList[1] != 'box_match') {
+                    element.style.pointerEvents = 'auto'
+                }
+            });
+            if (document.querySelectorAll('.box_open').length == 2) {
                 document.querySelectorAll('.item').forEach(element => {
                     element.style.pointerEvents = 'none'
                 });
-                const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
-                var checked = await check_word.json();
-                this.innerText = checked['result']['innerHTML']
-                this.classList.add('box_open');
-                document.querySelectorAll('.item').forEach(element => {
-                    if (element.classList[1] != 'box_match') {
-                        element.style.pointerEvents = 'auto'
-                    }
-                });
-                if (document.querySelectorAll('.box_open').length == 2) {
+                setTimeout(() => {
                     document.querySelectorAll('.item').forEach(element => {
-                        element.style.pointerEvents = 'none'
-                    });
-                    setTimeout(() => {
-                        document.querySelectorAll('.item').forEach(element => {
-                            if (element.classList[1] == 'box_open') {
-                                element.style.pointerEvents = 'none'
-                            } else {
-                                element.style.pointerEvents = 'auto'
-                            }
-
-                        });
-                        if (checked['result']['checking']) {
-                            document.querySelectorAll('.box_open').forEach(element => {
-                                element.classList.add('box_match')
-                                successAudio.play();
-                            });
-
-                            document.querySelectorAll('.box_open')[1].classList.remove('box_open')
-                            document.querySelectorAll('.box_open')[0].classList.remove('box_open')
-                            flipCardAudio.play();
+                        if (element.classList[1] == 'box_open') {
+                            element.style.pointerEvents = 'none'
                         } else {
-                            document.querySelectorAll('.box_open').forEach(element => {
-                                element.style.pointerEvents = 'auto'
-                            });
-                            document.querySelectorAll('.box_open')[1].innerHTML = ""
-                            document.querySelectorAll('.box_open')[0].innerHTML = ""
-                            document.querySelectorAll('.box_open')[1].classList.remove('box_open')
-                            document.querySelectorAll('.box_open')[0].classList.remove('box_open')
-                            flipCardAudio.play();
+                            element.style.pointerEvents = 'auto'
                         }
-                        document.querySelectorAll('.item').forEach(element => {
-                            if (element.classList[1] == 'box_match') {
-                                element.style.pointerEvents = 'none'
-                            }
+
+                    });
+                    if (checked['result']['checking']) {
+                        document.querySelectorAll('.box_open').forEach(element => {
+                            element.classList.add('box_match')
+                            successAudio.play();
                         });
-                    }, 500);
-                }
-                if (checked.code == 201) {
-                    end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
-                }
+
+                        document.querySelectorAll('.box_open')[1].classList.remove('box_open')
+                        document.querySelectorAll('.box_open')[0].classList.remove('box_open')
+                        flipCardAudio.play();
+                    } else {
+                        document.querySelectorAll('.box_open').forEach(element => {
+                            element.style.pointerEvents = 'auto'
+                        });
+                        document.querySelectorAll('.box_open')[1].innerHTML = ""
+                        document.querySelectorAll('.box_open')[0].innerHTML = ""
+                        document.querySelectorAll('.box_open')[1].classList.remove('box_open')
+                        document.querySelectorAll('.box_open')[0].classList.remove('box_open')
+                        flipCardAudio.play();
+                    }
+                    document.querySelectorAll('.item').forEach(element => {
+                        if (element.classList[1] == 'box_match') {
+                            element.style.pointerEvents = 'none'
+                        }
+                    });
+                }, 500);
             }
-        }, 5000);
+            if (checked.code == 201) {
+                end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
+            }
+        }
     }
 }
 

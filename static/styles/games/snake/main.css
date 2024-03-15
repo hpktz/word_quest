@@ -21,6 +21,9 @@ canvas{
     padding: 15px;
     /* transform: scale(0.5); */
 }
+.content{
+    position: relative;
+}
 
 .word{
     display: flex;
@@ -85,6 +88,41 @@ canvas{
     height: 25px;
 }
 
+#source{
+    display: none;
+}
+
+.back{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -200%);
+}
+.back img{
+    height: 65px;
+}
+.press-arrow-message{
+    text-align: center;
+    font-family: 'League Spartan';
+    font-weight: bold;
+    font-size: 26px;
+    background: #0000001b;
+    position: absolute;
+    width: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: bounce 0.8s ease-out alternate infinite;
+}
+
+@keyframes bounce {
+    from{
+        opacity: 0.3;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
 @keyframes Xpanim {
     0% {
         transform: translate(-50%, -50%) scale(0.01);
@@ -109,5 +147,41 @@ canvas{
     }
     to {
         transform: translate(-50%, -50%) scale(0.01);
+    }
+}
+
+@media screen and (max-width: 630px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+@media screen and (max-width: 470px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.6);
+    }
+}
+@media screen and (max-width: 360px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+}
+@media screen and (max-width: 280px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.4);
+    }
+}
+@media screen and (max-height: 950px) {
+    .back{
+        transform: translate(-50%, -130%);
+    }
+}
+@media screen and (max-height: 840px) {
+    .game-container{
+        transform: translate(-50%, -47%) scale(0.8);
+    }
+}
+@media screen and (max-height: 640px) {
+    .game-container{
+        transform: translate(-50%, -45%) scale(0.7);
     }
 }

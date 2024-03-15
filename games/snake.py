@@ -96,17 +96,20 @@ class snake():
     def newWord(self):
         coLetters = []
         self.current_word = self.shuffle.pop()
-        french_word = self.current_word['trans_word']
+        frensh_word = self.current_word['trans_word']
         self.current_word = self.current_word['word']
         self.words_to_check += self.current_word
         for letter in self.current_word:
             coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
+        while len(coLetters) < 15:
+            coLetters.append(self.getcoordinate(coLetters, 'rock'))
+        print(coLetters)
         return jsonify({
             'code': 200,
             'message': 'ok',
             'result': {'coo': coLetters,
-                       'frensh': french_word}
+                       'frensh': frensh_word}
         })
     
     def getcoordinate(self,list, l):
@@ -133,33 +136,44 @@ class snake():
             
 
     def checkingCoo(self,list):
-        xpWord = 0
-        if list != 'vide':
-            for i in range(len(list)):
-                if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
-                    faute = False
-                    for j in range(len(list)):
-                        if self.finalChecking[j]['x'] == int(list[i]['x']) and self.finalChecking[j]['y'] == int(list[i]['y']) and self.finalChecking[j]['letter'] == self.finalChecking[i]['letter']:
-                            faute = True
-                            break
-                    if not faute:
-                        return jsonify({
-                            'code': 404,
-                            'message': 'error',
-                            'result': 'triche'
-                        })
-                xpWord += 1
-            if (xpWord//2 + 1) > 6:
-                xpWord = 11
-            self.xp += xpWord//2 + 1
-        if(len(self.shuffle) == 0):
-            return self._end_game(xpWord)
-        return jsonify({
-            'code': 200,
-            'message': 'ok',
-            'result': {'xp': 0 if list == 'vide' else xpWord//2 + 1,
-                       'xpTot': self.xp}
-        })
+        print(list)
+        print(self.finalChecking)
+        try:
+            xpWord = 0
+            if list != 'vide':
+                for i in range(len(list)):
+                    if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
+                        faute = False
+                        for j in range(len(list)):
+                            if self.finalChecking[j]['x'] == int(list[i]['x']) and self.finalChecking[j]['y'] == int(list[i]['y']) and self.finalChecking[j]['letter'] == self.finalChecking[i]['letter']:
+                                faute = True
+                                break
+                        if not faute:
+                            return jsonify({
+                                'code': 404,
+                                'message': 'error',
+                                'result': 'triche'
+                            })
+                    xpWord += 1
+                if (xpWord//2 + 1) > 6:
+                    xpWord = 11
+                self.xp += xpWord//2 + 1
+            if(len(self.shuffle) == 0):
+                return self._end_game(xpWord)
+            return jsonify({
+                'code': 200,
+                'message': 'ok',
+                'result': {'xp': 0 if list == 'vide' else xpWord//2 + 1,
+                        'xpTot': self.xp}
+            }) 
+        except Exception as e:
+            logging.error("An error has occured: " + str(e))
+            return jsonify({
+                    "code": 500,
+                    "message": "Une erreur s'est produite!",
+                    "result": []
+            }), 500
+        
 
     def reset(self):
         self.words.append(self.current_word)
@@ -233,12 +247,12 @@ class snake():
             time_passed = round(time_passed.total_seconds())
                 
             # Lose a life if there are remaining words
-            lives_to_lose = 1 if self.xp < len(self.allLetters)//4 else 0
+            lives_to_lose = 1 if self.xp < len(self.allLetters)//5 else 0
             while lives_to_lose > 0:
                 self._lose_life()
                 lives_to_lose -= 1
             
-            lives_to_lose = 1 if self.xp < len(self.allLetters)//4 + len(self.current_word) else 0
+            lives_to_lose = 1 if self.xp < len(self.allLetters)//5 + len(self.current_word) else 0
             # Update the lesson as completed
             if lives_to_lose == 0:
                 cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
@@ -344,7 +358,7 @@ def check_game(func):
             game = snake.from_json(session["game"])
             # Check if the game is still in progress
             if session_id != game.id or game.time < str(datetime.datetime.now()):
-                response = game._end_game(None,None)
+                response = game._end_game(0)
                 session["game"] = game.to_json()
                 return response
             else:
@@ -449,7 +463,7 @@ def check_status(session_id):
         "result": {}
     })
 
-@snake_bp.route('/dashboard/games/snake/<string:session_id>/getCard')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/getWord')
 @check_game
 def getCard(session_id):
     game = snake.from_json(session["game"])

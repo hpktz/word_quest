@@ -3,13 +3,14 @@ const session_id = document.body.dataset.session_id;
 const canvas = document.querySelector("canvas");
 const context = canvas.getContext('2d');
 
+
 const animXp = document.getElementById('animation-xp');
 const xpWin = document.getElementById('xpnotif');
-const frWord = document.getElementById('frensh-word')
+const frWord = document.getElementById('frensh-word');
 
 let box = 56
 
-
+const pressMessage = document.getElementById('press-message');
 const score = document.getElementById('xp')
 var xpTotal = 0
 
@@ -18,23 +19,24 @@ score.innerHTML = xpTotal + ' Xp'
 var snake = [{ x: 4*box, y:4*box}];
 
 snake[0] = { x: 4*box, y:4*box}
-// place le serpent au centre
-
-// var words = ["MAISON","CHATEAU","UNEFFICIENT"];
-// var word = words[2].split('');
 var word = []
 var wordStyle = []
+var nbrOfRock = 0
 const totalLetterArea = document.getElementById('word');
+
+const image = document.getElementById('source')
 
 nbrLettreTrouve = 0;    
 function updateWord(){
     totalLetterArea.innerHTML = '';
     wordStyle.forEach((element,index) => {
-        if(index < nbrLettreTrouve){
-            totalLetterArea.innerHTML += `<span class="letter">${element}</span>`
-        } else {
-            totalLetterArea.innerHTML += `<span class="letter"></span>`
-        };
+        if (element != 'rock') {
+            if(index < nbrLettreTrouve){
+                totalLetterArea.innerHTML += `<span class="letter">${element}</span>`
+            } else {
+                totalLetterArea.innerHTML += `<span class="letter"></span>`
+            };
+        }
     });
 }
 var isEventListener = false
@@ -43,7 +45,7 @@ var co2python = ['vide']
 // alreadyPos = false
 async function getPosition() {
     wordStyle = []
-    r = await fetch(`/dashboard/games/snake/${session_id}/getCard`)
+    r = await fetch(`/dashboard/games/snake/${session_id}/getWord`)
     response = await r.json();
     letterPositions = response.result.coo
     frWord.innerHTML = response.result.frensh
@@ -51,7 +53,11 @@ async function getPosition() {
         word.push(letterPositions[i].letter);
         wordStyle.push(letterPositions[i].letter)
     }
-    console.log(wordStyle)
+    for (let index = 0; index < word.length; index++) {
+        if (word[index] == 'rock') {
+            nbrOfRock ++;
+        }
+    }
     isEventListener = true
 }
 
@@ -125,11 +131,15 @@ function direction(event) {
 }
 var fin = 0
 function draw() {
-    let cool = setInterval(() => {
+    // let cool = setInterval(() => {
         if(isEventListener == true){
-            clearInterval(cool)
-    
+            // clearInterval(cool)
             context.clearRect(0, 0, 504, 504)
+            if (d != undefined) {
+                pressMessage.style.display= 'none'
+            } else{
+                pressMessage.style.display= 'block'
+            }
             context.fillStyle = "#ffffff80";
             let background_x = 0
             let background_y = 0
@@ -154,10 +164,14 @@ function draw() {
             }
             var letterIndex = 0;
             letterPositions.forEach(e => {
+                if (e.letter == 'rock') {
+                    context.drawImage(image, letterPositions[letterIndex].x - 10, letterPositions[letterIndex].y - 22, 40, 25)
+                } else {
                 context.fillStyle = "#373D20";
                 context.font = "30px League Spartan";
-                context.fillText(e.letter, letterPositions[letterIndex].x, letterPositions[letterIndex].y);
-                letterIndex++; 
+                context.fillText(e.letter, letterPositions[letterIndex].x, letterPositions[letterIndex].y); 
+                }
+            letterIndex++;
             });
             for(let i = 0; i < snake.length; i++){
                 if(i == 0){
@@ -222,8 +236,8 @@ function draw() {
                     fin+=1
                 }
             };
-            
-            if(word.length == 0){
+            console.log(word.length - nbrOfRock)
+            if((word.length - nbrOfRock) == 0){
                 if (fin == 0) {
                     clearInterval(game)
                     checkingCoo()
@@ -233,11 +247,14 @@ function draw() {
             snake.unshift(newHead);
             updateWord();
         }
-    }, 50);
+    // }, 50);
 }
 async function checkingCoo() {
     r = await fetch(`/dashboard/games/snake/${session_id}/${co2python}/check_coo`)
     response = await r.json()
+    if (response.code == 500) {
+        window.location.href = '/dashboard/errors/500';
+    }
     xpTotal = response.result.xpTot
     score.innerHTML = xpTotal + ' Xp'
     if (response.message == 'Le jeu est terminé!'){
@@ -249,13 +266,14 @@ async function checkingCoo() {
         xpWin.innerHTML = `+${xp}`
         setTimeout(() => {
             snake = [{ x: 4*box, y:4*box}]
-            d = undefined
             nbrLettreTrouve = 0
             co2python = ['vide']
             snakeX = snake[0].x;
             snakeY = snake[0].y;
+            nbrOfRock = 0
             animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
             getPosition() 
+            d = undefined
             game = setInterval(draw,35)
             fin = 0
         }, 1000);
@@ -273,6 +291,7 @@ function collision(head, array){
 
 getPosition()
 var game = setInterval(draw, 35);
+
 
 
 /**
@@ -295,7 +314,7 @@ var timer = setInterval(async() => {
         clearInterval(timer);
         try {
             // Check the status of the game
-            const response = await fetch(`/dashboard/games/memory/${session_id}/check_status`);
+            const response = await fetch(`/dashboard/games/snake/${session_id}/check_status`);
             const data = await response.json();
             console.log(data);
             // If the game is over

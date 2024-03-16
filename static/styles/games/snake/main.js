@@ -94,7 +94,7 @@ window.addEventListener("touchend", function mobiletouch(evt) {
     } else {
     
         if (Math.abs(betweenX) > 50 || Math.abs(betweenY) > 50) {
-            if (Math.abs(betweenX) > Math.abs(betweenY)) {
+            if (Math.abs(betweenX) > Math.abs(betweenY) + 10) {
                 if (betweenX > 0) d = 'RIGHT'
                 else d = 'LEFT'
             } else {
@@ -275,7 +275,7 @@ async function checkingCoo() {
             animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
             getPosition() 
             d = undefined
-            game = setInterval(draw,35)
+            game = setInterval(draw,45)
             fin = 0
         }, 1000);
     }
@@ -291,7 +291,7 @@ function collision(head, array){
 
 
 getPosition();
-var game = setInterval(draw, 35);
+var game = setInterval(draw, 45);
 
 
 

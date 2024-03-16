@@ -103,7 +103,7 @@ class snake():
             coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
         print(self.finalChecking)
-        while len(coLetters) < 15:
+        while len(coLetters) < 12:
             coLetters.append(self.getcoordinate(coLetters, 'rock'))
         return jsonify({
             'code': 200,

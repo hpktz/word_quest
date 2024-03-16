@@ -102,9 +102,9 @@ class snake():
         for letter in self.current_word:
             coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
+        print(self.finalChecking)
         while len(coLetters) < 15:
             coLetters.append(self.getcoordinate(coLetters, 'rock'))
-        print(coLetters)
         return jsonify({
             'code': 200,
             'message': 'ok',
@@ -136,8 +136,6 @@ class snake():
             
 
     def checkingCoo(self,list):
-        print(list)
-        print(self.finalChecking)
         try:
             xpWord = 0
             if list != 'vide':
@@ -145,6 +143,8 @@ class snake():
                     if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
                         faute = False
                         for j in range(len(list)):
+                            print(list)
+                            print(self.finalChecking)
                             if self.finalChecking[j]['x'] == int(list[i]['x']) and self.finalChecking[j]['y'] == int(list[i]['y']) and self.finalChecking[j]['letter'] == self.finalChecking[i]['letter']:
                                 faute = True
                                 break
@@ -152,7 +152,8 @@ class snake():
                             return jsonify({
                                 'code': 404,
                                 'message': 'error',
-                                'result': 'triche'
+                                'result': {'xp': 0,
+                                'xpTot': self.xp}
                             })
                     xpWord += 1
                 if (xpWord//2 + 1) > 6:
@@ -160,7 +161,8 @@ class snake():
                 self.xp += xpWord//2 + 1
             if(len(self.shuffle) == 0):
                 return self._end_game(xpWord)
-            return jsonify({
+            else:
+                return jsonify({
                 'code': 200,
                 'message': 'ok',
                 'result': {'xp': 0 if list == 'vide' else xpWord//2 + 1,
@@ -466,6 +468,7 @@ def check_status(session_id):
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/getWord')
 @check_game
 def getCard(session_id):
+    print('cool')
     game = snake.from_json(session["game"])
     result = game.newWord()
     session["game"] = game.to_json()
@@ -485,10 +488,3 @@ def endChecking(session_id, co2python):
     result = game.checkingCoo(coo)
     session["game"] = game.to_json()
     return result
-
-@snake_bp.route('/dashboard/games/snake/<string:session_id>/reset')
-@check_game
-def resetwords(session_id):
-    game = snake.from_json(session["game"])
-    result = game.reset()
-    session["game"] = game.to_json()

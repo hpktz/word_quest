@@ -236,7 +236,6 @@ function draw() {
                     fin+=1
                 }
             };
-            console.log(word.length - nbrOfRock)
             if((word.length - nbrOfRock) == 0){
                 if (fin == 0) {
                     clearInterval(game)
@@ -252,6 +251,7 @@ function draw() {
 async function checkingCoo() {
     r = await fetch(`/dashboard/games/snake/${session_id}/${co2python}/check_coo`)
     response = await r.json()
+    console.log(response)
     if (response.code == 500) {
         window.location.href = '/dashboard/errors/500';
     }
@@ -265,6 +265,7 @@ async function checkingCoo() {
         var xp = response.result.xp
         xpWin.innerHTML = `+${xp}`
         setTimeout(() => {
+            isEventListener = false
             snake = [{ x: 4*box, y:4*box}]
             nbrLettreTrouve = 0
             co2python = ['vide']
@@ -289,7 +290,7 @@ function collision(head, array){
 }
 
 
-getPosition()
+getPosition();
 var game = setInterval(draw, 35);
 
 

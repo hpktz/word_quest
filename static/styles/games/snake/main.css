@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+
 body{
+    overflow: hidden;
+    max-width: 100vw;
+    max-height: 100vh;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -93,11 +97,13 @@ canvas{
 }
 
 .back{
+    overflow: visible;
     position: absolute;
     left: 50%;
     transform: translate(-50%, -200%);
 }
 .back img{
+    overflow: visible;
     height: 65px;
 }
 .press-arrow-message{

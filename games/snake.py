@@ -176,9 +176,6 @@ class snake():
                     "result": []
             }), 500
         
-
-    def reset(self):
-        self.words.append(self.current_word)
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
     # si l'attribut a une longueur de 1, on attend
     # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste

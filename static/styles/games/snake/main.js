@@ -95,11 +95,15 @@ window.addEventListener("touchend", function mobiletouch(evt) {
     
         if (Math.abs(betweenX) > 50 || Math.abs(betweenY) > 50) {
             if (Math.abs(betweenX) > Math.abs(betweenY) + 10) {
-                if (betweenX > 0) d = 'RIGHT'
-                else d = 'LEFT'
+                if (betweenX > 0 && d != 'LEFT') d = 'RIGHT'
+                else if (d != 'LEFT') {
+                    d = 'LEFT'
+                } 
             } else {
-                if (betweenY > 0) d = 'DOWN'
-                else d = 'UP'
+                if (betweenY > 0 && d != 'UP') d = 'DOWN'
+                else if (d != 'DOWN') {
+                    d = 'UP'
+                } 
             }
         }
 
@@ -109,12 +113,13 @@ document.addEventListener('keydown', direction);
 function direction(event) {
 
     if (!Number.isInteger(snakeY/56) || !Number.isInteger(snakeX/56)) {
+        document.removeEventListener('keydown', direction)
         setTimeout(() => {
             direction(event)
-        }, 40);
+        }, 45);
     } else {
         let key = event.keyCode;
-        if(key == 37 && d != "RIGHT"){
+        if(key == 37 && d != "RIGHT" ){
             d = "LEFT";;
         }
         if(key == 39 && d != "LEFT"){
@@ -126,6 +131,7 @@ function direction(event) {
         if(key == 40 && d !="UP"){
             d = "DOWN";
         }
+        document.addEventListener('keydown', direction)
     }
 
 }

@@ -150,6 +150,23 @@ canvas{
     }
 }
 
+
+@media screen and (max-height: 950px) {
+    .back{
+        transform: translate(-50%, -130%);
+    }
+}
+@media screen and (max-height: 840px) {
+    .game-container{
+        transform: translate(-50%, -47%) scale(0.8);
+    }
+}
+@media screen and (max-height: 640px) {
+    .game-container{
+        transform: translate(-50%, -45%) scale(0.7);
+    }
+}
+
 @media screen and (max-width: 630px) {
     .game-container{
         transform: translate(-50%, -50%) scale(0.8);
@@ -168,20 +185,5 @@ canvas{
 @media screen and (max-width: 280px) {
     .game-container{
         transform: translate(-50%, -50%) scale(0.4);
-    }
-}
-@media screen and (max-height: 950px) {
-    .back{
-        transform: translate(-50%, -130%);
-    }
-}
-@media screen and (max-height: 840px) {
-    .game-container{
-        transform: translate(-50%, -47%) scale(0.8);
-    }
-}
-@media screen and (max-height: 640px) {
-    .game-container{
-        transform: translate(-50%, -45%) scale(0.7);
     }
 }

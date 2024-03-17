@@ -448,7 +448,7 @@ async function lives_counter() {
             return clearInterval(interval);
         }
 
-        if (window.location.hostname == "word-quest.com") {
+        if (window.location.hostname == "word-quest.com" || window.location.hostname == "www.word-quest.com") {
             var now = new Date().toUTCString();
         } else {
             var now = new Date();

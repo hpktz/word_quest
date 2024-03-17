@@ -449,12 +449,10 @@ async function lives_counter() {
         }
 
         if (window.location.hostname == "word-quest.com") {
-            // Date actuelle UTC +0
-            var now = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000);
+            var now = new Date().toUTCString();
         } else {
             var now = new Date();
         }
-        console.log(now, end_date, new Date());
         var diff = end_date - now;
 
         // if the time is up, the lives counter is updated and the function is stopped

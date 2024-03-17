@@ -192,6 +192,9 @@ app.register_blueprint(snake_bp)
 from games.memowordrize import memowordrize_bp
 app.register_blueprint(memowordrize_bp)
 
+from games.fallingword import fallingword_bp
+app.register_blueprint(fallingword_bp)
+
 @app.route('/')
 def index():
     user = None

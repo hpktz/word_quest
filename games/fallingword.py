@@ -325,7 +325,7 @@ class fallingword():
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
 
-            xp = good_answers
+            xp = good_answers * 2
                 
             # Lose a life if there are remaining words
             if bad_answers== 0 and good_answers == 0:

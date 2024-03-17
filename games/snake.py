@@ -138,13 +138,11 @@ class snake():
     def checkingCoo(self,list):
         try:
             xpWord = 0
-            if list != 'vide':
+            if list is not None:
                 for i in range(len(list)):
                     if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
                         faute = False
                         for j in range(len(list)):
-                            print(list)
-                            print(self.finalChecking)
                             if self.finalChecking[j]['x'] == int(list[i]['x']) and self.finalChecking[j]['y'] == int(list[i]['y']) and self.finalChecking[j]['letter'] == self.finalChecking[i]['letter']:
                                 faute = True
                                 break
@@ -165,7 +163,7 @@ class snake():
                 return jsonify({
                 'code': 200,
                 'message': 'ok',
-                'result': {'xp': 0 if list == 'vide' else xpWord//2 + 1,
+                'result': {'xp': 0 if list is None else xpWord//2 + 1,
                         'xpTot': self.xp}
             }) 
         except Exception as e:
@@ -471,17 +469,13 @@ def getCard(session_id):
     session["game"] = game.to_json()
     return result
 
-@snake_bp.route('/dashboard/games/snake/<string:session_id>/<string:co2python>/check_coo')
+@snake_bp.route('/dashboard/games/snake/<string:session_id>/check_coo', methods=['POST'])
 @check_game
-def endChecking(session_id, co2python):
-    n = co2python.split(',')
-    coo = []
-    for i in range(len(n)):
-        if n[i] == 'vide':
-            coo = 'vide'
-        elif i % 2 == 0:
-            coo.append({'x': n[i] , 'y': n[i+1]})
+def endChecking(session_id):
+    data = request.get_json()
+    coord = data['coo']
+
     game = snake.from_json(session["game"])
-    result = game.checkingCoo(coo)
+    result = game.checkingCoo(coord)
     session["game"] = game.to_json()
     return result

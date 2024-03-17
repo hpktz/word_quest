@@ -11,6 +11,7 @@
 </head>
 
 <body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <input type="hidden" id="csrf_token" value="{{csrf_token()}}">
     <div class="game-container">
         <a href="/dashboard" class="back">
             <img src="/static/icons/games-icons/exit.png" alt="">
@@ -36,11 +37,11 @@
             <img src="/static/icons/games-icons/big-flash.png" alt="">
         </div>
         <img id="source" src="/static/imgs/snake-obstacle.png" alt="" srcset="">
-        </div>
+    </div>
     </div>
 
     {% set popUpTitle = "Snake" %} {% set popUpDesc = "Vous disposez de 1 minutes pour reconstituer les mots avec le serpent" %} {%set popUpGame = "snake"%} {% include "games/popups.html" %}
     <script src="/static/styles/games/snake/main.js"></script>
 </body>
-</html>
 
+</html>

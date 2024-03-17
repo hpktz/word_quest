@@ -117,11 +117,13 @@ function showWord(data, letter) {
 
 function updateBadLetter(data, letter) {
     // afficher les mauvaises lettre
-    badLetter.innerHTML = badLetter.innerHTML + `<span> ${letter}</span>` + ','
-
-    // Afficher le bonhomme
-
-    //Verifier si on a perdu
+    const keyLetter = document.querySelectorAll('.key-letter');
+    for (let i = 0; i < keyLetter.length; i++) {
+        if (keyLetter[i].innerHTML == letter) {
+            keyLetter[i].style.background = '#8d0000';
+            keyLetter[i].style.color = 'white';
+        }
+    }
 
     if (data.result.finished == true) {
         failAudio.play();
@@ -133,6 +135,12 @@ function updateBadLetter(data, letter) {
         figurePart.forEach((partie, index) => {
             partie.style.display = 'block'
         })
+        for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
+            if (document.querySelectorAll('.letter')[i].innerHTML == '') {
+                document.querySelectorAll('.letter')[i].innerHTML = data.result.last_word[i];
+                document.querySelectorAll('.letter')[i].style.color = 'red';
+            }
+        }
         nextWord(data)
     } else {
         figurePart.forEach((partie, index) => {
@@ -172,18 +180,17 @@ window.addEventListener('keydown', async e => {
                     loader.style.display = 'none'
                     var checked = await check.json();
                     letter = e.key
-                    keyboard.forEach(el => {
-                        if (el.innerHTML == letter) {
-                            el.style.background = 'grey';
-                            el.style.color = 'white';
-                        }
-                    });
-
                     if (checked.code == 200) {
                         if (checked.message == "already touch") {
                             printNotification();
                         } else if (checked.result.correct == true) {
                             goodLetters = checked.result.good
+                            keyboard.forEach(el => {
+                                if (el.innerHTML == letter) {
+                                    el.style.background = '#373d20';
+                                    el.style.color = 'white';
+                                }
+                            });
                             showWord(checked, letter);
                         } else {
                             badLetters = checked.result.bad;
@@ -223,14 +230,12 @@ keyboard.forEach(e => {
                     } else if (checked.result.correct == true) {
                         goodLetters = checked.result.good
                         showWord(checked, e.innerHTML);
-                        e.style.background = 'grey';
+                        e.style.background = '#373d20';
                         e.style.color = 'white';
                     } else {
                         badLetters = checked.result.bad;
                         xpwin = checked.result.xp;
                         updateBadLetter(checked, e.innerHTML);
-                        e.style.background = 'grey';
-                        e.style.color = 'white';
                     }
                     isEventListener = true
                 } else if (checked.code == 201) {
@@ -258,7 +263,6 @@ function nextWord(data) {
         try {
             indiceContainer.innerHTML = "";
             addIndice.style.display = 'flex'
-            badLetter.innerHTML = null;
             figurePart.forEach((e) => {
                 e.style.display = 'none';
                 e.style.stroke = '#717744';

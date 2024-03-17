@@ -28,11 +28,6 @@
                 <p id="xpnotif">+0</p>
                 <img src="/static/icons/games-icons/big-flash.png" alt="">
             </div>
-            <div class="bad-letter-content">
-                Mauvaise Lettre
-                <div id="bad-letter"></div>
-
-            </div>
             <svg height="500" width="600" class=figure-content id="svg">
 
                 <!-- Support-->
@@ -116,8 +111,10 @@
                 </button>
             </div>
             <div class="keyboard" id="keyboard">
-                {% for letter in 'abcdefghijklmnopqrstuvwxyz' %} {% if letter in letters_used %}
-                <div class="key-letter" style="background: grey; color: white;">{{ letter }}</div>
+                {% for letter in 'abcdefghijklmnopqrstuvwxyz' %} {% if letter in bad_letters %}
+                <div class="key-letter" style="background: #8d0000; color: white;">{{ letter }}</div>
+                {% elif letter in good_letters %}
+                <div class="key-letter" style="background: #373d20; color: white;">{{ letter }}</div>
                 {% else %}
                 <div class="key-letter">{{ letter }}</div>
                 {% endif %} {% endfor %}

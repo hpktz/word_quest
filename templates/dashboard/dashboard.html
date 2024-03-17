@@ -25,7 +25,7 @@
         <div class="title">MES LISTES</div>
         <div class="user-infos">
             <div class="box">
-                <img src="/static/imgs/3d-pink-gemstone.png" class="img" alt="medal-icon">
+                <img src="/static/imgs/3d-blue-gemstone.png" class="img" alt="medal-icon">
                 <div class="text" id="gems-info" data-value="{{gems}}"></div>
             </div>
             <div class="box">
@@ -93,6 +93,10 @@
         <div class="list-box-empty" style="display: block;">
             <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">
             <p class="text">Aucune liste trouvée</p>
+            <div class="separate"></div>
+            <a href="/dashboard/create" class="redirect create-button">
+                Créer une liste
+            </a>
         </div>
         {% else %}
         <div class="list-box-empty" style="display: none;">

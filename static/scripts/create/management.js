@@ -109,7 +109,12 @@ async function remove_from_list(el, e, wordId) {
  * @throws {Error} If an error occurs during the creation process.
  */
 const createListButton = document.getElementById('create-list-button');
+const createListForm = document.getElementById('list-infos');
 createListButton.addEventListener('click', () => create_list());
+createListForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    create_list();
+});
 async function create_list() {
     try {
         window.removeEventListener('beforeunload', leave_page);

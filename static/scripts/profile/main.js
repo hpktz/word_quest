@@ -263,6 +263,9 @@ window.onload = function() {
  * 
  */
 async function display_pop_up(el, event) {
+    if (event.target.classList.contains('not-clickable-zone')) {
+        return;
+    }
     try {
         event.preventDefault();
         let elCenterX = el.getBoundingClientRect().left + el.offsetWidth / 2;

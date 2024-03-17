@@ -19,7 +19,8 @@ class hangman():
         self.lesson_id = lesson_id
         self.words = words
         self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=2))
+        self.total_time = len(words) * 20
+        self.time = str(datetime.datetime.now() + datetime.timedelta(seconds=self.total_time))
         self.start = str(datetime.datetime.now())
         self.xpTotal = 0
         self.current_word = None
@@ -34,6 +35,7 @@ class hangman():
             else:
                 is_last_word_correct = False
             bad_letters = self.current_word["bad_letter"] if self.current_word else []
+            word = self.current_word["word"]["word"] if self.current_word else ""
             self.current_word = {
                 "word": word_choosen,
                 "nb_hints": 0,
@@ -48,6 +50,7 @@ class hangman():
                 "message": "word_finished",
                 "result": {
                     "bad": bad_letters,
+                    "last_word": word,
                     "total_xp": self.xpTotal,
                     "xp_won": xp,
                     "len_word": len(word_choosen["word"]),
@@ -333,6 +336,7 @@ class hangman():
         json_dict = json.loads(json_string)
         to_extract = cls(json_dict["list_id"], json_dict["lesson_id"], json_dict["words"])
         to_extract.id = json_dict["id"]
+        to_extract.total_time = json_dict["total_time"]
         to_extract.time = json_dict["time"]
         to_extract.words_to_check = json_dict["words_to_check"]
         to_extract.start = json_dict["start"]
@@ -439,7 +443,7 @@ def start(session_id):
         if not game.current_word:
             game.new_word()
         
-        reloaded = True if game.get_remaning_time() < 118 else False
+        reloaded = True if game.get_remaning_time() < (game.total_time - 2) else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
             return render_template('games/hangman.html', 

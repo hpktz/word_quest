@@ -454,6 +454,7 @@ async function lives_counter() {
         } else {
             var now = new Date();
         }
+        console.log(now, end_date, new Date());
         var diff = end_date - now;
 
         // if the time is up, the lives counter is updated and the function is stopped
@@ -470,6 +471,9 @@ async function lives_counter() {
         var seconds = ((diff % 60000) / 1000).toFixed(0);
 
         counter.innerHTML = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+        if (document.getElementById('gems-info').dataset.value < 200) {
+            document.getElementById('life-purchase-button').classList.add('disabled');
+        }
     }, 1000);
 
     // start the countdown
@@ -681,7 +685,9 @@ window.onload = async function() {
             window.history.replaceState({}, document.title, urlParts[0]);
 
             // Update the UI based on the xp and lives
-            xpInfo.parentElement.classList.add('pulse');
+            if (xp > 0) {
+                xpInfo.parentElement.classList.add('pulse');
+            }
             if (lives > 0) {
                 livesInfo.parentElement.classList.add('pulse');
             }
@@ -700,15 +706,16 @@ window.onload = async function() {
             livesInfo.innerHTML = actual_lives;
 
             // Increase the counter of xp and lives
-            var interval_xp = setInterval(() => {
-                actual_xp++;
-                xpInfo.innerHTML = actual_xp;
-                if (actual_xp === total_xp) {
-                    clearInterval(interval_xp);
-                    xpInfo.parentElement.classList.remove('pulse');
-                }
-            }, delay_xp);
-
+            if (xp > 0) {
+                var interval_xp = setInterval(() => {
+                    actual_xp++;
+                    xpInfo.innerHTML = actual_xp;
+                    if (actual_xp === total_xp) {
+                        clearInterval(interval_xp);
+                        xpInfo.parentElement.classList.remove('pulse');
+                    }
+                }, delay_xp);
+            }
             if (lives > 0) {
                 var interval_lives = setInterval(() => {
                     actual_lives--;
@@ -732,19 +739,20 @@ window.onload = async function() {
         // Get the path of the user's list
         const pathPart = document.getElementsByClassName('path');
         var position = null;
-        for (let i = 0; i < pathPart.length; i++) {
-            if (pathPart[i].classList.contains('completed') == false) {
-                if (i > 0) {
-                    position = i;
-
-                    // Add the animation class to path that allow access to the next level
-                    pathPart[i - 1].classList.add('animation');
-                    break;
+        if (params.has('success') && params.get('success') == "True") {
+            for (let i = 0; i < pathPart.length; i++) {
+                if (pathPart[i].classList.contains('completed') == false) {
+                    if (i > 0) {
+                        position = i;
+                        // Add the animation class to path that allow access to the next level
+                        pathPart[i - 1].classList.add('animation');
+                        break;
+                    }
                 }
             }
         }
 
-        if (position == null) {
+        if (position == null && params.has('success') && params.get('success') == "True") {
             const gameTrail = document.getElementsByClassName('game-trail')[0];
             gameTrail.setAttribute('class', 'game-trail victory');
             setTimeout(function() {
@@ -757,16 +765,18 @@ window.onload = async function() {
 
         // Get the level box
         // Add animation to the level box
-        const levelBox = document.getElementsByClassName('level-box')[position];
-        levelBox.classList.remove('waiting');
-        levelBox.classList.add('blocked');
+        if (params.has('success') && params.get('success') == "True") {
+            const levelBox = document.getElementsByClassName('level-box')[position];
+            levelBox.classList.remove('waiting');
+            levelBox.classList.add('blocked');
 
-        await new Promise(resolve => setTimeout(resolve, 500));
-        levelBox.classList.remove('blocked');
-        levelBox.classList.add('waiting');
+            await new Promise(resolve => setTimeout(resolve, 500));
+            levelBox.classList.remove('blocked');
+            levelBox.classList.add('waiting');
 
-        await new Promise(resolve => setTimeout(resolve, 500));
-        levelBox.click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            levelBox.click();
+        }
     } else {
         xpInfo.innerHTML = xpInfo.dataset.value;
         livesInfo.innerHTML = livesInfo.dataset.value;

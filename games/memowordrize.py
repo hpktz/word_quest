@@ -34,12 +34,7 @@ from gtts import gTTS
 from io import BytesIO
 import logging
 import linecache
-import speech_recognition as sr
 import io
-import soundfile as sf
-import io
-import soundfile as sf
-import speech_recognition as sr
 
 memowordrize_bp = Blueprint('memowordrize', __name__)
 """

@@ -9,12 +9,14 @@ Imports:
     - datetime: For handling dates and times.
     - random: For generating random numbers.
     - logging: For logging errors and other information.
+    - profanity: For detecting the presence of profanity in a text.
 
 Blueprint:
     - create_bp: The blueprint for the routes for creating a list.
 """
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session, abort
 from flask_login import login_user, login_required, logout_user, current_user
+from profanity import profanity_detector
 from root import *
 import random as random
 from lxml import html, etree
@@ -301,7 +303,9 @@ def search(language, x):
                             english3 = example.xpath(".//span[@class='cit']/span[@class='quote']/text()")
                             for e in english3:
                                 array["examples"].append(e)
-                    else:
+                                               
+                if language == "french-english":
+                    for example in sense.xpath(".//span[@class='re']"):
                         # Select all the english elements
                         english_examples = example.xpath(".//span[@class='cit lang_en-gb']")
                         for f in english_examples:
@@ -469,6 +473,9 @@ def create_list():
         
         if len(name) == 0:
             return jsonify({"code": 400, "title": "Bad request", "message": "Nom invalide"})
+        
+        if profanity_detector(name) or profanity_detector(desc):
+            return jsonify({"code": 400, "title": "Bad request", "message": "Contenu inapproprié"})
         
         # Check if time, xp and game are valid
         if int(time) not in [5, 10, 15] or int(xp) not in [10, 20, 30] or int(game) not in [1, 2, 3]:

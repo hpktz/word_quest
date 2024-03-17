@@ -115,7 +115,8 @@ class quiz():
         self.lesson_id = lesson_id
         self.words = words
         self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=2))
+        self.total_time = len(words) * 7
+        self.time = str(datetime.datetime.now() + datetime.timedelta(seconds=self.total_time))
         self.start = str(datetime.datetime.now())
         self.current_quiz = None
         self.faults = 0
@@ -498,6 +499,7 @@ class quiz():
         to_extract = cls(json_dict["list_id"], json_dict["lesson_id"], json_dict["words"])
         to_extract.id = json_dict["id"]
         to_extract.time = json_dict["time"]
+        to_extract.total_time = json_dict["total_time"]
         to_extract.words_to_check = json_dict["words_to_check"]
         to_extract.start = json_dict["start"]
         to_extract.current_quiz = json_dict["current_quiz"]
@@ -602,7 +604,7 @@ def start(session_id):
         if not game.current_quiz:
             game.ask_next_question()
         
-        reloaded = True if game.get_remaning_time() < 118 else False
+        reloaded = True if game.get_remaning_time() < (game.total_time - 2) else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
             return render_template('games/quiz.html', 

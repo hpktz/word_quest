@@ -458,7 +458,7 @@ main {
 }
 
 .dashboard-main-container .main-infos .user-infos .box:nth-child(1).pulse {
-    --background-animation: #ffe4e1;
+    --background-animation: #e1eaff;
     animation: pulse 2s;
 }
 
@@ -574,6 +574,11 @@ main {
     text-decoration: none;
     margin: 0 auto;
     position: relative;
+}
+
+.lives-pop-up .container .button.disabled {
+    background-color: #777;
+    pointer-events: none;
 }
 
 .lives-pop-up .container .button .loader {
@@ -873,6 +878,31 @@ main {
     font-family: 'League Spartan', sans-serif;
     font-size: 16px;
     margin-top: 15px;
+}
+
+.dashboard-main-container .lists-container .list-box-empty .separate {
+    height: 40px;
+    width: 1px;
+    background-color: #333;
+    margin: 25px auto;
+}
+
+.dashboard-main-container .lists-container .list-box-empty .create-button {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    background: #766153;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    margin: 0 auto;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box-empty .create-button:hover {
+    background: #967b69;
 }
 
 .dashboard-main-container .games-trail {

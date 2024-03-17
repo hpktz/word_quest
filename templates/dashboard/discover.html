@@ -28,7 +28,10 @@
             <input type="radio" name="switch" id="switch-2" value="2">
             <label for="switch-2">De Word Quest</label>
         </form>
-        <div class="show-liked-filter"></div>
+        <div class="show-liked-filter">
+            <div class="title entry-animation">Mes listes aimés</div>
+            <img src="/static/icons/heart-30-dark-grey.png" class="img" alt="">
+        </div>
     </div>
     <div class="list-container entry-animation">
         <div class="trend-list list-to-switch active">
@@ -66,7 +69,9 @@
                     </div>
                 </div>
             </a>
-            {%endif%} {% endfor %} {% else %}
+            {%endif%} {% endfor %}
+            <div class="no-list" style="display: none;">Aucune liste n'a été trouvée</div>
+            {% else %}
             <div class="no-list">Aucune liste n'a été trouvée</div>
             {% endif %}
         </div>
@@ -105,7 +110,9 @@
                     </div>
                 </div>
             </a>
-            {%endif%} {% endfor %} {% else %}
+            {%endif%} {% endfor %}
+            <div class="no-list" style="display: none;">Aucune liste n'a été trouvée</div>
+            {% else %}
             <div class="no-list">Aucune liste n'a été trouvée</div>
             {% endif %}
         </div>

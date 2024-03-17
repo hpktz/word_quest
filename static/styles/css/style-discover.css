@@ -107,6 +107,13 @@
     padding-bottom: 25px;
 }
 
+.discover-main-container .main-infos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    grid-template-rows: auto 1fr;
+}
+
 .discover-main-container .main-infos .title {
     font-family: "Bangers", cursive;
     font-size: 36px;
@@ -114,12 +121,14 @@
 
 .discover-main-container .main-infos .switch {
     width: 275px;
+    height: fit-content;
     display: flex;
     gap: 10px;
     padding: 5px;
     border-radius: 10px;
     border: 1px solid #555;
-    margin-top: 25px;
+    grid-column: 1;
+    grid-row: 2;
 }
 
 .discover-main-container .main-infos .switch input {
@@ -140,6 +149,40 @@
 .discover-main-container .main-infos .switch input:checked+label {
     background-color: lightgray;
     font-weight: bold;
+}
+
+.discover-main-container .main-infos .show-liked-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+    grid-column: 2;
+    grid-row: 2;
+    margin-left: auto;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.discover-main-container .main-infos .show-liked-filter.active {
+    background-color: #d9b4b4;
+}
+
+.discover-main-container .main-infos .show-liked-filter.active .title {
+    font-weight: bold;
+}
+
+.discover-main-container .main-infos .show-liked-filter .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    transition: all 0.3s;
+}
+
+.discover-main-container .main-infos .show-liked-filter .img {
+    width: 25px;
+    height: 25px;
 }
 
 .discover-main-container .list-container {
@@ -438,5 +481,14 @@
 @media screen and (max-width: 670px) {
     .discover-main-container {
         grid-column: 1 / span 2;
+    }
+    .discover-main-container .main-infos {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        gap: 25px;
+    }
+    .discover-main-container .main-infos .show-liked-filter {
+        grid-column: 1;
+        grid-row: 3;
     }
 }

@@ -4,6 +4,7 @@ This module contains the main routes for the application.
 Imports:
     - flask: For handling requests and responses.
     - flask_login: For handling user sessions.
+    - profanity_detector: For detecting the presence of profanity in a text.
     - root: The root module of the application.
     - json: For parsing and generating JSON data.
     - datetime: For handling dates and times.
@@ -17,6 +18,7 @@ Blueprint:
 """
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, abort
 from flask_login import login_user, login_required, logout_user, current_user
+from profanity import profanity_detector
 from root import *
 import json
 from datetime import datetime, timedelta
@@ -69,8 +71,8 @@ def index():
         end_date = max(datetime.strptime(str(lst["created_at"]), "%d/%m/%Y") for lst in lists)    
         end_date = end_date.date().strftime("%Y-%m-%d")
     else:
-        start_date = None
-        end_date = None
+        start_date = datetime.now().date().strftime("%Y-%m-%d")
+        end_date = datetime.now().date().strftime("%Y-%m-%d")
 
     # Calculate the progress of each list
     for lst in lists:
@@ -304,6 +306,9 @@ def update(list_id):
         
         if len(name) == 0:
             return jsonify({"code": 400, "message": "Nom invalide"})
+        
+        if profanity_detector(name) or profanity_detector(description):
+            return jsonify({"code": 400, "title": "Bad request", "message": "Contenu inapproprié"})
         
         time_normalized = [5,10,15]
         xp_normalized = [10,20,30]

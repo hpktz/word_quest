@@ -10,6 +10,8 @@ Imports:
     - pyotp: For generating and verifying time-based one-time passwords (TOTP).
     - re: For handling regular expressions.
     - random: For generating random numbers.
+    - jwt: For encoding and decoding JSON Web Tokens (JWT).
+    - profanity_detector: For detecting profanity in text.
     - root: For the create_connection function.
     - sendmails: For sending emails to users.
     - logging: For logging errors and debugging information.
@@ -29,6 +31,7 @@ import re
 import random
 import jwt
 
+from profanity import profanity_detector
 from root import *
 from sendmails import send_mail
 import logging
@@ -282,6 +285,10 @@ def register_post():
                     # Check if the user's email is invalid
                     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
                         flash("Email invalide")
+                        return redirect(url_for('auth.register'))
+                    
+                    if profanity_detector(name):
+                        flash("Nom invalide - Veuillez ne pas utiliser de mots inappropriés")
                         return redirect(url_for('auth.register'))
 
                     # Hash the user's password

@@ -220,6 +220,9 @@ window.onload = function() {
  * 
  */
 async function display_pop_up(el, event) {
+    if (event.target.classList.contains('not-clickable-zone')) {
+        return;
+    }
     try {
         event.preventDefault();
         let elCenterX = el.getBoundingClientRect().left + el.offsetWidth / 2;
@@ -270,5 +273,55 @@ async function display_pop_up(el, event) {
     } catch (error) {
         popUp.classList.remove('active');
         console.log(error);
+    }
+}
+
+const likeFilterButton = document.getElementsByClassName('show-liked-filter')[0];
+likeFilterButton.addEventListener('click', function() {
+    show_liked_filter(likeFilterButton);
+});
+
+/**
+ * 
+ * This function is used to display the lists liked by the user.
+ * 
+ * @function show_liked_filter
+ * @param {HTMLElement} el - The element that triggered the function.
+ * @returns {void}
+ * 
+ */
+function show_liked_filter(el) {
+    var lists = document.getElementsByClassName('list-container-box');
+    lists = Array.from(lists);
+    if (el.classList.contains('active')) {
+        el.classList.remove('active');
+        lists.forEach(function(list) {
+            list.style.display = "block";
+        });
+        document.getElementsByClassName('trend-list')[0].getElementsByClassName('no-list')[0].style.display = "none";
+        document.getElementsByClassName('word-quest-list')[0].getElementsByClassName('no-list')[0].style.display = "none";
+    } else {
+        el.classList.add('active');
+        var countRecommandation = 0;
+        var countWordQuest = 0;
+        lists.forEach(function(list) {
+            var heartContainer = list.getElementsByClassName('heart-container')[0];
+            if (heartContainer.classList.contains('active')) {
+                list.style.display = "block";
+                if (list.parentElement.classList.contains('trend-list')) {
+                    countRecommandation++;
+                } else {
+                    countWordQuest++;
+                }
+            } else {
+                list.style.display = "none";
+            }
+        });
+        if (countRecommandation == 0) {
+            document.getElementsByClassName('trend-list')[0].getElementsByClassName('no-list')[0].style.display = "block";
+        }
+        if (countWordQuest == 0) {
+            document.getElementsByClassName('word-quest-list')[0].getElementsByClassName('no-list')[0].style.display = "block";
+        }
     }
 }

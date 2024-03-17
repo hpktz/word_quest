@@ -10,33 +10,36 @@ const game = document.getElementById('game')
 var lives = document.querySelectorAll('.lives-zone')
 
 
-
-
+const infos = document.getElementById('infos');
+var current_indice = 0
+var AllDuos = []
 var answers = []
-async function newDuo() {
-    var r = await fetch(`/dashboard/games/fallingword/${session_id}/getDuo`)
-    var response = await r.json();
+function newDuo(list) {
+    var indiceDuo = current_indice
     var time = Date.now();
     let counter = 0;
-    var duringOfFalling = Math.floor(Math.random() * 3500 + 2000)
-    let end = Math.floor(Math.random() * 50 +100)
+    console.log(list[indiceDuo])
+    var duringOfFalling = Math.floor(Math.random() * 2000 + 5000)
     var duo = document.createElement('div');
     duo.classList.add('duo');
-    duo.innerHTML = `${response.result.duo[0]}/${response.result.duo[1]}`;
+    duo.innerHTML = `${list[indiceDuo].duo[0]}/${list[indiceDuo].duo[1]}`;
     var rotate = Math.floor(Math.random() * 45 - 15)
+    var height = infos.clientHeight
     game.appendChild(duo)
     var Xpos = Math.floor(Math.random() * 70 + 8)
     duo.style.left = `${Xpos}%`
-    var startY = Math.floor(Math.random() * (window.innerHeight/2) +50)
+    var startY = Math.floor(Math.random() * (window.innerHeight/2) + height)
     setTimeout(() => {
         duo.style.transform = `rotateZ(${rotate}deg) scale(1)`
     }, 200);
     
     duo.style.top = `${startY}px`
-    var speed = Math.floor(Math.random() * 5 +2)
+    var speed = Math.floor(Math.random() * 4 +1)
     duo.onclick = function checking() {
-        answers.push(response.result.index);
-        if (response.message == 'good duo'){
+        clearInterval(timing)
+        answers.push(list[indiceDuo].indice);
+        if (list[indiceDuo].checking == true){
+            console.log('True')
             this.style.border = 'none'
             this.style.background = '#717744';
             setTimeout(() => {
@@ -45,7 +48,8 @@ async function newDuo() {
                     this.remove()
                 }, 200);
             }, 200);
-        } else if (response.message == 'bad duo'){
+        } else if (list[indiceDuo].checking == false){
+            console.log('Faux')
             if (lives.length != 0) {
                 lives[lives.length - 1].style.transform = 'scale(0.01)'
             }
@@ -74,7 +78,7 @@ async function newDuo() {
         counter++;
         if ((current_time - time) > duringOfFalling) {
             duo.style.transform = `rotateZ(${rotate}deg) scale(0.01)`
-            if (response.message == 'good duo') {
+            if (list[indiceDuo].checking) {
                 clearInterval(timing)
                 if (lives.length != 0) {
                     lives[lives.length - 1].remove()
@@ -89,6 +93,7 @@ async function newDuo() {
             }
         }
     }, 40);
+    current_indice ++;
 }
 
 function fall(speed, box, startY) {
@@ -111,17 +116,23 @@ async function check(list) {
     }
 }
 
-
 const popup = document.querySelectorAll('.pop-up')[0];
 
-begin = setInterval(() => {
-    if (popup.className !='start-pop-up pop-up active') {
-        clearInterval(begin)
-        appear = setInterval(() => {
-        newDuo();
-        }, 800);
-    }
-}, 50);
+async function getAllDuos() {
+    var r = await fetch(`/dashboard/games/fallingword/${session_id}/getDuo`)
+    var response = await r.json();
+    AllDuos = response.result;
+    begin = setInterval(() => {
+        if (popup.className !='start-pop-up pop-up active') {
+            clearInterval(begin)
+            appear = setInterval(() => {
+            newDuo(AllDuos);
+            }, 1200);
+        }
+    }, 50);
+}
+getAllDuos();
+
 
 
 

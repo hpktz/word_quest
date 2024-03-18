@@ -10,6 +10,7 @@ Imports:
     - random: For generating random numbers.
     - logging: For logging errors and other information.
     - profanity: For detecting the presence of profanity in a text.
+    - time: For handling time.
 
 Blueprint:
     - create_bp: The blueprint for the routes for creating a list.
@@ -25,6 +26,7 @@ import uuid
 import re
 import json
 import logging
+import time
 
 create_bp = Blueprint('create', __name__)
 """
@@ -368,6 +370,7 @@ def add_to_list(id):
     wordList = WordList.from_json(session['list_under_creation'])
     added = wordList.add(id)
     session['list_under_creation'] = wordList.to_json()
+    time.sleep(1/1000) # To avoid session concurrency
     
     if added is not None:
         return jsonify({"code": 200, "title": "Word added", "result": added}), 200
@@ -398,6 +401,7 @@ def remove_from_list(id):
     wordList = WordList.from_json(session['list_under_creation'])
     removed = wordList.remove(id)
     session['list_under_creation'] = wordList.to_json()
+    time.sleep(1/1000) # To avoid session concurrency
     
     if removed is not None:
         return jsonify({"code": 200, "title": "Word removed", "result": removed}), 200

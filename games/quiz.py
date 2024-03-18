@@ -15,6 +15,7 @@ Imports:
     - gTTS: For generating audio from text
     - BytesIO: For managing the audio bytes
     - logging: For logging errors
+    - time: For managing the time
     
 Blueprints:
     - quiz_bp: The blueprint of the quiz game
@@ -34,6 +35,7 @@ from gtts import gTTS
 from io import BytesIO
 import logging
 import linecache
+import time
 
 
 quiz_bp = Blueprint('quiz', __name__)
@@ -533,6 +535,7 @@ def check_game(func):
             if session_id != game.id or game.time < str(datetime.datetime.now()):
                 response = game._end_game()
                 session["game"] = game.to_json()
+                session.pop("game", None)
                 return response
             else:
                 return func(session_id, *args, **kwargs)
@@ -669,6 +672,7 @@ def check(session_id, answer):
     game = quiz.from_json(session["game"])
     response = game.check_answer(answer)
     session["game"] = game.to_json()
+    time.sleep(1/1000) # To avoid session concurrency
 
     if response.status_code == 201:
         session.pop("game", None)

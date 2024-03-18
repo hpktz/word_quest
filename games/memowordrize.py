@@ -35,6 +35,7 @@ from io import BytesIO
 import logging
 import linecache
 import io
+import time
 
 memowordrize_bp = Blueprint('memowordrize', __name__)
 """
@@ -42,7 +43,7 @@ The blueprint of the memowordrize game
 """
 
 # The id of the quiz lesson
-memowordrize_id = 8
+memowordrize_id = 6
 
 class memowordrize():
     """
@@ -447,6 +448,7 @@ def index(list_id):
     
     # Sort the lessons by order    
     list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
+    print(list_result["lessons"])
 
     # Check if the game exists and if it is available
     for index, game in enumerate(list_result["lessons"]):
@@ -561,6 +563,8 @@ def audio(session_id, id):
             audio_bytes.seek(0)
             
             game.current_path["path"][current_game_index[0]]["id"] = str(uuid.uuid4())
+            session["game"] = game.to_json()
+            time.sleep(1/1000) # To avoid session concurrency
             # Return the audio
             return Response(audio_bytes, mimetype="audio/mp3")
         return jsonify({
@@ -597,11 +601,13 @@ def try_case(session_id):
     """
     try:
         game = memowordrize.from_json(session["game"])
+        print(game.lesson_id)
         data = request.get_json()
         position = data["position"]
         word = data["word"]
         response = game.check_case(position, word)
         session["game"] = game.to_json()
+        time.sleep(1/1000) # To avoid session concurrency
         return response
     except Exception as e:
         logging.error("An error has occured: " + str(e))

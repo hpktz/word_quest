@@ -28,6 +28,7 @@ import datetime as datetime
 import uuid as uuid
 import json
 from functools import wraps
+import time
 
 import logging
 
@@ -85,8 +86,8 @@ class memory():
         self.words_to_check = words
         self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
         self.start = str(datetime.datetime.now())
-        self.french_words = [word['trans_word'] for word in self.words]
-        self.english_words = [word['word'] for word in self.words]
+        self.french_words = [[word['trans_word'], str(i), "french"] for i, word in enumerate(self.words)]
+        self.english_words = [[word['word'], str(i), "english"] for i, word in enumerate(self.words)]
         self.cards = self.french_words + self.english_words
         self.shuffle_cards = []
         self.open_cards = []
@@ -96,16 +97,14 @@ class memory():
         liste = []
         for i in range(len(self.cards)):
             current_card = random.choice(self.cards)
-            for j in range(len(self.cards)):
-                if self.cards[j] == current_card:
-                    del(self.cards[j])
-                    break
             self.shuffle_cards.append(current_card)
+            self.cards.remove(current_card)
         return jsonify({
             'code': 200,
             'message': 'ok',
             'result': {'nbr_cards': len(self.french_words + self.english_words)}
         })
+        
     def printWord(self, id):
         el = self.shuffle_cards[id]
         checking = self.checking_cards(el)
@@ -114,7 +113,7 @@ class memory():
         return jsonify({
             'code': 200,
             'message': 'ok',
-            'result': { 'innerHTML': self.shuffle_cards[id],
+            'result': { 'innerHTML': self.shuffle_cards[id][0],
                        'checking': checking}
         })
     
@@ -122,20 +121,14 @@ class memory():
         self.open_cards.append(new_card)
         if len(self.open_cards) == 2:
             self.nbr_try += 1
-            if new_card in self.french_words:
-                current_french_word = new_card
-                current_english_word = self.open_cards[0]
+            if self.open_cards[0][1] == self.open_cards[1][1]:
+                self.cards.append(self.open_cards[0])
+                self.cards.append(self.open_cards[1])
+                self.open_cards = []
+                return True
             else:
-                current_french_word = self.open_cards[0]
-                current_english_word = new_card
-            for i in range(len(self.french_words)):
-                if current_french_word == self.french_words[i] and current_english_word == self.english_words[i]:
-                    self.cards += self.open_cards
-                    self.open_cards = []
-                    return True
-            self.open_cards = []
-            
-            return False
+                self.open_cards = []
+                return False
         return None
 
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
@@ -315,11 +308,9 @@ class memory():
         json_dict = json.loads(json_string)
         to_extract = cls(json_dict["list_id"], json_dict["lesson_id"], json_dict["words"])
         to_extract.id = json_dict["id"]
-        to_extract.time = json_dict["time"]
         to_extract.words_to_check = json_dict["words_to_check"]
+        to_extract.time = json_dict["time"]
         to_extract.start = json_dict["start"]
-        to_extract.french_words = json_dict["french_words"]
-        to_extract.english_words = json_dict["english_words"]
         to_extract.cards = json_dict["cards"]
         to_extract.shuffle_cards = json_dict["shuffle_cards"]
         to_extract.open_cards = json_dict["open_cards"]
@@ -353,6 +344,8 @@ def check_game(func):
             if session_id != game.id or game.time < str(datetime.datetime.now()):
                 response = game._end_game(None,None)
                 session["game"] = game.to_json()
+                session.pop("game", None)
+
                 return response
             else:
                 return func(session_id, *args, **kwargs)
@@ -420,9 +413,13 @@ def start(session_id):
     """
     if 'game' in session:
         game = memory.from_json(session["game"])
-        if game.shuffle_cards:
+        if not game.shuffle_cards:
+            game.getWords()
+        else:
             return redirect(url_for('memory.index', list_id=game.list_id))
         
+        shuffle_cards = game.shuffle_cards
+        cards = game.cards
         reloaded = True if game.get_remaning_time() < 58 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
@@ -430,8 +427,8 @@ def start(session_id):
                                    session_id=session_id, 
                                    list_id=game.list_id,
                                    time=game.get_remaning_time(),
-                                #    max_score=len(game.words),
-                                #    score=len(game.words) - len(game.words_to_check) - game.faults,
+                                   shuffle_cards=shuffle_cards,
+                                   cards=cards,
                                    reloaded=reloaded)
         return redirect(url_for('memory.index', list_id=game.list_id))
     return redirect(url_for('main.index'))
@@ -459,18 +456,14 @@ def check_status(session_id):
         "result": {}
     })
 
-@memory_bp.route('/dashboard/games/memory/<string:session_id>/getCard')
-@check_game
-def getCard(session_id):
-    game = memory.from_json(session["game"])
-    result = game.getWords()
-    session["game"] = game.to_json()
-    return result
-
 @memory_bp.route('/dashboard/games/memory/<string:session_id>/check_word/<int:boxId>')
 @check_game
 def test(session_id, boxId):
     game = memory.from_json(session["game"])
     result = game.printWord(boxId)
     session["game"] = game.to_json()
+    time.sleep(1/1000)
+    
+    if result.status_code == 201:
+        session.pop("game", None)
     return result

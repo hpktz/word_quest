@@ -8,81 +8,74 @@ const flipCardAudio = new Audio(flipCardAudioUrl);
 flipCardAudio.volume = 1;
 flipCardAudio.load();
 
-async function getCard() {
-    const getCards = await fetch(`/dashboard/games/memory/${session_id}/getCard`);
-    var cardContent = await getCards.json();
-
-    console.log(cardContent);
-
-    nbrCards = cardContent['result']['nbr_cards'];
-
-    for (var i = 0; i < nbrCards; i++) {
-        let box = document.createElement('div');
-        box.className = 'item';
-        box.id = i
-        document.getElementById('game').appendChild(box);
-        box.onclick = async function() {
-            flipCardAudio.play();
-            var boxId = this.id;
+async function checkWord(el) {
+    flipCardAudio.play();
+    var boxId = el.id;
+    document.querySelectorAll('.item').forEach(element => {
+        element.style.pointerEvents = 'none'
+    });
+    const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
+    var checked = await check_word.json();
+    el.innerText = checked['result']['innerHTML']
+    el.classList.add('box_open');
+    document.querySelectorAll('.item').forEach(element => {
+        if (element.classList[1] != 'box_match') {
+            element.style.pointerEvents = 'auto'
+        }
+    });
+    console.log(checked)
+    if (document.querySelectorAll('.box_open').length == 2) {
+        document.querySelectorAll('.item').forEach(element => {
+            element.style.pointerEvents = 'none'
+        });
+        setTimeout(() => {
             document.querySelectorAll('.item').forEach(element => {
-                element.style.pointerEvents = 'none'
-            });
-            const check_word = await fetch(`/dashboard/games/memory/${session_id}/check_word/${boxId}`);
-            var checked = await check_word.json();
-            this.innerText = checked['result']['innerHTML']
-            this.classList.add('box_open');
-            document.querySelectorAll('.item').forEach(element => {
-                if (element.classList[1] != 'box_match') {
+                if (element.classList[1] == 'box_open') {
+                    element.style.pointerEvents = 'none'
+                } else {
                     element.style.pointerEvents = 'auto'
                 }
+
             });
-            if (document.querySelectorAll('.box_open').length == 2) {
-                document.querySelectorAll('.item').forEach(element => {
-                    element.style.pointerEvents = 'none'
+            if (checked['result']['checking']) {
+                document.querySelectorAll('.box_open').forEach(element => {
+                    element.classList.add('box_match')
+                    successAudio.play();
                 });
-                setTimeout(() => {
-                    document.querySelectorAll('.item').forEach(element => {
-                        if (element.classList[1] == 'box_open') {
-                            element.style.pointerEvents = 'none'
-                        } else {
-                            element.style.pointerEvents = 'auto'
-                        }
 
-                    });
-                    if (checked['result']['checking']) {
-                        document.querySelectorAll('.box_open').forEach(element => {
-                            element.classList.add('box_match')
-                            successAudio.play();
-                        });
-
-                        document.querySelectorAll('.box_open')[1].classList.remove('box_open')
-                        document.querySelectorAll('.box_open')[0].classList.remove('box_open')
-                        flipCardAudio.play();
-                    } else {
-                        document.querySelectorAll('.box_open').forEach(element => {
-                            element.style.pointerEvents = 'auto'
-                        });
-                        document.querySelectorAll('.box_open')[1].innerHTML = ""
-                        document.querySelectorAll('.box_open')[0].innerHTML = ""
-                        document.querySelectorAll('.box_open')[1].classList.remove('box_open')
-                        document.querySelectorAll('.box_open')[0].classList.remove('box_open')
-                        flipCardAudio.play();
-                    }
-                    document.querySelectorAll('.item').forEach(element => {
-                        if (element.classList[1] == 'box_match') {
-                            element.style.pointerEvents = 'none'
-                        }
-                    });
-                }, 500);
+                document.querySelectorAll('.box_open')[1].classList.remove('box_open')
+                document.querySelectorAll('.box_open')[0].classList.remove('box_open')
+                flipCardAudio.play();
+            } else {
+                document.querySelectorAll('.box_open').forEach(element => {
+                    element.style.pointerEvents = 'auto'
+                });
+                document.querySelectorAll('.box_open')[1].innerHTML = ""
+                document.querySelectorAll('.box_open')[0].innerHTML = ""
+                document.querySelectorAll('.box_open')[1].classList.remove('box_open')
+                document.querySelectorAll('.box_open')[0].classList.remove('box_open')
+                flipCardAudio.play();
             }
-            if (checked.code == 201) {
-                end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
-            }
-        }
+            document.querySelectorAll('.item').forEach(element => {
+                if (element.classList[1] == 'box_match') {
+                    element.style.pointerEvents = 'none'
+                }
+            });
+        }, 500);
+    }
+    if (checked.code == 201) {
+        end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
     }
 }
 
-getCard();
+window.onload = function() {
+    let item = document.querySelectorAll('.item');
+    for (let i = 0; i < item.length; i++) {
+        item[i].onclick = async function() {
+            checkWord(this);
+        }
+    }
+}
 
 /**
  * 

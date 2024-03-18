@@ -61,6 +61,7 @@ app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY') # Secret key for the ap
 app.config['SESSION_TYPE'] = 'filesystem' # Type of session
 app.config['SESSION_FILE_DIR'] = '/tmp' # Directory for the session files (Value for google cloud)
 app.config['SESSION_PERMANENT'] = True # Session is permanent - it will be stored until the user logs out
+app.config['SESSION_REFRESH_EACH_REQUEST'] = False # Refresh the session each request
 
 Session(app)
 

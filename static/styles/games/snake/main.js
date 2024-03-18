@@ -9,7 +9,7 @@ const animXp = document.getElementById('animation-xp');
 const xpWin = document.getElementById('xpnotif');
 const frWord = document.getElementById('frensh-word');
 
-let box = 56
+let box = 32
 
 const pressMessage = document.getElementById('press-message');
 const score = document.getElementById('xp')
@@ -17,9 +17,9 @@ var xpTotal = 0
 
 score.innerHTML = xpTotal + ' Xp'
 
-var snake = [{ x: 4 * box, y: 4 * box }];
+var snake = [{ x: 7 * box, y: 7 * box }];
 
-snake[0] = { x: 4 * box, y: 4 * box }
+snake[0] = { x: 7 * box, y: 7 * box }
 var word = []
 var wordStyle = []
 var nbrOfRock = 0
@@ -46,6 +46,7 @@ var letterPositions = [{ x: 0, y: 0 }];
 var co2python = []
     // alreadyPos = false
 async function getPosition() {
+    console.log("cool")
     wordStyle = []
     r = await fetch(`/dashboard/games/snake/${session_id}/getWord`)
     response = await r.json();
@@ -88,59 +89,262 @@ window.addEventListener("touchend", function mobiletouch(evt) {
     var touches = evt.changedTouches[0];
     var betweenX = touches.pageX - startX;
     var betweenY = touches.pageY - startY;
-
-    if (!Number.isInteger(snakeY / 56) || !Number.isInteger(snakeX / 56)) {
-        setTimeout(() => {
-            mobiletouch(evt)
-        }, 40);
-    } else {
-
-        if (Math.abs(betweenX) > 50 || Math.abs(betweenY) > 50) {
-            if (Math.abs(betweenX) > Math.abs(betweenY) + 10) {
-                if (betweenX > 0 && d != 'LEFT') d = 'RIGHT'
-                else if (d != 'LEFT') {
-                    d = 'LEFT'
-                }
-            } else {
-                if (betweenY > 0 && d != 'UP') d = 'DOWN'
-                else if (d != 'DOWN') {
-                    d = 'UP'
-                }
+    var current_d = {}
+    if (Math.abs(betweenX) > 15 || Math.abs(betweenY) > 15) {
+        if (Math.abs(betweenX) >= Math.abs(betweenY) + 10) {
+            if (betweenX > 0 && d != 'LEFT') current_dd = {keyCode: 39}
+            else{
+                current_d = {keyCode: 37}
+            }
+        } else {
+            if (betweenY > 0 && d != 'UP') d = current_d = {keyCode: 40}
+            else {
+                current_d = {keyCode: 38}
             }
         }
-
+        direction(current_d)
     }
 }, false);
-document.addEventListener('keydown', direction);
+document.addEventListener('keydown', (e) => {
+    direction(e)
+});
 
 function direction(event) {
-
-    if (!Number.isInteger(snakeY / 56) || !Number.isInteger(snakeX / 56)) {
-        document.removeEventListener('keydown', direction)
-        setTimeout(() => {
-            direction(event)
-        }, 45);
-    } else {
-        let key = event.keyCode;
-        if (key == 37 && d != "RIGHT") {
-            d = "LEFT";;
-        }
-        if (key == 39 && d != "LEFT") {
-            d = "RIGHT";
-        }
-        if (key == 38 && d != "DOWN") {
-            d = "UP";
-        }
-        if (key == 40 && d != "UP") {
-            d = "DOWN";
-        }
-        document.addEventListener('keydown', direction)
+    var old_d = d
+    var key = event.keyCode;
+    console.log(key)
+    if (key == 37 && d != "RIGHT") {
+        var d1 = "LEFT";;
     }
-
+    if (key == 39 && d != "LEFT") {
+        var d1 = "RIGHT";
+    }
+    if (key == 38 && d != "DOWN") {
+        var d1 = "UP";
+    }
+    if (key == 40 && d != "UP") {
+        var d1 = "DOWN";
+    }
+    if (d == d1) {
+        return
+    } else{
+        d = d1
+    }
+    if( d != old_d){
+        if (old_d == 'LEFT') {
+            if (snakeX % 32 == 0) {
+                return
+            }
+            if (d == 'DOWN') {
+                var changeHead = {
+                    
+                    x: snakeX - snakeX % 32,
+                    y: snakeY
+                    };
+            } else if (d == 'UP') {
+                var changeHead = {
+                    x: snakeX - snakeX % 32,
+                    y: snakeY
+                    };
+            }
+        }
+        else if (old_d == 'RIGHT') {
+            if (snakeX % 32 == 0) {
+                return
+            }
+            if (d == 'DOWN') {
+                var changeHead = {
+                    x: snakeX - snakeX % 32 + 32,
+                    y: snakeY
+                    };
+            } else if (d == 'UP') {
+                var changeHead = {
+                    x: snakeX - snakeX % 32 + 32,
+                    y: snakeY
+                    };
+            }
+        }
+        else if (old_d == 'UP') {
+            if (snakeY % 32 == 0) {
+                return
+            }
+            if (d == 'RIGHT') {
+                var changeHead = {
+                    x: snakeX,
+                    y: snakeY - snakeY % 32
+                    };
+            } else if (d == 'LEFT') {
+                var changeHead = {
+                    x: snakeX,
+                    y: snakeY - snakeY % 32
+                    };
+            }
+        }
+        else if (old_d == 'DOWN') {
+            if (snakeY % 32 == 0) {
+                return
+            }
+            if (d == 'RIGHT') {
+                var changeHead = {
+                    x: snakeX,
+                    y: snakeY - snakeY % 32 + 32
+                    };
+            } else if (d == 'LEFT') {
+                var changeHead = {
+                    x: snakeX,
+                    y: snakeY - snakeY % 32 + 32
+                    };
+            }
+        }
+        if (changeHead != undefined) {
+            console.log(changeHead)
+            draw(changeHead);
+        }
+    // if (current_d == null) {
+    //     var old_d = d
+    // } else {
+    //     var old_d = current_d
+    // }
+    // console.log(d)
+    // var key = event.keyCode;
+    // if (key == 37 && d != "RIGHT") {
+    //     var d1 = "LEFT";;
+    // }
+    // if (key == 39 && d != "LEFT") {
+    //     var d1 = "RIGHT";
+    // }
+    // if (key == 38 && d != "DOWN") {
+    //     var d1 = "UP";
+    // }
+    // if (key == 40 && d != "UP") {
+    //     var d1 = "DOWN";
+    // }
+    // if (d == d1) {
+    //     return
+    // } else{
+    //     var d = d1
+    // }
+    // if( d != old_d){
+    //     if ((old_d == 'LEFT' || old_d == 'RIGHT') && snakeX % 32 != 0) {
+    //         if (snakeX % 32 < 0) {
+    //             console.log('colonne précédente')
+    //             if (d == 'DOWN') {
+    //                 var changeHead = {
+    //                     x: snakeX - snakeX % 32 ,
+    //                     y: snakeY + 2
+    //                     };
+    //             } else if (d == 'UP') {
+    //                 var changeHead = {
+    //                     x: snakeX - snakeX % 32,
+    //                     y: snakeY - 2
+    //                     };
+    //             }
+    //         } else if (snakeX % 32 > 26)  {
+    //             console.log('colonne suivante')
+    //             if (d == 'DOWN') {
+    //                 var changeHead = {
+    //                     x: snakeX - snakeX % 32 + 32,
+    //                     y: snakeY + 2
+    //                     };
+    //             } else if (d == 'UP') {
+    //                 var changeHead = {
+    //                     x: snakeX - snakeX % 32 + 32,
+    //                     y: snakeY - 2
+    //                     };
+    //             }
+                
+    //         } else if(current_d == null){
+                                                        // document.removeEventListener('keydown', direction)
+                                                        // document.removeEventListener('keydown', (e) => {
+                                                        //     direction(e,null)
+                                                        // });
+                // var i = 0;
+                // d = old_d
+                // trucouf = setInterval(() => {
+                //     if (i < 20){
+                //         console.log('attend1')
+                //         direction(event, old_d)
+                //         if (direction(event, old_d) == true) {
+                //             i = 21
+                //         }
+                //         i ++;
+                //     } else {
+                                                        // document.addEventListener('keydown', (e) => {
+                                                        //     direction(e,null)
+                                                        // });
+        //                 clearInterval(trucouf)
+        //             }
+        //         }, 20);  
+        //     }
+        // }
+        // else if ((old_d == 'UP' || old_d == 'DOWN') && snakeY % 32 != 0) {
+        //     if (snakeY % 32 < 0) {
+        //         console.log('ligne suivante')
+        //         if (d == 'RIGHT') {
+        //             var changeHead = {
+        //                 x: snakeX + 2,
+        //                 y: snakeY - snakeY % 32
+        //                 };
+        //         } else if (d == 'LEFT') {
+        //             var changeHead = {
+        //                 x: snakeX - 2,
+        //                 y: snakeY - snakeY % 32
+        //                 };
+        //         }
+        //     } else if (snakeY % 32 > 26){
+        //         console.log('ligne suivante')
+        //         if (d == 'RIGHT') {
+        //             var changeHead = {
+        //                 x: snakeX + 2,
+        //                 y: snakeY - snakeY % 32 + 32
+        //                 };
+        //         } else if (d == 'LEFT') {
+        //             var changeHead = {
+        //                 x: snakeX - 2,
+        //                 y: snakeY - snakeY % 32 + 32
+        //                 };
+        //         }
+        //     } else if(current_d == null){
+                                                                // document.removeEventListener('keydown', direction)
+                                                                // document.removeEventListener('keydown', (e) => {
+                                                                //     direction(e,null)
+                                                                // });
+                // d = old_d
+                // var i = 0;
+                // trucouf = setInterval(() => {
+                //     if (i < 20){
+                //         console.log('attend2')
+                //         direction(event, old_d)
+                //         if (direction(event, old_d) == true) {
+                //             i = 21
+                //         }
+                //         i ++;
+                //     } else {
+                                                                // document.addEventListener('keydown', (e) => {
+                                                                //     direction(e,null)
+                                                                // });
+                //         clearInterval(trucouf)
+                //     }
+                // }, 20);
+                
+                
+            // }
+        // }
+        // if (changeHead != undefined) {
+        //     draw(changeHead);
+        //     return true
+        // } else if (current_d != null) {
+        //     d = old_d
+        // }
+        // return false
+        
+    }
 }
 var fin = 0
 
-function draw() {
+function draw(changeDirection) {
+    snakeX = snake[0].x;
+    snakeY = snake[0].y;
     // let cool = setInterval(() => {
     if (isEventListener == true) {
         // clearInterval(cool)
@@ -150,18 +354,23 @@ function draw() {
         } else {
             pressMessage.style.display = 'block'
         }
-        context.fillStyle = "#ffffff80";
+        context.fillStyle = "#766153";
         let background_x = 0
         let background_y = 0
-        for (let i = 0; i < 9; i++) {
-            for (let j = 0; j < 9; j++) {
-                context.fillRect(background_x + 8, background_y + 8, 40, 40)
+        for (let i = 0; i < 15; i++) {
+            for (let j = 0; j < 15; j++) {
+                context.fillRect(background_x, background_y, 32, 32)
                     // context.beginPath()
                     // context.lineWidth = "10"
                     // context.strokeStyle = "brown"
                     // context.rect(background_x,background_y,55,55)
                     // context.stroke()
-                background_x += 56
+                if (context.fillStyle == '#cca48a') {
+                    context.fillStyle = '#766153'
+                } else if (context.fillStyle == '#766153') {
+                    context.fillStyle = '#cca48a'
+                }
+                background_x += 32
                     // if(context.fillStyle == "#c1c286"){
                     //     context.fillStyle = "#84855c"
                     // } else if (context.fillStyle == '#84855c') {
@@ -170,12 +379,12 @@ function draw() {
 
             }
             background_x = 0
-            background_y += 56
+            background_y += 32
         }
         var letterIndex = 0;
         letterPositions.forEach(e => {
             if (e.letter == 'rock') {
-                context.drawImage(image, letterPositions[letterIndex].x - 10, letterPositions[letterIndex].y - 22, 40, 25)
+                context.drawImage(image, letterPositions[letterIndex].x - 10, letterPositions[letterIndex].y - 22, 25, 18)
             } else {
                 context.fillStyle = "#373D20";
                 context.font = "30px League Spartan";
@@ -188,13 +397,13 @@ function draw() {
                 context.fillStyle = "#BCBD8B";
                 context.beginPath();
                 context.lineWidth = "2";
-                context.arc(snake[i].x + 28, snake[i].y + 28, 13, 0, 2 * Math.PI)
+                context.arc(snake[i].x + 16, snake[i].y + 16, 17, 0, 2 * Math.PI)
                 context.fill();
             } else {
                 context.fillStyle = "#373D20"
-                context.fillRect(snake[i].x + 15, snake[i].y + 15, box - 30, box - 30);
+                context.fillRect(snake[i].x, snake[i].y, box, box);
             }
-            var e = 8 * (nbrLettreTrouve + 1)
+            var e = 16 * (nbrLettreTrouve + 1)
             if (snake.length != e + 1 && d != undefined) {
                 snake.push(1)
             }
@@ -202,19 +411,13 @@ function draw() {
             context.fillStyle = "#BCBD8B";
             context.beginPath();
             context.lineWidth = "2";
-            context.arc(snake[0].x + 28, snake[0].y + 28, 13, 0, 2 * Math.PI)
+            context.arc(snake[0].x + 16, snake[0].y + 16, 17, 0, 2 * Math.PI)
             context.fill();
         }
-        if (d == "LEFT") {
-            snakeX -= Math.floor(box / 8)
-        }
-        if (d == "RIGHT") snakeX += Math.floor(box / 8);
-        if (d == "UP") snakeY -= Math.floor(box / 8);
-        if (d == "DOWN") snakeY += Math.floor(box / 8);
         var letterFind = false
         var l = false
         for (let i = 0; i < letterPositions.length; i++) {
-            if (snakeX == letterPositions[i].x - 19 && snakeY == letterPositions[i].y - 37) {
+            if (snakeX == letterPositions[i].x - 9 && snakeY == letterPositions[i].y - 27) {
                 if (letterPositions[i].letter != word[0]) {
                     l = true
                 } else {
@@ -229,16 +432,23 @@ function draw() {
                 }
             }
         }
+        if (d == "LEFT") snakeX -= Math.floor(box / 16)
+        if (d == "RIGHT") snakeX += Math.floor(box / 16);
+        if (d == "UP") snakeY -= Math.floor(box / 16);
+        if (d == "DOWN") snakeY += Math.floor(box / 16);
         if (!letterFind) {
             snake.pop()
         }
-        let newHead = {
-            x: snakeX,
-            y: snakeY
-        };
+        if (changeDirection == 'pas de changement'){
+            var newHead = {
+                x: snakeX,
+                y: snakeY
+                };
+        } else {
+            var newHead = changeDirection;
+        }
 
-
-        if (snakeX < 0 || snakeY < 0 || snakeX > 8 * box || snakeY > 8 * box || collision(newHead, snake) || l) {
+        if (snakeX < -2 || snakeY < -2 || snakeX > 14 * box || snakeY > 14 * box || collision(newHead, snake) || l) {
             if (fin == 0) {
                 clearInterval(game)
                 checkingCoo()
@@ -269,7 +479,6 @@ async function checkingCoo() {
         })
     })
     response = await r.json()
-    console.log(response)
     if (response.code == 500) {
         window.location.href = '/dashboard/errors/500';
     }
@@ -284,7 +493,7 @@ async function checkingCoo() {
         xpWin.innerHTML = `+${xp}`
         setTimeout(() => {
             isEventListener = false
-            snake = [{ x: 4 * box, y: 4 * box }]
+            snake = [{ x: 7 * box, y: 7 * box }]
             nbrLettreTrouve = 0
             co2python = []
             snakeX = snake[0].x;
@@ -293,7 +502,9 @@ async function checkingCoo() {
             animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
             getPosition()
             d = undefined
-            game = setInterval(draw, 45)
+            var game = setInterval(function () {
+                draw('pas de changement');
+            }, 20)
             fin = 0
         }, 1000);
     }
@@ -305,12 +516,14 @@ function collision(head, array) {
             return true;
         }
     }
-    return false;
+    return false;+ 32
 }
 
 
 getPosition();
-var game = setInterval(draw, 45);
+var game = setInterval(function () {
+    draw('pas de changement');
+}, 20)
 
 
 
@@ -349,7 +562,6 @@ var timer = setInterval(async() => {
 }, 1000);
 
 timer;
-
 
 
 // animXp.style.animation = 'Xpanim 1s ease-in-out forwards';

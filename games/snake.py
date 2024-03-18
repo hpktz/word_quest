@@ -94,6 +94,7 @@ class snake():
 
 
     def newWord(self):
+        print(self.shuffle)
         coLetters = []
         self.current_word = self.shuffle.pop()
         frensh_word = self.current_word['trans_word']
@@ -102,7 +103,6 @@ class snake():
         for letter in self.current_word:
             coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
-        print(self.finalChecking)
         while len(coLetters) < 12:
             coLetters.append(self.getcoordinate(coLetters, 'rock'))
         return jsonify({
@@ -113,14 +113,14 @@ class snake():
         })
     
     def getcoordinate(self,list, l):
-        xpos = math.floor(random.random() * 9) * 56 + 19
-        ypos = math.floor(random.random() * 7 + 1) * 56 + 37
+        xpos = math.floor(random.random() * 5) * 32 + 9
+        ypos = math.floor(random.random() * 13 + 1) * 32 + 27
         alreadyPos = True
         if list == []:
             return {'letter': l,'x': xpos, 'y': ypos}
         else:
             for Letter in list:
-                if xpos == Letter['x'] and ypos == Letter['y'] or xpos == 243 and ypos == 261:
+                if xpos == Letter['x'] and ypos == Letter['y'] or (xpos == 235 and ypos == 251):
                     alreadyPos = False
                     break
                 else:
@@ -138,6 +138,9 @@ class snake():
     def checkingCoo(self,list):
         try:
             xpWord = 0
+            
+            print(self.finalChecking)
+            print(list)
             if list is not None:
                 for i in range(len(list)):
                     if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
@@ -463,7 +466,6 @@ def check_status(session_id):
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/getWord')
 @check_game
 def getCard(session_id):
-    print('cool')
     game = snake.from_json(session["game"])
     result = game.newWord()
     session["game"] = game.to_json()
@@ -474,7 +476,6 @@ def getCard(session_id):
 def endChecking(session_id):
     data = request.get_json()
     coord = data['coo']
-
     game = snake.from_json(session["game"])
     result = game.checkingCoo(coord)
     session["game"] = game.to_json()

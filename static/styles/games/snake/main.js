@@ -82,7 +82,6 @@ window.addEventListener("touchstart", function(evt) {
 }, false);
 window.addEventListener("touchmove", function(evt) {
     // Limite les effets de bord avec le tactile...
-    evt.preventDefault();
     evt.stopPropagation();
 }, false);
 window.addEventListener("touchend", function mobiletouch(evt) {
@@ -92,12 +91,12 @@ window.addEventListener("touchend", function mobiletouch(evt) {
     var current_d = {}
     if (Math.abs(betweenX) > 15 || Math.abs(betweenY) > 15) {
         if (Math.abs(betweenX) >= Math.abs(betweenY) + 10) {
-            if (betweenX > 0 && d != 'LEFT') current_dd = {keyCode: 39}
+            if (betweenX > 0 && d != 'LEFT') current_d = {keyCode: 39}
             else{
                 current_d = {keyCode: 37}
             }
         } else {
-            if (betweenY > 0 && d != 'UP') d = current_d = {keyCode: 40}
+            if (betweenY > 0 && d != 'UP') current_d = {keyCode: 40}
             else {
                 current_d = {keyCode: 38}
             }
@@ -112,7 +111,6 @@ document.addEventListener('keydown', (e) => {
 function direction(event) {
     var old_d = d
     var key = event.keyCode;
-    console.log(key)
     if (key == 37 && d != "RIGHT") {
         var d1 = "LEFT";;
     }
@@ -125,19 +123,17 @@ function direction(event) {
     if (key == 40 && d != "UP") {
         var d1 = "DOWN";
     }
-    if (d == d1) {
-        return
-    } else{
-        d = d1
-    }
+    d = d1
     if( d != old_d){
         if (old_d == 'LEFT') {
+            console.log(d)
             if (snakeX % 32 == 0) {
                 return
             }
+            
             if (d == 'DOWN') {
+                console.log('dedans')
                 var changeHead = {
-                    
                     x: snakeX - snakeX % 32,
                     y: snakeY
                     };
@@ -149,10 +145,13 @@ function direction(event) {
             }
         }
         else if (old_d == 'RIGHT') {
+            console.log(d)
             if (snakeX % 32 == 0) {
                 return
             }
+            
             if (d == 'DOWN') {
+                console.log('dedans')
                 var changeHead = {
                     x: snakeX - snakeX % 32 + 32,
                     y: snakeY
@@ -197,7 +196,6 @@ function direction(event) {
             }
         }
         if (changeHead != undefined) {
-            console.log(changeHead)
             draw(changeHead);
         }
     // if (current_d == null) {
@@ -506,7 +504,7 @@ async function checkingCoo() {
                 draw('pas de changement');
             }, 20)
             fin = 0
-        }, 1000);
+        }, 20);
     }
 }
 

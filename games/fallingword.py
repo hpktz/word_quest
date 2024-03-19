@@ -88,39 +88,39 @@ class fallingword():
 
     def newDuo(self):
         def get_similar_words(file_path, word, max_len):
-                """
-                Use the dichotomic search to find the word in the list of words
+            """
+            Use the dichotomic search to find the word in the list of words
+            
+            Args:
+                word (string): The word to search
                 
-                Args:
-                    word (string): The word to search
-                    
-                Returns:
-                    string: The list of similar words
-                """
-                # Set the list of words
-                min_len = 0
-                max_len = max_len
-                if file_path == "static/similar_words_levenshtein":
-                    if word < "micronization":
-                        file_path = file_path + "_1.txt"
-                    else:
-                        file_path = file_path + "_2.txt"
+            Returns:
+                string: The list of similar words
+            """
+            # Set the list of words
+            min_len = 0
+            max_len = max_len
+            if file_path == "static/similar_words_levenshtein":
+                if word < "micronization":
+                    file_path = file_path + "_1.txt"
                 else:
-                    if word < "grand-mamans":
-                        file_path = file_path + "_1.txt"
-                        max_len = 185053
-                    else:
-                        file_path = file_path + "_2.txt"
-                while min_len < max_len:
-                    mid = (min_len + max_len) // 2
-                    line = linecache.getline(file_path, mid).split(":")
-                    if str(line[0]) == word:
-                        return line[1]
-                    elif str(line[0]) < word:
-                        min_len = mid + 1
-                    else:
-                        max_len = mid
-                return None
+                    file_path = file_path + "_2.txt"
+            else:
+                if word < "grand-mamans":
+                    file_path = file_path + "_1.txt"
+                    max_len = 185053
+                else:
+                    file_path = file_path + "_2.txt"
+            while min_len < max_len:
+                mid = (min_len + max_len) // 2
+                line = linecache.getline(file_path, mid).split(":")
+                if str(line[0]) == word:
+                    return line[1]
+                elif str(line[0]) < word:
+                    min_len = mid + 1
+                else:
+                    max_len = mid
+            return None
         for i in range(30):
             boolean = random.randint(0,5)
             newindex = random.randint(0, len(self.words) - 2)
@@ -138,6 +138,12 @@ class fallingword():
                 words = 'static/similar_words_levenshtein'
                 max_len = 185052 if words == 'static/similar_words_levenshtein' else 168266
                 badduo = get_similar_words(words, word['word'], max_len)
+                if not badduo:
+                    # Change only one ot=r to letter in word
+                    letters = 'abcdefghijklmnopqrstuvwxyz'
+                    random_pos = random.randint(0, len(word['word']) - 1)
+                    badduo = word['word'][:random_pos] + letters[random.randint(0, len(letters) - 1)] + word['word'][random_pos + 1:]
+                    badduo_tab = [badduo]
                 self.shuffle.insert(newindex, word)
                 badduo_tab = badduo.split(',')
                 english_word = badduo_tab[random.randint(0,len(badduo_tab)-1)]
@@ -559,18 +565,21 @@ def test(session_id, boxId):
     session["game"] = game.to_json()
     return result
 
-@fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/<string:list>/checkAnswers')
+@fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/checkAnswers', methods=['POST'])
 @check_game
-def checking(session_id, list):
-    jsanswers = list.split(',')
+def checking(session_id):
+    data = request.get_json()
+    jsanswers = data['answers']
+    print(jsanswers)
     game = fallingword.from_json(session["game"])
     result = game.checking(jsanswers)
     session["game"] = game.to_json()
     return result
 
-@fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/<string:list>/checktime')
-def checkTime(session_id, list):
-    jsanswers = list.split(',')
+@fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/checktime', methods=['POST'])
+def checkTime(session_id):
+    data = request.get_json()
+    jsanswers = data['answers']
     print(jsanswers)
     game = fallingword.from_json(session["game"])
     result = game.checkingTime(jsanswers, session_id)

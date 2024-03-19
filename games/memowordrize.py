@@ -10,11 +10,10 @@ Imports:
     - uuid: For generating unique identifiers
     - json: For managing JSON data
     - functools: For managing the decorators
-    - Levenshtein: For calculating the Levenshtein distance
-    - GoogleImagesSearch: For searching images on Google
     - gTTS: For generating audio from text
     - BytesIO: For managing the audio bytes
     - logging: For logging errors
+    - time: For managing the time
     
 Blueprints:
     - memowordrize_bp: The blueprint of the memowordrize game
@@ -28,18 +27,25 @@ import datetime as datetime
 import uuid as uuid
 import json
 from functools import wraps
-import Levenshtein 
-from google_images_search import GoogleImagesSearch
 from gtts import gTTS
 from io import BytesIO
 import logging
-import linecache
-import io
 import time
 
 memowordrize_bp = Blueprint('memowordrize', __name__)
 """
 The blueprint of the memowordrize game
+
+Routes:
+    - /dashboard/games/memowordrize/<int:list_id>: The route to initialize the game
+    - /dashboard/games/memowordrize/<string:session_id>: The route to start the game and display the game interface
+    - /dashboard/games/memowordrize/<string:session_id>/see_path: The route to send the path of the game to the js interface
+    - /dashboard/games/memowordrize/<string:session_id>/audio/<string:id>: The route to generate the audio of a word
+    - /dashboard/games/memowordrize/<string:session_id>/try_case: The route to try a case in the game
+    - /dashboard/games/memowordrize/<string:session_id>/check_status: The route to check the status of the game
+    
+Attributes:
+    - memowordrize_id (int): The id of the quiz lesson
 """
 
 # The id of the quiz lesson
@@ -48,6 +54,30 @@ memowordrize_id = 6
 class memowordrize():
     """
     Represents a memowordrize game
+    
+    Attributes:
+        - id (string): The unique identifier of the game
+        - list_id (int): The id of the list
+        - lesson_id (int): The id of the lesson
+        - words (list): The words in the list
+        - words_to_check (list): The words to check
+        - time (string): The time when the game ends
+        - start (string): The time when the game started
+        - current_path (dict): The current path of the game
+        - xp (int): The experience points gained
+        - faults (int): The number of faults
+        - game_count (int): The number of games played
+    
+    Methods:
+        - see_path: Generate the current path
+        - next_path: Generate the next path
+        - check_case: Try a case
+        - get_remaning_time: Get the remaining time
+        - get_words_checked: Get the words that have been checked
+        - _lose_life: Lose a life
+        - _end_game: End the game and save the results
+        - to_json: Convert the object to a JSON string
+        - from_json: Convert the JSON string to an object
     
     """
     def __init__(self, list_id, lesson_id, words):
@@ -65,24 +95,29 @@ class memowordrize():
         
     def see_path(self):
         """
-        Generate the next path
+        Return the current path
         
         Returns:
             dict: The response of the request
                 - code (int): The status code of the request
-                    -> 200: The game is ready
-                    -> 500: An error has occured
+                    -> 200: The current path is accessible
+                    -> 403: The current path has been seen too many times
                 - message (string): The message of the request
                 - result (dict): The result of the request
                     - tries (int): The number of tries
                     - path (list): The path of the game
+                    - words (list): The shuffled words to place in the path
+                    
+            function: The next path function
+                -> If no path has been generated, generate the next path (For the beginning of the game)
         """
-        if self.current_path:
-            if self.current_path["tries"] < 3:
-                self.current_path["tries"] += 1
+        if self.current_path: # If the current path exists
+            if self.current_path["tries"] < 3: # If the current path has been seen less than 3 times
+                self.current_path["tries"] += 1 # Increment the number of tries
+                # Get the words to place in the path
                 words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
-                words = [item["word"]["word"] for item in words]
-                words = random.sample(words, len(words))
+                words = [item["word"]["word"] for item in words] # Get the unique words
+                words = random.sample(words, len(words)) # Shuffle the words
                 return jsonify({
                     "code": 200,
                     "message": "Voici le chemin!",
@@ -103,54 +138,83 @@ class memowordrize():
     def next_path(self):
         """
         Generate the next path
+        
+        Returns:
+            dict: The response of the request
+                - code (int): The status code of the request
+                    -> 200: The game is ready
+                    -> 500: An error has occured
+                - message (string): The message of the request
+                - result (dict): The result of the request
+                    - finished (bool): The game is finished
+                    - xp (int): The experience points gained
+                    - tries (int): The number of tries
+                    - path (list): The path of the game
+                    - words (list): The shuffled words to place in the path
         """
-        if self.game_count > 3:
-            return self._end_game()
-        starting_position = random.randint(1, 5)
-        positions = [starting_position]
-        self.game_count += 1
-        for i in range(1, 6):
-            next_positions = [positions[-1]]
-            next_positions.append(positions[-1] + 1 if positions[-1] < 5 else 5)
-            next_positions.append(positions[-1] - 1 if positions[-1] > 1 else 1)
-            positions.append(random.choice(next_positions))
-            
-        path = []
-        for index, position in enumerate(positions):
-            word_choice = random.choice(self.words_to_check)
-            dict_position = {
-                "id": str(uuid.uuid4()),
-                "line": index + 1,
-                "position": position + index * 5,
-                "word": word_choice,
-                "checked": False
+        try:
+            if self.game_count > 3: # If the player has played more than 3 games
+                return self._end_game()
+            # Select the position of the first case
+            starting_position = random.randint(1, 5)
+            positions = [starting_position]
+            self.game_count += 1
+            for i in range(1, 6):
+                # Add the next position
+                next_positions = [positions[-1]]
+                # 3 possibilities: go to the right, go to the left, stay at the same position
+                # If the position is at the edge, the player can only go to the opposite direction
+                next_positions.append(positions[-1] + 1 if positions[-1] < 5 else 5)
+                next_positions.append(positions[-1] - 1 if positions[-1] > 1 else 1)
+                positions.append(random.choice(next_positions)) # Add the next position
+                
+            path = [] # The path of the game
+            for index, position in enumerate(positions):
+                # Select a random word to place in the path
+                word_choice = random.choice(self.words_to_check)
+                dict_position = {
+                    "id": str(uuid.uuid4()),
+                    "line": index + 1,
+                    "position": position + index * 5,
+                    "word": word_choice,
+                    "checked": False
+                }
+                path.append(dict_position) # Add the word to the path
+                
+                ### We do not remove the word from the word_to_check list
+                ### Because if the player's list is to short, the game will be stuck
+                ### The difficulty is a bit lower, but it do not affect the game
+                
+            self.current_path = {
+                "tries": 0, # Set the number of tries to 0
+                "path": path
             }
-            path.append(dict_position)
-            for index, word_to_check in enumerate(self.words_to_check):
-                if word_to_check["word"] == word_choice:
-                    self.words_to_check.pop(index)
+            # Calculate the experience points
+            xp_won = 5 - self.faults * 0.3 if 5 - self.faults * 0.3 > 0 else 0
+            self.xp += round(xp_won, 2)
             
-        self.current_path = {
-            "tries": 0,
-            "path": path
-        }
-        xp_won = 5 - self.faults * 0.3 if 5 - self.faults * 0.3 > 0 else 0
-        self.xp += round(xp_won, 2)
-        
-        words = [{key: value for key, value in item.items() if key in ["word"]} for item in path]
-        words = [item["word"]["word"] for item in words]
-        words = random.sample(words, len(words))
-        
-        return jsonify({
-            "code": 200,
-            "message": "Le jeu est prêt!",
-            "result": {
-                "finished": True,
-                "xp": round(xp_won),
-                "tries": 0,
-                "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in path],
-                "words": words
-            }})
+            # Get the words to place in the path
+            words = [{key: value for key, value in item.items() if key in ["word"]} for item in path]
+            words = [item["word"]["word"] for item in words]
+            words = random.sample(words, len(words)) # Shuffle the words
+            
+            return jsonify({
+                "code": 200,
+                "message": "Le jeu est prêt!",
+                "result": {
+                    "finished": True, # Indicate if the last path is finished
+                    "xp": round(xp_won), # Xp won at the last game
+                    "tries": 0,
+                    "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in path],
+                    "words": words
+                }})
+        except Exception as e:
+            logging.error("An error has occured: " + str(e))
+            return jsonify({
+                "code": 500,
+                "message": "Une erreur s'est produite!",
+                "result": []
+            }), 500
         
     def check_case(self, position, word):
         """
@@ -170,34 +234,38 @@ class memowordrize():
                     - tries (int): The number of tries
                     - path (list): The path of the game
         """
-        if self.current_path:
+        if self.current_path: # If the current path exists
+            # Check if the position exists in the path and it is correct
             check_position = None
             for index, el in enumerate(self.current_path["path"]):
                 if el["position"] == int(position):
                     check_position = index
                     break
+            # If the position is correct
             if check_position is not None:
+                # Check if the word is correct
                 if self.current_path["path"][check_position]["word"]["word"].lower() == word.lower():
-                    self.current_path["path"][check_position]["checked"] = True
-                    if all([item["checked"] for item in self.current_path["path"]]):
-                        return self.next_path()
+                    self.current_path["path"][check_position]["checked"] = True # Set the case as checked
+                    if all([item["checked"] for item in self.current_path["path"]]): # If all the cases are checked
+                        return self.next_path() # Generate the next path
                     else:
                         return jsonify({
                             "code": 200,
                             "message": "Le mot est correct!",
                             "result": {
                                 "finished": False,
-                                "tries": self.current_path["tries"],
-                                "path": [{key: value for key, value in item.items() if key in ["id", "line", "position", "checked"]} for item in self.current_path["path"]]
+                                "tries": self.current_path["tries"]
                             }
                         })
                 else:
+                    # If the word is incorrect
                     self.faults += 1
+                    # Get the words to place in the path
                     words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
                     words = [item["word"]["word"] for item in words]
-                    words = random.sample(words, len(words))
+                    words = random.sample(words, len(words)) # Shuffle the words
                     for path in self.current_path["path"]:
-                        path["checked"] = False
+                        path["checked"] = False # Set all the cases as unchecked
                     return jsonify({
                         "code": 403,
                         "message": "Le mot est incorrect!",
@@ -207,12 +275,14 @@ class memowordrize():
                         }
                     })
             else:
+                # If the position is incorrect
                 self.faults += 1
+                # Get the words to place in the path
                 words = [{key: value for key, value in item.items() if key in ["word"]} for item in self.current_path["path"]]
                 words = [item["word"]["word"] for item in words]
-                words = random.sample(words, len(words))
+                words = random.sample(words, len(words)) # Shuffle the words
                 for path in self.current_path["path"]:
-                    path["checked"] = False
+                    path["checked"] = False # Set all the cases as unchecked
                 return jsonify({
                     "code": 403,
                     "message": "Le mot est incorrect!",
@@ -507,7 +577,7 @@ def start(session_id):
 @check_game
 def next_path(session_id):
     """
-    Generate the next path
+    See the current path of the game
     
     Args:
         session_id (string): The unique identifier of the game
@@ -515,12 +585,14 @@ def next_path(session_id):
     Returns:
         dict: The response of the request
             - code (int): The status code of the request
-                -> 200: The game is ready
+                -> 200: The current path is accessible
+                -> 403: The current path has been seen too many times
                 -> 500: An error has occured
             - message (string): The message of the request
             - result (dict): The result of the request
                 - tries (int): The number of tries
                 - path (list): The path of the game
+                - words (list): The shuffled words to place in the path
     """
     try:
         game = memowordrize.from_json(session["game"])
@@ -564,7 +636,7 @@ def audio(session_id, id):
             
             game.current_path["path"][current_game_index[0]]["id"] = str(uuid.uuid4())
             session["game"] = game.to_json()
-            time.sleep(1/1000) # To avoid session concurrency
+            time.sleep(1/100) # To avoid session concurrency
             # Return the audio
             return Response(audio_bytes, mimetype="audio/mp3")
         return jsonify({
@@ -601,13 +673,14 @@ def try_case(session_id):
     """
     try:
         game = memowordrize.from_json(session["game"])
-        print(game.lesson_id)
+        # Get the data from the request
         data = request.get_json()
         position = data["position"]
         word = data["word"]
+        # Try the case
         response = game.check_case(position, word)
         session["game"] = game.to_json()
-        time.sleep(1/1000) # To avoid session concurrency
+        time.sleep(1/100) # To avoid session concurrency
         return response
     except Exception as e:
         logging.error("An error has occured: " + str(e))

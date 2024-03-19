@@ -872,6 +872,7 @@ main {
 
 .dashboard-main-container .lists-container .list-box-empty .img {
     width: 75px;
+    margin: auto;
 }
 
 .dashboard-main-container .lists-container .list-box-empty .text {
@@ -880,14 +881,14 @@ main {
     margin-top: 15px;
 }
 
-.dashboard-main-container .lists-container .list-box-empty .separate {
+.dashboard-main-container .lists-container .create-list-box .separate {
     height: 40px;
     width: 1px;
     background-color: #333;
     margin: 25px auto;
 }
 
-.dashboard-main-container .lists-container .list-box-empty .create-button {
+.dashboard-main-container .lists-container .create-list-box .create-button {
     display: block;
     text-decoration: none;
     color: white;
@@ -899,9 +900,10 @@ main {
     width: 150px;
     margin: 0 auto;
     transition: all 0.2s ease-in-out;
+    text-align: center;
 }
 
-.dashboard-main-container .lists-container .list-box-empty .create-button:hover {
+.dashboard-main-container .lists-container .create-list-box .create-button:hover {
     background: #967b69;
 }
 

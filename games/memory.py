@@ -263,7 +263,7 @@ class memory():
                         "time": time_passed,
                         "lost_lives": lives_to_lose,
                         "xp": xp,
-                        'innerHTML': self.shuffle_cards[last_id],
+                        'innerHTML': self.shuffle_cards[last_id][0],
                         'checking': last_answer,
                         "score": len(self.cards)//2,
                         "total": len(self.words)
@@ -462,7 +462,7 @@ def test(session_id, boxId):
     game = memory.from_json(session["game"])
     result = game.printWord(boxId)
     session["game"] = game.to_json()
-    time.sleep(1/1000)
+    time.sleep(1/100)
     
     if result.status_code == 201:
         session.pop("game", None)

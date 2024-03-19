@@ -427,16 +427,14 @@ function close_lives(el, e) {
  */
 async function lives_counter() {
     const counter = document.getElementById('lives-counter');
-    console.log(counter.dataset.lives);
     const lives = counter.dataset.lives;
-    const start_date = new Date(counter.dataset.time);
-    const end_date = new Date(start_date.getTime() + 15 * 60 * 1000);
+    const start_date = counter.dataset.time;
+    const end_date = counter.dataset.end_time;
 
-
-    // if the user has all his lives, the lives counter is updated and the function is stopped    
+    // if the user has all his lives, the lives counter is updated and the function is stopped  
     if (parseInt(lives) == 5) {
         counter.innerHTML = "Vous avez toutes vos vies";
-        counter.dataset.time = new Date();
+        counter.dataset.time = counter.dataset.time;
         document.getElementById('life-purchase-button').style.display = "none";
         return;
     }
@@ -448,27 +446,24 @@ async function lives_counter() {
             return clearInterval(interval);
         }
 
-        if (window.location.hostname == "word-quest.com" || window.location.hostname == "www.word-quest.com") {
-            var now = new Date().toUTCString();
-        } else {
-            var now = new Date();
-        }
+        var now = counter.dataset.time;
         var diff = end_date - now;
 
         // if the time is up, the lives counter is updated and the function is stopped
         if (diff < 0) {
             counter.dataset.lives = parseInt(lives) + 1;
             document.getElementById('lives-info').innerHTML = parseInt(lives) + 1;
-            counter.dataset.time = new Date();
+            counter.dataset.end_time = parseInt(counter.dataset.end_time) + 900;
             const heartContainer = document.getElementsByClassName('heart-container')[0];
             heartContainer.getElementsByClassName('img')[lives].src = "/static/imgs/3d-red-heart.png";
             lives_counter();
             return clearInterval(interval);
         }
-        var minutes = Math.floor(diff / 60000);
-        var seconds = ((diff % 60000) / 1000).toFixed(0);
+        var minutes = Math.floor(diff / 60);
+        var seconds = ((diff % 60)).toFixed(0);
 
         counter.innerHTML = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+        counter.dataset.time = parseInt(counter.dataset.time) + 1;
         if (document.getElementById('gems-info').dataset.value < 200) {
             document.getElementById('life-purchase-button').classList.add('disabled');
         }
@@ -513,6 +508,7 @@ async function purchase_lives(el, event) {
             const time = counter.dataset.time;
             counter.dataset.lives = parseInt(lives) + 1;
             counter.dataset.time = time;
+            counter.dataset.end_time = parseInt(time) + 900;
 
             const heartContainer = document.getElementsByClassName('heart-container')[0];
             heartContainer.getElementsByClassName('img')[lives].src = "/static/imgs/3d-red-heart.png";

@@ -253,6 +253,7 @@ def user_profile(id):
                            subscriptions = subscriptions, 
                            subscribers = subscribers, 
                            is_current_user = is_current_user,
+                           is_public = is_public,
                            user_infos = user_infos)
     
     

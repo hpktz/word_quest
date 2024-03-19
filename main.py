@@ -145,7 +145,7 @@ permissions_policy = {
     'camera': '\'none\'',
     'microphone': '\'self\'', # Necessary for the use of the microphone in one of the games
     'fullscreen': '\'self\'',
-    'payment': '\'none\'',
+    'payment': '\'none\''
 }
 # Add the headers to Talisman
 talisman.force_https = True # Force the use of HTTPS

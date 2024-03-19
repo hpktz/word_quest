@@ -93,10 +93,6 @@
         <div class="list-box-empty" style="display: block;">
             <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">
             <p class="text">Aucune liste trouvée</p>
-            <div class="separate"></div>
-            <a href="/dashboard/create" class="redirect create-button">
-                Créer une liste
-            </a>
         </div>
         {% else %}
         <div class="list-box-empty" style="display: none;">
@@ -104,6 +100,12 @@
             <p class="text">Aucune liste trouvée</p>
         </div>
         {% endif %}
+        <div class="create-list-box">
+            <div class="separate"></div>
+            <a href="/dashboard/create" class="redirect create-button">
+                Créer une liste
+            </a>
+        </div>
     </section>
     <section class="games-trail entry-animation" id="game-trail" data-color="1">
         <div class="no-list-selected">
@@ -157,7 +159,7 @@
                     {% else %}
                     <img src="/static/imgs/3d-white-heart.png" class="img lives-zone" alt="medal-icon"> {% endif %} {% endfor %}
             </div>
-            <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}">Vous avez tout vos coeur</div>
+            <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}" data-end_time="{{lives_end}}">Vous avez tout vos coeur</div>
             <input type="hidden" name="csrf_token" id="csrf_token_purchase" value="{{ csrf_token() }}">
             <a href="" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
         </div>

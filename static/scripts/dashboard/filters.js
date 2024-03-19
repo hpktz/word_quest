@@ -32,7 +32,7 @@ function change_time() {
 
         // if the list box's creation date is between the start and end dates, it is displayed
         if (Number(list_creation) >= startDate && Number(list_creation) <= endDate) {
-            document.getElementsByClassName('list-box')[i].style.display = 'block';
+            document.getElementsByClassName('list-box')[i].style.display = 'grid';
             isThere = true;
         } else {
             document.getElementsByClassName('list-box')[i].style.display = 'none';
@@ -40,7 +40,7 @@ function change_time() {
 
         // if there is no list box to display, the "no list box" message is displayed
         if (isThere == false) {
-            document.getElementsByClassName('list-box-empty')[0].style.display = 'block';
+            document.getElementsByClassName('list-box-empty')[0].style.display = 'grid';
         } else {
             document.getElementsByClassName('list-box-empty')[0].style.display = 'none';
         }

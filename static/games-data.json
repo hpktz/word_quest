@@ -14,7 +14,7 @@
         "short_desc": "Essayer de deviner le mot cach&eacute; pour gagner",
         "img": "/static/icons/games-icons/hangman-30-dark-grey.png",
         "url": "/dashboard/games/hangman",
-        "difficulty": 3
+        "difficulty": 2
     },
     {
         "id": 4,
@@ -27,7 +27,7 @@
     },
     {
         "id": 5,
-        "name": "Jeux d&apos;assimilation",
+        "name": "FallingWord",
         "desc": "Le jeu d&apos;assimilation est un jeu dans lequel le joueur doit cliquer sur les bonnes paires le plus rapidement possible alors que ces derni&egrave;re tombent.",
         "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
         "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
@@ -41,7 +41,7 @@
         "short_desc": "M&eacute;moriser le chemin et les mots prononc&eacute;s, puis le refaire.",
         "img": "/static/icons/games-icons/memowordrize-30-dark-grey.png",
         "url": "/dashboard/games/memowordrize",
-        "difficulty": 3
+        "difficulty": 1
     },
     {
         "id": 7,

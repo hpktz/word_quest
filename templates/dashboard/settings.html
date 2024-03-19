@@ -66,9 +66,9 @@
         </div>
         <div class="danger-zone-section entry-animation">
             <div class="title">Danger Zone</div>
-            <div class="box">
+            <div class="box" id="profile-zone">
                 <div class="title">Changer la visibilité </div>
-                <div class="description">Cette action permet aux autres utilisateurs de voir votre profil ou non</div>
+                <div class="description">Activez cette option pour rendre votre profil visible pour tous</div>
                 <div class="toggle-container">
                     <input type="checkbox" name="visibility" id="visibility" class="visibility-checkbox" {% if current_user.public %}checked{%endif%}>
                     <label for="visibility" class="toggle">

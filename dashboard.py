@@ -100,6 +100,7 @@ def index():
         gems = user_statement[0]
         lives = user_statement[1]
         lives_time = user_statement[2]
+        life_time = None
         xp = user_statement[3]
         
         # Checking if the user is eligible for potential news lives
@@ -131,6 +132,11 @@ def index():
     
     hearts_message = True if request.args.get('hearts_message') else False
     
+    lives_time = datetime.now()
+    if not life_time:
+        life_time = datetime.now()     
+        
+    print(lives_time.timestamp(), life_time.timestamp())
     return render_template(
         'dashboard/dashboard.html', 
         daytime_tip=tip, 
@@ -139,7 +145,8 @@ def index():
         end_date=end_date,
         gems=gems, 
         lives=lives, 
-        lives_time=lives_time, 
+        lives_time=lives_time.timestamp(), 
+        lives_end=life_time.timestamp(),
         xp=xp,
         new_list_id=new_list_id, 
         hearts_message=hearts_message

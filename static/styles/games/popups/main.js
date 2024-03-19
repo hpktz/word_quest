@@ -40,6 +40,7 @@ function end_game(xp, time, life) {
     const end_pop_up = document.querySelector('.end-pop-up');
     end_pop_up.classList.add('active');
     const leaveButton = document.getElementById('leave-button');
+    const nextButton = document.getElementById('final-path-button');
     const body = document.querySelector('body');
     for (let i = 0; i < body.children.length; i++) {
         if (body.children[i].className != "end-pop-up pop-up active") {
@@ -49,7 +50,11 @@ function end_game(xp, time, life) {
 
     clearInterval(timer);
     if (life > 0) {
-        leaveButton.dataset.url = leaveButton.dataset.url + "False&xp=" + xp + "&lives=" + life;
+        try {
+            leaveButton.dataset.url = leaveButton.dataset.url + "False&xp=" + xp + "&lives=" + life;
+        } catch (error) {
+            nextButton.dataset.url = nextButton.dataset.url + "False&xp=" + xp + "&lives=" + life;
+        }
         possiblesMessages = [
             "Vous pouvez faire mieux !",
             "Retentez votre chance pour améliorer votre score !",
@@ -59,7 +64,11 @@ function end_game(xp, time, life) {
         ];
         failureAudio.play();
     } else {
-        leaveButton.dataset.url = leaveButton.dataset.url + "True&xp=" + xp + "&lives=" + life;
+        try {
+            leaveButton.dataset.url = leaveButton.dataset.url + "True&xp=" + xp + "&lives=" + life;
+        } catch (error) {
+            nextButton.dataset.url = nextButton.dataset.url + "True&xp=" + xp + "&lives=" + life;
+        }
         possiblesMessages = [
             "Félicitations ! Vous avez gagné !",
             "Bravo ! Vous avez réussi !",

@@ -28,6 +28,7 @@ class hangman():
     def new_word(self, xp=0):
         if len(self.words_to_check) > 0:
             self.xpTotal += xp
+            print(self.xpTotal)
             word_choosen = random.choice(self.words_to_check)
             is_example = word_choosen["examples"] 
             if self.current_word:
@@ -36,11 +37,14 @@ class hangman():
                 is_last_word_correct = False
             bad_letters = self.current_word["bad_letter"] if self.current_word else []
             word = self.current_word["word"]["word"] if self.current_word else ""
+            spaces_positions = [i for i, l in enumerate(word_choosen["word"]) if l == " "]
+            word_choosen["word"] = ''.join([i for i in word_choosen["word"] if i != " "])
             self.current_word = {
                 "word": word_choosen,
                 "nb_hints": 0,
                 "max_hint": 3 if is_example else 2,
                 "remaining_letters": len(word_choosen["word"]),
+                "spaces_positions": spaces_positions,
                 "good_letter": [],
                 "bad_letter": [],
                 "max_xp": 5
@@ -54,12 +58,13 @@ class hangman():
                     "total_xp": self.xpTotal,
                     "xp_won": xp,
                     "len_word": len(word_choosen["word"]),
+                    "spaces_positions": spaces_positions,
                     "correct": is_last_word_correct,
                     "finished": False if len(self.words_to_check) == len(self.words) else True
                 }
             })
         else:
-            return self._end_game()
+            return self._end_game(xp)
 
     def checking_letter(self, letter):
         all_letters = self.current_word["good_letter"] + self.current_word["bad_letter"]
@@ -113,7 +118,7 @@ class hangman():
                 if word_to_check["word"] == self.current_word["word"]["word"]:
                     self.words_to_check.pop(index)
                     if len(self.words_to_check) == 0:
-                        return self._end_game()
+                        return self._end_game(self.current_word["max_xp"])
                     else:       
                         return self.new_word(self.current_word["max_xp"])
                     
@@ -238,7 +243,7 @@ class hangman():
             if conn:
                 conn.close()
                 
-    def _end_game(self):
+    def _end_game(self, xp=0):
         """
         End the game and save the results
         
@@ -265,7 +270,7 @@ class hangman():
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
-            xp = self.xpTotal
+            xp = self.xpTotal + xp
             
             lives_to_lose = 1 if (xp/(len(self.words)*5)) < 0.75 else 0
             lives_lost = lives_to_lose
@@ -293,7 +298,7 @@ class hangman():
                 "result": {
                     "time": time_passed,
                     "xp": xp,
-                    "lost_lives": lives_to_lose
+                    "lost_lives": lives_lost
                 }
             })
             response = make_response(response, 201)
@@ -455,6 +460,7 @@ def start(session_id):
                                    bad_letters=game.current_word["bad_letter"],
                                    good_letters=game.current_word["good_letter"],
                                    word=game.current_word["word"]["word"],
+                                   space_positions=game.current_word["spaces_positions"],
                                    score=game.xpTotal,
                                    reloaded=reloaded)
         return redirect(url_for('hangman.index', list_id=game.list_id))

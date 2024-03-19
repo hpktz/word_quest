@@ -91,7 +91,7 @@ def quests():
             day_result = next((res for res in result if res[0] == day), None)
             if day_result:
                 progress += day_result[1] + day_result[2] + day_result[3]
-                target_achieved = day_result[2] >= targets["xp"] and day_result[3] >= targets["time"]//60 and day_result[1] >= targets["games"]
+                target_achieved = day_result[2] >= targets["xp"] and day_result[3]//60 >= targets["time"] and day_result[1] >= targets["games"]
             else:
                 target_achieved = False
             results.append({
@@ -117,7 +117,7 @@ def quests():
         
         # Set the progress for the progress bar
         if progress != 0 and targets["games"] != 0 and targets["xp"] != 0 and targets["time"] != 0:
-            progress = round(progress/(targets["games"]*7 + targets["xp"]*7 + targets["time"]*7), 0)
+            progress = round(progress/(targets["games"]*7 + targets["xp"]*7 + targets["time"]*7)*100, 0)
                 
         results.reverse()
         

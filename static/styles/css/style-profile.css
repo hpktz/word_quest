@@ -119,7 +119,7 @@
 
 .profile-main-container .profile-header {
     display: grid;
-    grid-template-columns: 175px 1fr;
+    grid-template-columns: minmax(0, 175px) minmax(0, 1fr);
     gap: 25px;
     align-items: center;
 }
@@ -142,6 +142,9 @@
 .profile-main-container .profile-header .profile-main-infos .name {
     font-family: "Bangers", cursive;
     font-size: 35px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .profile-main-container .profile-header .profile-main-infos .info-box {
@@ -642,6 +645,7 @@
     .profile-main-container {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr auto;
+        grid-column: 1 / span 2;
     }
     .profile-main-container .friends-list {
         grid-column: 1;

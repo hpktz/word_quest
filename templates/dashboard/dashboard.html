@@ -164,6 +164,15 @@
             <a href="" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
         </div>
     </div>
+    {% if gifts %}
+    <div class="gift-pop-up-background active" id="gift-pop-up-background"></div>
+    <div class="gift-pop-up active" id="gift-pop-up">
+        <img src="/static/icons/gemstone-animation.gif" class="img" alt="gift-icon">
+        <div class="text">Vous avez reçu un cadeau !</div>
+        <div class="gift-box">200 Gemmes</div>
+        <div class="button" id="close-gift-pop-up-button">Fermer</div>
+    </div>
+    {% endif %}
     <script src="/static/scripts/dashboard/search.js"></script>
     <script src="/static/scripts/dashboard/filters.js"></script>
     <script src="/static/styles/js/dashboard.js"></script>

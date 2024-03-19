@@ -287,6 +287,9 @@ function nextWord(data) {
 
             wordEl.innerHTML = "";
             for (let i = 0; i < data.result.len_word; i++) {
+                if (data.result.spaces_positions.includes(i)) {
+                    wordEl.innerHTML += '<span class="space"></span>';
+                }
                 wordEl.innerHTML += '<span class="letter"></span>';
             }
         } catch (error) {

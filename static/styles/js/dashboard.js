@@ -776,3 +776,17 @@ window.onload = async function() {
         livesInfo.innerHTML = livesInfo.dataset.value;
     }
 }
+
+
+const closeGiftPupUpButton = document.getElementById('close-gift-pop-up-button');
+if (closeGiftPupUpButton) {
+    closeGiftPupUpButton.addEventListener('click', function(event) {
+        close_gift_pop_up(this, event);
+    });
+}
+
+function close_gift_pop_up(el, event) {
+    event.preventDefault();
+    document.getElementById('gift-pop-up-background').classList.remove('active');
+    document.getElementById('gift-pop-up').classList.remove('active');
+}

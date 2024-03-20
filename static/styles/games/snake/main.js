@@ -25,7 +25,11 @@ var wordStyle = []
 var nbrOfRock = 0
 const totalLetterArea = document.getElementById('word');
 
-const image = document.getElementById('source')
+const image = document.getElementById('source');
+const headUp = document.getElementById('up');
+const headDown = document.getElementById('down');
+const headLeft = document.getElementById('left');
+const headRight = document.getElementById('right');
 
 nbrLettreTrouve = 0;
 
@@ -286,13 +290,14 @@ function draw(changeDirection) {
         });
         for (let i = 0; i < snake.length; i++) {
             if (i == 0) {
-                context.fillStyle = "#BCBD8B";
-                context.beginPath();
-                context.lineWidth = "2";
-                context.arc(snake[i].x + 16, snake[i].y + 16, 17, 0, 2 * Math.PI)
-                context.fill();
+                // context.fillStyle = "#BCBD8B";
+                // context.beginPath();
+                // context.lineWidth = "2";
+                // context.arc(snake[i].x + 16, snake[i].y + 16, 17, 0, 2 * Math.PI)
+                // context.fill();
+                i = i
             } else {
-                context.fillStyle = "#373D20"
+                context.fillStyle = "#ADAE82"
                 context.fillRect(snake[i].x, snake[i].y, box, box);
             }
             var e = 16 * (nbrLettreTrouve + 1)
@@ -300,11 +305,26 @@ function draw(changeDirection) {
                 snake.push(1)
             }
 
-            context.fillStyle = "#BCBD8B";
-            context.beginPath();
-            context.lineWidth = "2";
-            context.arc(snake[0].x + 16, snake[0].y + 16, 17, 0, 2 * Math.PI)
-            context.fill();
+            // context.fillStyle = "#BCBD8B";
+            // context.beginPath();
+            // context.lineWidth = "2";
+            // context.arc(snake[0].x + 16, snake[0].y + 16, 17, 0, 2 * Math.PI)
+            // context.fill();
+            // if (d == 'RIGHT') {
+            //     context.drawImage(headRight, snake[0].x - 7, snake[0].y - 7, 46, 46)
+            // }
+            // if (d == 'LEFT') {
+            //     context.drawImage(headLEFT, snake[0].x - 7, snake[0].y - 7, 46, 46)
+            // }
+            // if (d == 'RIGHT') {
+            //     context.drawImage(headLEFT, snake[0].x - 7, snake[0].y - 7, 46, 46)
+            // }
+            // if (d == 'RIGHT') {
+            //     context.drawImage(headRight, snake[0].x - 7, snake[0].y - 7, 46, 46)
+            // }
+            if (d == undefined) {
+                context.drawImage(headRight, snake[0].x, snake[0].y - 10, 36, 50)
+            }
         }
         var letterFind = false
         var l = false
@@ -324,10 +344,22 @@ function draw(changeDirection) {
                 }
             }
         }
-        if (d == "LEFT") snakeX -= Math.floor(box / 16)
-        if (d == "RIGHT") snakeX += Math.floor(box / 16);
-        if (d == "UP") snakeY -= Math.floor(box / 16);
-        if (d == "DOWN") snakeY += Math.floor(box / 16);
+        if (d == "LEFT"){
+            snakeX -= Math.floor(box / 16)
+            context.drawImage(headLeft, snake[0].x - 10, snake[0].y - 10, 36, 51)
+        }
+        if (d == "RIGHT") {
+            snakeX += Math.floor(box / 16)
+            context.drawImage(headRight, snake[0].x, snake[0].y - 9, 38, 51)
+        };
+        if (d == "UP"){
+            snakeY -= Math.floor(box / 16);
+            context.drawImage(headUp, snake[0].x - 9, snake[0].y - 10, 51, 36)
+        }
+        if (d == "DOWN") {
+            snakeY += Math.floor(box / 16)
+            context.drawImage(headDown, snake[0].x - 10, snake[0].y + 1, 51, 36)
+        };
         if (!letterFind) {
             snake.pop()
         }
@@ -410,7 +442,7 @@ function collision(head, array) {
             return true;
         }
     }
-    return false;+ 32
+    return false;
 }
 
 

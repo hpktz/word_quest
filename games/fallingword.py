@@ -15,6 +15,7 @@ Imports:
     - gTTS: For generating audio from text
     - BytesIO: For managing the audio bytes
     - logging: For logging errors
+    - time: For managing the time
     
 Blueprints:
     - quiz_bp: The blueprint of the quiz game
@@ -30,6 +31,7 @@ import json
 from functools import wraps
 import linecache
 import logging
+import time
 
 
 fallingword_bp = Blueprint('fallingword', __name__)
@@ -555,6 +557,7 @@ def getDuo(session_id):
     game = fallingword.from_json(session["game"])
     result = game.newDuo()
     session["game"] = game.to_json()
+    time.sleep(1/100)
     return result
 
 @fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/check_word/<int:boxId>')
@@ -563,6 +566,7 @@ def test(session_id, boxId):
     game = fallingword.from_json(session["game"])
     result = game.printWord(boxId)
     session["game"] = game.to_json()
+    time.sleep(1/100)
     return result
 
 @fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/checkAnswers', methods=['POST'])
@@ -570,10 +574,10 @@ def test(session_id, boxId):
 def checking(session_id):
     data = request.get_json()
     jsanswers = data['answers']
-    print(jsanswers)
     game = fallingword.from_json(session["game"])
     result = game.checking(jsanswers)
     session["game"] = game.to_json()
+    time.sleep(1/100)
     return result
 
 @fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/checktime', methods=['POST'])
@@ -584,5 +588,6 @@ def checkTime(session_id):
     game = fallingword.from_json(session["game"])
     result = game.checkingTime(jsanswers, session_id)
     session["game"] = game.to_json()
+    time.sleep(1/100)
     return result
 

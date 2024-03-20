@@ -946,21 +946,21 @@ main {
 }
 
 .dashboard-main-container .games-trail[data-color='0'] .level.waiting {
-    --levels-color: #bcbd8b;
-    --levels-shadow: #5F603D;
-    filter: grayscale(60%);
+    --levels-color: #d8d99f;
+    --levels-shadow: #75764c;
+    border: 3px solid #bcbd8b;
 }
 
 .dashboard-main-container .games-trail[data-color='1'] .level.waiting {
-    --levels-color: #717744;
-    --levels-shadow: #212511;
-    filter: grayscale(60%);
+    --levels-color: #878f51;
+    --levels-shadow: #444c23;
+    border: 3px solid #5F603D;
 }
 
 .dashboard-main-container .games-trail[data-color='2'] .level.waiting {
-    --levels-color: #766153;
-    --levels-shadow: #342821;
-    filter: grayscale(60%);
+    --levels-color: #a5826a;
+    --levels-shadow: #5e4a3d;
+    border: 3px solid #766153;
 }
 
 .dashboard-main-container .games-trail[data-color='0'] .level.blocked,
@@ -1414,6 +1414,7 @@ main {
 .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .title {
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
+    line-height: 18px;
     font-weight: 600;
     margin-bottom: 10px;
     text-align: center;
@@ -1422,6 +1423,7 @@ main {
 .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .text {
     font-family: 'League Spartan', sans-serif;
     font-size: 16px;
+    line-height: 16px;
     font-weight: 400;
     text-align: center;
 }
@@ -1433,6 +1435,7 @@ main {
     font-family: 'League Spartan', sans-serif;
     text-align: center;
     font-size: 16px;
+    line-height: 16px;
     padding: 10px;
     font-weight: bold;
     transition: all 0.2s ease-in-out;

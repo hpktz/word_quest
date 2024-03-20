@@ -55,3 +55,17 @@ for (let i = 0; i < a.length; i++) {
         }, 500);
     });
 }
+
+
+/**
+ * Reload the page when the back button is pressed.
+ * 
+ * @event pageshow
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});

@@ -33,6 +33,12 @@ function updateWord() {
     totalLetterArea.innerHTML = '';
     wordStyle.forEach((element, index) => {
         if (element != 'rock') {
+            for (let i = 0; i < space_pos.length; i++) {
+                if (index == space_pos[i]) {
+                    totalLetterArea.innerHTML += `<span class="space"></span>`
+                }
+                
+            }
             if (index < nbrLettreTrouve) {
                 totalLetterArea.innerHTML += `<span class="letter">${element}</span>`
             } else {
@@ -44,12 +50,14 @@ function updateWord() {
 var isEventListener = false
 var letterPositions = [{ x: 0, y: 0 }];
 var co2python = []
+var space_pos = []
     // alreadyPos = false
 async function getPosition() {
     console.log("cool")
     wordStyle = []
     r = await fetch(`/dashboard/games/snake/${session_id}/getWord`)
     response = await r.json();
+    space_pos = response.result.space_positions
     letterPositions = response.result.coo
     frWord.innerHTML = response.result.frensh
     for (let i = 0; i < letterPositions.length; i++) {
@@ -352,6 +360,8 @@ function draw(changeDirection) {
     // }, 50);
 }
 async function checkingCoo() {
+    console.log('checking')
+    console.log(co2python)
     r = await fetch(`/dashboard/games/snake/${session_id}/check_coo`, {
         method: 'POST',
         headers: {

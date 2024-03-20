@@ -29,6 +29,9 @@ canvas{
 .content{
     position: relative;
 }
+.snakeHead{
+    display: none;
+}
 
 .word{
     display: flex;

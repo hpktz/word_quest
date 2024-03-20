@@ -42,7 +42,7 @@ async function see_path_call() {
             infoButton.classList.remove('wrong');
         }
     } catch (error) {
-        console.error('Error:', error);
+        window.location.href = '/dashboard/errors/500';
     }
 }
 
@@ -65,7 +65,8 @@ async function see_path(data) {
         const triesAmount = document.getElementById('tries-amount');
         // Unset all the cases
         for (var i = 0; i < items.length; i++) {
-            items[i].classList.add('disabled');
+            items[i].setAttribute('class', 'item disabled');
+            items[i].innerHTML = "";
         }
         var charArray = data.result.path;
         for (var i = 0; i < charArray.length; i++) {
@@ -138,9 +139,23 @@ async function see_path(data) {
  */
 async function play_audio(audio) {
     // Send a promise to wait for the audio to end
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+        let audioEnded = false;
         audio.play(); // Play the audio
-        audio.addEventListener('ended', resolve); // When the audio ends, resolve the promise
+        audio.addEventListener('ended', () => {
+            audioEnded = true;
+            resolve();
+        }); // When the audio ends, resolve the promise
+
+        // Otherwise, if the audio doesn't end, go to the next audio
+        // It is a security to avoid the audio to be stuck
+        setTimeout(() => {
+            if (!audioEnded) {
+                audio.pause();
+                audio.currentTime = 0;
+                resolve();
+            }
+        }, 5000);
     });
 }
 
@@ -254,7 +269,7 @@ async function try_case(draggableEl, max) {
             see_path(data); // Display the next path
         }
     } catch (error) {
-        console.error('Error:', error);
+        window.location.href = '/dashboard/errors/500';
     }
 }
 
@@ -286,8 +301,7 @@ var timer = setInterval(async() => {
                 end_game(data.result.xp, data.result.time, data.result.lost_lives);
             }
         } catch (error) {
-            //         window.location.href = '/dashboard/errors/500';
-            console.log(error)
+            window.location.href = '/dashboard/errors/500';
         }
     }
 }, 1000);
@@ -386,7 +400,6 @@ function endgraggWord() {
             // Put the word in the case
             itemCenterX = max.getBoundingClientRect().left + max.getBoundingClientRect().width / 2;
             itemCenterY = max.getBoundingClientRect().top + max.getBoundingClientRect().height / 2;
-            console.log(itemCenterX, itemCenterY);
             draggableEl.style.position = 'absolute';
             draggableEl.style.transform = 'translate(-50%, -50%) scale(0.9)';
             draggableEl.style.left = `${itemCenterX}px`;

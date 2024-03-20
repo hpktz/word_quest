@@ -82,7 +82,6 @@ window.addEventListener("touchstart", function(evt) {
 }, false);
 window.addEventListener("touchmove", function(evt) {
     // Limite les effets de bord avec le tactile...
-    evt.preventDefault();
     evt.stopPropagation();
 }, false);
 window.addEventListener("touchend", function mobiletouch(evt) {
@@ -92,12 +91,12 @@ window.addEventListener("touchend", function mobiletouch(evt) {
     var current_d = {}
     if (Math.abs(betweenX) > 15 || Math.abs(betweenY) > 15) {
         if (Math.abs(betweenX) >= Math.abs(betweenY) + 10) {
-            if (betweenX > 0 && d != 'LEFT') current_dd = {keyCode: 39}
+            if (betweenX > 0 && d != 'LEFT') current_d = {keyCode: 39}
             else{
                 current_d = {keyCode: 37}
             }
         } else {
-            if (betweenY > 0 && d != 'UP') d = current_d = {keyCode: 40}
+            if (betweenY > 0 && d != 'UP') current_d = {keyCode: 40}
             else {
                 current_d = {keyCode: 38}
             }
@@ -112,8 +111,6 @@ document.addEventListener('keydown', (e) => {
 async function direction(event) {
     var old_d = d
     var key = event.keyCode;
-    console.log('debut')
-    console.log(d)
     if (key == 37 && d != "RIGHT") {
         var d1 = "LEFT";;
     }
@@ -136,6 +133,7 @@ async function direction(event) {
     }
     if( d != old_d){
         if (old_d == 'LEFT') {
+            console.log(d)
             if (snakeX % 32 == 0) {
                 return
             } else if (d != 'RIGHT') {
@@ -154,10 +152,10 @@ async function direction(event) {
                         y: snakeY
                         };
                 }
-                
             }
         }
         else if (old_d == 'RIGHT') {
+            console.log(d)
             if (snakeX % 32 == 0) {
                 return
             } else if (d != 'LEFT') {
@@ -176,7 +174,6 @@ async function direction(event) {
                         y: snakeY
                         };
                 }
-                
             }
         }
         else if (old_d == 'UP') {
@@ -223,7 +220,6 @@ async function direction(event) {
             }
         }
         if (changeHead != undefined) {
-            console.log(changeHead)
             draw(changeHead);
         }
     }
@@ -394,7 +390,7 @@ async function checkingCoo() {
                 draw('pas de changement');
             }, 14)
             fin = 0
-        }, 1000);
+        }, 20);
     }
 }
 

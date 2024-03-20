@@ -55,7 +55,8 @@ async function check_word(form, event) {
             }, 250);
         }
     } catch (error) {
-        window.location.href = '/dashboard/errors/500';
+        console.log(error);
+        // window.location.href = '/dashboard/errors/500';
     }
 }
 

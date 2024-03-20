@@ -33,6 +33,23 @@
                 <img src="/static/icons/calendar-30-dark-grey.png" class="img">
                 <div class="text">Membre depuis le {{date}}</div>
             </div>
+            {% if is_current_user %} {% if is_public %}
+            <div class="visibility-box">
+                <img src="/static/icons/hide-password.png" class="img">
+                <div class="text">Profil public</div>
+                <a href="/dashboard/settings#profile-zone" class="change-visibility">
+                    <img src="/static/icons/modify.png" class="img" alt="logo">
+                </a>
+            </div>
+            {% else %}
+            <div class="visibility-box">
+                <img src="/static/icons/hide-password.png" class="img">
+                <div class="text">Profil privé</div>
+                <a href="/dashboard/settings#profile-zone" class="change-visibility">
+                    <img src="/static/icons/modify.png" class="img" alt="logo">
+                </a>
+            </div>
+            {% endif %} {% endif %}
             <div class="subscription-container">
                 {% if are_you_subscribed and not is_current_user %}
                 <div class="subscription">
@@ -158,18 +175,18 @@
         </a>
         {% endif %}
     </section>
-    <div class="pop-up" id="list-pop-up">
-        <div class="header">
-            <div class="title" id="list-title-pop-up">Partager la liste</div>
-            <div class="close-logo clickable-logo">
-                <a href="" id="close-list-pop-up-button">
-                    <img src="/static/icons/close.png" alt="logo">
-                </a>
-            </div>
-        </div>
-        <div id="list-content-pop-up"></div>
-    </div>
-    <script src="/static/scripts/profile/list-profile-main.js"></script>
-    <script src="/static/scripts/profile/main.js"></script>
 </main>
+<div class="pop-up" id="list-pop-up">
+    <div class="header">
+        <div class="title" id="list-title-pop-up">Partager la liste</div>
+        <div class="close-logo clickable-logo">
+            <a href="" id="close-list-pop-up-button">
+                <img src="/static/icons/close.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <div id="list-content-pop-up"></div>
+</div>
+<script src="/static/scripts/profile/list-profile-main.js"></script>
+<script src="/static/scripts/profile/main.js"></script>
 {% endblock %}

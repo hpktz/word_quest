@@ -102,6 +102,10 @@ a {
     display: flex;
 }
 
+.space {
+    width: 20px;
+}
+
 .letter {
     border-bottom: 3px solid black;
     display: inline-flex;

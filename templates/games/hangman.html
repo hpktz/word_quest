@@ -78,11 +78,10 @@
             </svg>
 
             <div class="word" id="word">
-                {% for i in range(len_word) %} {% if word[i] in good_letters %}
-                <div class="letter">{{word[i]}}</div>
-                {% else %}
-                <div class="letter"></div>
-                {% endif %} {% endfor %}
+                {% for i in range(len_word) %} {% if i in space_positions %}
+                <span class="space"></span> {% endif %} {% if word[i] in good_letters %}
+                <span class="letter">{{word[i]}}</span> {% else %}
+                <span class="letter"></span> {% endif %} {% endfor %}
             </div>
 
         </section>
@@ -132,13 +131,11 @@
                     <p class="data" id="time">{{time}}</p>
                 </div>
             </div>
-
         </section>
-        {% set popUpImage = '/static/icons/games-icons/hangman-30-dark-grey.png' %} {% set popUpTitle = "Le Pendu" %} {% set popUpDesc = "Vous avez 6 chances pour trouver le mot caché. Trouvez le plus de mots en un minimum de temps"%} {%set popUpGame = "hangman"%}
-        {% include "games/popups.html" %}
     </div>
+    {% set popUpImage = '/static/icons/games-icons/hangman-30-dark-grey.png' %} {% set popUpTitle = "Le Pendu" %} {% set popUpDesc = "Vous avez 6 chances pour trouver le mot caché. Trouvez le plus de mots en un minimum de temps"%} {%set popUpGame = "hangman"%}
+    {% include "games/popups.html" %}
     <script src="/static/styles/games/hangman/main.js"></script>
-    <script src="/static/styles/games/timer.js"></script>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu Falling Word - Word Quest</title>
+    <title>Falling Word - Word Quest</title>
     <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
     <link rel="stylesheet" href="/static/styles/games/fallingword/main.css">
     <link rel="stylesheet" href="/static/styles/games/main.css">
@@ -13,31 +13,26 @@
 <body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
     <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
     <div id="game" class="game-container">
-        
         <div id="infos" class="infos">
             <button class="exit" id="exit">
                 <a href="/dashboard"><img src="/static/icons/games-icons/exit.png" alt=""></a>
             </button>
-            <div class="lives"> 
+            <div class="lives">
                 <p>Vie restante: </p>
                 <div>
-                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
-                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
-                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
-                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
-                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
                 </div>
             </div>
             <div class="time">
-            <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
-            <div class="data" id="time">{{time}}</div>
-        </div>
+                <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
+                <div class="data" id="time">{{time}}</div>
+            </div>
         </div>
     </div>
-
-
-
-
     {% set popUpImage = '/static/icons/games-icons/assimilation-30-dark-grey.png' %} {% set popUpTitle = "Falling Word" %} {% set popUpDesc = "Cliquer le plus vite sur les duos Francais/Anlais mais attention aux piège"%} {%set popUpGame = "fallingword"%}
     {% include "games/popups.html" %}
     <script src="/static/styles/games/fallingword/main.js"></script>

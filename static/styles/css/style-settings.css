@@ -1,3 +1,7 @@
+* {
+    scroll-behavior: smooth;
+}
+
 body {
     grid-template-columns: 95px 1fr;
     animation: none;

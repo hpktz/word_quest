@@ -497,6 +497,7 @@ body {
     .content .header .info-button {
         grid-column: 2;
         grid-row: 1;
+        width: 100%;
     }
     .content .path-container {
         margin-top: 0;

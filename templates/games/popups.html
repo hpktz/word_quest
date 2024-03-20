@@ -38,9 +38,13 @@
             <div class="data" id="data-time">0</div>
         </div>
     </div>
+    {% if popUpGame == "typefast" %}
+    <div class="button final-path-button" id="final-path-button" data-url="/dashboard?end_lesson=True&list_id={{list_id}}&success=">Suivant</div>
+    {% else %}
     <div class="button-container">
         <div class="button try-again" data-url="/dashboard/games/{{popUpGame}}/{{list_id}}">Rejouer</div>
         <div class="button leave" id="leave-button" data-url="/dashboard?end_lesson=True&list_id={{list_id}}&success=">Suivant</div>
     </div>
+    {% endif %}
 </section>
 <script src="/static/styles/games/popups/main.js"></script>

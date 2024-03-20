@@ -1,3 +1,16 @@
+"""
+This module contains the profanity detector function.
+
+The profanity detector function is used to detect the presence of profanity in a text.
+
+Imports: 
+    - re: For handling regular expressions
+    - Levenshtein: For handling the Levenshtein distance
+    - logging: For logging errors
+    
+Functions:
+    - profanity_detector: Detects the presence of profanity in a text
+"""
 import re
 import Levenshtein
 import logging
@@ -12,7 +25,6 @@ def profanity_detector(text):
     Returns:
         bool: True if the text contains profanity, False otherwise.
     """
-
     try:
         # Load the profanity file
         with open("static/censored_words.txt", "r") as f:
@@ -27,14 +39,18 @@ def profanity_detector(text):
             if re.search(r"\b"+word+r"\b", text):
                 return True
 
+        # If no profanity is found, compare the words with the profanity words
         profanity_coef = []
-        for word in text.split(" "):
-            if len(word) > 4:
-                for profanity_word in profanity_words:
+        for word in text.split(" "): # For each word in the text
+            if len(word) > 6:
+                for profanity_word in profanity_words: # For each profanity word
+                    # Calculate the Levenshtein distance between the word and the profanity word
                     profanity_coef.append([profanity_word, Levenshtein.ratio(profanity_word, word)])
         
+        # Sort the profanity words by the Levenshtein distance
         profanity_coef = sorted(profanity_coef, key=lambda x: x[1], reverse=True)
         if profanity_coef:
+            # If the Levenshtein distance is greater than 0.7, the word is considered as profanity
             return True if profanity_coef[0][1] > 0.7 else False
         else:
             return False

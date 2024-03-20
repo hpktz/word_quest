@@ -1,5 +1,5 @@
 const session_id = document.getElementsByTagName('body')[0].dataset.session_id;
-
+const csrf_token = document.getElementById('csrf_token').value;
 // const duoBox = document.getElementById('duo')
 // duoBox.style.top = `${Ypos}px`
 // setInterval(() => {
@@ -14,11 +14,12 @@ const infos = document.getElementById('infos');
 var current_indice = 0
 var AllDuos = []
 var answers = []
+var gamePlay = true
+
 function newDuo(list) {
     var indiceDuo = current_indice
     var time = Date.now();
     let counter = 0;
-    console.log(list[indiceDuo])
     var duringOfFalling = Math.floor(Math.random() * 2000 + 5000)
     var duo = document.createElement('div');
     duo.classList.add('duo');
@@ -28,18 +29,17 @@ function newDuo(list) {
     game.appendChild(duo)
     var Xpos = Math.floor(Math.random() * 70 + 8)
     duo.style.left = `${Xpos}%`
-    var startY = Math.floor(Math.random() * (window.innerHeight/2) + height)
+    var startY = Math.floor(Math.random() * (window.innerHeight / 2) + height)
     setTimeout(() => {
         duo.style.transform = `rotateZ(${rotate}deg) scale(1)`
     }, 200);
-    
+
     duo.style.top = `${startY}px`
-    var speed = Math.floor(Math.random() * 4 +1)
+    var speed = Math.floor(Math.random() * 4 + 1)
     duo.onclick = function checking() {
         clearInterval(timing)
         answers.push(list[indiceDuo].indice);
-        if (list[indiceDuo].checking == true){
-            console.log('True')
+        if (list[indiceDuo].checking == true) {
             this.style.border = 'none'
             this.style.background = '#717744';
             setTimeout(() => {
@@ -48,8 +48,7 @@ function newDuo(list) {
                     this.remove()
                 }, 200);
             }, 200);
-        } else if (list[indiceDuo].checking == false){
-            console.log('Faux')
+        } else if (list[indiceDuo].checking == false) {
             if (lives.length != 0) {
                 lives[lives.length - 1].style.transform = 'scale(0.01)'
             }
@@ -59,11 +58,13 @@ function newDuo(list) {
                 this.style.transform = `rotateZ(${rotate}deg) scale(0.01)`
                 if (lives.length != 0) {
                     lives[lives.length - 1].remove()
-                } 
+                }
                 lives = document.querySelectorAll('.lives-zone')
                 if (lives.length == 0) {
                     clearInterval(appear);
-                    check(answers);
+                    if (gamePlay) {
+                        check(answers);
+                    }
                 }
                 setTimeout(() => {
                     this.remove();
@@ -82,18 +83,19 @@ function newDuo(list) {
                 clearInterval(timing)
                 if (lives.length != 0) {
                     lives[lives.length - 1].remove()
-                } 
+                }
                 lives = document.querySelectorAll('.lives-zone')
                 answers.push('false')
                 if (lives.length == 0) {
                     clearInterval(appear);
-                    console.log(answers)
-                    check(answers);
+                    if (gamePlay) {
+                        check(answers);
+                    }
                 }
             }
         }
     }, 40);
-    current_indice ++;
+    current_indice++;
 }
 
 function fall(speed, box, startY) {
@@ -101,14 +103,25 @@ function fall(speed, box, startY) {
     box.style.top = `${startY}px`;
 }
 
-
 async function check(list) {
     try {
-        r = await fetch(`/dashboard/games/fallingword/${session_id}/${list}/checkAnswers`);
+        r = await fetch(`/dashboard/games/fallingword/${session_id}/checkAnswers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrf_token
+            },
+            body: JSON.stringify({ answers: list })
+        });
         response = await r.json();
         if (response.code == 201) {
             // End the game
             clearInterval(appear)
+            let duo = document.querySelectorAll('.duo');
+            duo.forEach(element => {
+                element.remove();
+            });
+            gamePlay = false;
             end_game(response.result.xp, response.result.time, response.result.lost_lives);
         }
     } catch (error) {
@@ -123,19 +136,15 @@ async function getAllDuos() {
     var response = await r.json();
     AllDuos = response.result;
     begin = setInterval(() => {
-        if (popup.className !='start-pop-up pop-up active') {
+        if (popup.className != 'start-pop-up pop-up active') {
             clearInterval(begin)
             appear = setInterval(() => {
-            newDuo(AllDuos);
+                newDuo(AllDuos);
             }, 1200);
         }
     }, 50);
 }
 getAllDuos();
-
-
-
-
 
 
 /**
@@ -161,9 +170,15 @@ var timer = setInterval(async() => {
             if (answers.length == 0) {
                 answers = 'vide'
             }
-            const response = await fetch(`/dashboard/games/fallingword/${session_id}/${answers}/checktime`);
+            const response = await fetch(`/dashboard/games/fallingword/${session_id}/checktime`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrf_token
+                },
+                body: JSON.stringify({ answers: answers })
+            });
             const data = await response.json();
-            console.log(data);
             // If the game is over
             if (data.code == 201) {
                 // End the game

@@ -16,7 +16,7 @@ Imports:
 Blueprint:
     - main_bp: The blueprint for the main routes of the application.
 """
-from flask import Blueprint, render_template, redirect, url_for, jsonify, request, abort
+from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session, abort
 from flask_login import login_user, login_required, logout_user, current_user
 from profanity import profanity_detector
 from root import *
@@ -100,9 +100,11 @@ def index():
         gems = user_statement[0]
         lives = user_statement[1]
         lives_time = user_statement[2]
+        life_time = None
         xp = user_statement[3]
         
         # Checking if the user is eligible for potential news lives
+        print(lives_time)
         if lives != 5:
             life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
             life_time = life_time + timedelta(minutes=15)
@@ -131,6 +133,17 @@ def index():
     
     hearts_message = True if request.args.get('hearts_message') else False
     
+    lives_time = datetime.now()
+    if not life_time:
+        life_time = datetime.now()     
+        
+    if 'path_finished' in session:
+        gifts = session['path_finished']
+        session.pop('path_finished', None)
+    else:
+        gifts = False  
+    
+    print(gems)
     return render_template(
         'dashboard/dashboard.html', 
         daytime_tip=tip, 
@@ -139,9 +152,11 @@ def index():
         end_date=end_date,
         gems=gems, 
         lives=lives, 
-        lives_time=lives_time, 
+        lives_time=lives_time.timestamp(), 
+        lives_end=life_time.timestamp(),
         xp=xp,
         new_list_id=new_list_id, 
+        gifts=gifts,
         hearts_message=hearts_message
     )
     

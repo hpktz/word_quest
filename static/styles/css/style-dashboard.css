@@ -872,6 +872,7 @@ main {
 
 .dashboard-main-container .lists-container .list-box-empty .img {
     width: 75px;
+    margin: auto;
 }
 
 .dashboard-main-container .lists-container .list-box-empty .text {
@@ -880,14 +881,18 @@ main {
     margin-top: 15px;
 }
 
-.dashboard-main-container .lists-container .list-box-empty .separate {
+.dashboard-main-container .lists-container .create-list-box {
+    padding-bottom: 25px;
+}
+
+.dashboard-main-container .lists-container .create-list-box .separate {
     height: 40px;
     width: 1px;
     background-color: #333;
     margin: 25px auto;
 }
 
-.dashboard-main-container .lists-container .list-box-empty .create-button {
+.dashboard-main-container .lists-container .create-list-box .create-button {
     display: block;
     text-decoration: none;
     color: white;
@@ -899,9 +904,10 @@ main {
     width: 150px;
     margin: 0 auto;
     transition: all 0.2s ease-in-out;
+    text-align: center;
 }
 
-.dashboard-main-container .lists-container .list-box-empty .create-button:hover {
+.dashboard-main-container .lists-container .create-list-box .create-button:hover {
     background: #967b69;
 }
 
@@ -942,19 +948,19 @@ main {
 .dashboard-main-container .games-trail[data-color='0'] .level.waiting {
     --levels-color: #bcbd8b;
     --levels-shadow: #5F603D;
-    filter: grayscale(25%);
+    filter: grayscale(60%);
 }
 
 .dashboard-main-container .games-trail[data-color='1'] .level.waiting {
     --levels-color: #717744;
     --levels-shadow: #212511;
-    filter: grayscale(25%);
+    filter: grayscale(60%);
 }
 
 .dashboard-main-container .games-trail[data-color='2'] .level.waiting {
     --levels-color: #766153;
     --levels-shadow: #342821;
-    filter: grayscale(25%);
+    filter: grayscale(60%);
 }
 
 .dashboard-main-container .games-trail[data-color='0'] .level.blocked,
@@ -1927,6 +1933,81 @@ main {
     position: relative;
 }
 
+.dashboard-main-container .gift-pop-up-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000056;
+    display: none;
+    z-index: 11;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .gift-pop-up-background.active {
+    display: block;
+}
+
+.dashboard-main-container .gift-pop-up {
+    padding: 20px;
+    background-color: white;
+    width: 300px;
+    border-radius: 10px;
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    z-index: 12;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .gift-pop-up.active {
+    top: 50%;
+    box-shadow: 0px 0px 10px 0 #959da536;
+}
+
+.dashboard-main-container .gift-pop-up .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.dashboard-main-container .gift-pop-up .gift-box {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin: 25px 0;
+}
+
+.dashboard-main-container .gift-pop-up .button {
+    width: 100%;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    outline: none;
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    margin: auto;
+}
+
+.dashboard-main-container .gift-pop-up .button:hover {
+    background: black;
+    color: white;
+}
+
 @media screen and (max-width: 1085px) {
     body {
         grid-template-columns: 95px 1fr;
@@ -2506,6 +2587,9 @@ main {
         animation: entry-phone 0.5s ease-in-out 0.25s forwards;
         transform: rotateX(20deg) rotateY(-20deg) translateY(43px);
     }
+    .dashboard-main-container .gift-pop-up {
+        background-color: rgba(255, 255, 255, 0.849);
+    }
     @keyframes entry-phone {
         from {
             transform: rotateX(20deg) rotateY(-20deg) translateY(43px);
@@ -2540,12 +2624,18 @@ main {
         font-size: 14px;
     }
     .dashboard-main-container .games-trail .game-trail {
-        transform: scale(0.65) translateY(-180px);
+        transform: scale(0.9) translateY(-75px);
     }
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 325px) {
     .dashboard-main-container .games-trail .game-trail {
-        transform: scale(0.65) translateY(-180px) translateX(-20%);
+        transform: scale(0.75) translateY(-180px) translateX(-25px)
+    }
+}
+
+@media screen and (max-width: 285px) {
+    .dashboard-main-container .games-trail .game-trail {
+        transform: scale(0.65) translateY(-200px) translateX(-50px)
     }
 }

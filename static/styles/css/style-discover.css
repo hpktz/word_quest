@@ -203,7 +203,7 @@
     position: absolute;
     right: -150%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: minmax(22.5px, auto);
     gap: 20px;
     width: 100%;
@@ -302,6 +302,9 @@
     font-size: 18px;
     font-weight: 600;
     color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 34px;
 }
 
 .discover-main-container .list-container .list-container .certification {
@@ -456,14 +459,14 @@
 @media screen and (max-width: 1085px) {
     body.open .discover-main-container .list-container .trend-list.active,
     body.open .discover-main-container .list-container .word-quest-list.active {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 }
 
 @media screen and (max-width: 920px) {
     .discover-main-container .list-container .trend-list.active,
     .discover-main-container .list-container .word-quest-list.active {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
     body.info-section-phone-active header .infos-section .info-section {
         grid-template-rows: 35px 1fr;

@@ -444,8 +444,8 @@ def create_list():
     
     wordList = WordList.from_json(session['list_under_creation'])
     
-    if wordList.length() < 3:
-        return jsonify({"code": 400, "title": "Bad request", "message": "Ajoutez au minimum 3 mots à votre liste"})
+    if wordList.length() < 5:
+        return jsonify({"code": 400, "title": "Bad request", "message": "Ajoutez au minimum 5 mots à votre liste"})
 
     data = request.json
 

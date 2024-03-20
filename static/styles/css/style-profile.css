@@ -147,22 +147,25 @@
     text-overflow: ellipsis;
 }
 
-.profile-main-container .profile-header .profile-main-infos .info-box {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.profile-main-container .profile-header .profile-main-infos .subscription-infos {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
     margin-top: 10px;
 }
 
-.profile-main-container .profile-header .profile-main-infos .info-box .img {
-    width: 20px;
-    height: 20px;
-}
-
-.profile-main-container .profile-header .profile-main-infos .info-box .text {
+.profile-main-container .profile-header .profile-main-infos .member-date-info {
     font-family: "League Spartan", sans-serif;
     font-size: 14px;
+    margin-top: 10px;
     color: #333;
+}
+
+.profile-main-container .profile-header .profile-main-infos .separate {
+    width: 50px;
+    height: 1px;
+    background-color: #333;
+    margin-top: 15px;
 }
 
 .profile-main-container .profile-header .profile-main-infos .visibility-box {
@@ -215,7 +218,7 @@
 }
 
 .profile-main-container .profile-header .profile-main-infos .subscription .button {
-    padding: 5px 10px;
+    padding: 10px;
     border-radius: 5px;
     background-color: #333;
     color: white;
@@ -243,9 +246,10 @@
 }
 
 .profile-main-container .profile-header .profile-main-infos .subscribe-button {
-    padding: 5px 10px;
+    padding: 10px;
     border-radius: 5px;
     background-color: white;
+    background-position: 100%;
     box-shadow: 0px 0px 10px 0px #959da54d;
     color: #333;
     transition: all 0.2s ease-in-out;
@@ -253,8 +257,16 @@
     text-align: center;
     font-family: "League Spartan", sans-serif;
     font-size: 14px;
+    font-weight: 600;
     margin-top: 10px;
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+
+.profile-main-container .profile-header .profile-main-infos .subscribe-button.active {
+    background-image: url("/static/imgs/subscription-animation.gif");
+    background-size: cover;
 }
 
 .profile-main-container .profile-header .profile-main-infos .subscribe-button:hover {
@@ -312,6 +324,7 @@
 
 .profile-main-container .profile-content .lists-container {
     column-count: 2;
+    column-width: 10px;
     column-gap: 10px;
     margin-top: 25px;
 }
@@ -382,6 +395,8 @@
     font-size: 18px;
     font-weight: 600;
     color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-main-container .profile-content .lists-container .list-box .list-of-words {
@@ -434,9 +449,102 @@
     grid-row: 2;
     width: 100%;
     height: fit-content;
-    padding: 10px;
+    padding: 0 10px 10px 10px;
     border-radius: 10px;
     position: relative;
+}
+
+.profile-main-container .friends-list .badge-section .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2.5px solid grey;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box img {
+    width: 85px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .name {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .description {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar {
+    position: relative;
+    width: 100%;
+    height: 15px;
+    background-color: #ccc;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.polyglot {
+    background-color: #6b08ad;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.expert {
+    background-color: #c57f17;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.advanced {
+    background-color: #ffdfb0;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.intermediate {
+    background-color: #078b07;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.beginner {
+    background-color: #3974d4;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "League Spartan", sans-serif;
+    font-size: 12px;
+    padding-top: 3px;
+    color: #333;
+    font-weight: 800;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-text.polyglot {
+    color: white;
 }
 
 .profile-main-container .friends-list .menu {

@@ -142,6 +142,10 @@ async function subscribe(el) {
         let response = await request.json();
         if (response.code == 200) { // If the request is successful
             // Construct the unsubscription button
+            document.getElementById("subscribe-button").classList.add("active");
+            await new Promise(r => setTimeout(r, 2000));
+            document.getElementById("subscribe-button").classList.remove("active");
+
             let div = document.createElement("div");
             div.classList.add("subscription");
             div.onclick = function() {
@@ -198,6 +202,7 @@ async function unsubscribe(el) {
             // Construct the subscription button
             let div = document.createElement("div");
             div.classList.add("subscribe-button");
+            div.id = "subscribe-button";
             div.onclick = function() {
                 subscribe(this);
             }

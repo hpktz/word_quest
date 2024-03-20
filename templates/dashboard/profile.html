@@ -25,14 +25,9 @@
         </div>
         <div class="profile-main-infos">
             <div class="name">{{ name }}</div>
-            <div class="info-box">
-                <img src="/static/icons/member-30-dark-grey.png" class="img">
-                <div class="text">{{subscriptions|length}} abonnement{%if subscriptions|length > 1%}s{%endif%} / {{subscribers|length}} abonné{%if subscribers|length > 1%}s{%endif%}</div>
-            </div>
-            <div class="info-box">
-                <img src="/static/icons/calendar-30-dark-grey.png" class="img">
-                <div class="text">Membre depuis le {{date}}</div>
-            </div>
+            <div class="subscription-infos">{{subscriptions|length}} abonnement{%if subscriptions|length > 1%}s{%endif%} / {{subscribers|length}} abonné{%if subscribers|length > 1%}s{%endif%}</div>
+            <div class="member-date-info">Membre depuis le {{date}}</div>
+            <div class="separate"></div>
             {% if is_current_user %} {% if is_public %}
             <div class="visibility-box">
                 <img src="/static/icons/hide-password.png" class="img">
@@ -131,6 +126,51 @@
     </section>
     {% endif %}
     <section class="friends-list entry-animation">
+        <div class="badge-section">
+            <div class="title">Badge</div>
+            {% if user_infos["xp"] < 500 %}
+                {% set level = "beginner" %}
+                {% set name = "Débutant" %}
+                {% set description = "Débute son apprentissage de la langue anglaise" %}
+                {% set progress_text = "/ 500 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 500) * 100 %}
+            {% elif user_infos["xp"] < 2500 %}
+                {% set level = "intermediate" %}
+                {% set name = "Intermédiaire" %}
+                {% set description = "Explore de nouveaux horizons linguistiques en anglais" %}
+                {% set progress_text = "/ 2500 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 2500) * 100 %}
+            {% elif user_infos["xp"] < 7500 %}
+                {% set level = "advanced" %}
+                {% set name = "Avancé" %}
+                {% set description = "Voyage aisément à travers les nuances de la langue anglaise" %}
+                {% set progress_text = "/ 7500 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 7500) * 100 %}
+            {% elif user_infos["xp"] < 15000 %}
+                {% set level = "expert" %}
+                {% set name = "Expert" %}
+                {% set description = "Maîtrise les subtilités de l'anglais avec aisance" %}
+                {% set progress_text = "/ 15000 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 15000) * 100 %}
+            {% else %}
+                {% set level = "polyglot" %}
+                {% set name = "Polyglotte" %}
+                {% set description = "Incollable en anglais et prêt à conquérir de nouvelles langues" %}
+                {% set progress_text = "" %}
+                {% set progress_percent = 100 %}
+            {% endif %}
+            <div class="badge-box">
+                <img src="/static/imgs/badges/{{level}}-badge.png" alt="">
+                <div class="infos">
+                    <div class="name">{{name}}</div>
+                    <div class="description">{{description}}</div>
+                    <div class="progress-bar">
+                        <div class="progress-inner {{level}}" style="width: {{progress_percent}}%;"></div>
+                        <div class="progress-text {{level}}">{{user_infos["xp"]}} {{progress_text}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="menu" id="friend-list">
             <div class="item item_sub active">Abonnements</div>
             <div class="item item_sub">Abonnés</div>

@@ -305,6 +305,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     height: 34px;
+    line-height: 18px;
 }
 
 .discover-main-container .list-container .list-container .certification {

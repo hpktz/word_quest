@@ -215,7 +215,12 @@ body {
     font-family: "League Spartan", sans-serif;
     font-size: 18px;
     color: #fff;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 2px;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .content .path-container .line .item.wrong {

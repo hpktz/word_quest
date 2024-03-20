@@ -104,6 +104,7 @@ input {
     color: black;
     border-bottom: 3px solid #766153;
     transition: all 0.3s;
+    height: 45px;
 }
 
 input.password-input {
@@ -159,6 +160,11 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
 select {
     padding: 15px 0 15px 0;
     text-align: left;
@@ -167,6 +173,8 @@ select {
     border: 0;
     border-bottom: 3px solid #766153;
     transition: all 0.3s;
+    height: 45px;
+    background-color: white;
 }
 
 #2fa-form-main-alert {
@@ -342,6 +350,7 @@ select {
     border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s;
+    line-height: 15px;
 }
 
 .submit-button:hover {
@@ -439,6 +448,7 @@ select {
 .conditions-container .conditions {
     font-family: 'League Spartan', sans-serif;
     font-size: 16px;
+    line-height: 16px;
     color: #333333;
     text-align: left;
 }

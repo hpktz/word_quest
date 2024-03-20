@@ -98,10 +98,12 @@ class snake():
         print(self.shuffle)
         coLetters = []
         self.current_word = self.shuffle.pop()
+        word_choosen = ''.join([i for i in self.current_word["word"] if i != " "])
+        spaces_positions = [i for i, l in enumerate(self.current_word["word"]) if l == " "]
         frensh_word = self.current_word['trans_word']
         self.current_word = self.current_word['word']
         self.words_to_check += self.current_word
-        for letter in self.current_word:
+        for letter in word_choosen:
             coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
         while len(coLetters) < 12:
@@ -110,6 +112,7 @@ class snake():
             'code': 200,
             'message': 'ok',
             'result': {'coo': coLetters,
+                       'space_positions': spaces_positions,
                        'frensh': frensh_word}
         })
     
@@ -160,14 +163,19 @@ class snake():
                     xpWord += 1
                 if (xpWord//2 + 1) > 6:
                     xpWord = 11
-                self.xp += xpWord//2 + 1
+                if xpWord == 0:
+                    xpWord = 0
+                    self.xp += 0
+                else :
+                    xpWord = xpWord //2 + 1
+                    self.xp += xpWord
             if(len(self.shuffle) == 0):
                 return self._end_game(xpWord)
             else:
                 return jsonify({
                 'code': 200,
                 'message': 'ok',
-                'result': {'xp': 0 if list is None else xpWord//2 + 1,
+                'result': {'xp': 0 if list is None else xpWord,
                         'xpTot': self.xp}
             }) 
         except Exception as e:

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
@@ -122,7 +123,7 @@ canvas{
 
 @keyframes bounce {
     from{
-        opacity: 0.3;
+        opacity: 0;
     }
     to{
         opacity: 1;

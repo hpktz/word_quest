@@ -109,10 +109,11 @@ document.addEventListener('keydown', (e) => {
     direction(e)
 });
 
-function direction(event) {
+async function direction(event) {
     var old_d = d
     var key = event.keyCode;
-    console.log(key)
+    console.log('debut')
+    console.log(d)
     if (key == 37 && d != "RIGHT") {
         var d1 = "LEFT";;
     }
@@ -125,8 +126,11 @@ function direction(event) {
     if (key == 40 && d != "UP") {
         var d1 = "DOWN";
     }
+    console.log(d1)
     if (d == d1) {
         return
+    }else if ( d1 == undefined) {
+        d = d;
     } else{
         d = d1
     }
@@ -134,210 +138,94 @@ function direction(event) {
         if (old_d == 'LEFT') {
             if (snakeX % 32 == 0) {
                 return
-            }
-            if (d == 'DOWN') {
-                var changeHead = {
-                    
-                    x: snakeX - snakeX % 32,
-                    y: snakeY
-                    };
-            } else if (d == 'UP') {
-                var changeHead = {
-                    x: snakeX - snakeX % 32,
-                    y: snakeY
-                    };
+            } else if (d != 'RIGHT') {
+                if (snakeX % 32 > 16) {
+                    var temp_d = d
+                    d = old_d
+                    await new Promise(resolve => setTimeout(resolve, 70))
+                    var changeHead = {
+                        x: snakeX - snakeX % 32,
+                        y: snakeY
+                        };
+                    d = temp_d
+                } else {
+                    var changeHead = {
+                        x: snakeX - snakeX % 32,
+                        y: snakeY
+                        };
+                }
+                
             }
         }
         else if (old_d == 'RIGHT') {
             if (snakeX % 32 == 0) {
                 return
-            }
-            if (d == 'DOWN') {
-                var changeHead = {
-                    x: snakeX - snakeX % 32 + 32,
-                    y: snakeY
-                    };
-            } else if (d == 'UP') {
-                var changeHead = {
-                    x: snakeX - snakeX % 32 + 32,
-                    y: snakeY
-                    };
+            } else if (d != 'LEFT') {
+                if (snakeX % 32 < 16) {
+                    var temp_d = d
+                    d = old_d
+                    await new Promise(resolve => setTimeout(resolve, 70))
+                    var changeHead = {
+                        x: snakeX - snakeX % 32 + 32,
+                        y: snakeY
+                        };
+                    d = temp_d
+                } else {
+                    var changeHead = {
+                        x: snakeX - snakeX % 32 + 32,
+                        y: snakeY
+                        };
+                }
+                
             }
         }
         else if (old_d == 'UP') {
             if (snakeY % 32 == 0) {
                 return
-            }
-            if (d == 'RIGHT') {
-                var changeHead = {
-                    x: snakeX,
-                    y: snakeY - snakeY % 32
-                    };
-            } else if (d == 'LEFT') {
-                var changeHead = {
-                    x: snakeX,
-                    y: snakeY - snakeY % 32
-                    };
+            } else if(d != 'DOWN') {
+                if (snakeY % 32 > 16) {
+                    var temp_d = d
+                    d = old_d
+                    await new Promise(resolve => setTimeout(resolve, 70))
+                    var changeHead = {
+                        x: snakeX,
+                        y: snakeY - snakeY % 32
+                        };
+                    d = temp_d
+                } else{
+                    var changeHead = {
+                        x: snakeX,
+                        y: snakeY - snakeY % 32
+                        };
+                }
+                
             }
         }
         else if (old_d == 'DOWN') {
             if (snakeY % 32 == 0) {
                 return
-            }
-            if (d == 'RIGHT') {
-                var changeHead = {
+            } else if (d != 'UP') {
+                if (snakeY % 32 < 16) {
+                    var temp_d = d
+                    d = old_d
+                    await new Promise(resolve => setTimeout(resolve, 70))
+                    var changeHead = {
+                        x: snakeX,
+                        y: snakeY - snakeY % 32 + 32
+                        };
+                    d = temp_d
+                } else {
+                    var changeHead = {
                     x: snakeX,
                     y: snakeY - snakeY % 32 + 32
                     };
-            } else if (d == 'LEFT') {
-                var changeHead = {
-                    x: snakeX,
-                    y: snakeY - snakeY % 32 + 32
-                    };
+                }
             }
         }
         if (changeHead != undefined) {
             console.log(changeHead)
             draw(changeHead);
         }
-    // if (current_d == null) {
-    //     var old_d = d
-    // } else {
-    //     var old_d = current_d
-    // }
-    // console.log(d)
-    // var key = event.keyCode;
-    // if (key == 37 && d != "RIGHT") {
-    //     var d1 = "LEFT";;
-    // }
-    // if (key == 39 && d != "LEFT") {
-    //     var d1 = "RIGHT";
-    // }
-    // if (key == 38 && d != "DOWN") {
-    //     var d1 = "UP";
-    // }
-    // if (key == 40 && d != "UP") {
-    //     var d1 = "DOWN";
-    // }
-    // if (d == d1) {
-    //     return
-    // } else{
-    //     var d = d1
-    // }
-    // if( d != old_d){
-    //     if ((old_d == 'LEFT' || old_d == 'RIGHT') && snakeX % 32 != 0) {
-    //         if (snakeX % 32 < 0) {
-    //             console.log('colonne précédente')
-    //             if (d == 'DOWN') {
-    //                 var changeHead = {
-    //                     x: snakeX - snakeX % 32 ,
-    //                     y: snakeY + 2
-    //                     };
-    //             } else if (d == 'UP') {
-    //                 var changeHead = {
-    //                     x: snakeX - snakeX % 32,
-    //                     y: snakeY - 2
-    //                     };
-    //             }
-    //         } else if (snakeX % 32 > 26)  {
-    //             console.log('colonne suivante')
-    //             if (d == 'DOWN') {
-    //                 var changeHead = {
-    //                     x: snakeX - snakeX % 32 + 32,
-    //                     y: snakeY + 2
-    //                     };
-    //             } else if (d == 'UP') {
-    //                 var changeHead = {
-    //                     x: snakeX - snakeX % 32 + 32,
-    //                     y: snakeY - 2
-    //                     };
-    //             }
-                
-    //         } else if(current_d == null){
-                                                        // document.removeEventListener('keydown', direction)
-                                                        // document.removeEventListener('keydown', (e) => {
-                                                        //     direction(e,null)
-                                                        // });
-                // var i = 0;
-                // d = old_d
-                // trucouf = setInterval(() => {
-                //     if (i < 20){
-                //         console.log('attend1')
-                //         direction(event, old_d)
-                //         if (direction(event, old_d) == true) {
-                //             i = 21
-                //         }
-                //         i ++;
-                //     } else {
-                                                        // document.addEventListener('keydown', (e) => {
-                                                        //     direction(e,null)
-                                                        // });
-        //                 clearInterval(trucouf)
-        //             }
-        //         }, 20);  
-        //     }
-        // }
-        // else if ((old_d == 'UP' || old_d == 'DOWN') && snakeY % 32 != 0) {
-        //     if (snakeY % 32 < 0) {
-        //         console.log('ligne suivante')
-        //         if (d == 'RIGHT') {
-        //             var changeHead = {
-        //                 x: snakeX + 2,
-        //                 y: snakeY - snakeY % 32
-        //                 };
-        //         } else if (d == 'LEFT') {
-        //             var changeHead = {
-        //                 x: snakeX - 2,
-        //                 y: snakeY - snakeY % 32
-        //                 };
-        //         }
-        //     } else if (snakeY % 32 > 26){
-        //         console.log('ligne suivante')
-        //         if (d == 'RIGHT') {
-        //             var changeHead = {
-        //                 x: snakeX + 2,
-        //                 y: snakeY - snakeY % 32 + 32
-        //                 };
-        //         } else if (d == 'LEFT') {
-        //             var changeHead = {
-        //                 x: snakeX - 2,
-        //                 y: snakeY - snakeY % 32 + 32
-        //                 };
-        //         }
-        //     } else if(current_d == null){
-                                                                // document.removeEventListener('keydown', direction)
-                                                                // document.removeEventListener('keydown', (e) => {
-                                                                //     direction(e,null)
-                                                                // });
-                // d = old_d
-                // var i = 0;
-                // trucouf = setInterval(() => {
-                //     if (i < 20){
-                //         console.log('attend2')
-                //         direction(event, old_d)
-                //         if (direction(event, old_d) == true) {
-                //             i = 21
-                //         }
-                //         i ++;
-                //     } else {
-                                                                // document.addEventListener('keydown', (e) => {
-                                                                //     direction(e,null)
-                                                                // });
-                //         clearInterval(trucouf)
-                //     }
-                // }, 20);
-                
-                
-            // }
-        // }
-        // if (changeHead != undefined) {
-        //     draw(changeHead);
-        //     return true
-        // } else if (current_d != null) {
-        //     d = old_d
-        // }
-        // return false
-        
     }
 }
 var fin = 0
@@ -502,9 +390,9 @@ async function checkingCoo() {
             animXp.style.animation = 'disapear 0.5s ease-in-out forwards';
             getPosition()
             d = undefined
-            var game = setInterval(function () {
+            game = setInterval(function () {
                 draw('pas de changement');
-            }, 20)
+            }, 14)
             fin = 0
         }, 1000);
     }
@@ -523,7 +411,7 @@ function collision(head, array) {
 getPosition();
 var game = setInterval(function () {
     draw('pas de changement');
-}, 20)
+}, 14)
 
 
 

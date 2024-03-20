@@ -28,6 +28,7 @@ import datetime as datetime
 import math as math
 import uuid as uuid
 import json
+import time as time
 from functools import wraps
 
 import logging
@@ -113,7 +114,7 @@ class snake():
         })
     
     def getcoordinate(self,list, l):
-        xpos = math.floor(random.random() * 5) * 32 + 9
+        xpos = math.floor(random.random() * 15) * 32 + 9
         ypos = math.floor(random.random() * 13 + 1) * 32 + 27
         alreadyPos = True
         if list == []:
@@ -469,6 +470,7 @@ def getCard(session_id):
     game = snake.from_json(session["game"])
     result = game.newWord()
     session["game"] = game.to_json()
+    time.sleep(1/1000)
     return result
 
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/check_coo', methods=['POST'])

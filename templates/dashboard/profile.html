@@ -126,6 +126,7 @@
     </section>
     {% endif %}
     <section class="friends-list entry-animation">
+        {% if user_infos %}
         <div class="badge-section">
             <div class="title">Badge</div>
             {% if user_infos["xp"] < 500 %}
@@ -171,6 +172,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div class="menu" id="friend-list">
             <div class="item item_sub active">Abonnements</div>
             <div class="item item_sub">Abonnés</div>

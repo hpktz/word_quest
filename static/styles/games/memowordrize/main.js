@@ -120,7 +120,7 @@ async function see_path(data) {
             wordsContainer.appendChild(word);
         }
     } else if (data.code == 201) {
-        end_game(data.result.xp, data.result.time, data.result.lives);
+        end_game(data.result.xp, data.result.time, data.result.lost_lives);
     } else {
         infoButton.classList.add('wrong');
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -212,7 +212,7 @@ async function try_case(draggableEl, max) {
             draggableEl.remove(); // Remove the moveable word
         } else if (data.code == 201) {
             // If the game is over, end the game
-            end_game(data.result.xp, data.result.time, data.result.lives);
+            end_game(data.result.xp, data.result.time, data.result.lost_lives);
         } else {
             // Wrong animations
             draggableEl.setAttribute('class', 'word-draggable wrong');

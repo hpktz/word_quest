@@ -86,7 +86,7 @@ class memowordrize():
         self.lesson_id = lesson_id
         self.words = words
         self.words_to_check = words
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=3))
+        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=5))
         self.start = str(datetime.datetime.now())
         self.current_path = None
         self.xp = 0
@@ -396,6 +396,7 @@ class memowordrize():
             cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, xp))
             conn.commit()
             
+            print(xp, time_passed, lives_to_lose)
             response = jsonify({
                 "code": 201,
                 "message": "Le jeu est terminé!",

@@ -692,6 +692,18 @@ main {
     transition: all 0.2s ease-in-out;
 }
 
+.dashboard-main-container .lists-container .list-box.complete {
+    background-image: url("/static/imgs/3d-check-mark-in-box-side-view-blue.png");
+    background-size: 150px;
+    background-repeat: no-repeat;
+    background-position: center right -30px;
+}
+
+.dashboard-main-container .lists-container .list-box.complete.selected {
+    background-size: 50px;
+    background-position: top 10px center;
+}
+
 .dashboard-main-container .lists-container .list-box.new-list {
     opacity: 0;
     transform: translateY(-15px) scale(0.9);
@@ -739,6 +751,18 @@ main {
 .dashboard-main-container .lists-container .list-box:nth-child(3n-2).selected {
     background-color: #c1c286;
 }
+
+/* .dashboard-main-container .lists-container .list-box:nth-child(3n).complete {
+    border: 3px solid #766153;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1).complete {
+    border: 3px solid #717744;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2).complete {
+    border: 3px solid #c1c286;
+} */
 
 .dashboard-main-container .lists-container .list-box .creation {
     font-family: 'League Spartan', sans-serif;

@@ -199,7 +199,7 @@ class typeFast():
             # Calculate the experience points
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = time_passed.total_seconds()
-            xp = round((((len(self.words)-len(self.words_to_check)) * 2) / time_passed)*10)
+            xp = round((((len(self.words)-len(self.words_to_check)) * 5) / time_passed)*10)
                 
             # Lose a life if there are remaining words
             lives_to_lose = 1 if len(self.words_to_check) > 0 else 0

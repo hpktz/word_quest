@@ -28,9 +28,9 @@
                     </div>
                     <div>
                         <label for="username">Nom d'utilisateur</label>
-                        <input type="text" name="username" id="username" value="{{current_user.name}}">
+                        <input type="text" name="username" id="username" value="{{current_user.name}}" autocomplete="username">
                         <label for="email">Email</label>
-                        <input type="email" name="email" id="email" value="{{current_user.email}}">
+                        <input type="email" name="email" id="email" value="{{current_user.email}}" autocomplete="email">
                         <button type="submit" name="button" class="submit-button">Enregistrer</button>
                     </div>
                 </div>
@@ -43,11 +43,11 @@
                 <div class="password-container">
                     <div>
                         <label for="old-password">Ancien mot de passe</label>
-                        <input type="password" name="old-password" id="old-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
+                        <input type="password" name="old-password" id="old-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="current-password">
                     </div>
                     <div>
                         <label for="new-password">Nouveau mot de passe</label>
-                        <input type="password" name="new-password" id="new-password" placeholder="Votre nouveau mot de passe">
+                        <input type="password" name="new-password" id="new-password" placeholder="Votre nouveau mot de passe" autocomplete="new-password">
                     </div>
                     <div class="mfa-box">
                         <div>

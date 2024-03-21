@@ -55,6 +55,7 @@ def quests():
         
         # Get the user's targets
         lists = current_user.get_lists()
+
         for lst in lists:
             if not all(lesson["completed"] == 1 for lesson in lst["lessons"]):
                 targets["games"] += lst["tgt_games"]
@@ -63,7 +64,6 @@ def quests():
         
         # Check if there are targets
         is_there_targets = targets["games"] != 0 or targets["xp"] != 0 or targets["time"] != 0
-        
         # Get the user's stats
         seven_days_ago = datetime.now() - timedelta(days=7)
         
@@ -91,7 +91,10 @@ def quests():
             day_result = next((res for res in result if res[0] == day), None)
             if day_result:
                 progress += day_result[1] + day_result[2] + day_result[3]
-                target_achieved = day_result[2] >= targets["xp"] and day_result[3]//60 >= targets["time"] and day_result[1] >= targets["games"]
+                if is_there_targets:
+                    target_achieved = day_result[2] >= targets["xp"] and day_result[3]//60 >= targets["time"] and day_result[1] >= targets["games"]
+                else:
+                    target_achieved = False
             else:
                 target_achieved = False
             results.append({

@@ -57,38 +57,48 @@
         </div>
     </section>
     <section class="lists-container entry-animation" id="lists-container">
-        {% for list in lists %} {% if new_list_id == list['id'] %} {% set css_class = "new-list" %} {% else %} {% set css_class = "" %} {% endif %}
-        <div class="list-box {{ css_class }}" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
-            <div class="infos">
-                <div class="creation">
-                    <p>Créée le {{ list["created_at"] }}</p>
-                </div>
-                <p class="title">{{ list["title"] }}</p>
-                <div class="hidden">
-                    <div class="progress">
-                        <div class="title">Progression</div>
-                        <div class="progress-bar">
-                            <div class="progress-bar-fill" style="width: {{list['progress']}}%;"></div>
+        {% for list in lists %} 
+            {% if new_list_id == list['id'] %} 
+                {% set css_class = "new-list" %} 
+            {% else %} 
+                {% set css_class = "" %} 
+            {% endif %}
+            {% if list['progress'] == 100 %}
+                {% set css_complete_class = "complete" %}
+            {% else %}
+                {% set css_complete_class = "incomplete" %}
+            {% endif %}
+            <div class="list-box {{ css_class }} {{css_complete_class}}" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
+                <div class="infos">
+                    <div class="creation">
+                        <p>Créée le {{ list["created_at"] }}</p>
+                    </div>
+                    <p class="title">{{ list["title"] }}</p>
+                    <div class="hidden">
+                        <div class="progress">
+                            <div class="title">Progression</div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: {{list['progress']}}%;"></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="separator"></div>
+                    <p class="words">Liste de {{ list["words"]|length }} mot{% if list["words"]|length > 1 %}s{% endif %} - {% for index in range((10, list["words"]|length)|min) %}{% if index > 0 %}, {% endif %}{{list["words"][index]["word"]}}{% endfor %}</p>
                 </div>
-                <div class="separator"></div>
-                <p class="words">Liste de {{ list["words"]|length }} mot{% if list["words"]|length > 1 %}s{% endif %} - {% for index in range((10, list["words"]|length)|min) %}{% if index > 0 %}, {% endif %}{{list["words"][index]["word"]}}{% endfor %}</p>
+                <div class="actions">
+                    <div class="delete-logo clickable-logo delete-zone">
+                        <a href="" class="delete-zone manage-list-button" data-list_id="{{list['id']}}">
+                            <img src="/static/icons/settings-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                        </a>
+                    </div>
+                    <!-- TODO -->
+                    <div class="delete-logo clickable-logo delete-zone">
+                        <a href="" class="delete-zone copy-list-button" data-list_id="{{list['id']}}">
+                            <img src="/static/icons/share-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="actions">
-                <div class="delete-logo clickable-logo delete-zone">
-                    <a href="" class="delete-zone manage-list-button" data-list_id="{{list['id']}}">
-                        <img src="/static/icons/settings-30-dark-grey.png" class="delete-zone" alt="delete-icon">
-                    </a>
-                </div>
-                <!-- TODO -->
-                <div class="delete-logo clickable-logo delete-zone">
-                    <a href="" class="delete-zone copy-list-button" data-list_id="{{list['id']}}">
-                        <img src="/static/icons/share-30-dark-grey.png" class="delete-zone" alt="delete-icon">
-                    </a>
-                </div>
-            </div>
-        </div>
         {% endfor %} {% if lists|length == 0 %}
         <div class="list-box-empty" style="display: block;">
             <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">

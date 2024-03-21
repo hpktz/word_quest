@@ -1,5 +1,5 @@
 async function copy_list_frompopup(el) {
-    el.innerHTML = "<div class='loader'></div>"
+    el.innerHTML = "<div class='loader' style='width: 14px; height: 14px;'></div>"
     var id = el.dataset.id;
     try {
         let response = await fetch(`/dashboard/list/copy/${id}`);

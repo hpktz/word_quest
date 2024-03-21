@@ -23,7 +23,7 @@
             <p id="login-form-main-alert">{{ messages[0] }}</p>
             {% endif %} {% endwith %}
             <p class="text">Veuillez renseigner le code de vérification que vous avez reçu par e-mail.</p>
-            <input type="text" name="code" class="code-input" id="2fa-check-code-input" placeholder="Code de vérification" required>
+            <input type="number" name="code" class="code-input" id="2fa-check-code-input" placeholder="Code de vérification" autocomplete="one-time-code" required>
             <span class="separator"></span>
             <a href="{{ url_for('auth.sys_2fa_sendCodeAgain')}}" class="send-code-button" id="2fa-check-send-code-button">Renvoyer le code</a>
             <span class="separator"></span>

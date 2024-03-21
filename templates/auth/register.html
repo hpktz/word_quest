@@ -28,11 +28,11 @@
             <div id="front-alert"></div>
             <div class="parts-container">
                 <div class="part-1">
-                    <input type="text" name="name" class="name-input" id="signup-name-input" placeholder="Pseudo" required>
+                    <input type="text" name="name" class="name-input" id="signup-name-input" placeholder="Pseudo" autocomplete="username" required>
                     <p class="date-text">Date de naissance</p>
                     <div class="date-container">
-                        <input type="number" name="day" class="date-input" id="signup-day-input" placeholder="Jour" min="1" max="31" required>
-                        <select name="month" id="signup-month-input">
+                        <input type="number" name="day" class="date-input" id="signup-day-input" placeholder="Jour" min="1" max="31" autocomplete="bday-day" required>
+                        <select name="month" id="signup-month-input" autocomplete="bday-month" required>
                             <option value="01">Janvier</option>
                             <option value="02">Février</option>
                             <option value="03">Mars</option>
@@ -46,11 +46,11 @@
                             <option value="11">Novembre</option>
                             <option value="12">Décembre</option>
                         </select>
-                        <input type="number" name="year" class="date-input" id="signup-year-input" placeholder="Année" min="1910" max="2018" required>
+                        <input type="number" name="year" class="date-input" id="signup-year-input" placeholder="Année" min="1910" max="2018" autocomplete="bday-year" required>
                     </div>
                     <input type="hidden" name="birthday" id="birthday" value="">
                     <input type="email" name="email" class="email-input" id="signup-email-input" placeholder="Adresse e-mail" required>
-                    <input type="password" name="password" class="password-input" id="signup-password-input" placeholder="Mot de passe" required>
+                    <input type="password" name="password" class="password-input" id="signup-password-input" placeholder="Mot de passe" autocomplete="new-password" required>
                     <div class="conditions-container">
                         <p class="conditions">En cliquant sur "Inscription", vous acceptez la <a href="/privacy-policy" class="conditions-link">politique de confidentialité</a></p>
                         <div>

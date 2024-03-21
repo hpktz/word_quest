@@ -120,13 +120,13 @@ class snake():
     
     def getcoordinate(self,list, l):
         xpos = math.floor(random.random() * 15) * 32 + 9
-        ypos = math.floor(random.random() * 13 + 1) * 32 + 27
+        ypos = math.floor(random.random() * 15 + 1) * 32 - 4
         alreadyPos = True
         if list == []:
             return {'letter': l,'x': xpos, 'y': ypos}
         else:
             for Letter in list:
-                if xpos == Letter['x'] and ypos == Letter['y'] or (xpos == 235 and ypos == 251):
+                if xpos == Letter['x'] and ypos == Letter['y'] or (xpos == 233 and ypos == 252):
                     alreadyPos = False
                     break
                 else:

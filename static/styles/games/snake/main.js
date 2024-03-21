@@ -57,10 +57,10 @@ var co2python = []
 var space_pos = []
     // alreadyPos = false
 async function getPosition() {
-    console.log("cool")
     wordStyle = []
     r = await fetch(`/dashboard/games/snake/${session_id}/getWord`)
     response = await r.json();
+    console.log(response.result.coo)
     space_pos = response.result.space_positions
     letterPositions = response.result.coo
     frWord.innerHTML = response.result.frensh
@@ -136,7 +136,6 @@ async function direction(event) {
     if (key == 40 && d != "UP") {
         var d1 = "DOWN";
     }
-    console.log(d1)
     if (d == d1) {
         return
     }else if ( d1 == undefined) {
@@ -146,7 +145,6 @@ async function direction(event) {
     }
     if( d != old_d){
         if (old_d == 'LEFT') {
-            console.log(d)
             if (snakeX % 32 == 0) {
                 return
             } else if (d != 'RIGHT') {
@@ -168,7 +166,6 @@ async function direction(event) {
             }
         }
         else if (old_d == 'RIGHT') {
-            console.log(d)
             if (snakeX % 32 == 0) {
                 return
             } else if (d != 'LEFT') {
@@ -242,9 +239,7 @@ var fin = 0
 function draw(changeDirection) {
     snakeX = snake[0].x;
     snakeY = snake[0].y;
-    // let cool = setInterval(() => {
     if (isEventListener == true) {
-        // clearInterval(cool)
         context.clearRect(0, 0, 504, 504)
         if (d != undefined) {
             pressMessage.style.display = 'none'
@@ -257,22 +252,12 @@ function draw(changeDirection) {
         for (let i = 0; i < 15; i++) {
             for (let j = 0; j < 15; j++) {
                 context.fillRect(background_x, background_y, 32, 32)
-                    // context.beginPath()
-                    // context.lineWidth = "10"
-                    // context.strokeStyle = "brown"
-                    // context.rect(background_x,background_y,55,55)
-                    // context.stroke()
-                if (context.fillStyle == '#cca48a') {
+                if (context.fillStyle == '#635146') {
                     context.fillStyle = '#766153'
                 } else if (context.fillStyle == '#766153') {
-                    context.fillStyle = '#cca48a'
+                    context.fillStyle = '#635146'
                 }
                 background_x += 32
-                    // if(context.fillStyle == "#c1c286"){
-                    //     context.fillStyle = "#84855c"
-                    // } else if (context.fillStyle == '#84855c') {
-                    //     context.fillStyle = "#c1c286"
-                    // }
 
             }
             background_x = 0
@@ -281,48 +266,30 @@ function draw(changeDirection) {
         var letterIndex = 0;
         letterPositions.forEach(e => {
             if (e.letter == 'rock') {
-                context.drawImage(image, letterPositions[letterIndex].x - 5, letterPositions[letterIndex].y - 20, 25, 18)
+                context.drawImage(image, letterPositions[letterIndex].x - 9, letterPositions[letterIndex].y - 25, 30, 28)
             } else {
-                context.fillStyle = "#373D20";
-                context.font = "30px League Spartan";
-                context.fillText(e.letter, letterPositions[letterIndex].x, letterPositions[letterIndex].y);
+                context.font = "30px Bangers";
+                context.lineWidth = 2;
+                context.fillStyle = "#ADAE82";
+                context.fillText(e.letter, letterPositions[letterIndex].x - 2, letterPositions[letterIndex].y);
             }
             letterIndex++;
         });
         for (let i = 0; i < snake.length; i++) {
             if (i == 0) {
-                // context.fillStyle = "#BCBD8B";
-                // context.beginPath();
-                // context.lineWidth = "2";
-                // context.arc(snake[i].x + 16, snake[i].y + 16, 17, 0, 2 * Math.PI)
-                // context.fill();
                 i = i
+            } else if (i > (snake.length - 8)) {
+                context.beginPath();
+                context.arc(snake[i].x + 16, snake[i].y + 16, 16, 0, 2 * Math.PI);
+                context.fill();
             } else {
-                context.fillStyle = "#ADAE82"
+                context.fillStyle = "#ADAE82";
                 context.fillRect(snake[i].x, snake[i].y, box, box);
             }
             var e = 16 * (nbrLettreTrouve + 1)
             if (snake.length != e + 1 && d != undefined) {
                 snake.push(1)
             }
-
-            // context.fillStyle = "#BCBD8B";
-            // context.beginPath();
-            // context.lineWidth = "2";
-            // context.arc(snake[0].x + 16, snake[0].y + 16, 17, 0, 2 * Math.PI)
-            // context.fill();
-            // if (d == 'RIGHT') {
-            //     context.drawImage(headRight, snake[0].x - 7, snake[0].y - 7, 46, 46)
-            // }
-            // if (d == 'LEFT') {
-            //     context.drawImage(headLEFT, snake[0].x - 7, snake[0].y - 7, 46, 46)
-            // }
-            // if (d == 'RIGHT') {
-            //     context.drawImage(headLEFT, snake[0].x - 7, snake[0].y - 7, 46, 46)
-            // }
-            // if (d == 'RIGHT') {
-            //     context.drawImage(headRight, snake[0].x - 7, snake[0].y - 7, 46, 46)
-            // }
             if (d == undefined) {
                 context.drawImage(headRight, snake[0].x, snake[0].y - 10, 36, 50)
             }
@@ -330,7 +297,7 @@ function draw(changeDirection) {
         var letterFind = false
         var l = false
         for (let i = 0; i < letterPositions.length; i++) {
-            if (snakeX == letterPositions[i].x - 9 && snakeY == letterPositions[i].y - 27) {
+            if (snakeX == letterPositions[i].x - 9 && snakeY == letterPositions[i].y - 28) {
                 if (letterPositions[i].letter != word[0]) {
                     l = true
                 } else {
@@ -393,8 +360,6 @@ function draw(changeDirection) {
     // }, 50);
 }
 async function checkingCoo() {
-    console.log('checking')
-    console.log(co2python)
     r = await fetch(`/dashboard/games/snake/${session_id}/check_coo`, {
         method: 'POST',
         headers: {
@@ -433,7 +398,7 @@ async function checkingCoo() {
                 draw('pas de changement');
             }, 14)
             fin = 0
-        }, 500);
+        }, 1500);
     }
 }
 
@@ -476,7 +441,6 @@ var timer = setInterval(async() => {
             // Check the status of the game
             const response = await fetch(`/dashboard/games/snake/${session_id}/check_status`);
             const data = await response.json();
-            console.log(data);
             // If the game is over
             if (data.code == 201) {
                 // End the game

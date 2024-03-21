@@ -55,9 +55,12 @@ def quests():
         
         # Get the user's targets
         lists = current_user.get_lists()
-
+        current_date = datetime.now().date()
+        cursor.execute("SELECT lesson_id FROM lessons_log WHERE user_id = %s GROUP BY lesson_id HAVING DATE(MIN(created_at)) = %s;" , (current_user.id, current_date))
+        list_finished_today = cursor.fetchall()
+        list_finished_today = [lst[0] for lst in list_finished_today]
         for lst in lists:
-            if not all(lesson["completed"] == 1 for lesson in lst["lessons"]):
+            if not all(lesson["completed"] == 1 for lesson in lst["lessons"]) or any(lesson["id"] in list_finished_today for lesson in lst["lessons"]):
                 targets["games"] += lst["tgt_games"]
                 targets["xp"] += lst["tgt_xp"]
                 targets["time"] += lst["tgt_time"]

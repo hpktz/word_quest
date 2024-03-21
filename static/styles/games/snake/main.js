@@ -73,6 +73,7 @@ async function getPosition() {
             nbrOfRock++;
         }
     }
+    updateWord()
     isEventListener = true
 }
 
@@ -280,7 +281,7 @@ function draw(changeDirection) {
         var letterIndex = 0;
         letterPositions.forEach(e => {
             if (e.letter == 'rock') {
-                context.drawImage(image, letterPositions[letterIndex].x - 10, letterPositions[letterIndex].y - 22, 25, 18)
+                context.drawImage(image, letterPositions[letterIndex].x - 5, letterPositions[letterIndex].y - 20, 25, 18)
             } else {
                 context.fillStyle = "#373D20";
                 context.font = "30px League Spartan";
@@ -341,6 +342,7 @@ function draw(changeDirection) {
                     word.shift();
                     letterPositions.splice(i, 1);
                     nbrLettreTrouve++;
+                    updateWord();
                 }
             }
         }
@@ -387,7 +389,6 @@ function draw(changeDirection) {
             }
         }
         snake.unshift(newHead);
-        updateWord();
     }
     // }, 50);
 }
@@ -432,7 +433,7 @@ async function checkingCoo() {
                 draw('pas de changement');
             }, 14)
             fin = 0
-        }, 20);
+        }, 500);
     }
 }
 

@@ -81,10 +81,13 @@ class snake():
         self.list_id = list_id
         self.lesson_id = lesson_id
         self.words = words
+        while len(self.words) > 8:
+            self.words.pop(random.randint(0, len(words)-1))
         self.shuffle = random.sample(self.words, len(self.words))
         self.words_to_check = []
         self.current_word = {}
-        self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=3))
+        self.total_time = len(words) * 23
+        self.time = str(datetime.datetime.now() + datetime.timedelta(seconds=self.total_time))
         self.start = str(datetime.datetime.now())
         self.finalChecking = []
         self.xp = 0
@@ -95,7 +98,6 @@ class snake():
 
 
     def newWord(self):
-        print(self.shuffle)
         coLetters = []
         self.current_word = self.shuffle.pop()
         word_choosen = ''.join([i for i in self.current_word["word"] if i != " "])
@@ -106,7 +108,7 @@ class snake():
         for letter in word_choosen:
             coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
         self.finalChecking = coLetters
-        while len(coLetters) < 12:
+        while len(coLetters) < 16:
             coLetters.append(self.getcoordinate(coLetters, 'rock'))
         return jsonify({
             'code': 200,
@@ -142,9 +144,6 @@ class snake():
     def checkingCoo(self,list):
         try:
             xpWord = 0
-            
-            print(self.finalChecking)
-            print(list)
             if list is not None:
                 for i in range(len(list)):
                     if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
@@ -340,6 +339,7 @@ class snake():
         to_extract.finalChecking = json_dict["finalChecking"]
         to_extract.current_word = json_dict["current_word"]
         to_extract.xp = json_dict["xp"]
+        to_extract.total_time = json_dict["total_time"]
         return to_extract    
 
 
@@ -478,7 +478,7 @@ def getCard(session_id):
     game = snake.from_json(session["game"])
     result = game.newWord()
     session["game"] = game.to_json()
-    time.sleep(1/1000)
+    time.sleep(1/100)
     return result
 
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/check_coo', methods=['POST'])
@@ -489,4 +489,5 @@ def endChecking(session_id):
     game = snake.from_json(session["game"])
     result = game.checkingCoo(coord)
     session["game"] = game.to_json()
+    time.sleep(1/100)
     return result

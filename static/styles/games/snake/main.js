@@ -1,6 +1,23 @@
 const session_id = document.body.dataset.session_id;
 const csrf_token = document.getElementById('csrf_token').value;
 
+const successAudioUrl = '/static/sounds/success-sound-effect.mp3';
+const successAudio = new Audio(successAudioUrl);
+successAudio.volume = 1;
+successAudio.load();
+const failAudioUrl = '/static/sounds/wrong-sound-effect.mp3';
+const failAudio = new Audio(failAudioUrl);
+failAudio.volume = 1;
+failAudio.load();
+const eatingAudioUrl = '/static/sounds/eating-snake-sound-effect.mp3';
+const eatingAudio = new Audio(eatingAudioUrl);
+eatingAudio.volume = 1;
+eatingAudio.load();
+const hitAudioUrl = '/static/sounds/hit-snake-sound-effect.mp3';
+const hitAudio = new Audio(hitAudioUrl);
+hitAudio.volume = 1;
+hitAudio.load();
+
 const canvas = document.querySelector("canvas");
 const context = canvas.getContext('2d');
 
@@ -309,6 +326,7 @@ function draw(changeDirection) {
                     word.shift();
                     letterPositions.splice(i, 1);
                     nbrLettreTrouve++;
+                    eatingAudio.play();
                     updateWord();
                 }
             }

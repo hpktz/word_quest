@@ -126,28 +126,57 @@
             </div>
         </div>
         <div class="ranking entry-animation">
-            <div class="title">Classement de ces 7 derniers jours</div>
-            <div class="ranking-position">{{user_rank}}</div>
+            <div class="title">Classement global</div>
+            <div class="ranking-position"># {{user_rank}}</div>
             <div class="ranking-container">
-                {% if top_ranking %} {% for rank in top_ranking %}
-                <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
-                    <div class="rank">{{rank[4]}}</div>
-                    <div class="picture">
-                        <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
-                    </div>
-                    <div class="name">{{rank[2]}}</div>
-                </a> {% endfor %}
-                <div class="separate"></div>
-                {% endif %} {% for rank in arround_ranking %}
-                <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
-                    <div class="rank">{{rank[4]}}</div>
-                    <div class="picture">
-                        <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
-                    </div>
-                    <div class="name">{{rank[2]}}</div>
-                </a>
-                {% endfor %} {% if arround_ranking|length == 0 %}
-                <div class="empty-ranking-box">Pas de données</div>
+                {% if top_ranking %} 
+                    {% for rank in top_ranking %}
+                        <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
+                            <div class="rank">{{rank[4]}}</div>
+                            <div class="picture">
+                                <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
+                            </div>
+                            <div class="name">{{rank[2]}}</div>
+                            {% if rank[3] > 15000 %}
+                                <img class="badge" src="/static/imgs/badges/polyglot-badge.png" alt="medal">
+                            {% elif rank[3] > 7500 %}
+                                <img class="badge" src="/static/imgs/badges/expert-badge.png" alt="medal">
+                            {% elif rank[3] > 2500 %}
+                                <img class="badge" src="/static/imgs/badges/advanced-badge.png" alt="medal">
+                            {% elif rank[3] > 500 %}
+                                <img class="badge" src="/static/imgs/badges/intermediate-badge.png" alt="medal">
+                            {% else %}
+                                <img class="badge" src="/static/imgs/badges/beginner-badge.png" alt="medal">
+                            {% endif %}
+                        </a> 
+                    {% endfor %}
+                    <div class="separate"></div>
+                {% endif %}
+                {% for rank in arround_ranking %}
+                    <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
+                        <div class="rank">{{rank[4]}}</div>
+                        <div class="picture">
+                            <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
+                        </div>
+                        <div class="name">
+                            <div class="main-text">{{rank[2]}}</div>
+                            <div class="xp-amount">{{rank[3]}} XP</div>
+                        </div>
+                        {% if rank[3] > 15000 %}
+                            <img class="badge" src="/static/imgs/badges/polyglot-badge.png" alt="medal">
+                        {% elif rank[3] > 7500 %}
+                            <img class="badge" src="/static/imgs/badges/expert-badge.png" alt="medal">
+                        {% elif rank[3] > 2500 %}
+                            <img class="badge" src="/static/imgs/badges/advanced-badge.png" alt="medal">
+                        {% elif rank[3] > 500 %}
+                            <img class="badge" src="/static/imgs/badges/intermediate-badge.png" alt="medal">
+                        {% else %}
+                            <img class="badge" src="/static/imgs/badges/beginner-badge.png" alt="medal">
+                        {% endif %}
+                    </a>
+                {% endfor %} 
+                {% if arround_ranking|length == 0 %}
+                    <div class="empty-ranking-box">Pas de données</div>
                 {% endif %}
             </div>
         </div>

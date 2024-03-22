@@ -57,50 +57,47 @@ class User(UserMixin):
         try:
             conn = create_connection() # Create a connection to the database.
             cursor = conn.cursor() # Create a cursor to execute SQL queries.
-            cursor.execute("""
-            SELECT l.*, 
-                JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        'id', e.id,
-                        'word', e.word,
-                        'type', e.word_type,
-                        'examples', e.examples,
-                        'trans_word', e.trans_word,
-                        'trans_examples', e.trans_examples
-                    )
-                ) AS words,
-                lessons.lesson_data AS lessons
-            FROM lists l 
-            JOIN (
-                SELECT list_id, JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        'id', le.id,
-                        'lesson_id', le.lesson_id,
-                        'odr', le.odr,
-                        'completed', le.completed
-                    )
-                ) AS lesson_data
-                FROM lessons le
-                GROUP BY list_id
-            ) AS lessons ON lessons.list_id = l.id
-            JOIN list_content e ON e.list_id = l.id 
-            WHERE l.user_id = 55
-            GROUP BY l.id;
-            """)
-            results = cursor.fetchall() # Execute the SQL query.
-            columns = [col[0] for col in cursor.description] # Get the columns of the result.
-            results = [{columns[i]: result[i] for i in range(len(columns))} for result in results] # Convert the result to a dictionary.
-            for result in results:
-                result["created_at"] = result["created_at"].date().strftime("%d/%m/%Y") # Convert the created_at column to a string.
-                result["updated_at"] = result["updated_at"].date().strftime("%d/%m/%Y") # Convert the created_at column to a string.
-                
-                result["words"] = json.loads(result["words"]) # Convert the words column to a list.
-                result["lessons"] = json.loads(result["lessons"])
-
-                for word in result["words"]:
-                    word["examples"] = json.loads(word["examples"]) # Convert the examples column to a list.
-                    word["trans_examples"] = json.loads(word["trans_examples"])
+            cursor.execute('SELECT * FROM lists WHERE user_id = %s', (self.id,)) # Execute the SQL query.
+            columns = [column[0] for column in cursor.description]
+            lists = cursor.fetchall()
+            results = []
+            list_ids =[lst[0] for lst in lists]
+            list_ids = ",".join("'" + str(x) + "'" for x in list_ids)
             
+            cursor.execute('SELECT id, list_id, word, word_type, examples, trans_word, trans_examples FROM list_content WHERE list_id IN ('+ list_ids +')',) # Execute the SQL query.
+            words = cursor.fetchall()
+            
+            cursor.execute('SELECT id, list_id, lesson_id, odr, completed FROM lessons WHERE list_id IN ('+ list_ids +')',) # Execute the SQL query.
+            columns_lesson = [column[0] for column in cursor.description]
+            lessons = cursor.fetchall()
+            for lst in lists:
+                # Convert the list to a dictionary.
+                result = dict(zip(columns, lst))
+                result["created_at"] = result["created_at"].date().strftime("%d/%m/%Y") # Convert the created_at date to a string.
+                result["updated_at"] = result["updated_at"].date().strftime("%d/%m/%Y") # Convert the updated_at date to a string.
+
+                result["words"] = []
+                result["lessons"] = []
+
+                # Get the words in the list.
+
+                for word in words:
+                    # Convert the words to a dictionary.
+                    if word[1] == result["id"]:
+                        result["words"].append({
+                            "word": word[2],
+                            "type": word[3],
+                            "examples": json.loads(word[4]),
+                            "trans_word": word[5],
+                            "trans_examples": json.loads(word[6])
+                        })
+
+                # Get the lessons in the list.
+                for lesson in lessons:
+                    if lesson[1] == result["id"]:
+                        result["lessons"].append(dict(zip(columns_lesson, lesson)))
+
+                results.append(result)
             return results # Return the user's lists.
         except Exception as e:
             logging.error("Error in models :" +str(e))    

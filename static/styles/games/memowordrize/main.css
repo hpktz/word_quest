@@ -145,6 +145,13 @@ body {
     animation: wrong 0.5s ease-in-out;
 }
 
+.content .header .info-button #tries-amount {
+    padding: 3px 3px 1px 3px;
+    background: black;
+    color: white;
+    border-radius: 10px;
+}
+
 @keyframes wrong {
     0% {
         transform: rotate(0deg);
@@ -503,6 +510,9 @@ body {
         grid-column: 2;
         grid-row: 1;
         width: 100%;
+    }
+    .content .header .info-button #tries-amount {
+        display: none;
     }
     .content .path-container {
         margin-top: 0;

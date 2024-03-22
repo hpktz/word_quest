@@ -44,24 +44,6 @@
                 </div>
             </div>
         </div>
-        <div class="title">Dernière activité</div>
-        <div class="graph">
-            <div class="ordinate">
-                <div class="item">{{max_xp}}</div>
-                <div class="item">{{max_xp//2}}</div>
-                <div class="item">0</div>
-            </div>
-            <div class="chart-content">
-                {% for xp in xps %} {% if max_xp > 0%}{% set height = (xp[1] * 100) // max_xp %}{% else %}{% set height = 0 %}{% endif %}
-                <div class="item" style="height: {{height}}%"></div>
-                {% endfor %}
-            </div>
-            <div class="abscissa">
-                {% for xp in xps %}
-                <div class="item">{{xp[0]}}</div>
-                {% endfor %}
-            </div>
-        </div>
     </section>
     <section class="list-section">
         <div class="see-more-box">

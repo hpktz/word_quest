@@ -7,13 +7,13 @@
     <div class="goals-tab">
         <p class="subtitle">Temps</p>
         <div>
-            {% set time_1 = "" %} {% set time_2 = "" %} {% set time_3 = "" %} {% if list["tgt_time"] == 5 %} {% set time_1 = "checked" %} {% elif list["tgt_time"] == 10 %} {% set time_2 = "checked" %} {% else %} {% set time_3 = "checked" %} {% endif %}
-            <input type="radio" name="time" id="time-1" value="5" {{time_1}}>
-            <label for="time-1">5 min</label>
-            <input type="radio" name="time" id="time-2" value="10" {{time_2}}>
-            <label for="time-2">10 min</label>
-            <input type="radio" name="time" id="time-3" value="15" {{time_3}}>
-            <label for="time-3">15 min</label>
+            {% set time_1 = "" %} {% set time_2 = "" %} {% set time_3 = "" %} {% if list["tgt_time"] == 1 %} {% set time_1 = "checked" %} {% elif list["tgt_time"] == 3 %} {% set time_2 = "checked" %} {% else %} {% set time_3 = "checked" %} {% endif %}
+            <input type="radio" name="time" id="time-1" value="1" {{time_1}}>
+            <label for="time-1">1 min</label>
+            <input type="radio" name="time" id="time-2" value="3" {{time_2}}>
+            <label for="time-2">3 min</label>
+            <input type="radio" name="time" id="time-3" value="5" {{time_3}}>
+            <label for="time-3">5 min</label>
         </div>
     </div>
     <div class="goals-tab">

@@ -266,7 +266,9 @@ async function try_case(draggableEl, max) {
             await new Promise(resolve => setTimeout(resolve, 1250));
             xpMessageContainer.classList.remove('active');
             document.getElementById('xp').innerHTML = parseInt(document.getElementById('xp').innerHTML) + data.result.xp; // Update the experience points
-            see_path(data); // Display the next path
+            infoButton.classList.add('pulse');
+            infoButton.blur();
+            wordsContainer.innerHTML = '<div class="mess">Cliquez sur "Voir le parcours" pour continuer</div>';
         }
     } catch (error) {
         window.location.href = '/dashboard/errors/500';

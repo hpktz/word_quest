@@ -482,7 +482,7 @@ def create_list():
             return jsonify({"code": 400, "title": "Bad request", "message": "Contenu inapproprié"})
         
         # Check if time, xp and game are valid
-        if int(time) not in [5, 10, 15] or int(xp) not in [10, 20, 30] or int(game) not in [1, 2, 3]:
+        if int(time) not in [1, 3, 5] or int(xp) not in [10, 20, 30] or int(game) not in [1, 2, 3]:
             time = 5
             xp = 10
             game = 1

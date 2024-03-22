@@ -45,13 +45,6 @@ const failAudio = new Audio(failAudioUrl);
 failAudio.volume = 0.4;
 failAudio.load();
 
-// Ajout des Indices en appuyant sur le + -------------------------------------------------------------------------------------
-var indices = [
-    { title: "Indice Rigolo", indice: "eh regarde comme cet indice est fou" },
-    { title: "Hippoindice", indice: "eh regarde comme cet indice est hippodinguo" },
-    { title: "Yo c'est Billy", indice: "un apagnan sucrée au sucre" },
-]
-
 async function newIndice() {
     try {
         const getIndice = await fetch(`/dashboard/games/hangman/${sessionID}/askhint`);
@@ -241,7 +234,7 @@ keyboard.forEach(e => {
                 } else if (checked.code == 201) {
                     for (let i = 0; i < document.querySelectorAll('.letter').length; i++) {
                         if (document.querySelectorAll('.letter')[i].innerHTML == '') {
-                            document.querySelectorAll('.letter')[i].innerHTML = letter;
+                            document.querySelectorAll('.letter')[i].innerHTML = e.innerHTML;
                         }
                     }
                     end_game(checked.result.xp, checked.result.time, checked.result.lost_lives)
@@ -293,7 +286,8 @@ function nextWord(data) {
                 wordEl.innerHTML += '<span class="letter"></span>';
             }
         } catch (error) {
-            window.location.href = '/dashboard/errors/500';
+            console.log(error)
+            // window.location.href = '/dashboard/errors/500';
         }
     }, 1000);
 }

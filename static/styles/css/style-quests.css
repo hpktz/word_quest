@@ -243,7 +243,7 @@ header .infos-section::-webkit-scrollbar-thumb {
 
 .quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box {
     display: grid;
-    grid-template-columns: 30px 35px 1fr;
+    grid-template-columns: 30px 35px 1fr 40px;
     align-items: center;
     gap: 30px;
     margin: 20px 0;
@@ -295,6 +295,18 @@ header .infos-section::-webkit-scrollbar-thumb {
     font-family: 'League Spartan', sans-serif;
     font-size: 18px;
     font-weight: 400;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .name .xp-amount {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #959da5;
+    margin-top: 5px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .badge {
+    width: 40px;
 }
 
 .quests-main-container .reaward-ranking-container .reward .title {

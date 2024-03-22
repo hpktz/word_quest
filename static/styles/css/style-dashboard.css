@@ -700,8 +700,8 @@ main {
 }
 
 .dashboard-main-container .lists-container .list-box.complete.selected {
-    background-size: 50px;
-    background-position: top 10px center;
+    background-size: 250px;
+
 }
 
 .dashboard-main-container .lists-container .list-box.new-list {

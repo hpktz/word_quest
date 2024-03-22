@@ -463,22 +463,12 @@ def profile_list(id):
         copies_id = [row[0] for row in result]
         copies_id.append(id)
         copies_id = ','.join(map(str, copies_id))
+        print(copies_id)
         
         # Récupérer les xp gagnés par jour pour toutes les listes avec cet initial_id
-        cursor.execute("SELECT created_at, SUM(xp) FROM lessons_log WHERE list_id IN (%s) GROUP BY created_at;", (copies_id,))
+        cursor.execute("SELECT SUM(xp) FROM lessons_log WHERE list_id IN ("+ copies_id +")",)
         result = cursor.fetchall()
-        total_xp = sum([row[1] for row in result]) if result else 0
-        
-        days = [[(datetime.now() - timedelta(days=i)).day, 0] for i in range(14)]
-        result = [[row[0].day, row[1]] for row in result]
-        for day in days:
-            for row in result:
-                if day[0] == row[0]:
-                    day[1] = row[1]
-                    break
-        days.reverse()
-        
-        max_xp = max([row[1] for row in result]) if result else 0
+        total_xp = result[0][0] if result[0][0] is not None else 0
         
         cursor.execute("SELECT * FROM list_content WHERE list_id = %s;", (id,))
         words = cursor.fetchall()
@@ -497,8 +487,6 @@ def profile_list(id):
                                likes = likes,
                                copies = copies,
                                total_xp = total_xp,
-                               max_xp = max_xp,
-                               xps = days,
                                words = words,
                                is_public = is_public,
                                is_yours = is_yours)

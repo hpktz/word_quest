@@ -747,6 +747,12 @@
         grid-column: 1;
         grid-row: 3;
     }
+    .profile-main-container .friends-list .badge-section .badge-box {
+        grid-template-columns: 40px 1fr;
+    }
+    .profile-main-container .friends-list .badge-section .badge-box img {
+        width: 40px;
+    }
 }
 
 @media screen and (max-width: 670px) {

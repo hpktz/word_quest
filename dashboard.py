@@ -313,8 +313,11 @@ def update(list_id):
         public = request.json.get('public')
         
         regex = re.compile(r'^[a-zA-Z0-9#\'\s,.!?À-ÿ]+$')
-        if not regex.match(name) or not regex.match(description):
+        if not regex.match(name):
             return jsonify({"code": 400, "message": "Caractères invalides"})
+        
+        if len(description) > 0 and not regex.match(description):
+            return jsonify({"code": 400, "title": "Bad request", "message": "Caractères invalides"})
         
         if len(name) > 50 or len(description) > 500:
             return jsonify({"code": 400, "message": "Trop de caractères"})
@@ -325,9 +328,9 @@ def update(list_id):
         if profanity_detector(name) or profanity_detector(description):
             return jsonify({"code": 400, "title": "Bad request", "message": "Contenu inapproprié"})
         
-        time_normalized = [5,10,15]
-        xp_normalized = [10,20,30]
-        game_normalized = [1,2,3]
+        time_normalized = [1, 3, 5]
+        xp_normalized = [10, 20, 30]
+        game_normalized = [1, 2, 3]
         
         if not isinstance(reminder, bool) or not isinstance(stats, bool) or not isinstance(public, bool)\
         or not time in time_normalized or not xp in xp_normalized or not game in game_normalized:

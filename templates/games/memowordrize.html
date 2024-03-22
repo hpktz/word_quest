@@ -25,7 +25,7 @@
                     </div>
                     {% if not current_path %}{% set infoButton = "active pulse" %}{% else %}{% set infoButton = "disabled" %}{% endif %}
                     <div class="info-button {{infoButton}}" id="show-path">
-                        <span class="text">Voir le parcours</span> (<span class="amount" id="tries-amount">{% if current_path %}{{3 - current_path["tries"]}}{% else %}3{%endif%}</span>)
+                        <span class="text">Voir le parcours</span> <span class="amount" id="tries-amount">{% if current_path %}{{3 - current_path["tries"]}}{% else %}3{%endif%}</span>
                     </div>
                     <div class="xp-container">
                         <img src="/static/icons/games-icons/big-flash.png" class="icon" alt="">

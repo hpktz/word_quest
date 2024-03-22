@@ -1,3 +1,12 @@
+const successAudioUrl = '/static/sounds/success-sound-effect.mp3';
+const successAudio = new Audio(successAudioUrl);
+successAudio.volume = 1;
+successAudio.load();
+const failAudioUrl = '/static/sounds/wrong-sound-effect.mp3';
+const failAudio = new Audio(failAudioUrl);
+failAudio.volume = 1;
+failAudio.load();
+
 /**
  * 
  * This function is used to check the word entered by the user (by sending a request to the server)
@@ -39,17 +48,20 @@ async function check_word(form, event) {
             document.getElementById('score').textContent = parseInt(document.getElementById('score').textContent) + 1;
             word_list.innerHTML += `<div class="word">${word}</div>`;
             form.word.value = '';
+            successAudio.play();
             form.submit.innerHTML = "Vérifier";
         } else if (data.code == 201) { // If the game is over
             document.getElementById('score').textContent = parseInt(document.getElementById('score').textContent) + 1;
             word_list.innerHTML += `<div class="word">${word}</div>`;
             form.word.value = '';
             form.submit.innerHTML = "Vérifier";
+            successAudio.play();
             end_game(data.result.xp, data.result.time, data.result.lost_lives);
         } else { // If the word is incorrect
             // Activate the error animation
             form.submit.innerHTML = "Vérifier";
             form.submit.classList.add("pulse");
+            failAudio.play();
             setTimeout(() => {
                 form.submit.classList.remove("pulse");
             }, 250);

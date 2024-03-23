@@ -153,20 +153,28 @@ class snake():
                                 faute = True
                                 break
                         if not faute:
+                            if (xpWord//3 + 1) > 6:
+                                xpWord = 11
+                            if xpWord == 0:
+                                xpWord = 0
+                                self.xp += 0
+                            else :
+                                xpWord = xpWord //3 + 1
+                                self.xp += xpWord
                             return jsonify({
-                                'code': 404,
-                                'message': 'error',
-                                'result': {'xp': 0,
+                                'code': 200,
+                                'message': 'ok',
+                                'result': {'xp': 0 if list is None else xpWord,
                                 'xpTot': self.xp}
                             })
                     xpWord += 1
-                if (xpWord//2 + 1) > 6:
-                    xpWord = 11
+                if (xpWord//3 + 1) > 5:
+                    xpWord = 12
                 if xpWord == 0:
                     xpWord = 0
                     self.xp += 0
                 else :
-                    xpWord = xpWord //2 + 1
+                    xpWord = xpWord //3 + 1
                     self.xp += xpWord
             if(len(self.shuffle) == 0):
                 return self._end_game(xpWord)
@@ -261,6 +269,12 @@ class snake():
                 lives_to_lose -= 1
             
             lives_to_lose = 1 if self.xp < len(self.allLetters)//5 + len(self.current_word) else 0
+            
+            
+            cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
+            is_already_completed = cursor.fetchall()
+            if is_already_completed:
+                self.xp = 2*self.xp//3
             # Update the lesson as completed
             if lives_to_lose == 0:
                 cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))

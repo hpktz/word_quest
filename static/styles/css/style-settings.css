@@ -341,11 +341,12 @@ header {
     font-family: "League Spartan", sans-serif;
     font-size: 16px;
     margin-top: 20px;
+    text-align: left;
 }
 
 .settings-main-container .otp_check .body input {
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     background-color: #ededed;
     border: none;
     border-radius: 5px;
@@ -515,7 +516,7 @@ header {
 
 .delete_account .body input {
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     background-color: #ededed;
     border: none;
     border-radius: 5px;

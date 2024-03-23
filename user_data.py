@@ -666,11 +666,12 @@ def change_user_infos():
                         "email": email,
                         "picture": picture,
                         "secret_key": secret_key,
-                        "expires": time.time() + 60
+                        "expires": time.time() + 300
                     }
                     
                     # Send the verification code to the user's email.
-                    send_mail(email, "Vérification de votre adresse mail", "Votre code de vérification est : " + totp.now())
+                    html = render_template('emails/2fa.html', name=name, code=totp.now())
+                    send_mail(email, "Code de vérification - WORD QUEST", html)
                     return jsonify({
                         "code": 201,
                         "message": "Un code de vérification a été envoyé à votre adresse mail."
@@ -720,7 +721,7 @@ def verify_email(code):
     # Check if the code is valid.
     # Using pyotp to verify the code.
     totp = pyotp.TOTP(session["2fa"]["secret_key"])
-    if not totp.verify(code, valid_window=1):
+    if not totp.verify(code, valid_window=10):
         return jsonify({
             "code": 400,
             "message": "Code invalide."

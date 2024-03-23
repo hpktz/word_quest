@@ -273,6 +273,7 @@ async function display_pop_up(el, event) {
     }
     try {
         event.preventDefault();
+        document.getElementById('list-content-pop-up').innerHTML = "<div class='loader-container'><div class='load'></div></div>";
         let elCenterX = el.getBoundingClientRect().left + el.offsetWidth / 2;
         let elCenterY = el.getBoundingClientRect().top + el.offsetHeight / 2;
         popUp.style.transition = "0s";
@@ -285,21 +286,21 @@ async function display_pop_up(el, event) {
         popUp.style.zIndex = -1;
         el.style.transform = "scale(0.5)";
         await new Promise(r => setTimeout(r, 50));
-        popUp.style.transition = "0.25s";
+        popUp.style.transition = "0.5s";
         popUp.style.opacity = 1;
         popUp.style.transform = "translate(-50%, -50%) scale(1)";
         popUp.style.zIndex = 1;
         el.style.transform = "scale(1)";
+        
+        const listUrl = el.href;
+        const response = await fetch(listUrl);
+        const list = await response.text();
+        
         await new Promise(r => setTimeout(r, 250));
         popUp.removeAttribute('style');
         popUp.classList.add('active');
         const listTitle = el.getElementsByClassName('title')[0].innerText;
         document.getElementById('list-title-pop-up').innerText = listTitle;
-
-        const listUrl = el.href;
-        document.getElementById('list-content-pop-up').innerHTML = "<div class='loader'><div class='load'></div></div>";
-        const response = await fetch(listUrl);
-        const list = await response.text();
         document.getElementById('list-content-pop-up').innerHTML = list;
         const copyButton = document.getElementById("copy-button");
         if (copyButton) {

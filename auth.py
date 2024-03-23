@@ -161,8 +161,8 @@ def login_post():
                             session["2fa"]["email"] = email
                             session["2fa"]["action"] = "login"
                             session["2fa"]["secret_key"] = secret_key
-                            session["2fa"]["expires"] = time.time() + 60
-                            session["2fa"]["delay"] =  time.time() + 60
+                            session["2fa"]["expires"] = time.time() + 300
+                            session["2fa"]["delay"] =  time.time() + 300
                             
                             # Send the 2FA code to the user's email
                             html = render_template('emails/2fa.html', name=data[1], code=totp.now())
@@ -323,8 +323,8 @@ def register_post():
                     session["2fa"]["email"] = email
                     session["2fa"]["action"] = "register"
                     session["2fa"]["secret_key"] = secret_key
-                    session["2fa"]["expires"] = time.time() + 60
-                    session["2fa"]["delay"] =  time.time() + 60
+                    session["2fa"]["expires"] = time.time() + 300
+                    session["2fa"]["delay"] =  time.time() + 300
                     
                     # Send the 2FA code to the user's email
                     html = render_template('emails/2fa.html', name=name, code=totp.now())
@@ -381,7 +381,7 @@ def sys_2fa_sendCodeAgain():
         session["2fa"]["trials"] = 0
         session["2fa"]["secret_key"] = secret_key
         session["2fa"]["expires"] = time.time() + 300
-        session["2fa"]["delay"] =  time.time() + 60
+        session["2fa"]["delay"] =  time.time() + 300
 
         html = render_template('emails/2fa.html', name="", code=totp.now())
         send_mail(session["2fa"]["email"], "Code de vérification - WORD QUEST", html)
@@ -504,7 +504,7 @@ def sys_2fa_post():
     if session["2fa"]["trials"] >= 3 and session["2fa"]["delay"] > time.time():
         flash("Trop de tentatives de connexion, veuillez réessayer dans " + str(int(session["2fa"]["delay"] - time.time())) + " secondes")
         return redirect(url_for('auth.sys_2fa'))
-    elif pyotp.TOTP(session["2fa"]["secret_key"]).verify(code, valid_window=2): # Check if the 2FA code is correct
+    elif pyotp.TOTP(session["2fa"]["secret_key"]).verify(code, valid_window=10): # Check if the 2FA code is correct
         if session["2fa"]["action"] == "login":
             return _login(session["2fa"]["id"])
         elif session["2fa"]["action"] == "register":

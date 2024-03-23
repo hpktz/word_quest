@@ -672,7 +672,7 @@ def check(session_id, answer):
     game = quiz.from_json(session["game"])
     response = game.check_answer(answer)
     session["game"] = game.to_json()
-    time.sleep(1/1000) # To avoid session concurrency
+    time.sleep(1/100) # To avoid session concurrency
 
     if response.status_code == 201:
         session.pop("game", None)

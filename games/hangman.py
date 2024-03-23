@@ -7,6 +7,7 @@ import uuid as uuid
 import json
 from functools import wraps 
 import logging
+import time
 
 hangman_bp = Blueprint('hangman', __name__)
 
@@ -473,6 +474,7 @@ def check(session_id, l):
     game = hangman.from_json(session["game"])
     result = game.checking_letter(l)
     session["game"] = game.to_json()
+    time.sleep(1/100)
     if result.status_code == 201:
         session.pop('game', None)
     return result
@@ -482,6 +484,7 @@ def new_hint(session_id):
     game = hangman.from_json(session["game"])
     result = game.ask_hint()
     session["game"] = game.to_json()
+    time.sleep(1/100)
     if result.status_code == 201:
         session.pop('game', None)
     return result

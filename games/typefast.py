@@ -11,6 +11,7 @@ Imports:
     - json: For handling the JSON data
     - functools: For handling the decorators
     - logging: For logging the errors
+    - time: For handling the time
 
 Blueprints:
     - typefast_bp: The blueprint for the typefast game 
@@ -26,6 +27,7 @@ import uuid as uuid
 import json
 from functools import wraps 
 import logging
+import time
 
 typefast_bp = Blueprint('typefast', __name__)
 """
@@ -408,6 +410,7 @@ def check_word(session_id, word):
     game = typeFast.from_json(session["game"])
     response = game.check_word(word)
     session["game"] = game.to_json()
+    time.sleep(1/100)
 
     if response.status_code == 201:
         session.pop("game", None)

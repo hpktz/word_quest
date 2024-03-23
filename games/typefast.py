@@ -212,11 +212,9 @@ class typeFast():
             is_already_completed = cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
-                xp = xp//2
+                xp = round(xp  * 0.66)
             else:
-                print("not completed")
                 if lives_to_lose == 0:
-                    print("completed")
                     session["path_finished"] = True
                     cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'gems', transaction = %s", (current_user.id, 200))
                 

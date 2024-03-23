@@ -101,7 +101,7 @@ class typeFast():
             return self._end_game()
         
         for index, word_to_check in enumerate(self.words_to_check):
-            if word_to_check["word"] == word:
+            if word_to_check["word"].strip() == word.strip():
                 self.words_to_check.pop(index)
                 if len(self.words_to_check) == 0:
                     return self._end_game()

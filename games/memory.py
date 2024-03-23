@@ -232,7 +232,7 @@ class memory():
             is_already_completed = cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
-                xp = xp//2
+                xp = round(xp  * 0.66)
 
             # Update the lesson as completed
             if lives_to_lose == 0:

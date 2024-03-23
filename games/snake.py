@@ -1,5 +1,5 @@
 """
-This module contains the routes and functions to manage the quiz game
+This module contains the routes and functions to manage the snake game
 
 Imports:
     - flask: For handling the requests and responses
@@ -17,7 +17,7 @@ Imports:
     - logging: For logging errors
     
 Blueprints:
-    - quiz_bp: The blueprint of the quiz game
+    - snake_bp: The blueprint of the snake game
 """
 
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session, abort, make_response, Response
@@ -36,20 +36,20 @@ import logging
 
 snake_bp = Blueprint('snake', __name__)
 """
-The blueprint of the quiz game
+The blueprint of the snake game
 
 Attributes:
-    -quiz_bp: The blueprint of the quiz game
+    -snake_bp: The blueprint of the snake game
 
 Routes:
-    - /dashboard/games/quiz/<int:list_id>: Initialize the game and redirect to the game interface
-    - /dashboard/games/quiz/<string:session_id>: Start the game by displaying the game interface
-    - /dashboard/games/memory/<int:list_id>/getCard: Get the cards of the game
-    - /dashboard/games/quiz/<string:session_id>/check/<int:answer>: Check the answer of the game
-    - /dashboard/games/quiz/<string:session_id>/check_status: Check if the game is still in progress
+    - /dashboard/games/snake/<int:list_id>: Initialize the game and redirect to the game interface
+    - /dashboard/games/snake/<string:session_id>: Start the game by displaying the game interface
+    - /dashboard/games/snake/<string:session_id>/check_status: Check if the game is still in progress
+    - /dashboard/games/snake/<string:session_id>/getWord: Get a word and the coordinate of each letter
+    - /dashboard/games/snake/<string:session_id>/check_coo Check if the Javascript coordinate correspond to the Python coordinate
 """
 
-# The id of the quiz lesson
+# The id of the snake lesson
 snake_id = 1
 
 class snake():
@@ -61,15 +61,19 @@ class snake():
         - list_id (int): The id of the list
         - lesson_id (int): The id of the lesson
         - words (list): The words of the lesson
-        - words_to_check (list): The words to check
+        - shuffle (list): The words of the lesson mixed
         - time (string): The time when the game ends
+        - total_time: The duration of the game
         - start (string): The time when the game started
-        - current_quiz (dict): The current question
-        - faults (int): The number of faults
+        - current_word (dict): The current word
+        - xp (int): the xp earned
+        - finalChecking (list): the list of letters coordinates
+        - allLetter (list): the list of all letter in the words of the list
         
     Methods:
-        - check_answer: Check the answer of the user
-        - ask_next_question: Ask the next question
+        - newWord: Get a new word
+        - getcoordinate: Gets the coordinates of one letter
+        - checkingCoo: Check if the Javascript coordinates correspond to the Python coordinate
         - get_remaning_time: Get the remaining time
         - _lose_life: Lose a life
         - _end_game: End the game and save the results
@@ -84,7 +88,6 @@ class snake():
         while len(self.words) > 8:
             self.words.pop(random.randint(0, len(words)-1))
         self.shuffle = random.sample(self.words, len(self.words))
-        self.words_to_check = []
         self.current_word = {}
         self.total_time = len(words) * 23
         self.time = str(datetime.datetime.now() + datetime.timedelta(seconds=self.total_time))
@@ -98,60 +101,120 @@ class snake():
 
 
     def newWord(self):
-        coLetters = []
-        self.current_word = self.shuffle.pop()
-        word_choosen = ''.join([i for i in self.current_word["word"] if i != " "])
-        spaces_positions = [i for i, l in enumerate(self.current_word["word"]) if l == " "]
-        frensh_word = self.current_word['trans_word']
-        self.current_word = self.current_word['word']
-        self.words_to_check += self.current_word
-        for letter in word_choosen:
-            coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
-        self.finalChecking = coLetters
-        while len(coLetters) < 16:
-            coLetters.append(self.getcoordinate(coLetters, 'rock'))
-        return jsonify({
-            'code': 200,
-            'message': 'ok',
-            'result': {'coo': coLetters,
-                       'space_positions': spaces_positions,
-                       'frensh': frensh_word}
-        })
+        """
+        Take a new word in the list of the user
+
+        Returns:
+        dict: The response of the request
+            - code (int): The status code of the request
+                -> 200: the word has been recovered
+                -> 500: An error has occured
+            - message (string): The message of the request
+            - result (dict): The result of the request
+                - coo (list): The list of dictionnary which represent each coordinate of each letter in the word
+                - space_positions (list): the position of spaces in the word
+                - frensh (str): The the translation of the word
+        """
+        try:
+            coLetters = []
+            self.current_word = self.shuffle.pop()
+
+            # Joins the word and retrieves the space index if the word is a compound word
+            word_choosen = ''.join([i for i in self.current_word["word"] if i != " "])
+            spaces_positions = [i for i, l in enumerate(self.current_word["word"]) if l == " "]
+
+            # Get the translation of the word
+            frensh_word = self.current_word['trans_word']
+
+            # Get the coordinates of each letter
+            for letter in word_choosen:
+                coLetters.append(self.getcoordinate(coLetters, letter.upper() ))
+            self.finalChecking = coLetters
+
+            # Append rock if the word is too small
+            while len(coLetters) < 16:
+                coLetters.append(self.getcoordinate(coLetters, 'rock'))
+
+            return jsonify({
+                'code': 200,
+                'message': 'ok',
+                'result': {'coo': coLetters,
+                        'space_positions': spaces_positions,
+                        'frensh': frensh_word}
+            })
+        except Exception as e:
+            logging.error("An error has occured: " + str(e))
+            return jsonify({
+                    "code": 500,
+                    "message": "Une erreur s'est produite!",
+                    "result": []
+            })
     
     def getcoordinate(self,list, l):
+        """
+        Gets the coordinates of one letter
+
+        Args:
+            list: the list of the coordinates of each letter in the current word
+            l: the letter to which add coordinates
+        
+        Returns:
+            a dictionnary with the letter, her x position and her y positions  
+        """
+
+        # Take random coordinate in the snake grid
         xpos = math.floor(random.random() * 15) * 32 + 9
         ypos = math.floor(random.random() * 15 + 1) * 32 - 4
-        alreadyPos = True
+        alreadyGet = False
+
+        # Check if the list of coordinate already contains the random coordinate
         if list == []:
             return {'letter': l,'x': xpos, 'y': ypos}
         else:
             for Letter in list:
                 if xpos == Letter['x'] and ypos == Letter['y'] or (xpos == 233 and ypos == 252):
-                    alreadyPos = False
+                    alreadyGet = True
                     break
-                else:
-                    alreadyPos = True
         
-
-        if alreadyPos:
-            return {'letter': l, 'x': xpos, 'y': ypos}
+        # Get new coordinates if already taken
+        if alreadyGet:
+            return self.getcoordinate(list, l)
         
         else:
-            return self.getcoordinate(list, l)
+            return {'letter': l, 'x': xpos, 'y': ypos}
 
             
 
     def checkingCoo(self,list):
+        """
+        Check if the Javascript coordinates correspond to the Python coordinate
+
+        Args:
+            list: The list of coordinates retrieved in Javascript
+        
+        Returns:
+        dict: The response of the request
+            - code (int): The status code of the request
+                -> 200: checking successfully completed
+                -> 500: An error has occured
+            - message (string): The message of the request
+            - result (dict): The result of the request
+                - xp (int): xp earned with the current word
+                - xpTot (list): total xp earned
+        """
         try:
             xpWord = 0
             if list is not None:
                 for i in range(len(list)):
+                    # Check that the coordinates of each letter (retrieves in Javascript) correspond to the Python coordinates in order
                     if self.finalChecking[i]['x'] != int(list[i]['x']) or self.finalChecking[i]['y'] != int(list[i]['y']):
                         faute = False
                         for j in range(len(list)):
+                            # Go back over the list of coordinates to check whether the user really did get the wrong letter, or whether it's a word with the same letter several times over
                             if self.finalChecking[j]['x'] == int(list[i]['x']) and self.finalChecking[j]['y'] == int(list[i]['y']) and self.finalChecking[j]['letter'] == self.finalChecking[i]['letter']:
                                 faute = True
                                 break
+                        # Returns the result if the user really got the wrong letter
                         if not faute:
                             if (xpWord//2 + 1) > 6:
                                 xpWord = 11
@@ -168,6 +231,7 @@ class snake():
                                 'xpTot': self.xp}
                             })
                     xpWord += 1
+                # Calculating xp earned
                 if (xpWord//2 + 1) > 4:
                     xpWord = 9
                 if xpWord == 0:
@@ -176,8 +240,11 @@ class snake():
                 else :
                     xpWord = xpWord //2 + 1
                     self.xp += xpWord
+
+            # End the game if there are no more words in the list
             if(len(self.shuffle) == 0):
                 return self._end_game(xpWord)
+            
             else:
                 return jsonify({
                 'code': 200,
@@ -192,11 +259,6 @@ class snake():
                     "message": "Une erreur s'est produite!",
                     "result": []
             })
-        
-    # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
-    # si l'attribut a une longueur de 1, on attend
-    # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste
-
 
     def get_remaning_time(self):
         """
@@ -237,6 +299,9 @@ class snake():
     def _end_game(self, xp_last_word):
         """
         End the game and save the results
+
+        Args:
+            xp_last_word: The experience points gained with the last word
         
         Returns:
             dict: The response of the request
@@ -245,10 +310,10 @@ class snake():
                     -> 500: An error has occured
                 - message (string): The message of the request
                 - result (dict): The result of the request
-                    - remaining (int): The number of remaining words
-                    - time (string): The time when the game started
-                    - xp (int): The experience points gained
+                    - time (int): The time when the game started
                     - lost_lives (int): The number of lost lives 
+                    - xp (int): The experience points gained
+                    - xpAnim (int): The experience points gained with the last word
         Raises:
             Exception: An error has occured
         """
@@ -258,11 +323,11 @@ class snake():
             conn = create_connection()  
             cursor = conn.cursor()
             
-            # Calculate the experience points
+            # Calculate the time passed
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
                 
-            # Lose a life if there are remaining words
+            # Lose a life if winning experience points isn't enough
             lives_to_lose = 1 if self.xp < len(self.allLetters)//5 else 0
             while lives_to_lose > 0:
                 self._lose_life()
@@ -270,12 +335,13 @@ class snake():
             
             lives_to_lose = 1 if self.xp < len(self.allLetters)//5 + len(self.current_word) else 0
             
-            
+            # Reduces the amount of xp gained if the game are already completed
             cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
                 print('dedans')
                 self.xp = 2*self.xp//3
+
             # Update the lesson as completed
             if lives_to_lose == 0:
                 cursor.execute("UPDATE lessons SET completed = 1 WHERE id = %s", (self.lesson_id,))
@@ -284,30 +350,17 @@ class snake():
             cursor.execute("INSERT INTO lessons_log (user_id, list_id, lesson_id, xp, lost_lives, time) VALUES (%s, %s, %s, %s, %s, %s)", (current_user.id, self.list_id, self.lesson_id, self.xp, lives_to_lose, time_passed))
             cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, self.xp))
             conn.commit()
-            if True == None:
-                response = jsonify({
+            response = jsonify({
                 "code": 201,
                 "message": "Le jeu est terminé!",
                 "result": {
                     "time": time_passed,
                     "lost_lives": lives_to_lose,
-                    "xp": self.xp,
                     "xpAnim": xp_last_word,
+                    "xp": self.xp,
                     "xpTot": self.xp
                 }
             })
-            else:
-                response = jsonify({
-                    "code": 201,
-                    "message": "Le jeu est terminé!",
-                    "result": {
-                        "time": time_passed,
-                        "lost_lives": lives_to_lose,
-                        "xp": self.xp,
-                        "xpAnim": xp_last_word,
-                        "xpTot": self.xp
-                    }
-                })
             response = make_response(response, 201)
             session.pop('game', None)
             return response
@@ -349,7 +402,6 @@ class snake():
         to_extract = cls(json_dict["list_id"], json_dict["lesson_id"], json_dict["words"])
         to_extract.id = json_dict["id"]
         to_extract.time = json_dict["time"]
-        to_extract.words_to_check = json_dict["words_to_check"]
         to_extract.start = json_dict["start"]
         to_extract.shuffle = json_dict["shuffle"]
         to_extract.finalChecking = json_dict["finalChecking"]
@@ -461,8 +513,6 @@ def start(session_id):
                                    session_id=session_id, 
                                    list_id=game.list_id,
                                    time=game.get_remaning_time(),
-                                #    max_score=len(game.words),
-                                #    score=len(game.words) - len(game.words_to_check) - game.faults,
                                    reloaded=reloaded)
         return redirect(url_for('snake.index', list_id=game.list_id))
     return redirect(url_for('main.index'))
@@ -492,7 +542,16 @@ def check_status(session_id):
 
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/getWord')
 @check_game
-def getCard(session_id):
+def getWord(session_id):
+    """
+    Get one word of the user list
+    
+    Args:
+        session_id (string): The unique identifier of the game
+        
+    Returns:
+        flask.Response: The response of the request
+    """
     game = snake.from_json(session["game"])
     result = game.newWord()
     session["game"] = game.to_json()
@@ -506,6 +565,15 @@ def getCard(session_id):
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/check_coo', methods=['POST'])
 @check_game
 def endChecking(session_id):
+    """
+    Get one word of the user list
+    
+    Args:
+        session_id (string): The unique identifier of the game
+        
+    Returns:
+        flask.Response: The response of the request
+    """
     data = request.get_json()
     coord = data['coo']
     game = snake.from_json(session["game"])

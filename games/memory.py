@@ -94,28 +94,80 @@ class memory():
         self.nbr_try = 0
 
     def getWords(self):
-        liste = []
-        for i in range(len(self.cards)):
-            current_card = random.choice(self.cards)
-            self.shuffle_cards.append(current_card)
-            self.cards.remove(current_card)
-        return jsonify({
-            'code': 200,
-            'message': 'ok',
-            'result': {'nbr_cards': len(self.french_words + self.english_words)}
-        })
+        """
+        Get a word of the list
+        
+        Returns:
+            dict: The response of the request
+                - code (int): The status code of the request
+                    -> 200: The word has been found
+                    -> 500: An error has occured
+                - message (string): The message of the request
+                - result (dict): The result of the request
+                    - nbr_cards (int): The number of cards in the game
+            
+        Raises:
+            Exception: An error has occured
+        """
+        try:
+            liste = []
+            for i in range(len(self.cards)):
+                current_card = random.choice(self.cards)
+                self.shuffle_cards.append(current_card)
+                self.cards.remove(current_card)
+            return jsonify({
+                'code': 200,
+                'message': 'ok',
+                'result': {'nbr_cards': len(self.french_words + self.english_words)}
+            })
+        except Exception as e:
+            logging.error("An error has occured: " + str(e))
+            return jsonify({
+                "code": 500,
+                "message": "Une erreur s'est produite!",
+                "result": []
+            }), 500
         
     def printWord(self, id):
-        el = self.shuffle_cards[id]
-        checking = self.checking_cards(el)
-        if(len(self.cards) == len(self.shuffle_cards)):
-            return self._end_game(checking, id)
-        return jsonify({
-            'code': 200,
-            'message': 'ok',
-            'result': { 'innerHTML': self.shuffle_cards[id][0],
-                       'checking': checking}
-        })
+        """
+        Get the word clicked and check if a pair of cards matches
+        Args:
+            id: the index of the word in shuffle_cards list
+    
+        Returns:
+            dict: The response of the request
+                - code (int): The status code of the request
+                    -> 200: The word has been found
+                    -> 500: An error has occured
+                - message (string): The message of the request
+                - result (dict): The result of the request
+                    - innerHTML (str): The word to print the card
+                    - checking (bool): True if the duo match
+            
+        Raises:
+            Exception: An error has occured
+        """
+        try:
+            el = self.shuffle_cards[id]
+            checking = self.checking_cards(el)
+
+            # End the game if all duo was found
+            if(len(self.cards) == len(self.shuffle_cards)):
+                return self._end_game(checking, id)
+            
+            return jsonify({
+                'code': 200,
+                'message': 'ok',
+                'result': { 'innerHTML': self.shuffle_cards[id][0],
+                        'checking': checking}
+            })
+        except Exception as e:
+            logging.error("An error has occured: " + str(e))
+            return jsonify({
+                "code": 500,
+                "message": "Une erreur s'est produite!",
+                "result": []
+            }), 500
     
     def checking_cards(self, new_card):
         self.open_cards.append(new_card)

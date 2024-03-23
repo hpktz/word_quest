@@ -345,7 +345,6 @@ def check_game(func):
                 response = game._end_game(None,None)
                 session["game"] = game.to_json()
                 session.pop("game", None)
-
                 return response
             else:
                 return func(session_id, *args, **kwargs)

@@ -18,7 +18,9 @@ class hangman():
         self.list_id = list_id
         self.lesson_id = lesson_id
         self.words = words
-        self.words_to_check = words
+        while len(self.words) > 6:
+            self.words.pop(random.randint(0, len(words)-1))
+        self.words_to_check = self.words.copy()
         self.total_time = len(words) * 20
         self.time = str(datetime.datetime.now() + datetime.timedelta(seconds=self.total_time))
         self.start = str(datetime.datetime.now())
@@ -69,7 +71,7 @@ class hangman():
     def checking_letter(self, letter):
         all_letters = self.current_word["good_letter"] + self.current_word["bad_letter"]
         for i in all_letters:
-            if i == letter:
+            if i.lower() == letter.lower():
                 return jsonify({
                     "code": 200,
                     "message": "already touch",
@@ -77,7 +79,7 @@ class hangman():
                 })
         
         stop = True if len(self.current_word["bad_letter"]) == 5 and not letter in self.current_word["word"]["word"] else False
-        if not letter in self.current_word["word"]["word"]:
+        if not letter.lower() in self.current_word["word"]["word"].lower():
             if len(self.current_word["bad_letter"]) < 2:
                 self.current_word["max_xp"] = 5
             if len(self.current_word["bad_letter"]) >= 2 and len(self.current_word["bad_letter"]) < 4:
@@ -88,7 +90,7 @@ class hangman():
                 self.current_word["max_xp"] = 1
             elif len(self.current_word["bad_letter"]) == 6:
                 self.current_word["max_xp"] = 0
-            self.current_word["bad_letter"].append(letter)
+            self.current_word["bad_letter"].append(letter.lower())
             if stop:
                 pass
             else:
@@ -115,7 +117,7 @@ class hangman():
                     - result (dict): The result of the request
             """
             for index, word_to_check in enumerate(self.words_to_check):
-                if word_to_check["word"] == self.current_word["word"]["word"]:
+                if word_to_check["word"].lower() == self.current_word["word"]["word"].lower():
                     self.words_to_check.pop(index)
                     if len(self.words_to_check) == 0:
                         return self._end_game(self.current_word["max_xp"])
@@ -125,11 +127,11 @@ class hangman():
         if stop:
             return next_step()
         else:
-            self.current_word["good_letter"].append(letter)
-            self.current_word["remaining_letters"]-= sum([1 for i in self.current_word["word"]["word"] if i == letter])
+            self.current_word["good_letter"].append(letter.lower())
+            self.current_word["remaining_letters"]-= sum([1 for i in self.current_word["word"]["word"] if i.lower() == letter.lower()])
             if self.current_word["remaining_letters"] == 0:
                 return next_step()
-            letter_position = [i for i, l in enumerate(self.current_word["word"]["word"]) if l == letter]
+            letter_position = [i for i, l in enumerate(self.current_word["word"]["word"]) if l.lower() == letter.lower()]
             return jsonify({
                 "code": 200,
                 "message": "correct letter",
@@ -302,7 +304,6 @@ class hangman():
                 }
             })
             response = make_response(response, 201)
-            session.pop('game', None)
             return response
         except Exception as e:
             logging.error("An error has occured: " + str(e))
@@ -472,6 +473,8 @@ def check(session_id, l):
     game = hangman.from_json(session["game"])
     result = game.checking_letter(l)
     session["game"] = game.to_json()
+    if result.status_code == 201:
+        session.pop('game', None)
     return result
 
 @hangman_bp.route('/dashboard/games/hangman/<string:session_id>/askhint')
@@ -479,6 +482,8 @@ def new_hint(session_id):
     game = hangman.from_json(session["game"])
     result = game.ask_hint()
     session["game"] = game.to_json()
+    if result.status_code == 201:
+        session.pop('game', None)
     return result
 
 @hangman_bp.route('/dashboard/games/hangman/<string:session_id>/check_status')

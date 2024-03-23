@@ -191,7 +191,7 @@ class snake():
                     "code": 500,
                     "message": "Une erreur s'est produite!",
                     "result": []
-            }), 500
+            })
         
     # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
     # si l'attribut a une longueur de 1, on attend
@@ -309,6 +309,7 @@ class snake():
                     }
                 })
             response = make_response(response, 201)
+            session.pop('game', None)
             return response
         except Exception as e:
             logging.error("An error has occured: " + str(e))
@@ -316,7 +317,7 @@ class snake():
                 "code": 500,
                 "message": "Une erreur s'est produite!",
                 "result": []
-            }), 500
+            })
         finally:
             if cursor:
                 cursor.close()
@@ -384,6 +385,8 @@ def check_game(func):
             if session_id != game.id or game.time < str(datetime.datetime.now()):
                 response = game._end_game(0)
                 session["game"] = game.to_json()
+                if response.status_code == 201:
+                    session.pop('game', None)
                 return response
             else:
                 return func(session_id, *args, **kwargs)
@@ -494,6 +497,10 @@ def getCard(session_id):
     result = game.newWord()
     session["game"] = game.to_json()
     time.sleep(1/100)
+    
+    if result.status_code == 201:
+        session.pop('game', None)
+    
     return result
 
 @snake_bp.route('/dashboard/games/snake/<string:session_id>/check_coo', methods=['POST'])
@@ -505,4 +512,8 @@ def endChecking(session_id):
     result = game.checkingCoo(coord)
     session["game"] = game.to_json()
     time.sleep(1/100)
+    
+    if result.status_code == 201:
+        session.pop('game', None)
+    
     return result

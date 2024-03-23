@@ -308,6 +308,8 @@ def check_game(func):
             if session_id != game.id or game.time < str(datetime.datetime.now()):
                 response = game._end_game()
                 session["game"] = game.to_json()
+                if response.status_code == 201:
+                    session.pop('game', None)
                 return response
             else:
                 return func(session_id, *args, **kwargs)

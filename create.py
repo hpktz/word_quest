@@ -221,6 +221,10 @@ def search(language, x):
     else:
         language = "english-french"
         
+    
+    # Remove the end spaces
+    x = x.strip()    
+        
     url = f"https://api.collinsdictionary.com/api/v1/dictionaries/{language}/entries/{x}_1"
     headers = {
         "Accept": "application/json",
@@ -272,9 +276,9 @@ def search(language, x):
                         word = ''.join(text for text in word[0].xpath(".//text()[not(parent::*[@class='hi' or @class='lbl'])]"))
                         word = re.sub(r'[^a-zA-ZÀ-ÿ\s-]', '', word)
                         if language == "english-french":
-                            array["french_translation"] = word
+                            array["french_translation"] = word.strip()
                         else:
-                            array["word"] = word
+                            array["word"] = word.strip()
                     else:
                         continue
                 else:

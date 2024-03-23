@@ -153,13 +153,13 @@ class snake():
                                 faute = True
                                 break
                         if not faute:
-                            if (xpWord//3 + 1) > 6:
+                            if (xpWord//2 + 1) > 6:
                                 xpWord = 11
                             if xpWord == 0:
                                 xpWord = 0
                                 self.xp += 0
                             else :
-                                xpWord = xpWord //3 + 1
+                                xpWord = xpWord //2 + 1
                                 self.xp += xpWord
                             return jsonify({
                                 'code': 200,
@@ -168,13 +168,13 @@ class snake():
                                 'xpTot': self.xp}
                             })
                     xpWord += 1
-                if (xpWord//3 + 1) > 5:
-                    xpWord = 12
+                if (xpWord//2 + 1) > 4:
+                    xpWord = 9
                 if xpWord == 0:
                     xpWord = 0
                     self.xp += 0
                 else :
-                    xpWord = xpWord //3 + 1
+                    xpWord = xpWord //2 + 1
                     self.xp += xpWord
             if(len(self.shuffle) == 0):
                 return self._end_game(xpWord)
@@ -274,6 +274,7 @@ class snake():
             cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
+                print('dedans')
                 self.xp = 2*self.xp//3
             # Update the lesson as completed
             if lives_to_lose == 0:

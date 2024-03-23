@@ -295,13 +295,11 @@ function draw(changeDirection) {
         for (let i = 0; i < snake.length; i++) {
             if (i == 0) {
                 i = i
-            } else if (i > (snake.length - 8)) {
+            } else {
+                context.fillStyle = "#ADAE82";
                 context.beginPath();
                 context.arc(snake[i].x + 16, snake[i].y + 16, 16, 0, 2 * Math.PI);
                 context.fill();
-            } else {
-                context.fillStyle = "#ADAE82";
-                context.fillRect(snake[i].x, snake[i].y, box, box);
             }
             var e = 16 * (nbrLettreTrouve + 1)
             if (snake.length != e + 1 && d != undefined) {
@@ -362,6 +360,7 @@ function draw(changeDirection) {
         if (snakeX < -2 || snakeY < -2 || snakeX > 14 * box || snakeY > 14 * box || collision(newHead, snake) || l) {
             if (fin == 0) {
                 clearInterval(game)
+                hitAudio.play()
                 checkingCoo()
                 fin += 1
             }

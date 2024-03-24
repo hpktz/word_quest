@@ -1,5 +1,5 @@
 """
-This module contains the routes and functions to manage the quiz game
+This module contains the routes and functions to manage the memory game
 
 Imports:
     - flask: For handling the requests and responses
@@ -17,7 +17,7 @@ Imports:
     - logging: For logging errors
     
 Blueprints:
-    - quiz_bp: The blueprint of the quiz game
+    - memory_bp: The blueprint of the memory game
 """
 
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session, abort, make_response, Response
@@ -35,40 +35,43 @@ import logging
 
 memory_bp = Blueprint('memory', __name__)
 """
-The blueprint of the quiz game
+The blueprint of the memory game
 
 Attributes:
-    -quiz_bp: The blueprint of the quiz game
+    -memory_bp: The blueprint of the memory game
 
 Routes:
-    - /dashboard/games/quiz/<int:list_id>: Initialize the game and redirect to the game interface
-    - /dashboard/games/quiz/<string:session_id>: Start the game by displaying the game interface
-    - /dashboard/games/memory/<int:list_id>/getCard: Get the cards of the game
-    - /dashboard/games/quiz/<string:session_id>/check/<int:answer>: Check the answer of the game
-    - /dashboard/games/quiz/<string:session_id>/check_status: Check if the game is still in progress
+    - /dashboard/games/memory/<int:list_id>: Initialize the game and redirect to the game interface
+    - /dashboard/games/memory/<string:session_id>: Start the game by displaying the game interface
+    - /dashboard/games/memory/<string:session_id>/check_status: Check if the game is still in progress
+    - /dashboard/games/memory/<string:session_id>/check_word/<int:boxId>: Check the cards clicked by the user
 """
 
-# The id of the quiz lesson
+# The id of the memory lesson
 memory_id = 4
 
 class memory():
     """
-    Represents a quiz game
+    Represents a memory game
     
     Attributes:
         - id (string): The unique identifier of the game
         - list_id (int): The id of the list
         - lesson_id (int): The id of the lesson
         - words (list): The words of the lesson
-        - words_to_check (list): The words to check
         - time (string): The time when the game ends
         - start (string): The time when the game started
-        - current_quiz (dict): The current question
-        - faults (int): The number of faults
+        - french_word (list): The list of French words in the list
+        - english_word (list): The list of English words in the list
+        - cards (list): The list of French and English words in the list
+        - shuffle_cards: The list of mixed cards attributes
+        - open_cards: the list of returned cards
+        - nbr_try: The number of times the user has tried
         
     Methods:
-        - check_answer: Check the answer of the user
-        - ask_next_question: Ask the next question
+        - getWords: Get the words of the lists (English and French)
+        - printWord: Get the word clicked and check if a pair of cards matches
+        - checking_cards: Get the word clicked and check if a pair of cards matches
         - get_remaning_time: Get the remaining time
         - get_words_checked: Get the words that have been checked
         - _lose_life: Lose a life
@@ -83,7 +86,6 @@ class memory():
         self.words = words
         while len(self.words) > 7:
             self.words.pop(random.randint(0, len(words)-1))
-        self.words_to_check = words
         self.time = str(datetime.datetime.now() + datetime.timedelta(minutes=1))
         self.start = str(datetime.datetime.now())
         self.french_words = [[word['trans_word'], str(i), "french"] for i, word in enumerate(self.words)]
@@ -110,7 +112,7 @@ class memory():
             Exception: An error has occured
         """
         try:
-            liste = []
+            # Shuffles the words in the list in the shuffle_cards attribute
             for i in range(len(self.cards)):
                 current_card = random.choice(self.cards)
                 self.shuffle_cards.append(current_card)
@@ -170,6 +172,16 @@ class memory():
             }), 500
     
     def checking_cards(self, new_card):
+        """
+        Get the word clicked and check if a pair of cards matches
+        Args:
+            new_card: The word clicked by the user
+    
+        Returns:
+            True: If the returned card pair is correct
+            False: If the returned card pair is wrong
+            None: If only one card is returned
+        """
         self.open_cards.append(new_card)
         if len(self.open_cards) == 2:
             self.nbr_try += 1
@@ -183,10 +195,6 @@ class memory():
                 return False
         return None
 
-    # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
-    # si l'attribut a une longueur de 1, on attend
-    # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste
-
 
     def get_remaning_time(self):
         """
@@ -196,19 +204,6 @@ class memory():
             int: The remaining time in seconds
         """
         return round((datetime.datetime.strptime(self.time, '%Y-%m-%d %H:%M:%S.%f') - datetime.datetime.now()).total_seconds())
-       
-    def get_words_checked(self):
-        """
-        Get the words that have been checked
-        
-        Returns:
-            list: The words that have been checked
-        """
-        words = []
-        for word in self.words:
-            if word not in self.words_to_check:
-                words.append(word)
-        return words
     
     def _lose_life(self):
         """
@@ -240,6 +235,10 @@ class memory():
     def _end_game(self, last_answer, last_id):
         """
         End the game and save the results
+
+        Args:
+            last_answer (bool): True if the last word pair is correct
+            last_id (int): the index of the last word clicked
         
         Returns:
             dict: The response of the request
@@ -252,6 +251,8 @@ class memory():
                     - time (string): The time when the game started
                     - xp (int): The experience points gained
                     - lost_lives (int): The number of lost lives 
+                    - innerHTML (str): the last word clicked
+                    - checking (bool): the response of the last checking
         Raises:
             Exception: An error has occured
         """
@@ -301,9 +302,7 @@ class memory():
                 "result": {
                     "time": time_passed,
                     "lost_lives": lives_to_lose,
-                    "xp": xp,
-                    "score": len(self.cards)//2,
-                    "total": len(self.words)
+                    "xp": xp
                 }
             })
             else:
@@ -311,14 +310,11 @@ class memory():
                     "code": 201,
                     "message": "Le jeu est terminé!",
                     "result": {
-                        "remaining": len(self.words_to_check),
                         "time": time_passed,
                         "lost_lives": lives_to_lose,
                         "xp": xp,
                         'innerHTML': self.shuffle_cards[last_id][0],
-                        'checking': last_answer,
-                        "score": len(self.cards)//2,
-                        "total": len(self.words)
+                        'checking': last_answer
                     }
                 })
             response = make_response(response, 201)
@@ -360,7 +356,6 @@ class memory():
         json_dict = json.loads(json_string)
         to_extract = cls(json_dict["list_id"], json_dict["lesson_id"], json_dict["words"])
         to_extract.id = json_dict["id"]
-        to_extract.words_to_check = json_dict["words_to_check"]
         to_extract.time = json_dict["time"]
         to_extract.start = json_dict["start"]
         to_extract.cards = json_dict["cards"]
@@ -510,6 +505,16 @@ def check_status(session_id):
 @memory_bp.route('/dashboard/games/memory/<string:session_id>/check_word/<int:boxId>')
 @check_game
 def test(session_id, boxId):
+    """ 
+        check the answer given by the user
+        
+        Args:
+            session_id (string): The unique identifier of the game
+            boxId (int): the id of the card clicked
+        
+        Returns:
+            flask.Response: The response of the request
+        """
     game = memory.from_json(session["game"])
     result = game.printWord(boxId)
     session["game"] = game.to_json()

@@ -275,7 +275,7 @@ class hangman():
             time_passed = round(time_passed.total_seconds())
             xp = self.xpTotal + xp
             
-            lives_to_lose = 1 if (xp/(len(self.words)*5)) < 0.75 else 0
+            lives_to_lose = 1 if (xp/(len(self.words)*5)) < 0.80 else 0
             lives_lost = lives_to_lose
             while lives_to_lose > 0:
                 self._lose_life()

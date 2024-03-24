@@ -593,11 +593,13 @@ function collision(head, array) {
     return false;
 }
 
-
-getPosition();
+setTimeout(() => {
+    getPosition();
+}, 500);
 var game = setInterval(function () {
     draw(null);
 }, 14)
+
 
 
 

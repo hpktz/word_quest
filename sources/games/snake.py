@@ -15,6 +15,7 @@ Imports:
     - gTTS: For generating audio from text
     - BytesIO: For managing the audio bytes
     - logging: For logging errors
+    - math: for using ceil function
     
 Blueprints:
     - snake_bp: The blueprint of the snake game
@@ -29,6 +30,7 @@ import math as math
 import uuid as uuid
 import json
 import time as time
+import math as math
 from functools import wraps
 
 import logging
@@ -69,6 +71,7 @@ class snake():
         - xp (int): the xp earned
         - finalChecking (list): the list of letters coordinates
         - allLetter (list): the list of all letter in the words of the list
+        - word_find (int): the number of word find
         
     Methods:
         - newWord: Get a new word
@@ -85,7 +88,7 @@ class snake():
         self.list_id = list_id
         self.lesson_id = lesson_id
         self.words = words
-        while len(self.words) > 8:
+        while len(self.words) > 6:
             self.words.pop(random.randint(0, len(words)-1))
         self.shuffle = random.sample(self.words, len(self.words))
         self.current_word = {}
@@ -97,6 +100,7 @@ class snake():
         self.allLetters = ""
         for i in self.shuffle:
             self.allLetters += i['word']
+        self.word_find = 0
 
 
 
@@ -216,13 +220,13 @@ class snake():
                                 break
                         # Returns the result if the user really got the wrong letter
                         if not faute:
-                            if (xpWord//2 + 1) > 6:
-                                xpWord = 11
+                            if (math.ceil(xpWord/2)) > 5:
+                                xpWord = 10
                             if xpWord == 0:
                                 xpWord = 0
                                 self.xp += 0
                             else :
-                                xpWord = xpWord //2 + 1
+                                xpWord = math.ceil(xpWord/2)
                                 self.xp += xpWord
                             return jsonify({
                                 'code': 200,
@@ -231,14 +235,17 @@ class snake():
                                 'xpTot': self.xp}
                             })
                     xpWord += 1
+                word_choosen = ''.join([i for i in self.current_word["word"] if i != " "])
+                if xpWord == len(word_choosen):
+                    self.word_find += 1
                 # Calculating xp earned
-                if (xpWord//2 + 1) > 4:
-                    xpWord = 9
+                if (math.ceil(xpWord/2)) > 5:
+                    xpWord = 10
                 if xpWord == 0:
                     xpWord = 0
                     self.xp += 0
                 else :
-                    xpWord = xpWord //2 + 1
+                    xpWord = math.ceil(xpWord/2)
                     self.xp += xpWord
 
             # End the game if there are no more words in the list
@@ -328,18 +335,23 @@ class snake():
             time_passed = round(time_passed.total_seconds())
                 
             # Lose a life if winning experience points isn't enough
-            lives_to_lose = 1 if self.xp < len(self.allLetters)//5 else 0
+            if self.xp < len(self.allLetters)//3 or self.word_find <= 4:
+                lives_to_lose = 1 
+            else:
+                lives_to_lose = 0
             while lives_to_lose > 0:
                 self._lose_life()
                 lives_to_lose -= 1
             
-            lives_to_lose = 1 if self.xp < len(self.allLetters)//5 + len(self.current_word) else 0
+            if self.xp < len(self.allLetters)//3 or self.word_find <= 4:
+                lives_to_lose = 1 
+            else:
+                lives_to_lose = 0
             
             # Reduces the amount of xp gained if the game are already completed
             cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
-                print('dedans')
                 self.xp = 2*self.xp//3
 
             # Update the lesson as completed
@@ -408,6 +420,7 @@ class snake():
         to_extract.current_word = json_dict["current_word"]
         to_extract.xp = json_dict["xp"]
         to_extract.total_time = json_dict["total_time"]
+        to_extract.word_find = json_dict["word_find"]
         return to_extract    
 
 

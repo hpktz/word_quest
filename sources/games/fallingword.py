@@ -311,7 +311,7 @@ class fallingword():
                 lives_to_lose = 1
             elif bad_answers == 0:
                 lives_to_lose = 0
-            elif bad_answers == 5 or good_answers/bad_answers < 2:
+            elif bad_answers == 5 or good_answers/bad_answers < 3:
                 lives_to_lose = 1
             else:
                 lives_to_lose = 0

@@ -511,7 +511,7 @@ def create_list():
                             (word['word'], word['type'], word['french_translation'], json.dumps(word['examples']), json.dumps(word['french_translation_examples']), list_id))
             
         # Get the user level
-        with open('static/games-data.json') as json_file:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/games-data.json') as json_file:
             levels = json.load(json_file)
 
         levels_difficulty = [1, 1, 2, 2, 3]
@@ -601,7 +601,7 @@ def copy_list(id):
                             (word['word'], word['word_type'], word['trans_word'], word['examples'], word['trans_examples'], list_id))
         
         user_level = current_user.lvl
-        with open('static/games-data.json') as json_file:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/games-data.json') as json_file:
             levels = json.load(json_file)
         
         levels_difficulty = [1, 1, 2, 2, 3]
@@ -684,7 +684,7 @@ def copy_list_link(token):
                             (word['word'], word['word_type'], word['trans_word'], word['examples'], word['trans_examples'], list_id))
         
         user_level = current_user.lvl
-        with open('static/games-data.json') as json_file:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/games-data.json') as json_file:
             levels = json.load(json_file)
         
         levels_difficulty = [1, 1, 2, 2, 3]

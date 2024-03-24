@@ -1,5 +1,5 @@
 """
-This module contains the routes and functions to manage the quiz game
+This module contains the routes and functions to manage the fallingword game
 
 Imports:
     - flask: For handling the requests and responses
@@ -18,7 +18,7 @@ Imports:
     - time: For managing the time
     
 Blueprints:
-    - quiz_bp: The blueprint of the quiz game
+    - fallingword_bp: The blueprint of the fallingword game
 """
 
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, session, abort, make_response, Response
@@ -36,42 +36,44 @@ import time
 
 fallingword_bp = Blueprint('fallingword', __name__)
 """
-The blueprint of the quiz game
+The blueprint of the fallingword game
 
 Attributes:
-    -quiz_bp: The blueprint of the quiz game
+    -fallingword_bp: The blueprint of the fallingword game
 
 Routes:
-    - /dashboard/games/quiz/<int:list_id>: Initialize the game and redirect to the game interface
-    - /dashboard/games/quiz/<string:session_id>: Start the game by displaying the game interface
-    - /dashboard/games/fallingword/<int:list_id>/getCard: Get the cards of the game
-    - /dashboard/games/quiz/<string:session_id>/check/<int:answer>: Check the answer of the game
-    - /dashboard/games/quiz/<string:session_id>/check_status: Check if the game is still in progress
+    - /dashboard/games/fallingword/<int:list_id>: Initialize the game and redirect to the game interface
+    - /dashboard/games/fallingword/<string:session_id>: Start the game by displaying the game interface
+    - /dashboard/games/fallingword/<string:session_id>/getDuo: Get all duo of the game
+    - /dashboard/games/fallingword/<string:session_id>/check_status: Check if the game is still in progress
+    - /dashboard/games/fallingword/<string:session_id>/checkAnswers: check the answer at the end
+    - /dashboard/games/fallingword/<string:session_id>/checktime: 
 """
 
-# The id of the quiz lesson
+# The id of the fallingword lesson
 fallingword_id = 5
 
 class fallingword():
     """
-    Represents a quiz game
+    Represents a fallingword game
     
     Attributes:
         - id (string): The unique identifier of the game
         - list_id (int): The id of the list
         - lesson_id (int): The id of the lesson
         - words (list): The words of the lesson
+        - shuffle (list): The words of lesson mixed 
         - words_to_check (list): The words to check
         - time (string): The time when the game ends
         - start (string): The time when the game started
-        - current_quiz (dict): The current question
-        - faults (int): The number of faults
+        - answers: Boolean list (True if the answer is correct)
+        - duoList (list): The list of all word duos
         
     Methods:
-        - check_answer: Check the answer of the user
-        - ask_next_question: Ask the next question
+        - newDuo: Create a French/English word duo
+        - checking: Check user responses at the end of game
+        - checkingTime:
         - get_remaning_time: Get the remaining time
-        - get_words_checked: Get the words that have been checked
         - _lose_life: Lose a life
         - _end_game: End the game and save the results
         - to_json: Convert the object to a JSON string
@@ -89,83 +91,127 @@ class fallingword():
         self.duoList = []
 
     def newDuo(self):
-        def get_similar_words(file_path, word, max_len):
-            """
-            Use the dichotomic search to find the word in the list of words
+        """
+        Create a French/English word duo
             
-            Args:
-                word (string): The word to search
+        Returns:
+            dict: The response of the request
+                - code (int): The status code of the request
+                    -> 201: The game is ended
+                    -> 500: An error has occured
+                - message (string): The message of the request
+                - result (dict): The result of the request
+                    - duoList (int): The list of all duos  
+        """
+        try:
+            def get_similar_words(file_path, word, max_len):
+                """
+                Use the dichotomic search to find the word in the list of words
                 
-            Returns:
-                string: The list of similar words
-            """
-            # Set the list of words
-            min_len = 0
-            max_len = max_len
-            if file_path == "static/similar_words_levenshtein":
-                if word < "micronization":
-                    file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_1.txt"
+                Args:
+                    word (string): The word to search
+                    
+                Returns:
+                    string: The list of similar words
+                """
+                # Set the list of words
+                min_len = 0
+                max_len = max_len
+                if file_path == "static/similar_words_levenshtein":
+                    if word < "micronization":
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_1.txt"
+                    else:
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_2.txt"
                 else:
-                    file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_2.txt"
-            else:
-                if word < "grand-mamans":
-                    file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_1.txt"
-                    max_len = 185053
+                    if word < "grand-mamans":
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_1.txt"
+                        max_len = 185053
+                    else:
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_2.txt"
+                while min_len < max_len:
+                    mid = (min_len + max_len) // 2
+                    line = linecache.getline(file_path, mid).split(":")
+                    if str(line[0]) == word:
+                        return line[1]
+                    elif str(line[0]) < word:
+                        min_len = mid + 1
+                    else:
+                        max_len = mid
+                return None
+            
+            # Create 30 duos
+            for i in range(30):
+                boolean = random.randint(0,5)
+
+                # select the 
+                newindex = random.randint(0, len(self.words) - 2)
+
+                # selects the next index of the chosen word
+                indice = len(self.answers)
+
+                word = self.shuffle.pop()
+                
+                # if boolean < 2, the word duo will be correct
+                if boolean <= 2:
+                    self.answers.append(True)
+                    duo = [word['word'], word['trans_word']]
+                    self.shuffle.insert(newindex, word)
+                    self.duoList.append({'indice': indice, 
+                                        'duo': duo,
+                                        'checking': True})
                 else:
-                    file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_2.txt"
-            while min_len < max_len:
-                mid = (min_len + max_len) // 2
-                line = linecache.getline(file_path, mid).split(":")
-                if str(line[0]) == word:
-                    return line[1]
-                elif str(line[0]) < word:
-                    min_len = mid + 1
-                else:
-                    max_len = mid
-            return None
-        for i in range(30):
-            boolean = random.randint(0,5)
-            newindex = random.randint(0, len(self.words) - 2)
-            indice = len(self.answers)
-            word = self.shuffle.pop()
-            if boolean <= 1:
-                self.answers.append(True)
-                duo = [word['word'], word['trans_word']]
-                self.shuffle.insert(newindex, word)
-                self.duoList.append({'indice': indice, 
-                                    'duo': duo,
-                                    'checking': True})
-            else:
-                self.answers.append(False)
-                words = 'static/similar_words_levenshtein'
-                max_len = 185052 if words == 'static/similar_words_levenshtein' else 168266
-                badduo = get_similar_words(words, word['word'], max_len)
-                if not badduo:
-                    # Change only one ot=r to letter in word
-                    letters = 'abcdefghijklmnopqrstuvwxyz'
-                    random_pos = random.randint(0, len(word['word']) - 1)
-                    badduo = word['word'][:random_pos] + letters[random.randint(0, len(letters) - 1)] + word['word'][random_pos + 1:]
-                    badduo_tab = [badduo]
-                self.shuffle.insert(newindex, word)
-                badduo_tab = badduo.split(',')
-                english_word = badduo_tab[random.randint(0,len(badduo_tab)-1)]
-                self.duoList.append({'indice': indice,
-                                    'duo': [english_word,word['trans_word']],
-                                    'checking': False})
-        return jsonify({
-                "code": 200,
-                "message": "good duo",
-                "result": self.duoList
-        })
+                    self.answers.append(False)
+                    # Select a similar word 
+                    words = 'static/similar_words_levenshtein'
+                    max_len = 185052 if words == 'static/similar_words_levenshtein' else 168266
+                    badduo = get_similar_words(words, word['word'], max_len)
+                    if not badduo:
+                        # Change only one ot=r to letter in word
+                        letters = 'abcdefghijklmnopqrstuvwxyz'
+                        random_pos = random.randint(0, len(word['word']) - 1)
+                        badduo = word['word'][:random_pos] + letters[random.randint(0, len(letters) - 1)] + word['word'][random_pos + 1:]
+                        badduo_tab = [badduo]
+                    self.shuffle.insert(newindex, word)
+                    badduo_tab = badduo.split(',')
+                    english_word = badduo_tab[random.randint(0,len(badduo_tab)-1)]
+                    self.duoList.append({'indice': indice,
+                                        'duo': [english_word,word['trans_word']],
+                                        'checking': False})
+            return jsonify({
+                    "code": 200,
+                    "message": "good duo",
+                    "result": self.duoList
+            })
+        except Exception as e:
+            logging.error("An error has occured: " + str(e))
+            return jsonify({
+                "code": 500,
+                "message": "Une erreur s'est produite!",
+                "result": []
+            }), 500
         
     def checking(self, list):
+        """
+        Check user responses at the end of game
+            
+        Args:
+            list: List of user answers
+            
+        Returns:
+            string: The list of similar words
+        """
+
         good_answers = 0
         bad_answers = 0
         if list[0] == 'vide':
             return self._end_game(good_answers, bad_answers)
+        
+        # check the answer
         for i in range(len(list)):
             if list[i] == 'false':
                 bad_answers += 1
+
+                # End the game if the user has made more than 5 mistakes
                 if bad_answers == 5:
                     return self._end_game(good_answers, bad_answers)
             elif self.answers[int(list[i])] == True:
@@ -190,18 +236,7 @@ class fallingword():
             "message": "Le jeu n'a pas été trouvé!",
             "result": []
         })
-            
-        
     
-            
-
-
-
-    # Creer un attribut "carte en cours" qui stock les cartes que l'utilisateur vient de clicker
-    # si l'attribut a une longueur de 1, on attend
-    # si il a une longueur de 2, on compare les 2 et on regarde si c'est juste
-
-
     def get_remaning_time(self):
         """
         Get the remaining time
@@ -241,6 +276,10 @@ class fallingword():
     def _end_game(self, good_answers, bad_answers):
         """
         End the game and save the results
+
+        Args:
+            good_answers (int): number of good answers
+            bad_answers (int): number of bad answers
         
         Returns:
             dict: The response of the request
@@ -249,7 +288,6 @@ class fallingword():
                     -> 500: An error has occured
                 - message (string): The message of the request
                 - result (dict): The result of the request
-                    - remaining (int): The number of remaining words
                     - time (string): The time when the game started
                     - xp (int): The experience points gained
                     - lost_lives (int): The number of lost lives 
@@ -262,13 +300,13 @@ class fallingword():
             conn = create_connection()  
             cursor = conn.cursor()
             
-            # Calculate the experience points
+            # Calculate the time passed
             time_passed = datetime.datetime.now() - datetime.datetime.strptime(self.start, '%Y-%m-%d %H:%M:%S.%f')
             time_passed = round(time_passed.total_seconds())
 
             xp = good_answers * 2
                 
-            # Lose a life if there are remaining words
+            # Lose a life if there are too many mistakes
             if bad_answers== 0 and good_answers == 0:
                 lives_to_lose = 1
             elif bad_answers == 0:
@@ -282,6 +320,7 @@ class fallingword():
                 self._lose_life()
                 l -= 1
 
+            # reduces the number of experience point if the game has already been finished
             is_already_completed = cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
@@ -489,17 +528,17 @@ def check_status(session_id):
 @fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/getDuo')
 @check_game
 def getDuo(session_id):
+    """ 
+    Get all duos
+    
+    Args:
+        session_id (string): The unique identifier of the game
+    
+    Returns:
+        flask response: The response of the request
+    """
     game = fallingword.from_json(session["game"])
     result = game.newDuo()
-    session["game"] = game.to_json()
-    time.sleep(1/100)
-    return result
-
-@fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/check_word/<int:boxId>')
-@check_game
-def test(session_id, boxId):
-    game = fallingword.from_json(session["game"])
-    result = game.printWord(boxId)
     session["game"] = game.to_json()
     time.sleep(1/100)
     return result
@@ -507,6 +546,15 @@ def test(session_id, boxId):
 @fallingword_bp.route('/dashboard/games/fallingword/<string:session_id>/checkAnswers', methods=['POST'])
 @check_game
 def checking(session_id):
+    """ 
+    Check the answers at the end of game
+    
+    Args:
+        session_id (string): The unique identifier of the game
+    
+    Returns:
+        flask response: The response of the request
+    """
     data = request.get_json()
     jsanswers = data['answers']
     game = fallingword.from_json(session["game"])

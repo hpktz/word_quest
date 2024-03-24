@@ -506,7 +506,7 @@ def start(session_id):
     """
     if 'game' in session:
         game = snake.from_json(session["game"])
-        reloaded = True if game.get_remaning_time() < 178 else False
+        reloaded = True if game.get_remaning_time() < game.total_time - 2 else False
         if session_id == game.id and game.time > str(datetime.datetime.now()):
             session["game"] = game.to_json()
             return render_template('games/snake.html', 

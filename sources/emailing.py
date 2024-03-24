@@ -95,7 +95,7 @@ def send_mail(to, subject, body, main_img, notif_remind, notif_stats):
     # Attach the body to the message
     mess.attach(MIMEText(body, 'html'))
     
-    with open('static/imgs/app-main-logo.png', 'rb') as fp:
+    with open(str(os.getenv("DIRECTORY_PATH")) + 'static/imgs/app-main-logo.png', 'rb') as fp:
         img = MIMEImage(fp.read())
         img.add_header('Content-ID', '<{}>'.format('app-main-logo'))
         mess.attach(img)
@@ -106,18 +106,18 @@ def send_mail(to, subject, body, main_img, notif_remind, notif_stats):
         mess.attach(img)
         
     if notif_remind:
-        with open('static/imgs/opened-chest.png', 'rb') as fp:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/imgs/opened-chest.png', 'rb') as fp:
             img = MIMEImage(fp.read())
             img.add_header('Content-ID', '<{}>'.format('chest-illustration'))
             mess.attach(img)
     
     if notif_stats:
-        with open('static/imgs/3d-three-yelow-lightnings.png', 'rb') as fp:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/imgs/3d-three-yelow-lightnings.png', 'rb') as fp:
             img = MIMEImage(fp.read())
             img.add_header('Content-ID', '<{}>'.format('lightnings-illustration'))
             mess.attach(img)
             
-        with open('static/imgs/3d-red-clock.png', 'rb') as fp:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/imgs/3d-red-clock.png', 'rb') as fp:
             img = MIMEImage(fp.read())
             img.add_header('Content-ID', '<{}>'.format('red-clock-illustration'))
             mess.attach(img)
@@ -214,7 +214,7 @@ def get_user_data(user_id):
                 "static/imgs/emails/3d-business-young-woman-with-bag-pointing-up.png",
                 "static/imgs/emails/3d-casual-life-happy-thankful-man-holding-folded-hands-near-heart.png",
             ]
-            main_picture = random.choice(main_pictures)
+            main_picture = str(os.getenv("DIRECTORY_PATH")) + random.choice(main_pictures)
             main_titles = [
                 "Bonne soirée !",
                 "Bonsoir !",

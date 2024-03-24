@@ -14,6 +14,8 @@ Functions:
 import re
 import Levenshtein
 import logging
+from root import *
+
 
 def profanity_detector(text):
     """
@@ -27,7 +29,7 @@ def profanity_detector(text):
     """
     try:
         # Load the profanity file
-        with open("static/censored_words.txt", "r") as f:
+        with open(str(os.getenv("DIRECTORY_PATH")) + "static/censored_words.txt", "r") as f:
             profanity_words = f.read().splitlines()
 
         # Convert the text to lowercase and remove accents

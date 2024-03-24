@@ -244,15 +244,15 @@ class quiz():
                 max_len = max_len
                 if file_path == "static/similar_words_levenshtein":
                     if word < "micronization":
-                        file_path = file_path + "_1.txt"
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_1.txt"
                     else:
-                        file_path = file_path + "_2.txt"
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_2.txt"
                 else:
                     if word < "grand-mamans":
-                        file_path = file_path + "_1.txt"
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_1.txt"
                         max_len = 185053
                     else:
-                        file_path = file_path + "_2.txt"
+                        file_path = str(os.getenv("DIRECTORY_PATH")) + file_path + "_2.txt"
                 while min_len < max_len:
                     mid = (min_len + max_len) // 2
                     line = linecache.getline(file_path, mid).split(":")

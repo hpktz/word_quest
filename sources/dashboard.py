@@ -80,7 +80,7 @@ def index():
         lst["progress"] = round((progress / len(lst["lessons"]) * 100), 0) if progress != 0 else 5 
 
     # Retrieve a random daytime tip
-    with open('static/daytime-tips.json') as json_file:
+    with open(str(os.getenv("DIRECTORY_PATH")) + 'static/daytime-tips.json') as json_file:
         tips = json.load(json_file)
 
     tip = tips[random.randint(0, len(tips) - 1)]
@@ -225,7 +225,7 @@ def list(list_id):
         list_result = [l for l in current_user.get_lists() if l["id"] == list_id][0]  
         games_result = []
 
-        with open('static/games-data.json') as json_file:
+        with open(str(os.getenv("DIRECTORY_PATH")) + 'static/games-data.json') as json_file:
             games_data = json.load(json_file)
 
         status = None

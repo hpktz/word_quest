@@ -46,7 +46,7 @@ git clone https://github.com/hpktz/word_quest
 2. Ouvrez votre terminal
 3. Naviguez jusqu'au dossier du site
 ```bash
-cd C:\wamp64\www\word_quest
+cd C:\wamp64\www\word_quest\sources
 ```
 4. Installez les modules nécessaires
 ```bash
@@ -59,15 +59,19 @@ pip install -r requirements.txt
 2. Connectez-vous avec les identifiants par défaut (login : root, mot de passe : vide)
 3. Créez une nouvelle base de données nommée `word_quest`
 4. Importez le fichier `word_quest.sql` dans la base de données
+> **Note :** La base contient des données de base pour le site (utilisateurs, scores, etc.). Cela permet de tester l'environnement complet du site.
 
 ## Ajout des Variables d'Environnement ⚙️
 
-1. Accédez à votre fichier `.env` dans le dossier `word_quest`
+1. Créez un fichier `.env` dans le dossier `word_quest/sources`
 2. Modifiez les variables d'environnement pour correspondre à votre configuration
 ```env
-COLLINS_API_KEY=<VOTRE_CLE_API_COLLINS>
-GOOGLE_SEARCH_API_KEY=<VOTRE_CLE_API_GOOGLE>
-GOOGLE_SEARCH_ENGINE_ID=<VOTRE_ID_MOTEUR_RECHERCHE_GOOGLE>
+FLASK_SECRET_KEY=<VOTRE_CLE_SECRETE> - Clé secrète Flask (valeurs aléatoires recommandées)
+COLLINS_API_KEY=<VOTRE_CLE_API_COLLINS> - Clé API Collins Dictionary
+GOOGLE_SEARCH_API_KEY=<VOTRE_CLE_API_GOOGLE> - Clé API Google Custom Search Engine
+GOOGLE_SEARCH_ENGINE_ID=<VOTRE_ID_MOTEUR_RECHERCHE_GOOGLE> - ID du moteur de recherche Google
+EMAILING_SERVICE_PASSWORD=<VOTRE_MOT_DE_PASSE_EMAILING_SERVICE> - Mot de passe du compte de messagerie
+EMAILING_SERVICE_TOKEN=<VOTRE_TOKEN_EMAILING_SERVICE> - Token Google Cloud pour taches Cron
 DB_HOST=localhost
 DB_NAME=word_quest
 DB_USERNAME=root
@@ -80,11 +84,11 @@ DB_PASSWORD=
 2. Ouvrez votre terminal
 3. Naviguez jusqu'au dossier du site
 ```bash
-cd C:\wamp64\www\word_quest
+cd C:\wamp64\www\word_quest\sources
 ```
 4. Lancez le serveur
 ```bash
-python __init__.py
+python main.py
 ```
 
 Félicitations ! Vous avez maintenant configuré votre environnement de développement et lancé notre site avec succès. 🎉

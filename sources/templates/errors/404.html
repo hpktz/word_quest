@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un problème est survenu</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/css/style-errors.css">
+</head>
+
+<body>
+    <main class="error-main-container">
+        <section class="error-section">
+            <img src="/static/imgs/3d-white-fluffy-cloud.png" class="img" alt="White Cloud">
+            <div class="title">Code 404</div>
+            <div class="desc">
+                Rien à trouver ici, si ce n'est que du vent. Vérifiez l'URL et réessayez.
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="button-container">
+                <a href="/dashboard" class="button">Retour au dashboard</a>
+            </div>
+            {% else %}
+            <div class="button-container">
+                <a href="/" class="button">Retour à l'accueil</a>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+{% extends "dashboard/main.html" %}{% block color %}dashboard-color{% endblock %} {% block dashboard %}selected{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">
+        <div>Dashboard</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button">
+                <img src="/static/icons/search-30-white.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <div class="search-bar-container">
+        <input class="search-bar" id="search-bar" type="text" placeholder="Votre recherche">
+        <img src="/static/icons/search-30-dark-grey.png" class="img" alt="search-icon">
+    </div>
+    <div class="search-results"> </div>
+</div>
+<div class="tips">
+    <div class="title">Astuce</div>
+    <div class="text">{{daytime_tip}}</div>
+    <img src="/static/imgs/3d-young-man-with-coffee-standing-and-speaking.png" class="img" alt="tips-illustration">
+</div>
+{% endblock %} {% block daytime_tip %} {{daytime_tip}} {% endblock %} {% block content %}
+<main class="dashboard-main-container">
+    <section class="main-infos entry-animation">
+        <div class="title">MES LISTES</div>
+        <div class="user-infos">
+            <div class="box">
+                <img src="/static/imgs/3d-blue-gemstone.png" class="img" alt="medal-icon">
+                <div class="text" id="gems-info" data-value="{{gems}}"></div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-flash-on.png" class="img" alt="medal-icon">
+                <div class="text" id="xp-info" data-value="{{xp}}"></div>
+            </div>
+            <div class="box lives-zone" id="lives-box">
+                <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                <div class="text lives-zone" id="lives-info" data-value="{{lives}}"></div>
+            </div>
+        </div>
+        <div class="filters">
+            <div class="creation-date">
+                <div class="date">
+                    <input type="date" class="date-start-input" value="{{start_date}}">
+                    <img src="/static/icons/arrow-right-30-dark-grey.png" alt="">
+                    <input type="date" class="date-end-input" value="{{end_date}}">
+                </div>
+                <div class="filter">
+                    <img src="/static/icons/menu-30-dark-grey.png" alt="">
+                    <select class="filter-select" id="filter-select">
+                        <option value="date-increasing">Date ↓</option>
+                        <option value="date-decreasing">Date ↑</option>
+                        <option value="name-increasing">A-Z</option>
+                        <option value="name-decreasing">Z-A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="lists-container entry-animation" id="lists-container">
+        {% for list in lists %} 
+            {% if new_list_id == list['id'] %} 
+                {% set css_class = "new-list" %} 
+            {% else %} 
+                {% set css_class = "" %} 
+            {% endif %}
+            {% if list['progress'] == 100 %}
+                {% set css_complete_class = "complete" %}
+            {% else %}
+                {% set css_complete_class = "incomplete" %}
+            {% endif %}
+            <div class="list-box {{ css_class }} {{css_complete_class}}" data-list_id="{{list['id']}}" data-list_creation="{{list['created_at']}}" data-list_name="{{list['title']}}">
+                <div class="infos">
+                    <div class="creation">
+                        <p>Créée le {{ list["created_at"] }}</p>
+                    </div>
+                    <p class="title">{{ list["title"] }}</p>
+                    <div class="hidden">
+                        <div class="progress">
+                            <div class="title">Progression</div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: {{list['progress']}}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator"></div>
+                    <p class="words">Liste de {{ list["words"]|length }} mot{% if list["words"]|length > 1 %}s{% endif %} - {% for index in range((10, list["words"]|length)|min) %}{% if index > 0 %}, {% endif %}{{list["words"][index]["word"]}}{% endfor %}</p>
+                </div>
+                <div class="actions">
+                    <div class="delete-logo clickable-logo delete-zone">
+                        <a href="" class="delete-zone manage-list-button" data-list_id="{{list['id']}}">
+                            <img src="/static/icons/settings-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                        </a>
+                    </div>
+                    <!-- TODO -->
+                    <div class="delete-logo clickable-logo delete-zone">
+                        <a href="" class="delete-zone copy-list-button" data-list_id="{{list['id']}}">
+                            <img src="/static/icons/share-30-dark-grey.png" class="delete-zone" alt="delete-icon">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %} {% if lists|length == 0 %}
+        <div class="list-box-empty" style="display: block;">
+            <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">
+            <p class="text">Aucune liste trouvée</p>
+        </div>
+        {% else %}
+        <div class="list-box-empty" style="display: none;">
+            <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="empty-list-icon">
+            <p class="text">Aucune liste trouvée</p>
+        </div>
+        {% endif %}
+        <div class="create-list-box">
+            <div class="separate"></div>
+            <a href="/dashboard/create" class="redirect create-button">
+                Créer une liste
+            </a>
+        </div>
+    </section>
+    <section class="games-trail entry-animation" id="game-trail" data-color="1">
+        <div class="no-list-selected">
+            <div>
+                <img src="/static/imgs/3d-black-cursor.png" class="img" alt="cursor-icon">
+                <div class="text">Selectionnez une liste pour voir les niveaux</div>
+            </div>
+        </div>
+    </section>
+    <div class="overlay-load-game">
+        <div class="content">
+            <span class="loader"></span>
+        </div>
+    </div>
+    <section class="manage-list pop-up">
+        <div class="header">
+            <div class="title">Gestion de la liste</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="close-manage-list-button">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="body" id="manage-list-content"></div>
+    </section>
+    <section class="copy-list pop-up">
+        <div class="header">
+            <div class="title">Partager la liste</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="close-copy-list-button">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="text">
+            Voici un lien pour partager la liste. Il vous suffit de le copier et de le partager à vos amis. <br><br>Ce lien est unique et ne peut être utilisé qu'une seule fois et dans un délai de 1 heure.
+        </div>
+        <div class="share-box">
+            <div class="link" id="link" data-link=""></div>
+            <div class="copy-button" id="copy-link-button">
+                Copier
+            </div>
+        </div>
+    </section>
+    <div class="lives-pop-up lives-zone">
+        <div class="triangle lives-zone"></div>
+        <div class="container lives-zone">
+            <div class="heart-container lives-zone">
+                {% for index in range(5) %} {% if index
+                < lives %} <img src="/static/imgs/3d-red-heart.png" class="img lives-zone" alt="medal-icon">
+                    {% else %}
+                    <img src="/static/imgs/3d-white-heart.png" class="img lives-zone" alt="medal-icon"> {% endif %} {% endfor %}
+            </div>
+            <div class="text lives-zone" id="lives-counter" data-lives="{{lives}}" data-time="{{lives_time}}" data-end_time="{{lives_end}}">Vous avez tout vos coeur</div>
+            <input type="hidden" name="csrf_token" id="csrf_token_purchase" value="{{ csrf_token() }}">
+            <a href="" class="button lives-zone" id="life-purchase-button">Acheter (200 gemmes)</a>
+        </div>
+    </div>
+    {% if gifts %}
+    <div class="gift-pop-up-background active" id="gift-pop-up-background"></div>
+    <div class="gift-pop-up active" id="gift-pop-up">
+        <img src="/static/icons/gemstone-animation.gif" class="img" alt="gift-icon">
+        <div class="text">Vous avez reçu un cadeau !</div>
+        <div class="gift-box">200 Gemmes</div>
+        <div class="button" id="close-gift-pop-up-button">Fermer</div>
+    </div>
+    {% endif %}
+    <script src="/static/scripts/dashboard/search.js"></script>
+    <script src="/static/scripts/dashboard/filters.js"></script>
+    <script src="/static/styles/js/dashboard.js"></script>
+    {% if hearts_message %}
+    <script>
+        document.getElementById("lives-box").click();
+    </script>
+    {% endif %}
+</main>
+{% endblock %}

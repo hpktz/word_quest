@@ -1,0 +1,711 @@
+header .infos-section {
+    grid-template-rows: 1fr 30px;
+}
+
+header .infos-section::-webkit-scrollbar-thumb {
+    border: 1px solid #333;
+    background-color: aliceblue;
+}
+
+header .infos-section::-webkit-scrollbar-track {
+    background: #333;
+}
+
+header .infos-section .form .error-message {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #c78383;
+    margin-top: 10px;
+}
+
+header .infos-section .form .input-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    margin-top: 15px;
+}
+
+header .infos-section .form input,
+header .infos-section .form textarea {
+    background: white;
+    font-family: 'League Spartan', sans-serif;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    width: 100%;
+    padding: 7.5px;
+    color: black;
+    margin-top: 10px;
+    resize: vertical;
+}
+
+header .infos-section .form input:focus,
+header .infos-section .form textarea:focus {
+    background: #dcdcdc;
+}
+
+header .infos-section .form .goals-tab {
+    display: flex;
+    width: calc(100%);
+    margin: 20px 0 20px 0px;
+}
+
+header .infos-section .form .goals-tab .subtitle {
+    font-size: 16px;
+    color: lightgrey;
+    font-weight: 200;
+    font-family: 'League Spartan', sans-serif;
+    width: 50px;
+}
+
+header .infos-section .form .goals-tab>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+header .infos-section .form .goals-tab label {
+    font-size: 16px;
+    color: #766153;
+    font-weight: 200;
+    font-family: 'League Spartan', sans-serif;
+    cursor: pointer;
+    transition: all 250ms;
+}
+
+header .infos-section .form .goals-tab input[type="radio"] {
+    display: none;
+}
+
+header .infos-section .form .goals-tab input[type="radio"]:checked+label {
+    font-weight: bold;
+    color: white;
+}
+
+header .infos-section .form .notifications-tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0 20px 0;
+}
+
+header .infos-section .form .notifications-tab .subtitle {
+    font-size: 16px;
+    color: lightgrey;
+    font-weight: 200;
+    font-family: 'League Spartan', sans-serif;
+}
+
+header .infos-section .form .notifications-tab label {
+    display: block;
+    height: 20px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: #eceaea;
+    cursor: pointer;
+}
+
+header .infos-section .form .notifications-tab label span {
+    display: block;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
+    background-color: #766153;
+    margin: 2px;
+    transition: all 250ms;
+}
+
+header .infos-section .form .notifications-tab input[type="checkbox"] {
+    display: none;
+}
+
+header .infos-section .form .notifications-tab input[type="checkbox"]:checked+label {
+    background: white;
+}
+
+header .infos-section .form .notifications-tab input[type="checkbox"]:checked+label span {
+    margin-left: 22px;
+}
+
+header .infos-section .create-button {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 0;
+    border-radius: 5px;
+    background: #766153;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'League Spartan', sans-serif;
+    box-sizing: border-box;
+    outline: none;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 250ms;
+}
+
+header .infos-section .create-button:hover {
+    background: #5e4a3c;
+}
+
+.create-main-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+    row-gap: 20px;
+}
+
+.create-main-container .main-infos .title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    text-align: left;
+    grid-row: 1;
+}
+
+.create-main-container .main-infos .info {
+    width: 100%;
+    padding: 10px;
+    background: #ebebeb;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.create-main-container .main-infos .info .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #766153;
+}
+
+.create-main-container .main-infos .info .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    margin-top: 15px;
+}
+
+.create-main-container .search-words {
+    grid-column: 1;
+    grid-row: 2;
+    padding-bottom: 15px;
+}
+
+.create-main-container .search-words .search-bar-box {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    grid-template-rows: 1fr;
+    gap: 10px;
+}
+
+.create-main-container .search-words .search-bar-box .search-bar {
+    font-family: 'League Spartan', sans-serif;
+    background-color: #ebebeb;
+    border-radius: 5px;
+    padding: 7.5px;
+    width: 100%;
+    outline: none;
+    border: none;
+    transition: all 250ms;
+    grid-column: 1;
+}
+
+.create-main-container .search-words .search-bar-box .search-bar:focus {
+    background-color: #dcdcdc;
+}
+
+.create-main-container .search-words .search-bar-box .search-logo {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    background-color: #333;
+    border-radius: 5px;
+    transition: all 250ms;
+    grid-column: 2;
+}
+
+.create-main-container .search-words .search-bar-box .search-logo:hover {
+    background-color: #555;
+}
+
+.create-main-container .search-words .language-switch p {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.create-main-container .search-words .language-switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    grid-column: 1/ span 2;
+}
+
+.create-main-container .search-words .language-switch>div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.create-main-container .search-words .language-switch input[type="radio"] {
+    display: none;
+}
+
+.create-main-container .search-words .language-switch label {
+    display: block;
+    width: 75px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 250ms;
+    background-color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+}
+
+.create-main-container .search-words .language-switch input[type="radio"]:checked+label {
+    background-color: #ebebeb;
+    color: #333;
+    font-weight: 600;
+}
+
+.create-main-container .search-words .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+    margin-top: 25px;
+}
+
+.create-main-container .search-words .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    margin-top: 10px;
+}
+
+.create-main-container .search-words .words-container {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.create-main-container .search-words .words-container .load {
+    width: 100%;
+    height: 150px;
+    position: relative;
+}
+
+.create-main-container .search-words .words-container .load .loader {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+    border: 2px solid #fff;
+    border-top: 2px solid #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.create-main-container .search-words .words-container .word-box {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 250ms;
+}
+
+.create-main-container .search-words .words-container .word-box.clicked .loader-box {
+    top: 0;
+}
+
+.create-main-container .search-words .words-container .word-box .loader-box {
+    position: absolute;
+    top: -150px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #333333cf;
+    border-radius: 10px;
+}
+
+.create-main-container .search-words .words-container .word-box.clicked .loader {
+    animation: spin 1s linear infinite;
+}
+
+.create-main-container .search-words .words-container .word-box .loader {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: calc(50% - 12.5px);
+    left: calc(50% - 12.5px);
+    border: 2px solid #fff;
+    border-top: 2px solid #333;
+    border-radius: 50%;
+}
+
+.create-main-container .search-words .words-container .word-box:hover {
+    background-color: #f5f5f5;
+}
+
+.create-main-container .search-words .words-container .word-box .type {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: grey;
+}
+
+.create-main-container .search-words .words-container .word-box .translation {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 5px;
+}
+
+.create-main-container .search-words .words-container .word-box .example {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    color: #333;
+    margin-top: 5px;
+}
+
+.create-main-container .search-words .words-container .empty-word-box {
+    text-align: center;
+}
+
+.create-main-container .search-words .words-container .empty-word-box .img {
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.create-main-container .search-words .words-container .empty-word-box .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    margin-top: 5px;
+}
+
+.create-main-container .list-in-construction {
+    grid-column: 2;
+    grid-row: 2;
+    position: relative;
+}
+
+.create-main-container .list-in-construction .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+    position: sticky;
+    top: 10px;
+}
+
+.create-main-container .list-in-construction .list-container {
+    display: grid;
+    gap: 10px;
+    position: sticky;
+    top: 35px;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+    position: relative;
+    animation: item-pop 0.25s ease-in-out;
+}
+
+@keyframes item-pop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    75% {
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box:hover {
+    background-color: #f5f5f5;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box .word {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box .type {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: grey;
+    text-align: center;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo {
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box .load {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -70px;
+    left: 0;
+    background-color: #333333cf;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box .load.active {
+    top: 0px;
+}
+
+.create-main-container .list-in-construction .list-container .word-in-list-box .loader {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 2px solid #333;
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.create-main-container .list-in-construction .list-container .no-word-in-list {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}
+
+@media screen and (max-width: 1085px) {
+    body.open .create-main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+    }
+    body.open .create-main-container .main-infos {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    body.open .create-main-container .search-words {
+        grid-row: 3;
+        grid-column: 1;
+    }
+    body.open .create-main-container .list-in-construction {
+        grid-row: 2;
+        grid-column: 1;
+    }
+    .create-main-container .list-in-construction .list-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    body.open .create-main-container .list-in-construction .list-container .word-in-list-box {
+        width: fit-content;
+        grid-template-columns: auto auto;
+        gap: 10px;
+        padding: 5px 5px 5px 10px;
+        border: 0;
+        background-color: #ebebeb;
+        border-radius: 50px;
+        transition: all 250ms;
+        overflow: hidden;
+    }
+    body.open .create-main-container .list-in-construction .list-container .word-in-list-box:hover {
+        background-color: #ebebeb;
+    }
+    body.open .create-main-container .list-in-construction .list-container .word-in-list-box .type {
+        display: none;
+    }
+    body.open .create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo {
+        background-color: white;
+        border-radius: 50%;
+    }
+    body.open .create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo a {
+        padding: 5px;
+    }
+    .create-main-container .list-in-construction .title {
+        position: unset;
+        top: unset;
+    }
+    .create-main-container .list-in-construction .list-container {
+        position: unset;
+        top: unset;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .create-main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+    }
+    .create-main-container .main-infos {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    .create-main-container .search-words {
+        grid-row: 3;
+        grid-column: 1;
+    }
+    .create-main-container .list-in-construction {
+        grid-row: 2;
+        grid-column: 1;
+    }
+    .create-main-container .list-in-construction .list-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box {
+        width: fit-content;
+        grid-template-columns: auto auto;
+        gap: 10px;
+        padding: 5px 5px 5px 10px;
+        border: 0;
+        background-color: #ebebeb;
+        border-radius: 50px;
+        transition: all 250ms;
+        overflow: hidden;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box:hover {
+        background-color: #ebebeb;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box .type {
+        display: none;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo {
+        background-color: white;
+        border-radius: 50%;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo a {
+        padding: 5px;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    header .info-section .form,
+    header .infos-section .create-button {
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .create-main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+    }
+    .create-main-container .main-infos {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    .create-main-container .search-words {
+        grid-row: 3;
+        grid-column: 1;
+    }
+    .create-main-container .list-in-construction {
+        grid-row: 2;
+        grid-column: 1;
+    }
+    body.info-section-phone-active header .infos-section .form,
+    body.info-section-phone-active header .infos-section .create-button {
+        height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        opacity: 1;
+        pointer-events: all;
+        margin-top: 0;
+        transition: all 0.2s ease-in-out 0.4s;
+        margin-top: 5px;
+        scrollbar-width: none;
+    }
+    body.info-section-phone-active header .infos-section .create-button {
+        margin-top: 0;
+    }
+    body.info-section-phone-active {
+        grid-template-rows: 1fr 25px;
+    }
+    body.info-section-phone-active header .infos-section .info-section {
+        grid-template-rows: 35px 1fr 5px;
+        gap: 25px;
+    }
+    .create-main-container .list-in-construction .list-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box {
+        width: fit-content;
+        grid-template-columns: auto auto;
+        gap: 10px;
+        padding: 5px 5px 5px 10px;
+        border: 0;
+        background-color: #ebebeb;
+        border-radius: 50px;
+        transition: all 250ms;
+        overflow: hidden;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box:hover {
+        background-color: #ebebeb;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box .type {
+        display: none;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo {
+        background-color: white;
+        border-radius: 50%;
+    }
+    .create-main-container .list-in-construction .list-container .word-in-list-box .trash-logo a {
+        padding: 5px;
+    }
+}

@@ -1,0 +1,272 @@
+.main-game-section {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    display: grid;
+    grid-template-rows: 45px 1fr;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    place-items: center;
+}
+
+.main-game-section .back img {
+    width: 45px;
+}
+
+.pop-up {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    width: 400px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.pop-up.active {
+    top: 50%;
+    box-shadow: 0px 0px 1000px 0 #959da5;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.pop-up .title {
+    font-family: "Bangers", cursive;
+    font-size: 24px;
+    margin-top: 25px;
+}
+
+.pop-up .desc {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    margin-top: 25px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.pop-up .desc p {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.pop-up .start-buttons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    gap: 10px;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.pop-up .counter {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #766153;
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.pop-up .counter .inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #766153;
+    z-index: -1;
+    animation: loading 5s linear;
+}
+
+.pop-up .skip {
+    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pop-up .skip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes loading {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+.pop-up .counter span {
+    font-family: "Bangers", cursive;
+}
+
+.pop-up.end-pop-up .title {
+    margin-bottom: 25px;
+}
+
+.pop-up .message {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.pop-up .data-box {
+    display: grid;
+    grid-template-columns: 30px 1fr 50px;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    margin: 15px 0;
+}
+
+.pop-up .data-box .icon {
+    width: 30px;
+}
+
+.pop-up .data-box .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+}
+
+.pop-up .data-box .data {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.pop-up .final-path-button {
+    width: 100%;
+    height: 37px;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: "League Spartan", sans-serif;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.pop-up .final-path-button:hover {
+    background: #555;
+    color: #fff;
+}
+
+.pop-up .final-path-button .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    border: 2px solid transparent;
+    border-radius: 100%;
+    border-top-color: #333;
+    animation: spin 0.5s linear infinite;
+}
+
+.pop-up .button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 50px;
+    width: 100%;
+}
+
+.pop-up .button-container .button {
+    width: 100%;
+    height: 37px;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: "League Spartan", sans-serif;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.pop-up .button-container .button.try-again {
+    background: #333;
+    color: #fff;
+}
+
+.pop-up .button-container .button:hover {
+    background: #555;
+    color: #fff;
+}
+
+.pop-up .button-container .button .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    border: 2px solid transparent;
+    border-radius: 100%;
+    border-top-color: #333;
+    animation: spin 0.5s linear infinite;
+}
+
+.pop-up .button-container .button.try-again .loader {
+    border-top-color: #fff;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 670px) {
+    .pop-up {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+    }
+    .pop-up .desc {
+        font-size: 20px;
+    }
+    .pop-up .desc p {
+        margin: 25px 0;
+        border-radius: 20px;
+    }
+    .pop-up.start-pop-up {
+        grid-template-rows: 50px 50px 1fr 70px;
+    }
+    .pop-up.end-pop-up {
+        grid-template-rows: 75px 150px 1fr 37px;
+    }
+    .pop-up.end-pop-up .title {
+        margin-bottom: 0;
+    }
+    .pop-up.end-pop-up .button-container {
+        margin-top: 0;
+    }
+    .pop-up div {
+        width: 100%;
+    }
+    .main-game-section {
+        padding: 25px 10px;
+    }
+}

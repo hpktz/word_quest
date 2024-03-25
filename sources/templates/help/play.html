@@ -1,0 +1,42 @@
+{% extends "help/header.html" %} {% block content %}
+<main>
+    <a href="/dashboard/help">
+        <img class="main-logo entry-animation" src="/static/icons/games-icons/exit.png" alt="logo">
+    </a>
+    <div class="title entry-animation">Commencer un jeu</div>
+    <div class="navigation entry-animation">
+        <div id="prev" class="prev disabled">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+        <div id="next" class="next">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+    </div>
+    <div class="carousel entry-animation">
+        <div class="item">
+            <img src="/static/imgs/help/play-1.gif" class="illustration pc" alt="">
+            <img src="/static/imgs/help/play-1-mobile.gif" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Cliquez sur votre liste</div>
+                <div class="text">
+                    <p>Sur la page principale du dashboard, cliquez sur une de vos listes de vocabulaire.</p>
+                    <p>Votre parcours va alors s'afficher.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/play-2.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/play-2-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Cliquez sur les jeux disponibles</div>
+                <div class="text">
+                    <p>1. <strong>Cliquez</strong> sur un jeu disponible (Les cases en couleurs)</p>
+                    <p>2. Lisez le titre du jeu et sa description</p>
+                    <p>2. Cliquez sur <strong>"Jouer"</strong> ou "Rejouer" si vous l'avez d'ores et déjà fait</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/scripts/help/main.js"></script>
+</main>
+{% endblock %}

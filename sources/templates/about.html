@@ -1,0 +1,57 @@
+{% extends "header.html" %} {% block title %}À propos{% endblock %} {% block desc %}Découvrez qui nous sommes et quel est notre projet !{% endblock %} {% block content %}
+<main>
+    <section class="title-section">
+        <div class="title">À propos</div>
+    </section>
+    <section class="main-container-section">
+        <div class="text-container">
+            <h1>Qui sommes-nous ?</h1>
+            <p>
+                Nous sommes une équipe de deux développeurs web passionnés par l'informatique. Nous avons créé Word Quest dans le but de rendre l'apprentissage de l'anglais plus accessible et plus amusant pour tous. Notre mission est de fournir une plateforme d'apprentissage
+                plus personnalisée et plus efficace que les méthodes traditionnelles.
+            </p>
+            <p>
+                Nous sommes actuellement en classe de terminale et nous avons décidé de consacrer notre temps libre à ce projet. Notre objectif est de participer au concours des Trophées NSI en fin d'année 2024.
+            </p>
+            <h1>Un projet open-source</h1>
+            <p>
+                Word Quest est un projet open-source. Cela signifie que notre code source est disponible gratuitement et des modifications peuvent être suggérées. Nous croyons que l'open-source est la meilleure façon de développer des logiciels de qualité et de permettre
+                à chacun de contribuer à notre projet.
+            </p>
+            <div class="github-box">
+                <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="github-logo">
+                <a href="https://github.com/hpktz/word_quest" class="link">Voir notre code source sur GitHub</a>
+            </div>
+            <h1>Notre rapport de projet</h1>
+            <p>Rapport de projet</p>
+            <a href="https://docs.google.com/document/d/1gqWTgmgGnjPdn7Zk2cQaKJqaEedpj1TC/edit?usp=sharing&ouid=104653183796477045289&rtpof=true&sd=true" class="link">Voir notre rapport de projet</a>
+            <p>Vidéo de présentation</p>
+            <a href="https://tube-sciences-technologies.apps.education.fr/w/qLsg1WdSTfAtA5uAhqMVvt" class="link">Voir notre vidéo de présentation</a>
+            <h1>Versions de l'application</h1>
+            <div class="versions-box">
+                <div class="version">
+                    <div class="point"></div>
+                    <div class="text">
+                        <h2>Version 1.1 (actuelle)</h2>
+                        <p>Sortie le 22 mars 2024</p>
+                        <p>
+                            La version finale de Word Quest est disponible. Les bugs ont été corrigés, nous avons ajouté 2 jeux supplémentaires et des fonctionnalités de personnalisation.
+                        </p>
+                    </div>
+                </div>
+                <div class="version">
+                    <div class="point"></div>
+                    <div class="text">
+                        <h2>Version 1.0</h2>
+                        <p>Sortie le 5 mars 2024</p>
+                        <p>
+                            La première version de Word Quest est disponible en bêta. Elle propose des fonctionnalités de base pour apprendre l'anglais. Nous travaillons actuellement sur la version 1.1 qui apportera de nouvelles fonctionnalités et des améliorations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'footer.html' %}
+</main>
+{% endblock %}

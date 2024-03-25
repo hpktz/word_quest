@@ -1,0 +1,648 @@
+* {
+    scroll-behavior: smooth;
+}
+
+body {
+    grid-template-columns: 95px 1fr;
+    animation: none;
+}
+
+header {
+    grid-template-columns: 75px 0;
+    background-color: #f6f6f6;
+}
+
+.settings-main-container {
+    display: grid;
+    grid-template-columns: 1fr 500px 1fr;
+}
+
+.settings-main-container .settings-section {
+    grid-column: 2;
+}
+
+.settings-main-container .settings-section .title {
+    font-family: "Bangers", cursive;
+    font-size: 36px;
+    margin-bottom: 50px;
+}
+
+.settings-main-container .settings-section>div {
+    margin: 25px 0;
+}
+
+.settings-main-container .settings-section>div .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.settings-main-container .settings-section input {
+    width: 100%;
+    max-width: 300px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 10px;
+}
+
+.settings-main-container .settings-section label {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    margin-top: 15px;
+    display: block;
+}
+
+.settings-main-container .settings-section button {
+    width: 100px;
+    max-width: 300px;
+    background-color: #777;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: auto;
+    cursor: not-allowed;
+    margin-left: calc(100% - 100px);
+}
+
+.settings-main-container .settings-section button.active {
+    width: 100px;
+    max-width: 300px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: calc(100% - 100px);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.settings-main-container .settings-section button .loader {
+    width: 15px;
+    height: 15px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    margin: auto;
+    animation: loader-animation 1s linear infinite;
+}
+
+.settings-main-container .settings-section button.active:hover {
+    background-color: #555;
+}
+
+.settings-main-container .settings-section button.pulse {
+    animation: pulse 0.1s infinite;
+}
+
+.settings-main-container .alert-mess {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #9b0000;
+    animation: alert-mess-entry 0.3s;
+}
+
+.settings-main-container .success-mess {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #006800;
+    animation: alert-mess-entry 0.3s;
+}
+
+@keyframes alert-mess-entry {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        height: 20px;
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: rotate(0deg);
+    }
+    33% {
+        transform: rotate(2.5deg);
+    }
+    66% {
+        transform: rotate(-2.5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.settings-main-container .user-infos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+.settings-main-container .user-infos .profile-picture {
+    width: 125px;
+    height: 125px;
+    transition: all 0.3s ease-in-out;
+}
+
+.settings-main-container .user-infos .profile-picture div input:not(:checked),
+.settings-main-container .user-infos .profile-picture div input:not(:checked)+label {
+    display: none;
+}
+
+.settings-main-container .user-infos .profile-picture div input:checked {
+    display: none;
+}
+
+.settings-main-container .user-infos .profile-picture div input:checked+label {
+    width: 125px;
+    height: 125px;
+    display: block;
+    border-radius: 50%;
+    background-color: lightgrey;
+    cursor: pointer;
+}
+
+.settings-main-container .user-infos .profile-picture div input:checked+label img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.settings-main-container .user-infos .profile-picture.active {
+    display: grid;
+    width: 100%;
+    height: fit-content;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    background-color: #ededed;
+    padding: 10px;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+
+.settings-main-container .user-infos .profile-picture.active div input {
+    display: none;
+}
+
+.settings-main-container .user-infos .profile-picture.active div input+label {
+    width: 100%;
+    height: 70px;
+    display: block;
+    border-radius: 50%;
+    border: 2px solid #ededed;
+    outline: 2px solid #ededed;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.settings-main-container .user-infos .profile-picture.active div input:checked+label {
+    outline: 2px solid #333;
+}
+
+.settings-main-container .user-infos .profile-picture.active div:nth-child(3n-2) input+label {
+    background-color: #ac9484;
+}
+
+.settings-main-container .user-infos .profile-picture.active div:nth-child(3n-1) input+label {
+    background-color: #BCBD8B;
+}
+
+.settings-main-container .user-infos .profile-picture.active div:nth-child(3n) input+label {
+    background-color: #A5A58D;
+}
+
+.settings-main-container .user-infos .profile-picture.active div input+label img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.settings-main-container .user-infos .public-box {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+    grid-column: 1 / span 2;
+}
+
+.settings-main-container .user-infos .public-box>div:nth-child(1) {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+}
+
+.settings-main-container .user-infos input[type="checkbox"] {
+    display: none;
+}
+
+.settings-main-container .user-infos input[type="checkbox"]+label {
+    display: block;
+    width: 50px;
+    height: 25px;
+    background: #ededed;
+    border-radius: 25px;
+    padding: 2.5px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.settings-main-container .user-infos input[type="checkbox"]+label .toggle-button {
+    width: 20px;
+    height: 19px;
+    background: #333;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.settings-main-container .user-infos input[type="checkbox"]:checked+label {
+    background: #333;
+}
+
+.settings-main-container .user-infos input[type="checkbox"]:checked+label .toggle-button {
+    background: #ededed;
+    transform: translateX(25px);
+}
+
+.settings-main-container .password-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.settings-main-container .password-container .mfa-box {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+    grid-column: 1 / span 2;
+}
+
+.settings-main-container .password-container .mfa-box>div:nth-child(1) {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+}
+
+.settings-main-container .password-container input[type="checkbox"] {
+    display: none;
+}
+
+.settings-main-container .password-container input[type="checkbox"]+label {
+    display: block;
+    width: 50px;
+    height: 25px;
+    background: #ededed;
+    border-radius: 25px;
+    padding: 2.5px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.settings-main-container .password-container input[type="checkbox"]+label .toggle-button {
+    width: 20px;
+    height: 19px;
+    background: #333;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.settings-main-container .password-container input[type="checkbox"]:checked+label {
+    background: #333;
+}
+
+.settings-main-container .password-container input[type="checkbox"]:checked+label .toggle-button {
+    background: #ededed;
+    transform: translateX(25px);
+}
+
+.settings-main-container .password-container .submit-button {
+    grid-column: 2;
+}
+
+.settings-main-container .otp_check .body .description {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.settings-main-container .otp_check .body input {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ededed;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.settings-main-container .otp_check .body input:hover {
+    background-color: #ebebeb;
+}
+
+.settings-main-container .otp_check .body button {
+    width: 100px;
+    max-width: 300px;
+    background-color: #777;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: auto;
+    cursor: not-allowed;
+    margin-left: calc(100% - 100px);
+}
+
+.settings-main-container .otp_check .body button.active {
+    width: 100px;
+    max-width: 300px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: calc(100% - 100px);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.settings-main-container .otp_check .body button .loader {
+    width: 15px;
+    height: 15px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    margin: auto;
+    animation: loader-animation 1s linear infinite;
+}
+
+.settings-main-container .otp_check .body button.active:hover {
+    background-color: #555;
+}
+
+.settings-main-container .otp_check .body button.pulse {
+    animation: pulse 0.1s infinite;
+}
+
+.settings-main-container .settings-section .danger-zone-section {
+    border: 2px solid #9b0000;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.settings-main-container .settings-section .danger-zone-section .box {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    grid-template-rows: auto auto;
+    gap: 20px;
+}
+
+.settings-main-container .settings-section .danger-zone-section .box .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 25px 0 0 0;
+    grid-column: 1 / span 2;
+}
+
+.settings-main-container .settings-section .danger-zone-section .description {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+}
+
+.settings-main-container .settings-section .danger-zone-section .box .button {
+    width: 100px;
+    background-color: #9b0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    font-family: "League Spartan", sans-serif;
+    cursor: pointer;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox {
+    display: none;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox+label {
+    display: block;
+    width: 50px;
+    height: 25px;
+    background: #ededed;
+    position: relative;
+    border-radius: 25px;
+    padding: 2.5px;
+    cursor: pointer;
+    margin-top: 0;
+    margin-left: auto;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox+label .loader-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    background-color: #333;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox+label .loader {
+    position: absolute;
+    top: calc(50% - 7.5px);
+    left: calc(50% - 7.5px);
+    width: 15px;
+    height: 15px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: loader-animation 1s linear infinite;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox+label .toggle-button {
+    width: 20px;
+    height: 19px;
+    background: #333;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox:checked+label {
+    background: #333;
+}
+
+.settings-main-container .settings-section .danger-zone-section .visibility-checkbox:checked+label .toggle-button {
+    background: #ededed;
+    transform: translateX(25px);
+}
+
+.delete_account .body .description {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.delete_account .body input {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ededed;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.delete_account .body input:hover {
+    background-color: #ebebeb;
+}
+
+.delete_account .body .button {
+    width: 100px;
+    max-width: 300px;
+    background-color: #9b0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: auto;
+    cursor: not-allowed;
+    margin-left: calc(100% - 100px);
+}
+
+.delete_account .body .button.active {
+    width: 100px;
+    max-width: 300px;
+    background-color: #9b0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: "League Spartan", sans-serif;
+    margin-top: 25px;
+    margin-left: calc(100% - 100px);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.delete_account .body .button .loader {
+    width: 15px;
+    height: 15px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    margin: auto;
+    animation: loader-animation 1s linear infinite;
+}
+
+.delete_account .body .button.active:hover {
+    background-color: #9b0000;
+}
+
+.delete_account .body .button.pulse {
+    animation: pulse 0.1s infinite;
+}
+
+@media screen and (max-width: 1085px) {
+    body.open {
+        grid-template-columns: 95px 1fr;
+    }
+    header .nav-bar {
+        grid-template-rows: 140px 1fr 55px;
+    }
+    header .nav-bar .responsive-logo {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    header {
+        background: transparent;
+        box-shadow: none;
+    }
+    header .nav-bar {
+        grid-template-rows: 60px 0 0;
+    }
+    .settings-main-container {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        grid-template-columns: 0 1fr 0;
+    }
+    .settings-main-container .user-infos {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+    .settings-main-container .password-container {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        grid-template-rows: auto auto auto auto;
+    }
+    .settings-main-container .password-container>div:nth-child(2) {
+        grid-row: 2;
+    }
+    .settings-main-container .password-container .mfa-box {
+        grid-row: 3;
+    }
+    .settings-main-container .password-container .submit-button {
+        grid-row: 4;
+    }
+    .settings-main-container .settings-section input {
+        max-width: 100%;
+    }
+    .delete_account .body input {
+        max-width: 100%;
+    }
+    .settings-main-container .user-infos .profile-picture.active {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    .settings-main-container .user-infos .profile-picture.active div input+label {
+        height: auto;
+    }
+}
+
+@keyframes loader-animation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification - WORD QUEST</title>
+    <link rel="icon" href="/static/icons/favicon.ico">
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL=../error/nojs.html">
+    </noscript>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/css/style-account-forms.css') }}">
+</head>
+
+<body>
+    <section class="2fa-check-form-container disabled">
+        <form id="2fa-check-form" method="POST" action="/auth/2fa">
+            <a href="/">
+                <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            </a>
+            <h1>Vérification</h1>
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <p id="login-form-main-alert">{{ messages[0] }}</p>
+            {% endif %} {% endwith %}
+            <p class="text">Veuillez renseigner le code de vérification que vous avez reçu par e-mail.</p>
+            <input type="number" name="code" class="code-input" id="2fa-check-code-input" placeholder="Code de vérification" autocomplete="one-time-code" required>
+            <span class="separator"></span>
+            <a href="{{ url_for('auth.sys_2fa_sendCodeAgain')}}" class="send-code-button" id="2fa-check-send-code-button">Renvoyer le code</a>
+            <span class="separator"></span>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="submit-button" id="2fa-check-submit-button">Connexion</button>
+        </form>
+    </section>
+</body>
+
+</html>

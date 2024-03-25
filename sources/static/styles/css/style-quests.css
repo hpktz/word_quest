@@ -1,0 +1,387 @@
+header .info-section .stat-box {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+    height: fit-content;
+}
+
+header .info-section .stat-box .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+header .info-section .stat-box .main-nbr {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+header .info-section .stat-box .img {
+    height: 70px;
+    position: absolute;
+    right: -10px;
+    bottom: 0;
+    opacity: 0.2;
+}
+
+header .infos-section::-webkit-scrollbar-track {
+    background-color: #717744;
+}
+
+header .infos-section::-webkit-scrollbar-thumb {
+    background-color: #333;
+    border: 1.25Px solid #717744;
+}
+
+.quests-main-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    row-gap: 40px;
+}
+
+.quests-main-container .main-infos .title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    text-align: left;
+    grid-row: 1;
+}
+
+.quests-main-container .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+}
+
+.quests-main-container .stats .stat-box {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 15px;
+}
+
+.quests-main-container .stats .stat-box .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .stats .stat-box .subtitle {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    color: #959da5;
+    height: 28px;
+    margin-top: 10px;
+}
+
+.quests-main-container .stats .stat-box .empty-target-box {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 25px;
+    color: #b4b4b4;
+    margin-top: 25%;
+}
+
+.quests-main-container .stats .stat-box .target-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.quests-main-container .stats .stat-box .target-box .img {
+    width: 20px;
+    height: 20px;
+}
+
+.quests-main-container .stats .stat-box .target-box .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container.good {
+    --progression-color: #064800;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container.average {
+    --progression-color: #c98200;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container.bad {
+    --progression-color: #750000;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container {
+    width: 90px;
+    height: 90px;
+    border: 5px solid var(--progression-color);
+    border-radius: 50%;
+    margin: 15px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quests-main-container .stats .stat-box .progress-index-container .progress-index {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--progression-color);
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-rows: 1fr 24px;
+    height: 120px;
+    margin-top: 15px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .ordinate {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    border-right: 1px solid #959da5;
+    padding-bottom: 10px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .abscissa {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: space-around;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 10px;
+    border-top: 1px solid #959da5;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .chart-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding-bottom: 10px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .chart-content .item {
+    height: 20px;
+    width: 8px;
+    background-color: #766153;
+    border-radius: 5px;
+}
+
+.quests-main-container .stats .stat-box .bar-chart-container .chart-content .empty-item {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 25px;
+    color: #b4b4b4;
+    margin: auto;
+}
+
+.quests-main-container .reaward-ranking-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking {
+    width: 100%;
+    height: fit-content;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    padding: 20px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-position {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 35px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container {
+    margin-top: 20px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .separate {
+    width: 100%;
+    height: 1px;
+    background-color: #959da5;
+    margin: 10px 0;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .empty-ranking-box {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 25px;
+    color: #b4b4b4;
+    margin: auto;
+    text-decoration: none;
+    color: #333;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box {
+    display: grid;
+    grid-template-columns: 30px 35px 1fr 40px;
+    align-items: center;
+    gap: 30px;
+    margin: 20px 0;
+    text-decoration: none;
+    color: #333;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .rank {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(1n) {
+    --profile-background: #8B7070;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(2n) {
+    --profile-background: #70845D;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(3n) {
+    --profile-background: #5B747D;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(4n) {
+    --profile-background: #766153;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box:nth-child(5n) {
+    --profile-background: #6C4A72;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .picture {
+    background-color: var(--profile-background);
+    border-radius: 5px;
+    height: 35px;
+    width: 35px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .name {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .name .xp-amount {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #959da5;
+    margin-top: 5px;
+}
+
+.quests-main-container .reaward-ranking-container .ranking .ranking-container .ranking-box .badge {
+    width: 40px;
+}
+
+.quests-main-container .reaward-ranking-container .reward .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box {
+    width: 100%;
+    height: 275px;
+    position: relative;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100px;
+    width: 100px;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.opened {
+    top: calc(50% - 20px);
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest.blocked img {
+    filter: grayscale(100%);
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .chest img {
+    width: 100px;
+    height: 100px;
+}
+
+.quests-main-container .reaward-ranking-container .reward .reward-box .base {
+    width: 150px;
+    height: 30px;
+    background-color: #959da5;
+    border-radius: 100%;
+    position: absolute;
+    top: calc(50% + 30px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 920px) {
+    body.open .quests-main-container .stats {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    .quests-main-container .stats {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+    .quests-main-container .reaward-ranking-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 40px;
+    }
+    .quests-main-container .reaward-ranking-container .reward {
+        grid-row: 2;
+    }
+    .quests-main-container .reaward-ranking-container .ranking {
+        grid-row: 1;
+    }
+    body.info-section-phone-active header .infos-section .info-section {
+        grid-template-rows: 30px 140px 106px 106px;
+    }
+    header .info-section .stat-box:nth-child(2) {
+        margin-top: 50px;
+    }
+}

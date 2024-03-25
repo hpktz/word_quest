@@ -1,0 +1,63 @@
+{% extends "help/header.html" %} {% block content %}
+<main>
+    <a href="/dashboard/help">
+        <img class="main-logo entry-animation" src="/static/icons/games-icons/exit.png" alt="logo">
+    </a>
+    <div class="title entry-animation">Voir ses statistiques</div>
+    <div class="navigation entry-animation">
+        <div id="prev" class="prev disabled">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+        <div id="next" class="next">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+    </div>
+    <div class="carousel entry-animation">
+        <div class="item">
+            <img src="/static/imgs/help/quests-1.gif" class="illustration pc" alt="">
+            <img src="/static/imgs/help/quests-1-mobile.gif" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Accédez à la page des quêtes</div>
+                <div class="text">
+                    <p>Dans le menu, cliquez sur le parchemin, comme indiqué ci-contre.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/quests-2.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/quests-2-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Consultez vos statistiques</div>
+                <div class="text">
+                    <p>1. Vos <strong>objectifs</strong> en cours (Objectifs correspondant à ceux fixés lors de la création d'une liste).</p>
+                    <p>2. Votre <strong>indicateur de progression</strong> (Calculé sur toute la semaine).</p>
+                    <p>3. Vos <strong>activités</strong> de la semaine passée.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/quests-3.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/quests-3-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Accédez au classement</div>
+                <div class="text">
+                    <p>Votre classement correspond à votre nombre total d'XP. Plus vous avez d'XP, plus vous êtes haut dans le classement.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/quests-4.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/quests-4-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Recevez vos récompenses</div>
+                <div class="text">
+                    <p>1. <strong>Cliquez</strong> sur le coffre s'il est fermé et coloré.</p>
+                    <p>2. Vous serez redirigé vers une page où il faudra cliquer à nouveau dessus.</p>
+                    <p>3. <strong>Vous recevrez</strong> vos récompenses !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/scripts/help/main.js"></script>
+</main>
+{% endblock %}

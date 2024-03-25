@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - WORD QUEST</title>
+    <link rel="icon" href="/static/icons/favicon.ico">
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL=../error/nojs.html">
+    </noscript>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/css/style-account-forms.css') }}">
+</head>
+
+<body>
+    <section class="login-form-container" id="login-form-container">
+        <form id="login-form" method="POST" action="/auth/login">
+            <a href="/">
+                <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            </a>
+            <h1>Connexion</h1>
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <p id="login-form-main-alert">{{ messages[0] }}</p>
+            {% endif %} {% endwith %}
+            <input type="email" name="email" class="email-input" id="login-email-input" placeholder="Adresse e-mail" value="{{email}}" required>
+            <input type="password" name="password" class="password-input" id="login-password-input" placeholder="Mot de passe" value="{{password}}" required>
+            <div class="hidden-password-container">
+                <img src="{{ url_for('static', filename='icons/hide-password.png') }}" style="z-index: 15;" class="hidden-password-img" id="hidden-password-img">
+                <span class="hidden-password-asset hidden" id="hidden-password-asset"></span>
+            </div>
+            <span class="separator"></span>
+            <a href="/auth/pass-recovery" class="password-recovery">Mot de passe oublié ?</a>
+            <span class="separator"></span>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="submit-button" id="login-submit-button">Connexion</button>
+        </form>
+        <span class="separator snd-separator"></span>
+        <div class="create-account-container">
+            <a href="{{ url_for('auth.register') }}" class="create-account">Je n'ai pas encore de compte</a>
+        </div>
+    </section>
+    <script src="/static/styles/js/auth-login.js"></script>
+</body>
+
+</html>

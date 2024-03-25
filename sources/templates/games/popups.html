@@ -1,0 +1,50 @@
+{% if reloaded %} {% set active = "" %} {% else %} {% set active = "active" %} {%endif%}
+<section class="start-pop-up pop-up {{active}}">
+    <img src="{{popUpImage}}" alt="logo">
+    <div class="title">{{popUpTitle}}</div>
+    <div class="desc">
+        <p>{{popUpDesc}}</p>
+        <p>Un seul mot d'ordre : la rapidité</p>
+        <p>Bonne chance !</p>
+    </div>
+    <div class="start-buttons">
+        <div class="counter" style="display: block;">
+            Le jeu commance dans <span id="counter">5</span> secondes
+            <div class="inner"></div>
+        </div>
+        <div class="skip" id="skip-intro">
+            <img src="/static/icons/skip-30-white.png" alt="">
+        </div>
+    </div>
+
+</section>
+<section class="end-pop-up pop-up">
+    <div class="title">Vos résultats</div>
+    <div class="message" id="end-message"></div>
+    <div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-three-yelow-lightnings.png" class="icon" alt="">
+            <div class="text">XP gagné</div>
+            <div class="data" id="data-xp">0</div>
+        </div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-red-heart.png" class="icon" alt="">
+            <div class="text">Vie perdue</div>
+            <div class="data" id="data-life">0</div>
+        </div>
+        <div class="data-box">
+            <img src="/static/imgs/3d-red-clock.png" class="icon" alt="">
+            <div class="text">Temps passé</div>
+            <div class="data" id="data-time">0</div>
+        </div>
+    </div>
+    {% if popUpGame == "typefast" %}
+    <div class="button final-path-button" id="final-path-button" data-url="/dashboard?end_lesson=True&list_id={{list_id}}&success=">Suivant</div>
+    {% else %}
+    <div class="button-container">
+        <div class="button try-again" data-url="/dashboard/games/{{popUpGame}}/{{list_id}}">Rejouer</div>
+        <div class="button leave" id="leave-button" data-url="/dashboard?end_lesson=True&list_id={{list_id}}&success=">Suivant</div>
+    </div>
+    {% endif %}
+</section>
+<script src="/static/styles/games/popups/main.js"></script>

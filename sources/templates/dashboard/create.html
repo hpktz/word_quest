@@ -1,0 +1,119 @@
+{% extends "dashboard/main.html" %} {% block title %}Création{% endblock %}{% block color %}create-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-create.css">{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">
+        <div>Création</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button">
+                <img src="/static/icons/check-30-white.pnh.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <form id="list-infos" class="form">
+        <div class="error-message"></div>
+        <div class="input-title ">Le nom de votre liste</div>
+        <input type="text" name="name" id="list-name" placeholder="Nom de la liste (requis)" required>
+        <div class="input-title ">Description</div>
+        <textarea name="desc" id="list-description" cols="30" rows="10" placeholder="Description de la liste"></textarea>
+        <div class="input-title ">Objectifs</div>
+        <div class="goals-tab">
+            <p class="subtitle">Temps</p>
+            <div>
+                <input type="radio" name="time" id="time-1" value="1" checked>
+                <label for="time-1">1 min</label>
+                <input type="radio" name="time" id="time-2" value="3">
+                <label for="time-2">3 min</label>
+                <input type="radio" name="time" id="time-3" value="5">
+                <label for="time-3">5 min</label>
+            </div>
+        </div>
+        <div class="goals-tab">
+            <p class="subtitle">XP</p>
+            <div>
+                <input type="radio" name="xp" id="xp-1" value="10" checked>
+                <label for="xp-1">10</label>
+                <input type="radio" name="xp" id="xp-2" value="20">
+                <label for="xp-2">20</label>
+                <input type="radio" name="xp" id="xp-3" value="30">
+                <label for="xp-3">30</label>
+            </div>
+        </div>
+        <div class="goals-tab">
+            <p class="subtitle">Jeux</p>
+            <div>
+                <input type="radio" name="game" id="game-1" value="1" checked>
+                <label for="game-1">1</label>
+                <input type="radio" name="game" id="game-2" value="2">
+                <label for="game-2">2</label>
+                <input type="radio" name="game" id="game-3" value="3">
+                <label for="game-3">3</label>
+            </div>
+        </div>
+        <div class="input-title ">Notifications</div>
+        <div class="notifications-tab">
+            <p class="subtitle">Rappel par mail</p>
+            <input type="checkbox" name="reminder" id="reminder-1">
+            <label for="reminder-1"> <span class="slider"></span></label>
+        </div>
+        <div class="notifications-tab">
+            <p class="subtitle">Stats par mail</p>
+            <input type="checkbox" name="stats" id="stats-1">
+            <label for="stats-1"><span class="slider"></span></label>
+        </div>
+        <div class="notifications-tab">
+            <p class="subtitle">Liste publique</p>
+            <input type="checkbox" name="public" id="public-1">
+            <label for="public-1"><span class="slider"></span></label>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    </form>
+</div>
+<div class="create-button" id="create-list-button">Créer</div>
+{% endblock %}{% block create %}selected{% endblock %} {% block content %}
+<main class="create-main-container">
+    <div class="main-infos entry-animation">
+        <div class="title">Votre vocabulaire</div>
+        <div class="info">
+            <div class="title">Petite astuce</div>
+            <div class="text">
+                Ajoutez les mots <strong>anglais</strong> qui composent votre liste de vocabulaire à apprendre. Nommez votre liste, choisissez vos objectifs, et partez pour l'aventure !
+            </div>
+        </div>
+    </div>
+    <div class="search-words entry-animation">
+        <div class="search-bar-box">
+            <form method="" action="" id="language-switch" class="language-switch">
+                <p>Choisissez la langue de recherche :</p>
+                <div>
+                    <input type="radio" name="language" id="language-1" value="en" checked>
+                    <label for="language-1">Anglais </label>
+                    <input type="radio" name="language" id="language-2" value="fr">
+                    <label for="language-2">Français</label>
+                </div>
+            </form>
+            <input type="text" class="search-bar" id="search-bar" placeholder="Rechercher...">
+            <div class="search-logo clickable-logo">
+                <a id="search-button">
+                    <img src="/static/icons/search-30-white.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="title">Définitions</div>
+        <div class="text">Cliquez sur la défintion que vous souhaitez apprendre.</div>
+        <div class="words-container">
+            <div class="empty-word-box">
+                <img src="/static/imgs/3d-magnifier-with-wooden-handle.png" alt="search" class="img">
+                <p class="text"> Recherchez un mot pour continuer</p>
+            </div>
+        </div>
+    </div>
+    <div class="list-in-construction entry-animation">
+        <div class="title">Contenu de votre liste</div>
+        <div class="list-container" data-items_count="0">
+            <div class="no-word-in-list">Vous n'avez pas de mot dans votre liste</div>
+        </div>
+    </div>
+</main>
+<script src="/static/scripts/create/search.js"></script>
+<script src="/static/scripts/create/management.js"></script>
+{% endblock %}

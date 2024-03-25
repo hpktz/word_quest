@@ -1,0 +1,68 @@
+{% extends "help/header.html" %} {% block content %}
+<main>
+    <a href="/dashboard/help">
+        <img class="main-logo entry-animation" src="/static/icons/games-icons/exit.png" alt="logo">
+    </a>
+    <div class="title entry-animation">Consultez votre profil</div>
+    <div class="navigation entry-animation">
+        <div id="prev" class="prev disabled">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+        <div id="next" class="next">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+    </div>
+    <div class="carousel entry-animation">
+        <div class="item">
+            <img src="/static/imgs/help/profile-1.gif" class="illustration pc" alt="">
+            <img src="/static/imgs/help/profile-1-mobile.gif" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Accédez à la page de votre profil</div>
+                <div class="text">
+                    <p>Dans le menu, cliquez sur l'icône de profil, comme indiqué ci-contre.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/profile-2.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/profile-2-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Gérez vos abonnements</div>
+                <div class="text">
+                    <p>Vous pouvez voir vos abonnements et vos abonnés sur votre profil.</p>
+                    <p>En cliquant dessus, vous accéderez au profil des autres utilisateurs.</p>
+                    <div class="separate"></div>
+                    <p>
+                        En cliquant sur le bouton <strong>Paramètres</strong>, vous pourrez modifier vos informations personnelles et vous déconnecter.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/profile-3.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/profile-3-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Recherchez d'autres utilisateurs</div>
+                <div class="text">
+                    <p>1. <strong>Cliquez</strong> sur la barre de recherche.</p>
+                    <p>2. <strong>Entrez</strong> le nom de l'utilisateur que vous cherchez.</p>
+                    <p>3. <strong>Appuyez</strong> sur la touche <strong>Entrée</strong>.</p>
+                    <p>4. <strong>Cliquez</strong> sur le profil de l'utilisateur que vous cherchez.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/profile-4.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/profile-4-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Autres utilisateurs et abonnements</div>
+                <div class="text">
+                    <p>Vous pouvez voir les abonnements et les abonnés des autres utilisateurs.</p>
+                    <p>Si leur profil est public, vous pourrez voir leur liste de vocabulaire et leur progression.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/scripts/help/main.js"></script>
+</main>
+{% endblock %}

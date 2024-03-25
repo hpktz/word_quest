@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block desc %} {% endblock %}">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/static/icons/favicon.ico" />
+    <link type="text/css" rel="stylesheet" href="/static/styles/css/style-index.css">
+</head>
+
+<body>
+    <div class="header-phone-button">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+    </div>
+    <div class="header-phone-logo">
+        <img src="/static/imgs/app-main-logo.png" alt="logo">
+    </div>
+    <header>
+        <div class="logo">
+            <img src="/static/imgs/app-main-logo.png" alt="logo">
+        </div>
+        <div class="menu">
+            <a href="/" class="item">Accueil</a>
+            <a href="/method" class="item">Methode</a>
+            <a href="/resources" class="item">Ressources</a>
+            <a href="/about" class="item">A propos</a>
+        </div>
+        {% if user %}
+        <div class="account-menu">
+            <a href="/dashboard" class="item">
+                <img src="/static/icons/home-60-dark-grey.png" class="img" alt="home-icon">
+            </a>
+            <a href="/dashboard/settings" class="item">
+                <img src="/static/icons/settings-30-dark-grey.png" class="img" alt="settings-icon">
+            </a>
+            <a href="/dashboard/profile/user/0" class="item profile">
+                <img src="/static/icons/user-60-white.png" class="img" alt="account-icon">
+            </a>
+        </div>
+        {% else %}
+        <a href="/dashboard" class="dashboard-access-not-connected">
+            <div class="account-name">Me connecter</div>
+        </a>
+        {% endif %}
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+    <script src="/static/styles/js/main-index.js"></script>
+</body>
+
+</html>

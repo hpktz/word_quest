@@ -1,0 +1,515 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body,
+html {
+    height: 100%;
+}
+
+input {
+    border: unset;
+    outline: unset;
+    background-color: unset;
+    display: block;
+}
+
+body {
+    display: grid;
+    place-items: center;
+    background-color: #f6f6f6;
+}
+
+body::-webkit-scrollbar {
+    width: 7.5px;
+}
+
+body::-webkit-scrollbar-thumb {
+    border: 2.5px solid #ededed;
+    background-color: #777;
+    border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    border: 1px solid #ededed;
+    background-color: #555;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #ededed;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+section {
+    width: 375px;
+    height: fit-content;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    animation: entry-animation 0.5s ease-in-out;
+}
+
+@keyframes entry-animation {
+    0% {
+        transform: translateY(-100px) scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+form {
+    width: 100%;
+    box-sizing: border-box;
+    height: fit-content;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.2);
+    text-align: center;
+}
+
+.logo {
+    width: 50px;
+}
+
+h1 {
+    color: #333333;
+    font-family: Bangers, sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    margin-top: 15px;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px 0 15px 0;
+    margin: 15px 0 0 0;
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    color: black;
+    border-bottom: 3px solid #766153;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+input.password-input {
+    padding: 15px 30px 15px 0;
+}
+
+.password-input-checker {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: calc(100% - 20px);
+    margin-top: -35px;
+    margin-bottom: 35px;
+}
+
+input:hover {
+    border-bottom: 3px solid #5f4e43;
+}
+
+input:focus {
+    border-bottom: 3px solid #5f4e43;
+}
+
+input::placeholder {
+    color: #333333;
+}
+
+.date-text {
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    color: #333;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.date-container {
+    display: grid;
+    grid-template-columns: 50px 1fr 50px;
+    gap: 10px;
+}
+
+.date-container input {
+    margin-top: 0;
+}
+
+.date-container input::placeholder {
+    color: grey;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+select {
+    padding: 15px 0 15px 0;
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    color: black;
+    border: 0;
+    border-bottom: 3px solid #766153;
+    transition: all 0.3s;
+    height: 45px;
+    background-color: white;
+}
+
+#2fa-form-main-alert {
+    margin: 15px 0 10px 0;
+    font-family: 'League Spartan', sans-serif;
+    color: #350000;
+    height: 0;
+    opacity: 0;
+    animation: alert-animation 0.3s ease-in-out 0.3s forwards;
+}
+
+#login-form-main-alert {
+    margin-top: 25px;
+    font-family: 'League Spartan', sans-serif;
+    color: #350000;
+    height: 0;
+    opacity: 0;
+    animation: alert-animation 0.3s ease-in-out 0.3s forwards;
+}
+
+#signup-form-main-alert {
+    margin: 15px 0 10px 0;
+    font-family: 'League Spartan', sans-serif;
+    color: #350000;
+    height: 0;
+    opacity: 0;
+    animation: alert-animation 0.3s ease-in-out 0.3s forwards;
+}
+
+.pictures-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    margin-top: 15px;
+    background-color: #ededed;
+    padding: 10px;
+    border-radius: 15px;
+    height: 245px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pictures-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.pictures-container::-webkit-scrollbar-thumb {
+    background-color: #777;
+    border-radius: 5px;
+}
+
+.pictures-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.pictures-container::-webkit-scrollbar-track {
+    background-color: #ededed;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pictures-container .profile-picture-radio {
+    display: none;
+}
+
+.pictures-container>div:nth-child(3n-2) .profile-picture-radio+label {
+    background-color: #ac9484;
+}
+
+.pictures-container>div:nth-child(3n-1) .profile-picture-radio+label {
+    background-color: #BCBD8B;
+}
+
+.pictures-container>div:nth-child(3n) .profile-picture-radio+label {
+    background-color: #A5A58D;
+}
+
+.pictures-container .profile-picture-radio+label {
+    display: block;
+    box-sizing: border-box;
+    border-radius: 100%;
+    border: 2px solid #ededed;
+    outline: 2px solid #ededed;
+    transition: all 0.3s;
+    width: 100%;
+    height: 70px;
+    cursor: pointer;
+}
+
+.pictures-container .profile-picture-radio+label .profile-picture {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+
+.pictures-container .profile-picture-radio:checked+label {
+    border: 2px solid #555;
+}
+
+@keyframes alert-animation {
+    0% {
+        height: 0;
+        opacity: 0;
+    }
+    100% {
+        height: 15px;
+        opacity: 1;
+    }
+}
+
+.hidden-password-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    width: 20px;
+    margin-left: calc(100% - 20px);
+    margin-top: -35px;
+    margin-bottom: 35px;
+}
+
+.hidden-password-container:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.hidden-password-img {
+    width: 20px;
+    height: 20px;
+}
+
+.hidden-password-asset {
+    position: absolute;
+    right: 7px;
+    width: 20px;
+    height: 2px;
+    transform: rotateZ(-45deg) translate(5px, 5px);
+    background: #333333;
+    transition: 0.3s;
+    z-index: 10;
+}
+
+.hidden-password-asset.hidden {
+    transform: rotateZ(-45deg) translate(50px, 5px);
+}
+
+.password-recovery {
+    padding: 10px;
+    text-decoration: underline;
+    color: #333333;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bold;
+}
+
+.send-code-button {
+    padding: 10px;
+    text-decoration: underline;
+    color: #333333;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bold;
+}
+
+.submit-button {
+    all: unset;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    background: #766153;
+    color: white;
+    font-family: 'League Spartan', sans-serif;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    line-height: 15px;
+}
+
+.submit-button:hover {
+    background: #5f4e43;
+}
+
+.separator {
+    display: block;
+    width: 1px;
+    height: 20px;
+    background: #333333;
+    margin: 10px auto 10px auto;
+}
+
+.snd-separator {
+    height: 50px;
+}
+
+.create-account-container {
+    width: 100%;
+    text-align: center;
+}
+
+.create-account {
+    text-decoration: underline;
+    color: #333333;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bold;
+}
+
+.loader {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid #766153;
+    border-top: 2px solid white;
+    margin: auto;
+    animation: loader-animation 0.5s linear infinite;
+}
+
+.step-bar {
+    width: 100%;
+    height: 5px;
+    background: #ededed;
+    border-radius: 2.5px;
+    margin-top: 25px;
+}
+
+.step-bar-fill {
+    width: 0;
+    height: 5px;
+    background: #333;
+    border-radius: 2.5px;
+    transition: all 0.3s;
+}
+
+.parts-container {
+    position: relative;
+    height: fit-content;
+    height: 397px;
+    overflow: hidden;
+}
+
+.part-1 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 335px;
+    transition: all 0.3s;
+}
+
+.part-2 {
+    position: absolute;
+    left: 150%;
+    top: 0;
+    width: 335px;
+    transition: all 0.3s;
+}
+
+.title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #333333;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.conditions-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.conditions-container .conditions {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    color: #333333;
+    text-align: left;
+}
+
+.conditions-container input[type="checkbox"] {
+    display: none;
+}
+
+.conditions-container input[type="checkbox"]+label {
+    display: block;
+    width: 50px;
+    height: 25px;
+    border-radius: 25px;
+    background: #ededed;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 2.5px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.conditions-container input[type="checkbox"]+label .toggle-button {
+    display: block;
+    width: 19px;
+    height: 19px;
+    border-radius: 25px;
+    background: #333;
+    transition: all 0.3s;
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+}
+
+.conditions-container input[type="checkbox"]:checked+label {
+    background: #333;
+}
+
+.conditions-container input[type="checkbox"]:checked+label .toggle-button {
+    left: 27.5px;
+    background: white;
+}
+
+.text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #333333;
+    text-align: left;
+    margin-top: 15px;
+}
+
+@keyframes loader-animation {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+@media all and (max-width: 400px) {
+    .login-form-container {
+        width: calc(100% - 20px);
+    }
+}

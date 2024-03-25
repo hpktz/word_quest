@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeFast - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/typefast/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <section class="main-game-section">
+        <a href="/dashboard" class="back">
+            <img src="/static/icons/games-icons/exit.png" alt="">
+        </a>
+        <div class="content">
+            <div class="timer">
+                <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="timer">
+                <div id="time">{{time}}</div>
+            </div>
+            <div class="score"><span id="score">{{max_score-score}}</span> / {{max_score}}</div>
+            <div class="words_list">
+                {% if words %} {% for word in words %}
+                <div class="word">{{word["word"]}}</div>
+                {% endfor %} {% else %}
+                <div class="no-word">Aucun mot</div>
+                {% endif %}
+            </div>
+            <form method="POST" action="" class="form" id="check-form">
+                <input type="text" id="word" name="word" placeholder="Ecrivez un mot de votre liste" autocapitalize="off" autocomplete="off" required>
+                <button type="submit" name="submit">Vérifier</button>
+            </form>
+        </div>
+    </section>
+    {% set popUpImage = '/static/icons/games-icons/typefast-30-dark-grey.png' %} 
+    {% set popUpTitle = "TypeFast" %} 
+    {% set popUpDesc = "Écrivez les mots qui composent votre liste le plus rapidement possible" %} 
+    {% set popUpGame = "typefast" %} 
+    {% include "games/popups.html" %}
+    <script src="/static/styles/games/typefast/main.js"></script>
+</body>
+
+</html>

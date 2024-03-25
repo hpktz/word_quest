@@ -1,0 +1,185 @@
+{% extends "dashboard/main.html" %} {% block title %}Quêtes{% endblock %}{% block color %}quests-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-quests.css">{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">
+        <div>Quêtes</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button">
+                <img src="/static/icons/binoculars-30-white.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <div class="stat-box">
+        <div class="text">Il est recommandé, par jour, de gagner</div>
+        <div class="main-nbr">10xp</div>
+        <img src="/static/imgs/3d-flash-on.png" class="img">
+    </div>
+    <div class="stat-box">
+        <div class="text">Par leçons, vous ne pouvez perdre que</div>
+        <div class="main-nbr">1</div>
+        <img src="/static/imgs/3d-red-heart.png" class="img">
+    </div>
+    <div class="stat-box">
+        <div class="text">Ouvrez votre coffre le soir pour plus de gemmes</div>
+        <div class="main-nbr">18h</div>
+        <img src="/static/imgs/opened-chest.png" class="img">
+    </div>
+</div>
+{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
+<main class="quests-main-container">
+    <section class="main-infos entry-animation">
+        <div class="title">Mes quêtes</div>
+    </section>
+    <section class="stats">
+        <div class="stat-box entry-animation">
+            <div class="title">Mes objectifs</div>
+            <div class="subtitle">Ensemble de vos objectifs</div>
+            {% if is_there_targets %}
+            <div class="target-box">
+                {% if stats[-1]["target_lesson_count_achieved"] %}
+                <img src="/static/icons/success-30-green.png" class="img" alt="success"> {% else %}
+                <img src="/static/icons/timer-30-dark-grey.png" class="img" alt="success"> {% endif %}
+                <div class="text">Finir {{stats[-1]["target_lesson_count"]}} mini-jeux</div>
+            </div>
+            <div class="target-box">
+                {% if stats[-1]["target_time_achieved"] %}
+                <img src="/static/icons/success-30-green.png" class="img" alt="success"> {% else %}
+                <img src="/static/icons/timer-30-dark-grey.png" class="img" alt="success"> {% endif %}
+                <div class="text">Passer {{stats[-1]["target_time"]}} minutes</div>
+            </div>
+            <div class="target-box">
+                {% if stats[-1]["target_xp_achieved"] %}
+                <img src="/static/icons/success-30-green.png" class="img" alt="success"> {% else %}
+                <img src="/static/icons/timer-30-dark-grey.png" class="img" alt="success"> {% endif %}
+                <div class="text">Prendre {{stats[-1]["target_xp"]}} XP</div>
+            </div>
+            {% else %}
+            <div class="empty-target-box">Pas de données</div>
+            {% endif %}
+        </div>
+        <div class="stat-box entry-animation">
+            <div class="title">Ma progression</div>
+            <div class="subtitle">Indicateur de progression en fonction de votre activité</div>
+            {% if progress >= 100 %}
+            <div class="progress-index-container good">
+                <div class="progress-index good">{{progress}}</div>
+            </div>
+            {% elif progress >= 50 %}
+            <div class="progress-index-container average">
+                <div class="progress-index">{{progress}}</div>
+            </div>
+            {% else %}
+            <div class="progress-index-container bad">
+                <div class="progress-index">{{progress}}</div>
+            </div>
+            {% endif %}
+        </div>
+        </div>
+        <div class="stat-box entry-animation">
+            <div class="title">Mon activité</div>
+            <div class="subtitle">Vos XP depuis 1 semaine</div>
+            <div class="bar-chart-container">
+                <div class="ordinate">
+                    <div class="item">{{max_xp}}</div>
+                    <div class="item">{{max_xp//2}}</div>
+                    <div class="item">0</div>
+                </div>
+                <div class="chart-content">
+                    {% if is_there_stats %} {% for stat in stats %} {% set height = stat["total_xp"]*100//max_xp %}
+                    <div class="item" style="height: {{height}}%;"></div>
+                    {% endfor%} {% else %}
+                    <div class="empty-item">Pas de donnée</div>
+                    {% endif %}
+                </div>
+                <div class="abscissa">
+                    <div class="item">L</div>
+                    <div class="item">M</div>
+                    <div class="item">M</div>
+                    <div class="item">J</div>
+                    <div class="item">V</div>
+                    <div class="item">S</div>
+                    <div class="item">D</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="reaward-ranking-container">
+        <div class="reward entry-animation">
+            <div class="title">Ma récompense</div>
+            <div class="reward-box">
+                {% if reward %}
+                <div class="chest opened">
+                    <img src="/static/imgs/opened-chest.png" alt="">
+                </div>
+                {% elif stats[-1]["target_achieved"] %}
+                <div class="chest">
+                    <a href="/dashboard/quests/reward" class="redirect">
+                        <img src="/static/imgs/closed-chest.png" alt="">
+                    </a>
+                </div>
+                {% else %}
+                <div class="chest blocked">
+                    <img src="/static/imgs/closed-chest.png" alt="">
+                </div>
+                {% endif %}
+                <div class="base"></div>
+            </div>
+        </div>
+        <div class="ranking entry-animation">
+            <div class="title">Classement global</div>
+            <div class="ranking-position"># {{user_rank}}</div>
+            <div class="ranking-container">
+                {% if top_ranking %} 
+                    {% for rank in top_ranking %}
+                        <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
+                            <div class="rank">{{rank[4]}}</div>
+                            <div class="picture">
+                                <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
+                            </div>
+                            <div class="name">{{rank[2]}}</div>
+                            {% if rank[3] > 15000 %}
+                                <img class="badge" src="/static/imgs/badges/polyglot-badge.png" alt="medal">
+                            {% elif rank[3] > 7500 %}
+                                <img class="badge" src="/static/imgs/badges/expert-badge.png" alt="medal">
+                            {% elif rank[3] > 2500 %}
+                                <img class="badge" src="/static/imgs/badges/advanced-badge.png" alt="medal">
+                            {% elif rank[3] > 500 %}
+                                <img class="badge" src="/static/imgs/badges/intermediate-badge.png" alt="medal">
+                            {% else %}
+                                <img class="badge" src="/static/imgs/badges/beginner-badge.png" alt="medal">
+                            {% endif %}
+                        </a> 
+                    {% endfor %}
+                    <div class="separate"></div>
+                {% endif %}
+                {% for rank in arround_ranking %}
+                    <a href="/dashboard/profile/user/{{rank[0]}}" class="ranking-box">
+                        <div class="rank">{{rank[4]}}</div>
+                        <div class="picture">
+                            <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
+                        </div>
+                        <div class="name">
+                            <div class="main-text">{{rank[2]}}</div>
+                            <div class="xp-amount">{{rank[3]}} XP</div>
+                        </div>
+                        {% if rank[3] > 15000 %}
+                            <img class="badge" src="/static/imgs/badges/polyglot-badge.png" alt="medal">
+                        {% elif rank[3] > 7500 %}
+                            <img class="badge" src="/static/imgs/badges/expert-badge.png" alt="medal">
+                        {% elif rank[3] > 2500 %}
+                            <img class="badge" src="/static/imgs/badges/advanced-badge.png" alt="medal">
+                        {% elif rank[3] > 500 %}
+                            <img class="badge" src="/static/imgs/badges/intermediate-badge.png" alt="medal">
+                        {% else %}
+                            <img class="badge" src="/static/imgs/badges/beginner-badge.png" alt="medal">
+                        {% endif %}
+                    </a>
+                {% endfor %} 
+                {% if arround_ranking|length == 0 %}
+                    <div class="empty-ranking-box">Pas de données</div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

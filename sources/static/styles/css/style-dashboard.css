@@ -1,0 +1,2668 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Path: static/styles/css/style-dashboard.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body,
+html {
+    height: 100%;
+    background-color: #f6f6f6;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr;
+    transition: grid-template-columns 0.3s ease-in-out;
+    animation: body-entry 0.3s ease-in-out;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@keyframes body-entry {
+    from {
+        grid-template-columns: 95px 1fr;
+    }
+    to {
+        grid-template-columns: 300px 1fr;
+    }
+}
+
+
+/** MAIN LOADER **/
+
+.main-loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 5px solid white;
+    border-top: 5px solid #333;
+    animation: main-spin 1s linear infinite;
+    display: none;
+}
+
+.main-loader.active {
+    display: block;
+}
+
+@keyframes main-spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.entry-animation {
+    animation: entry 0.5s ease-in-out 0.25s forwards;
+    transform: rotateX(20deg) rotateY(-20deg) translateZ(43px);
+}
+
+@keyframes entry {
+    from {
+        transform: rotateX(20deg) rotateY(-20deg) translateZ(43px);
+    }
+    to {
+        transform: rotateX(0deg) rotateY(0deg) translateZ(0px);
+    }
+}
+
+
+/** BASIC STYLES **/
+
+.clickable-logo a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+}
+
+.clickable-logo a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.clickable-logo a img {
+    width: 100%;
+    height: 100%;
+}
+
+
+/** MAIN SKELETON **/
+
+header.profile-color {
+    --header-background: #766153;
+}
+
+header.dashboard-color {
+    --header-background: #373D20;
+}
+
+header.quests-color {
+    --header-background: #717744;
+}
+
+header.discover-color {
+    --header-background: #BCBD8B;
+}
+
+header.create-color {
+    --header-background: #333;
+}
+
+header {
+    margin: 10px;
+    display: grid;
+    grid-template-columns: 75px 1fr;
+    border-radius: 10px;
+    background: linear-gradient(90deg, white 0%, var(--header-background) 10%, var(--header-background) 100%);
+    box-shadow: 8px 0px 24px 0 #959da54d;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 2;
+}
+
+header .nav-bar {
+    background-color: white;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 140px 1fr 95px;
+    place-items: center;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+header .nav-bar .phone-menu-logo {
+    display: none;
+}
+
+header .nav-bar .app-logo {
+    width: 30px;
+    height: 30px;
+}
+
+header .nav-bar .help-logo {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+header .nav-bar .responsive-logo {
+    display: none;
+}
+
+header .nav-bar .account-logo,
+header .nav-bar .create-logo {
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+header .nav-bar .account-logo a,
+header .nav-bar .create-logo a {
+    padding: 12.5px;
+}
+
+header .nav-bar .account-logo:hover,
+header .nav-bar .create-logo:hover {
+    border-radius: 30px;
+}
+
+header .nav-bar .account-logo {
+    background-color: #766153;
+}
+
+header .nav-bar .create-logo {
+    background-color: #333;
+    margin-top: 10px;
+}
+
+header .nav-bar .middle-logos {
+    display: grid;
+    gap: 15px;
+    width: 55px;
+    place-items: center;
+    position: relative;
+}
+
+header .nav-bar .account-logo .text,
+header .nav-bar .create-logo .text {
+    display: none;
+}
+
+header .nav-bar .middle-logos .text {
+    display: none;
+}
+
+header .nav-bar .middle-logo:nth-child(4) {
+    display: none;
+}
+
+header .nav-bar .middle-logo {
+    width: 30px;
+    height: 30px;
+}
+
+header .nav-bar .dynamic-pointer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 5px;
+    background-color: #333;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+}
+
+header .nav-bar .middle-logo:nth-child(1).selected~.dynamic-pointer {
+    opacity: 1;
+    top: 0;
+}
+
+header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer {
+    opacity: 1;
+    top: 45px;
+}
+
+header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer {
+    opacity: 1;
+    top: 90px;
+}
+
+header .nav-bar .middle-logo:nth-child(1):hover~.dynamic-pointer {
+    opacity: 1;
+    top: 0;
+}
+
+header .nav-bar .middle-logo:nth-child(2):hover~.dynamic-pointer {
+    opacity: 1;
+    top: 45px;
+}
+
+header .nav-bar .middle-logo:nth-child(3):hover~.dynamic-pointer {
+    opacity: 1;
+    top: 90px;
+}
+
+header .infos-section {
+    padding: 10px;
+    display: grid;
+    grid-template-rows: 1fr 175px;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+header .infos-section .info-section .title {
+    font-family: 'League Spartan', sans-serif;
+    color: white;
+    font-weight: 600;
+    font-size: 28px;
+    margin-top: 13.5px;
+    text-align: right;
+}
+
+header .infos-section .info-section .title .info-section-phone-logo {
+    display: none;
+}
+
+header .infos-section .tips {
+    background-color: #eceaea;
+    padding: 10px;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    gap: 10px;
+}
+
+header .infos-section .tips .title {
+    font-family: 'League Spartan', sans-serif;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    grid-column: 1 / span 2;
+}
+
+header .infos-section .tips .text {
+    font-family: 'League Spartan', sans-serif;
+    color: #333;
+    font-size: 14px;
+    grid-column: 1;
+}
+
+header .infos-section .tips .img {
+    width: 50px;
+    grid-column: 2;
+}
+
+main {
+    padding: 25px 10px 0 10px;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    animation: main-entry 0.5s ease-in-out;
+}
+
+@keyframes main-entry {
+    from {
+        opacity: 0;
+        transform: translate(1000px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@media all and (min-width: 670px) {
+     ::-webkit-scrollbar {
+        width: 7.5px;
+    }
+     ::-webkit-scrollbar-track {
+        background: #f6f6f6;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+     ::-webkit-scrollbar-thumb {
+        background: #33333352;
+        border: 1.25px solid #f6f6f6;
+        border-radius: 10px;
+    }
+     ::-webkit-scrollbar-thumb:hover {
+        background: #33333386;
+    }
+}
+
+
+/** DASHBOARD INFOS SECTION **/
+
+.search-bar-container {
+    position: relative;
+    margin-top: 26px;
+}
+
+.search-bar-container .search-bar {
+    background-color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    outline: none;
+    border-radius: 5px;
+}
+
+.search-bar-container .img {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 25px;
+    height: 25px;
+}
+
+.search-results {
+    margin-top: 15px;
+}
+
+.search-results .content {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.search-results .no-content {
+    font-family: 'League Spartan', sans-serif;
+    font-style: italic;
+    font-size: 14px;
+    color: white;
+    margin-top: 10px;
+}
+
+
+/** DASHBOARD **/
+
+.dashboard-main-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100px 1fr;
+    background: rgba(255, 255, 255, 0);
+    gap: 10px;
+}
+
+.dashboard-main-container .main-infos {
+    grid-column: 1 / span 2;
+    padding-left: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 40px 1fr;
+    gap: 10px;
+}
+
+.dashboard-main-container .main-infos .title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    text-align: left;
+    grid-column: 1;
+}
+
+.dashboard-main-container .main-infos .user-infos {
+    grid-column: 2;
+    display: flex;
+    justify-content: right;
+    padding-right: 25px;
+    gap: 25px;
+}
+
+.dashboard-main-container .main-infos .user-infos .box {
+    display: grid;
+    grid-template-columns: 20px auto;
+    gap: 10px;
+    align-items: center;
+    padding: 0 5px 0 5px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .main-infos .user-infos .box:nth-child(1).pulse {
+    --background-animation: #e1eaff;
+    animation: pulse 2s;
+}
+
+.dashboard-main-container .main-infos .user-infos .box:nth-child(2).pulse {
+    --background-animation: #ededb9;
+    animation: pulse 2s;
+}
+
+.dashboard-main-container .main-infos .user-infos .box:nth-child(3).pulse {
+    --background-animation: #f7d9d9;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: rgba(255, 255, 255, 0);
+        transform: scale(1);
+    }
+    50% {
+        background-color: var(--background-animation);
+        transform: scale(1.25);
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 0);
+        transform: scale(1);
+    }
+}
+
+.dashboard-main-container .main-infos .user-infos .box:nth-child(3) {
+    cursor: pointer;
+}
+
+.dashboard-main-container .main-infos .user-infos .box:nth-child(3):hover {
+    background-color: #b2bb93;
+    border-radius: 10px;
+}
+
+.dashboard-main-container .main-infos .user-infos .box .img {
+    width: 20px;
+    height: 20px;
+}
+
+.dashboard-main-container .main-infos .user-infos .box .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.lives-pop-up {
+    position: absolute;
+    top: -300px;
+    width: 300px;
+    height: 145px;
+    transition: all 0.2s ease-in-out;
+    z-index: 100;
+}
+
+.lives-pop-up .triangle {
+    position: relative;
+    top: 5px;
+    left: 250px;
+    display: inline-block;
+    height: 0;
+    width: 0;
+    border-right: 12px solid transparent;
+    border-bottom: 13px solid #333;
+    border-left: 13px solid transparent;
+}
+
+.lives-pop-up .container {
+    width: 100%;
+    height: 135px;
+    background-color: white;
+    border: 2Px solid #333;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.lives-pop-up .container .heart-container {
+    display: flex;
+    justify-content: center;
+    gap: 2.5px;
+}
+
+.lives-pop-up .container .heart-container .img {
+    width: 30px;
+}
+
+.lives-pop-up .container .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: #a5140f;
+}
+
+.lives-pop-up .container .button {
+    background-color: #333;
+    border-radius: 5px;
+    padding: 10px;
+    height: 31px;
+    font-family: 'League Spartan', sans-serif;
+    text-align: center;
+    font-size: 12px;
+    transition: all 0.2s ease-in-out;
+    color: white;
+    width: 150px;
+    text-decoration: none;
+    margin: 0 auto;
+    position: relative;
+}
+
+.lives-pop-up .container .button.disabled {
+    background-color: #777;
+    pointer-events: none;
+}
+
+.lives-pop-up .container .button .loader {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid white;
+    border-top: 2px solid #333;
+    animation: main-spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.lives-pop-up .container .button.pulse {
+    animation: pulse-button 0.1s infinite;
+}
+
+@keyframes pulse-button {
+    0% {
+        transform: rotate(0deg)
+    }
+    33% {
+        transform: rotate(2.5deg)
+    }
+    66% {
+        transform: rotate(-2.5deg)
+    }
+    100% {
+        transform: rotate(0deg)
+    }
+}
+
+.lives-pop-up .container .button:hover {
+    background-color: #555;
+}
+
+.dashboard-main-container .main-infos .filters {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.dashboard-main-container .main-infos .filters .creation-date {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 19px;
+}
+
+.dashboard-main-container .main-infos .filters .creation-date div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.dashboard-main-container .main-infos .filters .date img:nth-child(2) {
+    height: 20px;
+    margin: 0 15px 0 15px;
+}
+
+.dashboard-main-container .main-infos .filters .date input[type='date'] {
+    border: 0;
+    outline: none;
+    background: none;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+}
+
+.dashboard-main-container .main-infos .filters .filter {
+    border: 1px solid #333333;
+    border-radius: 5px;
+}
+
+.dashboard-main-container .main-infos .filters .filter img {
+    height: 25px;
+}
+
+.dashboard-main-container .main-infos .filters .filter p {
+    padding: 0 20px 0 20px;
+    text-align: center;
+}
+
+.dashboard-main-container .main-infos .filters .filter-select {
+    border: 0;
+    background: none;
+    font-size: 14px;
+    outline: none;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.dashboard-main-container .lists-container {
+    grid-column: 1;
+    max-height: 100%;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dashboard-main-container .lists-container .list-box {
+    background-color: white;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr 25px;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box.complete {
+    background-image: url("/static/imgs/3d-check-mark-in-box-side-view-blue.png");
+    background-size: 150px;
+    background-repeat: no-repeat;
+    background-position: center right -30px;
+}
+
+.dashboard-main-container .lists-container .list-box.complete.selected {
+    background-size: 250px;
+
+}
+
+.dashboard-main-container .lists-container .list-box.new-list {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.9);
+    background: #c1c286;
+    animation: new-list-entry 0.75s ease-in-out 0.5s forwards;
+}
+
+@keyframes new-list-entry {
+    0% {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.9);
+        background: #c1c286;
+    }
+    65% {
+        transform: translateY(-5px) scale(1.02);
+        background: #c1c286;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        background: white;
+    }
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n):hover {
+    background-color: #766153ce;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1):hover {
+    background-color: #717744;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2):hover {
+    background-color: #c1c286;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n).selected {
+    background-color: #766153ce;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1).selected {
+    background-color: #717744;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2).selected {
+    background-color: #c1c286;
+}
+
+/* .dashboard-main-container .lists-container .list-box:nth-child(3n).complete {
+    border: 3px solid #766153;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1).complete {
+    border: 3px solid #717744;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2).complete {
+    border: 3px solid #c1c286;
+} */
+
+.dashboard-main-container .lists-container .list-box .creation {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n) .creation {
+    color: #766153ce;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1) .creation {
+    color: #717744;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2) .creation {
+    color: #c1c286;
+}
+
+.dashboard-main-container .lists-container .list-box:nth-child(3n).selected .creation,
+.dashboard-main-container .lists-container .list-box:nth-child(3n):hover .creation,
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1).selected .creation,
+.dashboard-main-container .lists-container .list-box:nth-child(3n-1):hover .creation,
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2).selected .creation,
+.dashboard-main-container .lists-container .list-box:nth-child(3n-2):hover .creation {
+    color: #333;
+}
+
+.dashboard-main-container .lists-container .list-box .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 5px;
+    transition: all 0.2s ease-in-out;
+    margin-top: 10px;
+}
+
+.dashboard-main-container .lists-container .list-box.selected .title {
+    font-size: 24px;
+}
+
+.dashboard-main-container .lists-container .list-box .hidden {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px) scale(0.9);
+    transition: all 0.25s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box.selected .hidden {
+    height: fit-content;
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0) scale(1);
+}
+
+.dashboard-main-container .lists-container .list-box.selected .hidden .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.dashboard-main-container .lists-container .list-box .hidden .progress-bar {
+    margin-top: 10px;
+    height: 8px;
+    width: 100%;
+    background-color: #888;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dashboard-main-container .lists-container .list-box .hidden .progress-bar .progress-bar-fill {
+    height: 100%;
+    width: 0;
+    background-color: #333;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box .separator {
+    height: 1px;
+    width: 50px;
+    background-color: #333;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.dashboard-main-container .lists-container .list-box .words {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-top: 15px;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box .actions {
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box:hover .actions {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.dashboard-main-container .lists-container .list-box .actions .delete-logo {
+    width: 25px;
+    height: 25px;
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box .actions .delete-logo:hover {
+    opacity: 1;
+}
+
+.dashboard-main-container .lists-container .list-box-empty {
+    background-color: white;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .lists-container .list-box-empty .img {
+    width: 75px;
+    margin: auto;
+}
+
+.dashboard-main-container .lists-container .list-box-empty .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.dashboard-main-container .lists-container .create-list-box {
+    padding-bottom: 25px;
+}
+
+.dashboard-main-container .lists-container .create-list-box .separate {
+    height: 40px;
+    width: 1px;
+    background-color: #333;
+    margin: 25px auto;
+}
+
+.dashboard-main-container .lists-container .create-list-box .create-button {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    background: #766153;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    margin: 0 auto;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+}
+
+.dashboard-main-container .lists-container .create-list-box .create-button:hover {
+    background: #967b69;
+}
+
+.dashboard-main-container .games-trail {
+    grid-column: 2;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: grid;
+    justify-items: center;
+}
+
+.dashboard-main-container .games-trail .loader {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+    border-top: 2px solid #333;
+    animation: main-spin 1s linear infinite;
+    margin-top: calc(50% - 25px);
+}
+
+.dashboard-main-container .games-trail[data-color='0'] .level.completed {
+    --levels-color: #bcbd8b;
+    --levels-shadow: #5F603D;
+}
+
+.dashboard-main-container .games-trail[data-color='1'] .level.completed {
+    --levels-color: #717744;
+    --levels-shadow: #212511;
+}
+
+.dashboard-main-container .games-trail[data-color='2'] .level.completed {
+    --levels-color: #766153;
+    --levels-shadow: #342821;
+}
+
+.dashboard-main-container .games-trail[data-color='0'] .level.waiting {
+    --levels-color: #d8d99f;
+    --levels-shadow: #75764c;
+    border: 3px solid #bcbd8b;
+}
+
+.dashboard-main-container .games-trail[data-color='1'] .level.waiting {
+    --levels-color: #878f51;
+    --levels-shadow: #444c23;
+    border: 3px solid #5F603D;
+}
+
+.dashboard-main-container .games-trail[data-color='2'] .level.waiting {
+    --levels-color: #a5826a;
+    --levels-shadow: #5e4a3d;
+    border: 3px solid #766153;
+}
+
+.dashboard-main-container .games-trail[data-color='0'] .level.blocked,
+.dashboard-main-container .games-trail[data-color='1'] .level.blocked,
+.dashboard-main-container .games-trail[data-color='2'] .level.blocked {
+    --levels-color: #BDC3C7;
+    --levels-shadow: #909497;
+}
+
+.dashboard-main-container .games-trail .game-trail {
+    width: 350px;
+    position: relative;
+}
+
+.dashboard-main-container .games-trail .game-trail.victory {
+    background-image: url('/static/imgs/fireworks-animation.gif');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.dashboard-main-container .games-trail .game-trail .list-header {
+    display: none;
+}
+
+.dashboard-main-container .games-trail .game-trail .level {
+    position: absolute;
+    height: 50px;
+    width: 70px;
+    background-color: var(--levels-color);
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: 'Bangers', cursive;
+    box-shadow: 0px 12.5px var(--levels-shadow);
+    transition: 0.3s ease-in-out;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 2;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:hover,
+.dashboard-main-container .games-trail .game-trail .level.selected {
+    box-shadow: 0px 2.5px #333333;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:nth-child(2) {
+    top: 35px;
+    left: 50%;
+    opacity: 0;
+    animation: 300ms games-trail-entry 0s forwards ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:nth-child(3) {
+    top: 185px;
+    left: 65px;
+    opacity: 0;
+    animation: 300ms games-trail-entry 0.1s forwards ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:nth-child(4) {
+    top: 335px;
+    right: 0px;
+    opacity: 0;
+    animation: 300ms games-trail-entry 0.2s forwards ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:nth-child(5) {
+    top: 485px;
+    left: 50%;
+    opacity: 0;
+    animation: 300ms games-trail-entry 0.3s forwards ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:nth-child(6) {
+    top: 635px;
+    left: 65px;
+    opacity: 0;
+    animation: 300ms games-trail-entry 0.4s forwards ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:nth-child(7) {
+    top: 785px;
+    right: 0px;
+    opacity: 0;
+    animation: 300ms games-trail-entry 0.4s forwards ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level .level-img {
+    width: 30px;
+    height: 30px;
+    transform: rotateX(30deg);
+    transition: 0.3s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level:hover .level-img,
+.dashboard-main-container .games-trail .game-trail .level.selected .level-img {
+    transform: rotateX(2.5deg);
+}
+
+@keyframes pusle-level {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(2.5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.dashboard-main-container .games-trail .game-trail .path {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.dashboard-main-container .games-trail .path {
+    --path-color: #D7DBDD;
+}
+
+.dashboard-main-container .games-trail[data-color='0'] .path.completed {
+    --path-color: #212511;
+}
+
+.dashboard-main-container .games-trail[data-color='1'] .path.completed {
+    --path-color: #5F603D;
+}
+
+.dashboard-main-container .games-trail[data-color='2'] .path.completed {
+    --path-color: #342821;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-1 {
+    top: 35px;
+    left: 0px;
+    width: 140px;
+    height: 150px;
+    --path-width: 140px;
+    --path-height: 150px;
+    border-top: 3px solid var(--path-color);
+    border-left: 3px solid var(--path-color);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-1::before {
+    content: '';
+    position: absolute;
+    top: 150px;
+    left: 0px;
+    width: 70px;
+    border-bottom: 3px solid var(--path-color);
+    border-bottom-left-radius: 10px;
+    bottom: -1px;
+    margin-top: -10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-2 {
+    top: 185px;
+    left: 70px;
+    width: 210px;
+    height: 150px;
+    --path-width: 210px;
+    --path-height: 150px;
+    border-top: 3px solid var(--path-color);
+    border-right: 3px solid var(--path-color);
+    border-top-right-radius: 10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-3 {
+    top: 335px;
+    left: 162.5px;
+    width: 117.5px;
+    height: 150px;
+    --path-width: 117.5px;
+    --path-height: 150px;
+    border-bottom: 3px solid var(--path-color);
+    border-right: 3px solid var(--path-color);
+    border-bottom-right-radius: 10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-4 {
+    top: 482px;
+    left: 65px;
+    width: 112.5px;
+    height: 150px;
+    --path-width: 112.5px;
+    --path-height: 150px;
+    border-top: 3px solid var(--path-color);
+    border-left: 3px solid var(--path-color);
+    border-top-left-radius: 10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-1.animation {
+    animation: path-entry-1 0.5s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-2.animation {
+    animation: path-entry-2 0.5s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-3.animation {
+    animation: path-entry-3 0.5s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-4.animation {
+    animation: path-entry-4 0.5s ease-in-out;
+}
+
+@keyframes path-entry-1 {
+    0% {
+        width: 0;
+        height: 2x;
+        border-width: 10px;
+    }
+    50% {
+        width: var(--path-width);
+        height: 2px
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 3px;
+    }
+}
+
+@keyframes path-entry-2 {
+    0% {
+        width: 0;
+        height: 2px;
+        border-width: 10px;
+    }
+    50% {
+        width: var(--path-width);
+        height: 2px;
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 3px;
+    }
+}
+
+@keyframes path-entry-3 {
+    0% {
+        width: var(--path-width);
+        height: 0px;
+        border-width: 10px;
+        border-bottom: 0px solid var(--path-color);
+    }
+    50% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 10px;
+        border-bottom: 0px solid var(--path-color);
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-bottom: 3px solid var(--path-color);
+        border-width: 3px;
+    }
+}
+
+@keyframes path-entry-4 {
+    0% {
+        width: 0;
+        height: 2px;
+        left: 177.5px;
+        border-width: 3px;
+    }
+    50% {
+        left: 65px;
+        width: var(--path-width);
+        height: 2px;
+        border-width: 10px;
+    }
+    100% {
+        width: var(--path-width);
+        height: var(--path-height);
+        border-width: 3px;
+    }
+}
+
+.dashboard-main-container .games-trail .game-trail .path.step-6 {
+    top: 950px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+@keyframes games-trail-entry {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    25% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='0'] {
+    --level-pop-up-top: -200px;
+    --level-pop-up-left: 120px;
+    --triangle-position: 40px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='1'] {
+    --level-pop-up-top: 75px;
+    --level-pop-up-left: 120px;
+    --triangle-position: 40px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='2'] {
+    --level-pop-up-top: 225px;
+    --level-pop-up-left: -10px;
+    --triangle-position: 60px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='3'] {
+    --level-pop-up-top: 275px;
+    --level-pop-up-left: -20px;
+    --triangle-position: 250px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='4'] {
+    --level-pop-up-top: 285px;
+    --level-pop-up-left: -10px;
+    --triangle-position: 172.5px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='5'] {
+    --level-pop-up-top: 555px;
+    --level-pop-up-left: 120px;
+    --triangle-position: -25px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='6'] {
+    --level-pop-up-top: 725px;
+    --level-pop-up-left: -20px;
+    --triangle-position: 250px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container.level-info-entry {
+    animation: level-pop-up-entry 0.3s linear;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container {
+    position: absolute;
+    width: 250px;
+    z-index: 3;
+    top: var(--level-pop-up-top);
+    left: var(--level-pop-up-left);
+    transition: top 0s ease-in-out 0.15s, left 0s ease-in-out 0.15s;
+}
+
+@keyframes level-pop-up-entry {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    25% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    75% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .pop-up-triangle {
+    position: relative;
+    top: 5px;
+    left: var(--triangle-position);
+    display: inline-block;
+    height: 0;
+    width: 0;
+    border-right: 12px solid transparent;
+    border-bottom: 13px solid #333;
+    border-left: 13px solid transparent;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='3'] .pop-up-triangle {
+    position: relative;
+    top: 50px;
+    left: var(--triangle-position);
+    border-top: 12px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 13px solid #333;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='4'] .pop-up-triangle {
+    position: relative;
+    top: 153px;
+    left: var(--triangle-position);
+    border-top: 12px solid #333;
+    border-bottom: 13px solid transparent;
+    border-left: 13px solid transparent;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='5'] .pop-up-triangle {
+    position: relative;
+    top: 68px;
+    left: var(--triangle-position);
+    border-top: 13px solid transparent;
+    border-right: 13px solid #333;
+    border-bottom: 12px solid transparent;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='6'] .pop-up-triangle {
+    position: relative;
+    top: 50px;
+    left: var(--triangle-position);
+    border-top: 12px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 13px solid #333;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid #333;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    height: 125px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    line-height: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button {
+    margin-top: 10px;
+    background-color: #555;
+    border-radius: 10px;
+    font-family: 'League Spartan', sans-serif;
+    text-align: center;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 10px;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button a {
+    cursor: default;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start {
+    background-color: #333;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start a.pulse {
+    animation: pulse-button 0.1s infinite;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button.start:hover {
+    background-color: #555;
+}
+
+.dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container .level-infos-pop-up .submit-button a {
+    text-decoration: none;
+    color: white;
+}
+
+.dashboard-main-container .games-trail .no-list-selected {
+    display: grid;
+    height: 100%;
+    place-items: center;
+}
+
+.dashboard-main-container .games-trail .no-list-selected div {
+    display: grid;
+    place-items: center;
+}
+
+.dashboard-main-container .games-trail .no-list-selected .img {
+    width: 75px;
+}
+
+.dashboard-main-container .games-trail .no-list-selected .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    margin-top: 25px;
+}
+
+.dashboard-main-container .overlay-load-game {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 150px;
+    background-color: #373D20;
+    transition: all 1s cubic-bezier(.77, -0.01, 0, 1.01), background-color 0.5s ease-in-out 1.5s;
+    z-index: 11;
+}
+
+.dashboard-main-container .overlay-load-game.active {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    border-radius: 0;
+    pointer-events: all;
+    z-index: 1000;
+    top: 0;
+    background-color: white;
+}
+
+.dashboard-main-container .overlay-load-game .content {
+    display: none;
+    opacity: 0;
+}
+
+.dashboard-main-container .overlay-load-game.active .content {
+    display: block;
+    opacity: 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 5px;
+    transform: translate(-50%, -50%);
+}
+
+.dashboard-main-container .overlay-load-game.active .loader {
+    width: 0;
+    height: 10px;
+    display: inline-block;
+    position: relative;
+    background: #FFF;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-sizing: border-box;
+    animation: animFw 1s linear 0.50s;
+}
+
+@keyframes animFw {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+.pop-up {
+    position: fixed;
+    top: 200%;
+    left: 50%;
+    width: 400px;
+    max-height: calc(100% - 50px);
+    overflow: auto;
+    background-color: white;
+    height: fit-content;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 0 #959da536;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    z-index: 3;
+}
+
+.pop-up.active {
+    top: 50%;
+    box-shadow: 0px 0px 1000px 0 #959da5;
+}
+
+.pop-up .header {
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    gap: 10px;
+    align-items: center;
+}
+
+.pop-up .header .title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.pop-up .header .close-logo {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.pop-up .img {
+    width: 55px;
+    margin: auto;
+}
+
+.pop-up .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    margin-top: 15px;
+    color: grey;
+    text-align: left;
+}
+
+.dashboard-main-container .pop-up .submit-button {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .pop-up .submit-button:hover {
+    background-color: #555;
+}
+
+.dashboard-main-container .pop-up .submit-button a {
+    color: white;
+    text-decoration: none;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    width: 100%;
+}
+
+.dashboard-main-container .manage-list .body label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.dashboard-main-container .manage-list .body input[type="text"],
+.dashboard-main-container .manage-list .body textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+    background: #ededed;
+    border: 0;
+    outline: none;
+    resize: vertical;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .manage-list .body input[type="text"]:hover,
+.dashboard-main-container .manage-list .body input[type="text"]:focus,
+.dashboard-main-container .manage-list .body textarea:hover,
+.dashboard-main-container .manage-list .body textarea:focus {
+    background: #e0e0e0;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab {
+    display: grid;
+    grid-template-columns: 75px 1fr;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab .subtitle {
+    display: block;
+    text-align: left;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div input {
+    display: none;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div input+label {
+    display: flex;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dashboard-main-container .manage-list .body .goals-tab>div input:checked+label {
+    font-weight: bold;
+    color: #766153;
+}
+
+.dashboard-main-container .manage-list .input-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.dashboard-main-container .manage-list .notifications-tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.dashboard-main-container .manage-list .notifications-tab .subtitle {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"] {
+    display: none;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]+label {
+    width: 50px;
+    height: 25px;
+    background: #ededed;
+    border-radius: 25px;
+    display: block;
+    padding: 3.75px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]+label .slider {
+    display: block;
+    width: 17.5px;
+    height: 17.5px;
+    background: #333;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]:checked+label {
+    background: #333;
+}
+
+.dashboard-main-container .manage-list .notifications-tab input[type="checkbox"]:checked+label .slider {
+    transform: translateX(25px);
+    background: #ededed;
+}
+
+.dashboard-main-container .manage-list button {
+    width: 130px;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #333;
+    outline: none;
+    border: 0;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    margin-left: calc(100% - 130px);
+    margin-top: 25px;
+}
+
+.dashboard-main-container .manage-list button:hover {
+    background: #555;
+}
+
+.dashboard-main-container .manage-list button .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 11px;
+    height: 11px;
+    border: 2px solid #555;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    margin: auto;
+    animation: main-spin 1s linear infinite;
+}
+
+.dashboard-main-container .manage-list button.pulse {
+    animation: pulse-button 0.1s infinite;
+}
+
+.dashboard-main-container .manage-list .body {
+    min-height: 250px;
+    position: relative;
+}
+
+.dashboard-main-container .manage-list .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    border-top: 2px solid white;
+    animation: main-spin 1s linear infinite;
+}
+
+.dashboard-main-container .delete-list-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 25px;
+    margin-top: 25px;
+    border-top: 1px solid #333;
+}
+
+.dashboard-main-container .delete-list-container .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    margin: 0;
+}
+
+.dashboard-main-container .delete-list-container .delete-button {
+    width: 130px;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #a5140f;
+    outline: none;
+    border: 0;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.dashboard-main-container .delete-list-container .delete-button a {
+    text-decoration: none;
+    color: white;
+}
+
+.dashboard-main-container .alert-mess {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #a5140f;
+    animation: error-entry 0.3s linear;
+}
+
+.dashboard-main-container .success-mess {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    color: #717744;
+    animation: error-entry 0.3s linear;
+}
+
+@keyframes error-entry {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 30px;
+    }
+}
+
+.dashboard-main-container .share-box {
+    width: 100%;
+    height: fit-content;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    display: grid;
+    grid-template-columns: 1fr 70px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.dashboard-main-container .share-box .link {
+    width: 100%;
+    max-width: 100%;
+    height: 14px;
+    overflow: auto;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    position: relative;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.dashboard-main-container .share-box .link::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.dashboard-main-container .share-box .link .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #555;
+    border-radius: 50%;
+    animation: main-spin 1s linear infinite;
+}
+
+.dashboard-main-container .share-box .copy-button {
+    width: 70px;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #333;
+    outline: none;
+    border: 0;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.dashboard-main-container .gift-pop-up-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000056;
+    display: none;
+    z-index: 11;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .gift-pop-up-background.active {
+    display: block;
+}
+
+.dashboard-main-container .gift-pop-up {
+    padding: 20px;
+    background-color: white;
+    width: 300px;
+    border-radius: 10px;
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    z-index: 12;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-main-container .gift-pop-up.active {
+    top: 50%;
+    box-shadow: 0px 0px 10px 0 #959da536;
+}
+
+.dashboard-main-container .gift-pop-up .text {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.dashboard-main-container .gift-pop-up .gift-box {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin: 25px 0;
+}
+
+.dashboard-main-container .gift-pop-up .button {
+    width: 100%;
+    height: 31px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    outline: none;
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    margin: auto;
+}
+
+.dashboard-main-container .gift-pop-up .button:hover {
+    background: black;
+    color: white;
+}
+
+@media screen and (max-width: 1085px) {
+    body {
+        grid-template-columns: 95px 1fr;
+        animation: none;
+    }
+    header .nav-bar {
+        grid-template-rows: 140px 1fr 135px;
+    }
+    header .nav-bar .app-logos {
+        display: grid;
+        gap: 10px;
+    }
+    header .nav-bar .app-logo {
+        width: 30px;
+        height: 30px;
+    }
+    header .nav-bar .help-logo {
+        margin: 0;
+    }
+    header .nav-bar .responsive-logo {
+        display: block;
+        width: 30px;
+        height: 30px;
+        transform: rotate(180deg);
+        transition: all 0.2s ease-in-out;
+    }
+    body.open .nav-bar .responsive-logo {
+        transform: rotate(0deg);
+    }
+    body.open {
+        grid-template-columns: 300px 1fr;
+    }
+    body.open .dashboard-main-container {
+        grid-template-columns: 1fr 0;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .dashboard-main-container {
+        grid-template-columns: 1fr 0;
+        grid-template-rows: 120px 1fr;
+    }
+    .dashboard-main-container .main-infos .filters {
+        grid-column: 1 / span 2;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date {
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: space-between;
+    }
+    .dashboard-main-container .lists-container .list-box .actions {
+        opacity: 1;
+        pointer-events: all;
+    }
+    .dashboard-main-container .games-trail {
+        position: fixed;
+        top: 10Px;
+        bottom: 10px;
+        left: 35px;
+        right: 100%;
+        transition: all 0.5s ease-in-out;
+        background-color: white;
+        z-index: 1;
+    }
+    .dashboard-main-container .games-trail.active {
+        padding: 10px;
+        left: 75px;
+        right: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        box-shadow: 0px 0px 10px 0 #959da536;
+    }
+    .dashboard-main-container .games-trail .game-trail .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .dashboard-main-container .games-trail .game-trail .list-header .title {
+        font-family: 'League Spartan', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .dashboard-main-container .games-trail .game-trail .list-header .close-logo {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+    .dashboard-main-container .games-trail .game-trail .level:nth-child(2) {
+        top: 120px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level:nth-child(3) {
+        top: 270px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level:nth-child(4) {
+        top: 420px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level:nth-child(5) {
+        top: 570px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level:nth-child(6) {
+        top: 720px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level:nth-child(7) {
+        top: 870px;
+    }
+    .dashboard-main-container .games-trail .game-trail .path.step-1 {
+        top: 120px;
+    }
+    .dashboard-main-container .games-trail .game-trail .path.step-2 {
+        top: 270px;
+    }
+    .dashboard-main-container .games-trail .game-trail .path.step-3 {
+        top: 420px;
+    }
+    .dashboard-main-container .games-trail .game-trail .path.step-4 {
+        top: 570px;
+    }
+    .dashboard-main-container .games-trail .game-trail .path.step-5 {
+        top: 720px;
+    }
+    .dashboard-main-container .games-trail .game-trail .path.step-6 {
+        top: 1000px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='0'] {
+        --level-pop-up-top: -200px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='1'] {
+        --level-pop-up-top: 150px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='2'] {
+        --level-pop-up-top: 300px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='3'] {
+        --level-pop-up-top: 360px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='4'] {
+        --level-pop-up-top: 360px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='5'] {
+        --level-pop-up-top: 630px;
+    }
+    .dashboard-main-container .games-trail .game-trail .level-infos-pop-up-container[data-position='6'] {
+        --level-pop-up-top: 790px;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-rows: 55px 1fr;
+    }
+    body.open {
+        grid-template-columns: 1fr;
+        grid-template-rows: 55px 1fr;
+    }
+    header {
+        position: fixed;
+        width: calc(100% - 20px);
+        height: 60px;
+        transition: all 0.5s ease-in-out;
+        margin-bottom: 0;
+        border-radius: 5px;
+        animation: entry-header-phone 0.5s ease-in-out;
+        background: var(--header-background);
+    }
+    main {
+        padding: 50px 10px 0 10px;
+        grid-row: 2;
+        animation: main-entry-phone 0.5s ease-in-out;
+    }
+    @keyframes main-entry-phone {
+        from {
+            opacity: 0;
+            transform: translateY(-1000px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes entry-header-phone {
+        from {
+            width: 75px;
+        }
+        to {
+            width: calc(100% - 20px);
+        }
+    }
+    header .nav-bar {
+        position: fixed;
+        grid-template-rows: 60px 0 0;
+        align-items: center;
+        overflow: hidden;
+        height: 60px;
+        width: 60px;
+        border-radius: 4px;
+        transition: all 0.3s ease-in-out;
+    }
+    header .nav-bar>div {
+        height: 100%;
+        width: 100%;
+        display: grid;
+        place-items: center;
+        place-content: center;
+        grid-template-rows: 1fr 0;
+    }
+    header .nav-bar .phone-menu-logo {
+        display: grid;
+        place-items: center;
+        height: 30px;
+        width: 30px;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        cursor: pointer;
+    }
+    header .nav-bar .phone-menu-logo .bar {
+        height: 2px;
+        width: 25px;
+        background-color: #333;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+    header .nav-bar .phone-menu-logo .bar:nth-child(1) {
+        grid-row: 2;
+    }
+    header .nav-bar .phone-menu-logo .bar:nth-child(2) {
+        grid-row: 4;
+    }
+    header .nav-bar .phone-menu-logo .bar:nth-child(3) {
+        grid-row: 6;
+    }
+    body.phone-menu-open header .nav-bar .phone-menu-logo .bar:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+    body.phone-menu-open header .nav-bar .phone-menu-logo .bar:nth-child(2) {
+        opacity: 0;
+    }
+    body.phone-menu-open header .nav-bar .phone-menu-logo .bar:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+    header .nav-bar .account-logo,
+    header .nav-bar .create-logo,
+    header .nav-bar .middle-logos,
+    header .nav-bar .app-logos {
+        height: 0;
+        opacity: 0;
+        margin: unset;
+        pointer-events: none;
+        transform: translateX(-30px);
+        transition: all 0.5s ease-in-out;
+    }
+    header .nav-bar .responsive-logo {
+        display: none;
+        position: fixed;
+    }
+    header .infos-section {
+        grid-column: 1 / span 2;
+        grid-template-rows: 1fr 0;
+        overflow: hidden;
+    }
+    header .infos-section .info-section .title {
+        margin-top: 5px;
+        font-size: 24px;
+        text-align: right;
+        display: grid;
+        place-items: right;
+        align-items: center;
+        text-align: center;
+        grid-template-columns: 1fr 40px;
+        column-gap: 20px;
+        width: calc(100% - 75px);
+        margin-left: auto;
+    }
+    header .infos-section .info-section .title .info-section-phone-logo {
+        display: block;
+        width: 30px;
+        height: 30px;
+        background-color: rgba(255, 255, 255, 0);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+    header .info-section .search-bar-container {
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+        margin: 0;
+    }
+    header .info-section .search-results {
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+    header .infos-section .tips {
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+        display: none;
+    }
+    .dashboard-main-container {
+        position: relative;
+    }
+    body.info-section-phone-active header {
+        height: calc(100% - 20px);
+        background: var(--header-background);
+    }
+    body.info-section-phone-active header .infos-section {
+        grid-row: 1 / span 2;
+        grid-column: 1 / span 2;
+        height: 100%;
+    }
+    body.info-section-phone-active header .infos-section .info-section {
+        height: 100%;
+        display: grid;
+        grid-template-rows: 35px 100px 1fr;
+        overflow: auto;
+    }
+    body.info-section-phone-active header .infos-section .search-bar-container {
+        height: 35px;
+        opacity: 1;
+        pointer-events: all;
+        margin-top: 55px;
+        transition: all 0.2s ease-in-out 0.4s;
+    }
+    body.info-section-phone-active header .infos-section .search-results {
+        height: 100%;
+        opacity: 1;
+        pointer-events: all;
+        margin-top: 0;
+        transition: all 0.2s ease-in-out 0.4s;
+    }
+    body.info-section-phone-active header .infos-section .info-section .title .info-section-phone-logo img {
+        display: none;
+    }
+    body.info-section-phone-active header .infos-section .info-section .title .info-section-phone-logo {
+        background-image: url('/static/icons/close-30-white.png');
+        background-size: 30px;
+    }
+    body.phone-menu-open {
+        transition: all 0.2s ease-in-out;
+        overflow: hidden;
+    }
+    body.phone-menu-open header .nav-bar {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+    }
+    body.phone-menu-open main {
+        overflow: hidden;
+        opacity: 0;
+    }
+    body.phone-menu-open header .nav-bar {
+        grid-template-rows: 210px 1fr 55px;
+        align-items: center;
+        overflow: hidden;
+    }
+    body.phone-menu-open header .nav-bar>div {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        width: 100%;
+    }
+    body.phone-menu-open header .nav-bar .app-logos {
+        grid-template-rows: 1fr 0;
+        grid-template-columns: 1fr 40px 40px 1fr;
+    }
+    body.phone-menu-open header .nav-bar .app-logos .app-logo {
+        width: 40px;
+        height: 40px;
+        grid-column: 2;
+    }
+    body.phone-menu-open header .nav-bar .app-logos .help-logo {
+        grid-column: 3;
+    }
+    body.phone-menu-open header .nav-bar .account-logo,
+    body.phone-menu-open header .nav-bar .create-logo,
+    body.phone-menu-open header .nav-bar .middle-logos,
+    body.phone-menu-open header .nav-bar .app-logos {
+        height: auto;
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: all;
+    }
+    body.phone-menu-open header .nav-bar .middle-logos {
+        height: 250px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logo a {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logo {
+        width: 250px;
+        height: 50px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logo img {
+        width: 50px;
+        height: 50px;
+    }
+    body.phone-menu-open header .nav-bar .middle-logos .text {
+        display: block;
+        font-family: 'League Spartan', sans-serif;
+        font-size: 28px;
+    }
+    body.phone-menu-open header .nav-bar .account-logo,
+    body.phone-menu-open header .nav-bar .create-logo {
+        width: calc(100% - 20px);
+        height: 50px;
+    }
+    header .nav-bar .account-logo a,
+    header .nav-bar .create-logo a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    header .nav-bar .account-logo img,
+    header .nav-bar .create-logo img {
+        width: 30px;
+        height: 30px;
+    }
+    header .nav-bar .account-logo .text,
+    header .nav-bar .create-logo .text {
+        display: block;
+        font-family: 'League Spartan', sans-serif;
+        font-size: 22px;
+        color: white;
+        font-weight: 600;
+        width: 75px;
+    }
+    header .nav-bar .dynamic-pointer {
+        height: 70px;
+    }
+    header .nav-bar .middle-logo:nth-child(2).selected~.dynamic-pointer {
+        top: 90px
+    }
+    header .nav-bar .middle-logo:nth-child(3).selected~.dynamic-pointer {
+        top: 180px
+    }
+    body.phone-menu-open header .nav-bar .app-logos {
+        gap: 0;
+    }
+    body.phone-menu-open header .nav-bar .app-logo {
+        width: 40px;
+        height: 40px;
+    }
+    .dashboard-main-container .lists-container {
+        max-height: none;
+        overflow-x: unset;
+        overflow-y: unset;
+        padding: 0;
+    }
+    .dashboard-main-container {
+        column-gap: 0;
+        grid-template-rows: auto 1fr;
+        padding-top: 0;
+        row-gap: 25px;
+    }
+    .dashboard-main-container .games-trail {
+        height: 30px;
+        width: 30px;
+        top: 35px;
+        left: 15px;
+        right: unset;
+        opacity: 0;
+        z-index: -1;
+    }
+    .dashboard-main-container .main-infos {
+        display: grid;
+        grid-template-columns: 1fr 0;
+        grid-template-rows: 81px auto auto;
+        column-gap: 0;
+        padding: 0;
+    }
+    .dashboard-main-container .main-infos.active {
+        grid-template-rows: 190px auto auto;
+    }
+    .dashboard-main-container .main-infos .user-infos {
+        grid-row: 1;
+        grid-column: 1;
+        justify-content: space-between;
+        padding: 34px 20px 0 20px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        box-shadow: 0px 0px 10px 0 #959da536;
+        background: #e0e5cd;
+        height: 81px;
+        transition: height 0.2s ease-in-out;
+    }
+    .dashboard-main-container .main-infos.active .user-infos {
+        height: 190px;
+    }
+    .dashboard-main-container .main-infos .user-infos .box {
+        height: 30px;
+        width: 100%;
+        text-align: center;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .img {
+        width: 25px;
+        height: 25px;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .text {
+        font-size: 16px;
+    }
+    .dashboard-main-container .main-infos .title {
+        grid-row: 2;
+        margin-top: 10px;
+    }
+    .dashboard-main-container .main-infos .filters {
+        grid-row: 3;
+        grid-column: 1;
+        gap: 20px;
+    }
+    .dashboard-main-container .games-trail.active {
+        top: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding-top: 40px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 10px;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        z-index: 10;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date {
+        flex-direction: column;
+        padding-right: 0;
+        gap: 25px;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .date {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .filter {
+        width: 100%;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .filter select {
+        width: 100%;
+        text-align: center;
+    }
+    .pop-up {
+        position: fixed;
+        top: unset;
+        bottom: -200%;
+        left: 0;
+        width: 100%;
+        transform: translate(0, 0);
+    }
+    .pop-up.active {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        border-radius: 0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .lives-pop-up {
+        position: absolute;
+        transform: scale(0.8);
+        transition: top 0s, left 0s, transform 0.3s ease-in-out;
+        z-index: 1;
+    }
+    .lives-pop-up.active {
+        transform: scale(1);
+    }
+    .lives-pop-up .triangle {
+        display: none;
+    }
+    .lives-pop-up .container {
+        width: calc(100% - 20px);
+        background-color: transparent;
+        box-shadow: none;
+        padding: 0;
+        border: 0;
+    }
+    .entry-animation {
+        animation: entry-phone 0.5s ease-in-out 0.25s forwards;
+        transform: rotateX(20deg) rotateY(-20deg) translateY(43px);
+    }
+    .dashboard-main-container .gift-pop-up {
+        background-color: rgba(255, 255, 255, 0.849);
+    }
+    @keyframes entry-phone {
+        from {
+            transform: rotateX(20deg) rotateY(-20deg) translateY(43px);
+        }
+        to {
+            transform: rotateX(0deg) rotateY(0deg) translateY(0px);
+        }
+    }
+}
+
+@media screen and (max-width: 385px) {
+    .dashboard-main-container .main-infos .filters .creation-date .date {
+        flex-direction: column;
+        align-items: baseline;
+        gap: 10px;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .date input {
+        width: 100%;
+    }
+    .dashboard-main-container .main-infos .filters .creation-date .date img {
+        transform: rotate(90deg);
+        margin: 0;
+    }
+    .dashboard-main-container .main-infos .user-infos {
+        overflow-y: auto;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .img {
+        width: 20px;
+        height: 20px;
+    }
+    .dashboard-main-container .main-infos .user-infos .box .text {
+        font-size: 14px;
+    }
+    .dashboard-main-container .games-trail .game-trail {
+        transform: scale(0.9) translateY(-75px);
+    }
+}
+
+@media screen and (max-width: 325px) {
+    .dashboard-main-container .games-trail .game-trail {
+        transform: scale(0.75) translateY(-180px) translateX(-25px)
+    }
+}
+
+@media screen and (max-width: 285px) {
+    .dashboard-main-container .games-trail .game-trail {
+        transform: scale(0.65) translateY(-200px) translateX(-50px)
+    }
+}

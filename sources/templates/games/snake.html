@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/snake/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <input type="hidden" id="csrf_token" value="{{csrf_token()}}">
+    <div class="game-container">
+        <a href="/dashboard" class="back">
+            <img src="/static/icons/games-icons/exit.png" alt="">
+        </a>
+        <div class="press-arrow-message" id="press-message">Appuyer sur les flèches du clavier ou faites glisser votre doigt</div>
+        <div class="info-content">
+            <div class="counter">
+                <img src="/static/icons/games-icons/flash.png" alt="">
+                <p id="xp">{{score}}Xp</p>
+            </div>
+            <div class="frensh-word" id="frensh-word">Mot</div>
+            <div class="counter">
+                <img src="/static/icons/games-icons/timer-icon.png" alt="">
+                <p class="data" id="time">{{time}}</p>
+            </div>
+        </div>
+
+        <canvas width="480" height="480"></canvas>
+        <div class="word" id="word">
+        </div>
+        <div id="animation-xp" class="XP">
+            <p id="xpnotif">+0</p>
+            <img src="/static/icons/games-icons/big-flash.png" alt="">
+        </div>
+        <img class="snakeHead" id="source" src="/static/imgs/snake-obstacle.png" alt="" srcset="">
+        <img class="snakeHead" id="up" src="/static/imgs/snakeUp.png" alt="">
+        <img class="snakeHead" id="right" src="/static/imgs/snakeRight.png" alt="">
+        <img class="snakeHead" id="left" src="/static/imgs/snakeLeft.png" alt="">
+        <img class="snakeHead" id="down" src="/static/imgs/snakeDown.png" alt="">
+    </div>
+    </div>
+    {% set popUpImage = '/static/icons/games-icons/snake-30-dark-grey.png' %}
+    {% set popUpTitle = "Snake" %} 
+    {% set popUpDesc = "Reconstituez le mot affiché en anglais en mangeant les lettres dans l'ordre" %} 
+    {% set popUpGame = "snake"%} 
+    {% include "games/popups.html" %}
+    <script src="/static/styles/games/snake/main.js"></script>
+</body>
+
+</html>

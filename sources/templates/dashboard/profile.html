@@ -1,0 +1,235 @@
+{% extends"dashboard/main.html" %} {% block title %}Quêtes{% endblock %}{% block color %}profile-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-profile.css">{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">
+        <div>Profil</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button">
+                <img src="/static/icons/search-30-white.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <div class="search-container">
+        <input type="text" placeholder="Rechercher un utilisateur" class="search-input">
+        <img src="/static/icons/search-30-dark-grey.png" id="search-button" class="search-icon" alt="logo">
+    </div>
+    <div class="search-result">
+        <div class="info">Recherchez un utilisateur</div>
+    </div>
+</div>
+{% endblock %} {% block content %}
+<main class="profile-main-container">
+    <section class="profile-header entry-animation">
+        <div class="profile-picture">
+            <img src="/static/imgs/profiles/{{ picture }}.png" alt="profile-picture">
+        </div>
+        <div class="profile-main-infos">
+            <div class="name">{{ name }}</div>
+            <div class="subscription-infos">{{subscriptions|length}} abonnement{%if subscriptions|length > 1%}s{%endif%} / {{subscribers|length}} abonné{%if subscribers|length > 1%}s{%endif%}</div>
+            <div class="member-date-info">Membre depuis le {{date}}</div>
+            <div class="separate"></div>
+            {% if is_current_user %} {% if is_public %}
+            <div class="visibility-box">
+                <img src="/static/icons/hide-password.png" class="img">
+                <div class="text">Profil public</div>
+                <a href="/dashboard/settings#profile-zone" class="change-visibility">
+                    <img src="/static/icons/modify.png" class="img" alt="logo">
+                </a>
+            </div>
+            {% else %}
+            <div class="visibility-box">
+                <img src="/static/icons/hide-password.png" class="img">
+                <div class="text">Profil privé</div>
+                <a href="/dashboard/settings#profile-zone" class="change-visibility">
+                    <img src="/static/icons/modify.png" class="img" alt="logo">
+                </a>
+            </div>
+            {% endif %} {% endif %}
+            <div class="subscription-container">
+                {% if are_you_subscribed and not is_current_user %}
+                <div class="subscription">
+                    <div class="button">
+                        <div class="text" id="unsubscribe-button" data-id="{{id}}">Se désabonner</div>
+                    </div>
+                    <div class="text">Depuis le {{subscribed_date}}</div>
+                </div>
+                {% elif not is_current_user %}
+                <div class="subscribe-button" id="subscribe-button" data-id="{{id}}">
+                    <div class="text">S'abonner</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {% if user_infos %}
+    <section class="profile-content entry-animation">
+        <div class="title">Statistiques</div>
+        <div class="stats-container">
+            <div class="box">
+                <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img">
+                <div class="texts">
+                    <div class="number">{{user_infos["xp"]}}</div>
+                    <div class="text">XP gagné{% if user_infos["xp"] > 1%}s{%endif%}</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-reward-badge-with-star-and-ribbon.png" class="img">
+                <div class="texts">
+                    <div class="number">{% if user_infos["rank"] > 0%}{{user_infos["rank"]}}{%else%}Pas classé{%endif%}</div>
+                    <div class="text">Classement</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-blue-gemstone.png" class="img">
+                <div class="texts">
+                    <div class="number">{{user_infos["gems"]}}</div>
+                    <div class="text">Gemme{% if user_infos["gems"] > 1%}s{%endif%}</div>
+                </div>
+            </div>
+        </div>
+        <div class="title" style="margin-top: 50px;">Listes</div>
+        <div class="lists-container">
+            {% if user_infos["lists"] %} {% for list in user_infos["lists"] %}
+            <a href="/dashboard/profile/list/{{list['id']}}" class="list-box">
+                <div class="title">{{list["title"]}}</div>
+                <div class="list-of-words">
+                    {% for word in list["words"] %}
+                    <div class="word">{{word["word"]}}</div>
+                    {% endfor %}
+                </div>
+                <div class="list-box-footer">
+                    <div class="date">Créée il y a {{list["created_at"]}}</div>
+                    {% if not is_current_user %} {% if list["is_yours"] %}
+                    <div class="button not-clickable-zone">
+                        <img src="/static/icons/done-30-grey.png" class="not-clickable-zone" alt="logo">
+                    </div>
+                    {% else %}
+                    <div data-id="{{list['id']}}" class="copy-list-button button not-clickable-zone">
+                        <img src="/static/icons/copy-30-dark-grey.png" class="not-clickable-zone" alt="logo">
+                    </div>
+                    {% endif %} {% endif %}
+                </div>
+            </a>
+            {% endfor %} {% else %}
+            <div class="empty-list-box">
+                <img src="/static/imgs/3d-robot-assistant-sad.png" class="img" alt="logo">
+                <div class="text">Aucune liste visible</div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% else %}
+    <section class="private-profile entry-animation">
+        <img src="/static/imgs/3d-business-desk.png" class="img" alt="">
+        <div class="title">Profil privé</div>
+        <div class="text">Vous ne pouvez pas accéder au profil de cet utilisateur car il est privé.</div>
+    </section>
+    {% endif %}
+    <section class="friends-list entry-animation">
+        {% if user_infos %}
+        <div class="badge-section">
+            <div class="title">Badge</div>
+            {% if user_infos["xp"] < 500 %}
+                {% set level = "beginner" %}
+                {% set name = "Débutant" %}
+                {% set description = "Débute son apprentissage de la langue anglaise" %}
+                {% set progress_text = "/ 500 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 500) * 100 %}
+            {% elif user_infos["xp"] < 2500 %}
+                {% set level = "intermediate" %}
+                {% set name = "Intermédiaire" %}
+                {% set description = "Explore de nouveaux horizons linguistiques en anglais" %}
+                {% set progress_text = "/ 2500 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 2500) * 100 %}
+            {% elif user_infos["xp"] < 7500 %}
+                {% set level = "advanced" %}
+                {% set name = "Avancé" %}
+                {% set description = "Voyage aisément à travers les nuances de la langue anglaise" %}
+                {% set progress_text = "/ 7500 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 7500) * 100 %}
+            {% elif user_infos["xp"] < 15000 %}
+                {% set level = "expert" %}
+                {% set name = "Expert" %}
+                {% set description = "Maîtrise les subtilités de l'anglais avec aisance" %}
+                {% set progress_text = "/ 15000 XP" %}
+                {% set progress_percent = (user_infos["xp"] / 15000) * 100 %}
+            {% else %}
+                {% set level = "polyglot" %}
+                {% set name = "Polyglotte" %}
+                {% set description = "Incollable en anglais et prêt à conquérir de nouvelles langues" %}
+                {% set progress_text = "" %}
+                {% set progress_percent = 100 %}
+            {% endif %}
+            <div class="badge-box">
+                <img src="/static/imgs/badges/{{level}}-badge.png" alt="">
+                <div class="infos">
+                    <div class="name">{{name}}</div>
+                    <div class="description">{{description}}</div>
+                    <div class="progress-bar">
+                        <div class="progress-inner {{level}}" style="width: {{progress_percent}}%;"></div>
+                        <div class="progress-text {{level}}">{{user_infos["xp"]}} {{progress_text}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="menu" id="friend-list">
+            <div class="item item_sub active">Abonnements</div>
+            <div class="item item_sub">Abonnés</div>
+        </div>
+        <div class="content content_sub active">
+            {% if subscriptions %} {% for subscription in subscriptions %}
+            <a href="/dashboard/profile/user/{{subscription[0]}}" class="redirect account-container">
+                <img src="/static/imgs/profiles/{{subscription[2]}}.png" class="account-picture" alt="profile-picture">
+                <div class="texts">
+                    <div class="name">{{subscription[1]}}</div>
+                    <div class="xp">{{subscription[3]}} XP</div>
+                </div>
+            </a>
+            {%endfor%} {% else %}
+            <div class="nothing-container">
+                <img src="/static/icons/disappointed-30-grey.png" class="account-picture" alt="profile-picture">
+                <div class="text">Pas d'abonnements</div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="content content_sub">
+            {% if subscribers %} {% for subscriber in subscribers %}
+            <a href="/dashboard/profile/user/{{subscriber[0]}}" class="redirect account-container">
+                <img src="/static/imgs/profiles/{{subscriber[2]}}.png" class="account-picture" alt="profile-picture">
+                <div class="texts">
+                    <div class="name">{{subscriber[1]}}</div>
+                    <div class="xp">{{subscriber[3]}} XP</div>
+                </div>
+            </a>
+            {%endfor%} {% else %}
+            <div class="nothing-container">
+                <img src="/static/icons/disappointed-30-grey.png" class="account-picture" alt="profile-picture">
+                <div class="text">Pas d'abonné</div>
+            </div>
+            {% endif %}
+        </div>
+        {% if is_current_user %}
+        <div class="separate"></div>
+        <a href="/dashboard/settings" class="settings-container redirect">
+            <img src="/static/icons/settings-30-dark-grey.png" class="img" alt="logo">
+            <div class="text">Paramètres</div>
+        </a>
+        {% endif %}
+    </section>
+</main>
+<div class="pop-up" id="list-pop-up">
+    <div class="header">
+        <div class="title" id="list-title-pop-up">Partager la liste</div>
+        <div class="close-logo clickable-logo">
+            <a href="" id="close-list-pop-up-button">
+                <img src="/static/icons/close.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <link rel="stylesheet" href="/static/styles/css/style-list-profile.css">
+    <div id="list-content-pop-up"></div>
+</div>
+<script src="/static/scripts/profile/list-profile-main.js"></script>
+<script src="/static/scripts/profile/main.js"></script>
+{% endblock %}

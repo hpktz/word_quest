@@ -1,0 +1,796 @@
+.info-section::-webkit-scrollbar {
+    width: 7.5px;
+}
+
+.info-section::-webkit-scrollbar-thumb {
+    background: #33333352;
+    border: 1.25px solid #766153;
+    border-radius: 10px;
+}
+
+.info-section::-webkit-scrollbar-track {
+    background: #766153;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.info-section .search-container {
+    position: relative;
+}
+
+.info-section .search-container .search-input {
+    background-color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14px;
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    outline: none;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+.info-section .search-container .search-input:focus {
+    outline: none;
+    border: 1px solid #555;
+}
+
+.info-section .search-container .search-input::placeholder {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.info-section .search-container .search-icon {
+    position: absolute;
+    top: calc(50% + 15px);
+    right: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.info-section .search-result {
+    display: grid;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.info-section .search-result .loader {
+    position: relative;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #555;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    animation: spin 1s linear infinite;
+}
+
+.info-section .search-result .info {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+.info-section .search-result .result-box {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #ededed;
+}
+
+.info-section .search-result .result-box .result-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+}
+
+.info-section .search-result .result-box .result-texts .name {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+.info-section .search-result .result-box .result-texts .xp {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: lightgrey;
+    margin-top: 5px;
+}
+
+.profile-main-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto 1fr;
+    gap: 25px;
+    padding-bottom: 15px;
+}
+
+.profile-main-container .profile-header {
+    display: grid;
+    grid-template-columns: minmax(0, 175px) minmax(0, 1fr);
+    gap: 25px;
+    align-items: center;
+}
+
+.profile-main-container .profile-header .profile-picture {
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-main-container .profile-header .profile-picture img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.profile-main-container .profile-header .profile-main-infos .name {
+    font-family: "Bangers", cursive;
+    font-size: 35px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscription-infos {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.profile-main-container .profile-header .profile-main-infos .member-date-info {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    margin-top: 10px;
+    color: #333;
+}
+
+.profile-main-container .profile-header .profile-main-infos .separate {
+    width: 50px;
+    height: 1px;
+    background-color: #333;
+    margin-top: 15px;
+}
+
+.profile-main-container .profile-header .profile-main-infos .visibility-box {
+    display: grid;
+    grid-template-columns: 20px 75px 30px;
+    gap: 15px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.profile-main-container .profile-header .profile-main-infos .visibility-box .img {
+    width: 20px;
+    height: 20px;
+}
+
+.profile-main-container .profile-header .profile-main-infos .visibility-box .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.profile-main-container .profile-header .profile-main-infos .visibility-box a {
+    width: 25px;
+    height: 25px;
+    display: block;
+    padding: 2.5px;
+    background: white;
+    border-radius: 2.5px;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 10px 0px #959da54d;
+    transition: all 0.2s ease-in-out;
+}
+
+.profile-main-container .profile-header .profile-main-infos .visibility-box a:hover {
+    background: #999;
+    cursor: pointer;
+}
+
+.profile-main-container .profile-header .profile-main-infos .visibility-box a .img {
+    width: 100%;
+    height: 100%;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscription {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscription .button {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscription .button:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscription .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscription .button .text {
+    width: 93px;
+    text-align: center;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscribe-button {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    background-position: 100%;
+    box-shadow: 0px 0px 10px 0px #959da54d;
+    color: #333;
+    transition: all 0.2s ease-in-out;
+    width: 110px;
+    text-align: center;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+
+.profile-main-container .profile-header .profile-main-infos .subscribe-button.active {
+    background-image: url("/static/imgs/subscription-animation.gif");
+    background-size: cover;
+}
+
+.profile-main-container .profile-header .profile-main-infos .subscribe-button:hover {
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+}
+
+.profile-main-container .profile-content {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.profile-main-container .profile-content .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-main-container .profile-content .stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.profile-main-container .profile-content .stats-container .box {
+    display: grid;
+    grid-template-columns: 35px 1fr;
+    gap: 20px;
+    align-items: start;
+    background-color: white;
+    box-shadow: 8px 0px 24px 0 #959da54d;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.profile-main-container .profile-content .stats-container .box .img {
+    width: 35px;
+}
+
+.profile-main-container .profile-content .stats-container .box .texts .number {
+    font-family: "League Spartan", sans-serif;
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.profile-main-container .profile-content .stats-container .box .texts .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.profile-main-container .profile-content .lists-container {
+    column-count: 2;
+    column-width: 10px;
+    column-gap: 10px;
+    margin-top: 25px;
+}
+
+.profile-main-container .profile-content .lists-container .empty-list-box {
+    grid-column: 1/ span 2;
+    text-align: center;
+    margin-top: 35px;
+}
+
+.profile-main-container .profile-content .lists-container .empty-list-box .img {
+    width: 50px;
+}
+
+.profile-main-container .profile-content .lists-container .empty-list-box .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-7) {
+    background: #bcbd8b;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-6) {
+    background: #c09575;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-5) {
+    background: #dac7aa;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-4) {
+    background: #E1F0DA;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-3) {
+    background: #eff1ed;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-2) {
+    background: #B3A398;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n-1) {
+    background: #C6DCBA;
+}
+
+.profile-main-container .profile-content .lists-container .list-box:nth-child(8n) {
+    background: #aeb675;
+}
+
+.profile-main-container .profile-content .lists-container .list-box {
+    box-shadow: 8px 0px 24px 0 #959da54d;
+    padding: 10px;
+    border-radius: 10px;
+    display: block;
+    text-decoration: none;
+    height: fit-content;
+    margin-bottom: 10px;
+    break-inside: avoid;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-of-words {
+    margin-top: 15px;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-of-words .word {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #555;
+    margin-top: 7.5px;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-box-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-box-footer .date {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-box-footer .button {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-box-footer .button img {
+    width: 100%;
+    height: 100%;
+}
+
+.profile-main-container .profile-content .lists-container .list-box .list-box-footer .loader {
+    width: 25px;
+    height: 25px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #555;
+    border-radius: 50%;
+    margin-left: 12.5px;
+    animation: spin 1s linear infinite;
+}
+
+.profile-main-container .friends-list {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    height: fit-content;
+    padding: 0 10px 10px 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.profile-main-container .friends-list .badge-section .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2.5px solid grey;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box img {
+    width: 85px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .name {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .description {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar {
+    position: relative;
+    width: 100%;
+    height: 15px;
+    background-color: #ccc;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.polyglot {
+    background-color: #6b08ad;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.expert {
+    background-color: #c57f17;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.advanced {
+    background-color: #ffdfb0;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.intermediate {
+    background-color: #078b07;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-inner.beginner {
+    background-color: #3974d4;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "League Spartan", sans-serif;
+    font-size: 12px;
+    padding-top: 3px;
+    color: #333;
+    font-weight: 800;
+}
+
+.profile-main-container .friends-list .badge-section .badge-box .infos .progress-bar .progress-text.polyglot {
+    color: white;
+}
+
+.profile-main-container .friends-list .menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.profile-main-container .friends-list .menu .item {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    padding: 10px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.profile-main-container .friends-list .menu .item:hover {
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+}
+
+.profile-main-container .friends-list .menu .item.active {
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+}
+
+.profile-main-container .friends-list .account-container {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 40px 1fr 40px;
+    gap: 10px;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+.profile-main-container .friends-list .content {
+    display: none;
+}
+
+.profile-main-container .friends-list .content.active {
+    display: block;
+}
+
+.profile-main-container .friends-list .account-container .account-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-main-container .friends-list .account-container .texts .name {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+.profile-main-container .friends-list .account-container .texts .xp {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: lightgrey;
+    margin-top: 5px;
+}
+
+.profile-main-container .friends-list .account-container .manage-friendship {
+    padding: 4px;
+    border-radius: 5px;
+    border: 2px solid #555;
+    width: 30px;
+    height: 30px;
+}
+
+.profile-main-container .friends-list .account-container .manage-friendship.added {
+    border: 2px solid #766153;
+    cursor: pointer;
+}
+
+.profile-main-container .friends-list .account-container .manage-friendship .img {
+    width: 20px;
+    height: 20px;
+}
+
+.profile-main-container .friends-list .nothing-container {
+    text-align: center;
+}
+
+.profile-main-container .friends-list .nothing-container .img {
+    width: 30px;
+    height: 30px;
+    margin-top: 50px;
+}
+
+.profile-main-container .friends-list .nothing-container .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.profile-main-container .friends-list .separate {
+    width: 1px;
+    height: 35px;
+    background-color: #333;
+    margin: auto;
+    margin-top: 25px;
+}
+
+.profile-main-container .friends-list .settings-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 160px;
+    margin: auto;
+    margin-top: 25px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    padding: 5px 25px;
+    border-radius: 5px;
+}
+
+.profile-main-container .friends-list .settings-container:hover {
+    background: white;
+}
+
+.profile-main-container .friends-list .settings-container .img {
+    width: 25px;
+    height: 25px;
+}
+
+.profile-main-container .friends-list .settings-container .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+.profile-main-container .share-box .copy-button {
+    background-color: #333;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.profile-main-container .share-box .copy-button:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.profile-main-container .private-profile {
+    grid-row: 2;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-main-container .private-profile .img {
+    width: 100px;
+}
+
+.profile-main-container .private-profile .title {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 25px;
+}
+
+.profile-main-container .private-profile .text {
+    font-family: "League Spartan", sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 920px) {
+    .profile-main-container {
+        grid-template-columns: 1fr 200px;
+    }
+    body.open .profile-main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+    body.open .profile-main-container .friends-list {
+        grid-column: 1;
+        grid-row: 3;
+    }
+    .profile-main-container .friends-list .badge-section .badge-box {
+        grid-template-columns: 40px 1fr;
+    }
+    .profile-main-container .friends-list .badge-section .badge-box img {
+        width: 40px;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    .profile-main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-column: 1 / span 2;
+    }
+    .profile-main-container .friends-list {
+        grid-column: 1;
+        grid-row: 3;
+    }
+    .profile-main-container .profile-header .profile-main-infos .name {
+        font-family: "Bangers", cursive;
+        font-size: 25px;
+    }
+    .info-section .search-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
+    .info-section .search-container .search-icon {
+        top: unset;
+        bottom: 0;
+    }
+    .info-section .search-container .search-input {
+        height: 33px;
+    }
+    .info-section .search-result .result-box {
+        height: 55px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: translateX(-50%) rotate(0deg);
+    }
+    100% {
+        transform: translateX(-50%) rotate(360deg);
+    }
+}

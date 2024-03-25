@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - WORD QUEST</title>
+    <link rel="icon" href="/static/icons/favicon.ico">
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL=../error/403.html">
+    </noscript>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/css/style-account-forms.css') }}">
+</head>
+
+<body>
+    <section class="signup-form-container" id="signup-form-container">
+        <form id="signup-form" method="POST" action="/auth/register">
+            <a href="/">
+                <img src="{{ url_for('static', filename='imgs/app-main-logo.png') }}" alt="logo" class="logo">
+            </a>
+            <h1>Inscription</h1>
+            <div class="step-bar">
+                <div class="step-bar-fill" style="width: 33%;"></div>
+            </div>
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <p id="login-form-main-alert">{{ messages[0] }}</p>
+            {% endif %} {% endwith %}
+            <div id="front-alert"></div>
+            <div class="parts-container">
+                <div class="part-1">
+                    <input type="text" name="name" class="name-input" id="signup-name-input" placeholder="Pseudo" autocomplete="username" required>
+                    <p class="date-text">Date de naissance</p>
+                    <div class="date-container">
+                        <input type="number" name="day" class="date-input" id="signup-day-input" placeholder="Jour" min="1" max="31" autocomplete="bday-day" required>
+                        <select name="month" id="signup-month-input" autocomplete="bday-month" required>
+                            <option value="01">Janvier</option>
+                            <option value="02">Février</option>
+                            <option value="03">Mars</option>
+                            <option value="04">Avril</option>
+                            <option value="05">Mai</option>
+                            <option value="06">Juin</option>
+                            <option value="07">Juillet</option>
+                            <option value="08">Août</option>
+                            <option value="09">Septembre</option>
+                            <option value="10">Octobre</option>
+                            <option value="11">Novembre</option>
+                            <option value="12">Décembre</option>
+                        </select>
+                        <input type="number" name="year" class="date-input" id="signup-year-input" placeholder="Année" min="1910" max="2018" autocomplete="bday-year" required>
+                    </div>
+                    <input type="hidden" name="birthday" id="birthday" value="">
+                    <input type="email" name="email" class="email-input" id="signup-email-input" placeholder="Adresse e-mail" required>
+                    <input type="password" name="password" class="password-input" id="signup-password-input" placeholder="Mot de passe" autocomplete="new-password" required>
+                    <div class="conditions-container">
+                        <p class="conditions">En cliquant sur "Inscription", vous acceptez la <a href="/privacy-policy" class="conditions-link">politique de confidentialité</a></p>
+                        <div>
+                            <input type="checkbox" name="conditions" id="conditions" class="conditions-checkbox" required>
+                            <label for="conditions" class="toggle">
+                                <span class="toggle-button"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <span class="separator"></span>
+                    <div class="submit-button" style="width: 100%; display:block;" id="continue-button">Continuer</div>
+                </div>
+                <div class="part-2">
+                    <p class="title">Choisissez votre avatar</p>
+                    <div class="pictures-container">
+                        {% for i in range(1, 13) %}
+                        <div>
+                            <input type="radio" name="profile-picture" value="{{ i }}" id="profile-picture-{{ i }}" class="profile-picture-radio" {% if i==1 %}checked{% endif %} required>
+                            <label for="profile-picture-{{ i }}">
+                                <img src="/static/imgs/profiles/picture-{{ i }}.png" alt="profile-picture-{{ i }}" class="profile-picture">
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <span class="separator"></span>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="submit-button" id="signup-submit-button">Inscription</button>
+                </div>
+            </div>
+        </form>
+        <span class="separator snd-separator"></span>
+        <div class="create-account-container">
+            <a href="{{ url_for('auth.login') }}" class="create-account">J'ai déjà un compte</a>
+        </div>
+    </section>
+    <script src="/static/styles/js/auth-register.js"></script>
+</body>
+
+</html>

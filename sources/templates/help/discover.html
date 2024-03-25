@@ -1,0 +1,53 @@
+{% extends "help/header.html" %} {% block content %}
+<main>
+    <a href="/dashboard/help">
+        <img class="main-logo entry-animation" src="/static/icons/games-icons/exit.png" alt="logo">
+    </a>
+    <div class="title entry-animation">Découverte des listes</div>
+    <div class="navigation entry-animation">
+        <div id="prev" class="prev disabled">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+        <div id="next" class="next">
+            <img src="/static/icons/arrow-60-black.png" class="icon" alt="">
+        </div>
+    </div>
+    <div class="carousel entry-animation">
+        <div class="item">
+            <img src="/static/imgs/help/discover-1.gif" class="illustration pc" alt="">
+            <img src="/static/imgs/help/discover-1-mobile.gif" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Accédez à la page découvertes</div>
+                <div class="text">
+                    <p>Dans le menu, cliquez sur la boussole, comme indiqué ci-contre.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/discover-2.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/discover-2-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Découvrez les listes les plus en rapport avec vos goûts</div>
+                <div class="text">
+                    <p>1. <strong>Choisissez</strong> une catégorie. Deux catégories, listes créées par Word Quest et celles de la communauté.</p>
+                    <p>2. <strong>Parcourez</strong> les listes.</p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/imgs/help/discover-3.png" class="illustration pc" alt="">
+            <img src="/static/imgs/help/discover-3-mobile.png" class="illustration phone" alt="">
+            <div class="content">
+                <div class="title">Copiez la liste</div>
+                <div class="text">
+                    <p>
+                        Cliquez sur le bouton à côté du cœur. Et voilà, la liste est ajoutée à votre dashboard !</p>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/scripts/help/main.js"></script>
+</main>
+{% endblock %}

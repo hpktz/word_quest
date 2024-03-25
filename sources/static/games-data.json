@@ -1,0 +1,64 @@
+[{
+        "id": 1,
+        "name": "Jeux du snake",
+        "desc": "Le jeu du snake est un jeu de serpent dans lequel le joueur doit manger les lettres composant le mot &agrave; trouver afin de gagner des points.",
+        "short_desc": "Manger les lettres composant le mot &agrave; trouver pour gagner.",
+        "img": "/static/icons/games-icons/snake-30-dark-grey.png",
+        "url": "/dashboard/games/snake",
+        "difficulty": 2
+    },
+    {
+        "id": 2,
+        "name": "Jeux du pendu",
+        "desc": "Le jeux du pendu est un jeu dans lequel le joueur doit trouver le mot cach&eacute; en proposant des lettres. Chaque indice utilis&eacute; fait perdre des points.",
+        "short_desc": "Essayer de deviner le mot cach&eacute; pour gagner",
+        "img": "/static/icons/games-icons/hangman-30-dark-grey.png",
+        "url": "/dashboard/games/hangman",
+        "difficulty": 2
+    },
+    {
+        "id": 4,
+        "name": "Jeux du memory",
+        "desc": "Le jeux du memory est un jeu dans lequel le joueur doit m&eacute;moriser l&apos;emplacement des mots et de leur traduction afin de les retrouver par paire.",
+        "short_desc": "Retrouver les paires de mots et de leur traduction.",
+        "img": "/static/icons/games-icons/memory-30-dark-grey.png",
+        "url": "/dashboard/games/memory",
+        "difficulty": 1
+    },
+    {
+        "id": 5,
+        "name": "FallingWord",
+        "desc": "Le jeu d&apos;assimilation est un jeu dans lequel le joueur doit cliquer sur les bonnes paires le plus rapidement possible alors que ces derni&egrave;re tombent.",
+        "short_desc": "Cliquer sur les bonnes paires le plus rapidement possible.",
+        "img": "/static/icons/games-icons/assimilation-30-dark-grey.png",
+        "url": "/dashboard/games/fallingword",
+        "difficulty": 2
+    },
+    {
+        "id": 6,
+        "name": "MemoWordRize",
+        "desc": "Le jeu MemoWordRize est un jeu dans lequel le joueur doit m&eacute;moriser le parcours et les mots prononc&eacute;s, et ensuite le refaire.",
+        "short_desc": "M&eacute;moriser le chemin et les mots prononc&eacute;s, puis le refaire.",
+        "img": "/static/icons/games-icons/memowordrize-30-dark-grey.png",
+        "url": "/dashboard/games/memowordrize",
+        "difficulty": 1
+    },
+    {
+        "id": 7,
+        "name": "TypeFast",
+        "desc": "Le jeu du TypeFast est un jeu dans lequel le joueur doit taper le plus rapidement possible les mots affich&eacute;s.",
+        "short_desc": "Taper le plus rapidement possible les mots de la liste.",
+        "img": "/static/icons/games-icons/typefast-30-dark-grey.png",
+        "url": "/dashboard/games/typefast",
+        "difficulty": 3
+    },
+    {
+        "id": 8,
+        "name": "Quiz",
+        "desc": "Le Quiz est un jeu ou le joueur doit r&eacute;pondre &agrave; un maximum de questions dans un temps imparti. Plus le joueur répond vite, plus il gagne de points.",
+        "short_desc": "R&eacute;pondre &agrave; un maximum de questions dans un temps imparti.",
+        "img": "/static/icons/games-icons/quiz-30-dark-grey.png",
+        "url": "/dashboard/games/quiz",
+        "difficulty": 1
+    }
+]

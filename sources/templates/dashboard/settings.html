@@ -1,0 +1,126 @@
+{% extends "dashboard/main.html" %} {% block title %}Paramètres{% endblock %}{% block color %}quests-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-settings.css">{% endblock %}{% block quests %}selected{% endblock %} {% block content %}
+<main class="settings-main-container">
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <section class="settings-section">
+        <div class="title entry-animation">Paramètres</div>
+        <div class="user-infos-section entry-animation">
+            <div class="title">Informations personnelles</div>
+            <div id="settings-section-alert-mess"></div>
+            <form method="POST" action="" id="user-infos-form">
+                <div class="user-infos">
+                    <div class="profile-picture">
+                        {% set picture_id = current_user.picture.split("-")[1]|int %}
+                        <div class="profile-picture-box">
+                            <input type="radio" name="profilePicture" value="{{ picture_id }}" id="profile-picture-{{ picture_id }}" class="profile-picture-radio" checked required>
+                            <label for="profile-picture-{{ picture_id }}">
+                                <img src="/static/imgs/profiles/{{current_user.picture}}.png" alt="profile-picture-{{ picture_id }}" class="profile-picture">
+                            </label>
+                        </div>
+                        {% for i in range(1, 13) %} {% if i != picture_id %}
+                        <div class="profile-picture-box">
+                            <input type="radio" name="profilePicture" value="{{ i }}" id="profile-picture-{{ i }}" class="profile-picture-radio" required>
+                            <label for="profile-picture-{{ i }}">
+                                <img src="/static/imgs/profiles/picture-{{ i }}.png" alt="profile-picture-{{ i }}" class="profile-picture">
+                            </label>
+                        </div>
+                        {% endif %} {% endfor %}
+                    </div>
+                    <div>
+                        <label for="username">Nom d'utilisateur</label>
+                        <input type="text" name="username" id="username" value="{{current_user.name}}" autocomplete="username">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" value="{{current_user.email}}" autocomplete="email">
+                        <button type="submit" name="button" class="submit-button">Enregistrer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="password-section entry-animation">
+            <div class="title">Sécurité</div>
+            <div id="password-section-alert-mess"></div>
+            <form method="POST" action="" id="password-form">
+                <div class="password-container">
+                    <div>
+                        <label for="old-password">Ancien mot de passe</label>
+                        <input type="password" name="old-password" id="old-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="current-password">
+                    </div>
+                    <div>
+                        <label for="new-password">Nouveau mot de passe</label>
+                        <input type="password" name="new-password" id="new-password" placeholder="Votre nouveau mot de passe" autocomplete="new-password">
+                    </div>
+                    <div class="mfa-box">
+                        <div>
+                            Activer l'authentification à deux facteurs
+                        </div>
+                        <div>
+                            <input type="checkbox" name="mfa" id="mfa" class="mfa-checkbox" {% if current_user.mfa %}checked{%endif%}>
+                            <label for="mfa" class="toggle">
+                                <div class="toggle-button"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" name="button" class="submit-button">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+        <div class="danger-zone-section entry-animation">
+            <div class="title">Danger Zone</div>
+            <div class="box" id="profile-zone">
+                <div class="title">Changer la visibilité </div>
+                <div class="description">Activez cette option pour rendre votre profil visible pour tous</div>
+                <div class="toggle-container">
+                    <input type="checkbox" name="visibility" id="visibility" class="visibility-checkbox" {% if current_user.public %}checked{%endif%}>
+                    <label for="visibility" class="toggle">
+                        <div class="toggle-button"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="box">
+                <div class="title">Supprimer mon compte</div>
+                <div class="description">Cette action est irréversible</div>
+                <div class="button" id="popup-delete-button">Supprimer</div>
+            </div>
+            <div class="box">
+                <div class="title">Se déconnecter</div>
+                <div class="description">Vous serez déconnecté de votre compte</div>
+                <a class="button" href="/auth/logout">Deconnexion</a>
+            </div>
+        </div>
+    </section>
+    <section class="pop-up otp_check">
+        <div class="header">
+            <div class="title">Vérification de l'email</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="close-popup-verification-email">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="body">
+            <form method="POST" action="" id="otp-form">
+                <div id="otp-alert-mess"></div>
+                <div class="description">Veuillez renseigner le code reçu par mail pour sauvegarder les modifications.</div>
+                <input type="text" name="code" id="code" placeholder="Entrez le code de vérification">
+                <button type="submit" name="button" class="submit-button">Vérifier</button>
+            </form>
+        </div>
+    </section>
+    <section class="pop-up delete_account">
+        <div class="header">
+            <div class="title">Supprimer mon compte</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="close-popup-delete">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <div class="body">
+            <div class="description">Vous êtes sur le point de supprimer votre compte. Toutes vos données seront supprimées (vos listes, vos xp, vos gemmes, etc.)<br><br>Pour continuer taper : <strong>supprimer mon compte</strong></div>
+            <input type="text" name="delete" id="delete" placeholder="Entrez la phrase pour supprimer votre compte">
+            <div class="button" id="delete-account-button">Supprimer</div>
+        </div>
+    </section>
+    <script src="/static/scripts/settings/main.js"></script>
+</main>
+{% endblock %}

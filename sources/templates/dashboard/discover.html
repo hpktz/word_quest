@@ -1,0 +1,135 @@
+{% extends "dashboard/main.html" %} {% block title %}Découverte{% endblock %}{% block color %}discover-color{% endblock %} {% block css %}
+<link rel="stylesheet" href="/static/styles/css/style-discover.css">{% endblock %} {% block discover %}selected{% endblock %} {% block dashboard_info %}
+<div class="info-section">
+    <div class="title">
+        <div>Découverte</div>
+        <div class="info-section-phone-logo clickable-logo">
+            <a href="" id="info-section-phone-button">
+                <img src="/static/icons/search-30-white.png" alt="logo">
+            </a>
+        </div>
+    </div>
+    <div class="search-container">
+        <form method="POST" id="search-form" class="form">
+            <input type="text" name="search" id="search" placeholder="Rechercher une liste" required>
+            <button type="submit" id="search-button" class="button"><img src="/static/icons/search-30-dark-grey.png" alt="search"></button>
+        </form>
+        <div class="search-results"> </div>
+    </div>
+</div>
+{% endblock %}{% block content %}
+<main class="discover-main-container">
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <div class="main-infos">
+        <div class="title entry-animation">Tendances</div>
+        <form class="switch entry-animation">
+            <input type="radio" name="switch" id="switch-1" value="1" checked>
+            <label for="switch-1">Recommandées</label>
+            <input type="radio" name="switch" id="switch-2" value="2">
+            <label for="switch-2">De Word Quest</label>
+        </form>
+        <div class="show-liked-filter">
+            <div class="title entry-animation">Mes listes aimés</div>
+            <img src="/static/icons/heart-30-dark-grey.png" class="img" alt="">
+        </div>
+    </div>
+    <div class="list-container entry-animation">
+        <div class="trend-list list-to-switch active">
+            {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] != 1 %}
+            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" data-class="{{list['amount']}}" class="visible list-container list-container-box">
+                <div class="title">{{list["list_title"]}}</div>
+                {% if list["is_owner"] %}
+                <div class="certification">
+                    <img src="/static/icons/approval-30-dark-grey.png" class="img" alt="user">
+                    <div class="certification-text ">Liste originale</div>
+                </div>
+                {% else %}
+                <div class="no-certification">Liste copiée</div>
+                {% endif %}
+                <div class="list-content">
+                    {% for word in list["words"] %}
+                    <div class="word">{{word["word"]}} - <span class="type">{{word["type"]}}</span></div>
+                    {% endfor %}
+                </div>
+                {% if list['nb_words_not_displayed'] == 0 %}
+                <div class="more-words">Liste de {{list['amount']}} mots</div>
+                {% else %}
+                <div class="more-words">+ {{list['nb_words_not_displayed']}} {% if list['nb_words_not_displayed'] == 1 %} mot {% else %} mots {% endif %}
+                </div>
+                {% endif %}
+                <div class="action not-clickable-zone">
+                    <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}">
+                        <img src="/static/icons/copy-30-dark-grey.png" class="img not-clickable-zone" alt="copy">
+                    </div>
+                    {% set active = "" %} {% if list['user_in_like_list'] %} {% set active = "active" %} {% endif %}
+                    <div class="heart-container {{active}} not-clickable-zone" data-id="{{list['list_id']}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="not-clickable-zone">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="#333" stroke-width="2" class="not-clickable-zone"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+            {%endif%} {% endfor %}
+            <div class="no-list" style="display: none;">Aucune liste n'a été trouvée</div>
+            {% else %}
+            <div class="no-list">Aucune liste n'a été trouvée</div>
+            {% endif %}
+        </div>
+        <div class="word-quest-list list-to-switch">
+            {% if all_lists %} {% for list in all_lists %} {% if list["list_user"] == 1 %}
+            <a href="/dashboard/profile/list/{{list['list_id']}}" data-id="{{list['list_id']}}" data-class="{{list['amount']}}" class="list-container list-container-box">
+                <div class="title">{{list["list_title"]}}</div>
+                {% if list["is_owner"] %}
+                <div class="certification">
+                    <img src="/static/icons/approval-30-dark-grey.png" class="img" alt="user">
+                    <div class="certification-text ">Liste originale</div>
+                </div>
+                {% else %}
+                <div class="no-certification">Liste copiée</div>
+                {% endif %}
+                <div class="list-content">
+                    {% for word in list["words"] %}
+                    <div class="word">{{word["word"]}} - <span class="type">{{word["type"]}}</span></div>
+                    {% endfor %}
+                </div>
+                {% if list['nb_words_not_displayed'] == 0 %}
+                <div class="more-words">Liste de {{list['amount']}} mots</div>
+                {% else %}
+                <div class="more-words">+ {{list['nb_words_not_displayed']}} {% if list['nb_words_not_displayed'] == 1 %} mot {% else %} mots {% endif %}
+                </div>
+                {% endif %}
+                <div class="action not-clickable-zone">
+                    <div class="copy-button not-clickable-zone" data-id="{{list['list_id']}}">
+                        <img src="/static/icons/copy-30-dark-grey.png" class="img not-clickable-zone" alt="copy">
+                    </div>
+                    {% set active = "" %} {% if list['user_in_like_list'] %} {% set active = "active" %} {% endif %}
+                    <div class="heart-container {{active}} not-clickable-zone" data-id="{{list['list_id']}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="not-clickable-zone">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="#333" stroke-width="2" class="not-clickable-zone"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+            {%endif%} {% endfor %}
+            <div class="no-list" style="display: none;">Aucune liste n'a été trouvée</div>
+            {% else %}
+            <div class="no-list">Aucune liste n'a été trouvée</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="pop-up" id="list-pop-up">
+        <div class="header">
+            <div class="title" id="list-title-pop-up">Partager la liste</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="close-list-pop-up-button">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <link rel="stylesheet" href="/static/styles/css/style-list-profile.css">
+        <div id="list-content-pop-up"></div>
+    </div>
+    <script src="/static/scripts/profile/list-profile-main.js"></script>
+    <script src="/static/scripts/discover/main.js"></script>
+</main>
+{% endblock %}

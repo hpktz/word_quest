@@ -1,0 +1,72 @@
+<section class="list-main-container">
+    <section class="header-list">
+        <div class="desc">{{desc}}</div>
+        <div class="mains-infos">
+            <div class="box">
+                <img src="/static/icons/user-30-dark-grey.png" class="icon" alt="">
+                <div class="text">Par <a href="/dashboard/profile/user/{{list_owner}}">{{list_owner_name}}</a></div>
+            </div>
+            <div class="box">
+                <img src="/static/icons/calendar-30-dark-grey.png" class="icon" alt="">
+                <div class="text">Créée le {{created_at}}</div>
+            </div>
+            <div class="box">
+                <img src="/static/icons/hide-password.png" class="icon" alt="">
+                <div class="text">
+                    {% if is_public %}Publique{% else %}Privée{% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="stats-section">
+        <div class="title">Statistiques</div>
+        <div class="stats-container">
+            <div class="box">
+                <img src="/static/imgs/3d-paper-page-with-notes.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">{{copies}}</div>
+                    <div class="text">Fois copiée</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-three-yelow-lightnings.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">{{total_xp}}</div>
+                    <div class="text">XP accumulés</div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/static/imgs/3d-floating-red-hearts.png" class="img" alt="">
+                <div class="texts">
+                    <div class="number">{{likes}}</div>
+                    <div class="text">Likes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="list-section">
+        <div class="see-more-box">
+            <div class="title">Contenu de la liste</div>
+            <div class="img">
+                <img src="/static/icons/arrow-left-60-dark-grey.png" class="img" id="see-more-button" alt="">
+            </div>
+        </div>
+        <div class="list-container-popup">
+            {% for word in words %}
+            <div class="box">
+                <div class="word">{{word[2]}} ({{word[5]}})</div>
+                <div class="type">{{word[3]}}</div>
+                <div class="example">
+                    {% if word[4] %} {{word[4][0]}} - {{word[6][0]}} {% else %} Pas d'exemple {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not is_yours %}
+        <div class="separate"></div>
+        <div class="copy-button" id="copy-button" data-id="{{id}}">
+            Copier la liste
+        </div>
+        {% endif %}
+    </section>
+</section>

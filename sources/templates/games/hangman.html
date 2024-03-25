@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu du Pendu - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/hangman/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <section id="begining" class="begining">
+        <div>
+            <p id="begin"></p>
+        </div>
+    </section>
+    <div class="all" id="all">
+        <button class="exit" id="exit">
+            <a href="/dashboard"><img src="/static/icons/games-icons/exit.png" alt=""></a>
+
+        </button>
+        <section class="game">
+            <div class="loader" id="loader">
+            </div>
+            <div id="animation-xp" class="XP">
+                <p id="xpnotif">+0</p>
+                <img src="/static/icons/games-icons/big-flash.png" alt="">
+            </div>
+            <svg height="500" width="600" class=figure-content id="svg">
+
+                <!-- Support-->
+                <line x1="30%" y1="10%" x2="75%" y2="10%" />
+                <line x1="75%" y1="10%" x2="75%" y2="25%" />
+                <line x1="30%" y1="10%" x2="30%" y2="85%" />
+                <line x1="5%" y1="85%" x2="55%" y2="85%" />
+
+                <!--stickman-->
+                <!--head-->
+                {% if bad_letters|length > 0 %}
+                <circle cx="75%" cy="34%" r="6%" class="figure-part" style="display: block;"/>
+                {% else %}
+                <circle cx="75%" cy="34%" r="6%" class="figure-part"/>
+                {% endif %}
+
+                <!--body-->
+                {% if bad_letters|length > 1 %}
+                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part" style="display: block;" />
+                {% else %}
+                <line x1="75%" y1="42%" x2="75%" y2="62%" class="figure-part" />
+                {% endif %}
+
+                <!--arms-->
+                {% if bad_letters|length > 2 %}
+                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part" style="display: block;" />
+                {% else %}
+                <line x1="75%" y1="50%" x2="65%" y2="45%" class="figure-part" />
+                {% endif %}
+                {% if bad_letters|length > 3 %}
+                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part" style="display: block;" />
+                {% else %}
+                <line x1="75%" y1="50%" x2="85%" y2="45%" class="figure-part" />
+                {% endif %}
+
+                <!--legs-->
+                {% if bad_letters|length > 4 %}
+                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part" style="display: block;" />
+                {% else %}
+                <line x1="75%" y1="62%" x2="70%" y2="75%" class="figure-part" />
+                {% endif %}
+                {% if bad_letters|length > 5 %}
+                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part" style="display: block;" />
+                {% else %}
+                <line x1="75%" y1="62%" x2="80%" y2="75%" class="figure-part" />
+                {% endif %}
+                
+            </svg>
+
+            <div class="word" id="word">
+                {% for i in range(len_word) %} {% if i in space_positions %}
+                <span class="space"></span> {% endif %} {% if word[i] in good_letters %}
+                <span class="letter">{{word[i]}}</span> {% else %}
+                <span class="letter"></span> {% endif %} {% endfor %}
+            </div>
+
+        </section>
+        <!--message final-->
+        <div class="popup-content" id="popup-content">
+            <div class="popup">
+                <h2 id="final-message">Bravo tu as gagné !</h2>
+                <button id="play-button">Rejouer !</button>
+            </div>
+            <p></p>
+        </div>
+
+        <!-- Notification-->
+        <div class="notification-content" id="notification-content">
+
+            <p>Vous avez déja essayé cette lettre !</p>
+        </div>
+        <span class="separation-line" id="sep"></span>
+        <section class="other" id="other">
+            <div class="indices" id="hint">
+                <h1>Indices</h1>
+                <div id="indice-container" class="container">
+                </div>
+                <button id="add-indice" class="new-indice-btn">
+                    <img src="/static/icons/plus-60-white.png" alt="">
+                </button>
+            </div>
+            <div class="keyboard" id="keyboard">
+                {% for letter in 'abcdefghijklmnopqrstuvwxyz' %} {% if letter in bad_letters %}
+                <div class="key-letter" style="background: #8d0000; color: white;">{{ letter }}</div>
+                {% elif letter in good_letters %}
+                <div class="key-letter" style="background: #373d20; color: white;">{{ letter }}</div>
+                {% else %}
+                <div class="key-letter">{{ letter }}</div>
+                {% endif %} {% endfor %}
+            </div>
+
+            <span class="separation-line2"></span>
+
+            <div class="info-content">
+                <div class="counter">
+                    <img src="/static/icons/games-icons/flash.png" alt="">
+                    <p id="xp">{{score}}Xp</p>
+                </div>
+                <div class="counter">
+                    <img src="/static/icons/games-icons/timer-icon.png" alt="">
+                    <p class="data" id="time">{{time}}</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% set popUpImage = '/static/icons/games-icons/hangman-30-dark-grey.png' %} 
+    {% set popUpTitle = "Le Pendu" %} 
+    {% set popUpDesc = "Vous avez 6 chances pour trouver le mot caché. Trouvez le plus de mots en un minimum de temps" %} 
+    {% set popUpGame = "hangman"%}
+    {% include "games/popups.html" %}
+    <script src="/static/styles/games/hangman/main.js"></script>
+</body>
+
+</html>

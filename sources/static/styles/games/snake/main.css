@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+body{
+    overflow: hidden;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f6f6f6;
+}
+.game-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+canvas{
+    background-color: #635146;
+    border-radius: 15px;
+    padding: 15px;
+    /* transform: scale(0.5); */
+}
+.content{
+    position: relative;
+}
+.snakeHead{
+    display: none;
+}
+
+.word{
+    display: flex;
+    font-family: 'League Spartan';
+}
+.letter{
+    border-bottom: 3px solid black;
+    display: inline-flex;
+    font-size: 30px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+    height: 50px;
+    width: 30px;
+    text-transform: uppercase;
+}
+.space{
+    height: 50px;
+    width: 30px;
+}
+
+.XP {
+    font-family: 'League Spartan';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.01);
+                /* scale(0.1) */
+    font-size: 64px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+}
+
+.XP p {
+    transform: translateY(5px);
+    background: linear-gradient(to bottom, #FEDE00, #F5AA00);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.XP img {
+    height: 84px;
+}
+
+.info-content{
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    font-family: 'League Spartan';
+
+}
+
+.frensh-word{
+    font-size: 35px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.counter{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.counter img{
+    height: 25px;
+}
+
+#source{
+    display: none;
+}
+
+.back{
+    overflow: visible;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -200%);
+}
+.back img{
+    overflow: visible;
+    height: 65px;
+}
+.press-arrow-message{
+    text-align: center;
+    font-family: 'League Spartan';
+    font-weight: bold;
+    font-size: 26px;
+    background: #0000001b;
+    position: absolute;
+    width: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: bounce 0.8s ease-out alternate infinite;
+}
+
+@keyframes bounce {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+@keyframes Xpanim {
+    0% {
+        transform: translate(-50%, -50%) scale(0.01);
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes disapear {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(0.01);
+    }
+}
+
+
+@media screen and (max-height: 950px) {
+    .back{
+        transform: translate(-50%, -130%);
+    }
+}
+@media screen and (max-height: 840px) {
+    .game-container{
+        transform: translate(-50%, -47%) scale(0.8);
+    }
+}
+@media screen and (max-height: 640px) {
+    .game-container{
+        transform: translate(-50%, -45%) scale(0.7);
+    }
+}
+
+@media screen and (max-width: 630px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+@media screen and (max-width: 470px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.6);
+    }
+}
+@media screen and (max-width: 360px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+}
+@media screen and (max-width: 280px) {
+    .game-container{
+        transform: translate(-50%, -50%) scale(0.4);
+    }
+}

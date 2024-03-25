@@ -1,0 +1,700 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+    background-color: #f6f6f6;
+    color: black;
+    font-family: 'League Spartan';
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+.all {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100vh;
+    width: 80vw;
+    max-width: 1400px;
+}
+
+.exit {
+    background-color: transparent;
+    border: none;
+    margin-top: 25px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.exit img {
+    height: 50px;
+}
+
+.game {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.figure-content {
+    stroke: #766153;
+    stroke-width: 24px;
+    stroke-linecap: round;
+    fill: transparent;
+    max-width: 880px;
+}
+
+.figure-part {
+    display: none;
+    stroke-width: 12px;
+    stroke: #717744;
+}
+
+.bad-letter-content {
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.bad-letter-content p {
+    margin: 0 0 5px;
+}
+
+.bad-letter-content span {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+#bad-letter {
+    height: 30px;
+    width: 100%;
+}
+
+.word {
+    display: flex;
+}
+
+.space {
+    width: 20px;
+}
+
+.letter {
+    border-bottom: 3px solid black;
+    display: inline-flex;
+    font-size: 30px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+    height: 50px;
+    width: 30px;
+    text-transform: uppercase;
+}
+
+.popup-content {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup {
+    background-color: black;
+    color: white;
+    box-shadow: 0 10px 10px 3px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.popup button {
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    color: black;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.popup button:active {
+    transform: scale(0.95);
+}
+
+.popup:focus {
+    outline: 0;
+}
+
+.notification-content {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px 10px 0 0;
+    padding: 15px 20px;
+    position: absolute;
+    bottom: -80px;
+    transition: transform 0.3 ease-in-out;
+}
+
+.notification-content.afficher {
+    transform: translateY(-80px);
+}
+
+.separation-line {
+    width: 1px;
+    height: 50vh;
+    background-color: #BDBDBD;
+}
+
+.other {
+    width: 33vw;
+    max-width: 600px;
+    height: 400px;
+}
+
+h1 {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.indice {
+    background: white;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px 20px;
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.224);
+    margin-bottom: 10px;
+}
+
+.name-indice {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.indice-content {
+    color: #333333;
+    font-size: 20px;
+}
+
+.separation-line2 {
+    width: 90%;
+    height: 1px;
+    display: block;
+    margin: 0 auto;
+    background-color: #BDBDBD;
+}
+
+.info-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 75px;
+    margin-top: 20px;
+}
+
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.counter img {
+    height: 40px;
+}
+
+.XP {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.01);
+    font-size: 64px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+}
+
+.XP p {
+    transform: translateY(5px);
+    background: linear-gradient(to bottom, #FEDE00, #F5AA00);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.XP img {
+    height: 84px;
+}
+
+.recap {
+    z-index: 100;
+    width: 400px;
+    height: 380px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #F6F6F6;
+    color: black;
+    padding: 50px 0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.129);
+}
+
+.recap h1 {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.stats>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats>div>p:nth-child(1) {
+    font-weight: bold;
+}
+
+.stats-xp div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.stats-xp img {
+    height: 25px;
+}
+
+.recap-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 2vw;
+}
+
+.recap-btns button a {
+    color: white;
+    text-decoration: none;
+}
+
+.recap-btns button {
+    background-color: #766153;
+    color: #F6F6F6;
+    width: 150px;
+    height: 55px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'League Spartan';
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.new-indice-btn {
+    background-color: #717744;
+    color: white;
+    font-family: 'League Spartan';
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.new-indice-btn img {
+    height: 45px;
+}
+
+.new-indice-btn:hover {
+    transform: scale(1.08);
+}
+
+.new-indice-btn:active {
+    transform: scale(1);
+}
+
+.loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 5px solid white;
+    border-top: 5px solid black;
+    animation: spin 0.5s linear infinite;
+}
+
+.keyboard {
+    margin: 60px 0 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    z-index: 9;
+}
+
+.key-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-family: 'League Spartan';
+    background-color: #ccd77c;
+    color: #433831;
+    padding: 2px 0 0 2px;
+    transition: 0.3s;
+}
+
+.key-letter:hover {
+    cursor: pointer;
+}
+
+.key-letter:active {
+    transform: scale(0.9);
+}
+
+.tablet-all {
+    flex-direction: column;
+    justify-content: center;
+    gap: 10%;
+}
+
+.tablet-svg {
+    height: 30vh;
+    width: 60vw;
+    max-width: none;
+    stroke-width: 24px;
+}
+
+.tablet-exit {
+    top: 0;
+    left: 10%;
+}
+
+.tablet-sep {
+    display: none;
+}
+
+.tablet-hint {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+}
+
+.tablet-other {
+    height: auto;
+    width: 80vw;
+    max-width: none;
+}
+
+.tablet-kl {
+    height: 100px;
+    width: 100px;
+    font-size: 30px;
+}
+
+.tablet-kb {
+    width: 80vw;
+}
+
+.tablet-idc {
+    width: 35vw;
+}
+
+@media screen and (max-width: 1330px) {
+    .figure-content {
+        width: 400px;
+        height: 430px;
+    }
+}
+
+@media screen and (max-height: 700px) {
+    .figure-content {
+        width: 400px;
+        height: 430px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .key-letter {
+        width: 30px;
+        height: 30px;
+    }
+    .tablet-kl {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+@media screen and (max-width: 1000px) and (max-height: 550px) {
+    .figure-content {
+        width: 300px;
+        height: 320px;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .svg {
+        height: 45vh;
+    }
+    .indice-content {
+        transform: scale(0.7);
+    }
+    .figure-content {
+        width: 200px;
+        height: 320px;
+    }
+    .info-content {
+        font-size: 13px;
+    }
+    .info-content img {
+        height: 25px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .recap {
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .recap {
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+}
+
+@media screen and (max-height: 500px) {
+    .recap {
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .key-letter {
+        width: 30px;
+        height: 30px;
+    }
+    .tablet-kl {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    .indices h1 {
+        margin-bottom: 10px;
+    }
+    .separation-line {
+        display: none;
+    }
+    .separation-line2 {
+        display: none;
+    }
+    .other {
+        width: auto;
+    }
+    .indices {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+    }
+    .all {
+        justify-content: center;
+    }
+    .new-indice-btn {
+        width: 30px;
+        height: 30px;
+        margin-top: 0;
+    }
+    .new-indice-btn img {
+        height: 25px;
+    }
+    .figure-content {
+        stroke-width: 15px;
+        height: 30vh;
+        width: 60vw;
+    }
+    .exit img {
+        height: 35px;
+    }
+    .all {
+        flex-direction: column;
+        justify-content: center;
+        gap: 10%;
+    }
+    .exit {
+        left: 10%;
+    }
+    .key-letter {
+        height: 40px;
+        width: 40px;
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 490px) {
+    .keyboard {
+        width: 90vw;
+    }
+    .key-letter {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .key-letter {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    .key-letter {
+        width: 27px;
+        height: 27px;
+        font-size: 15px;
+    }
+    .keyboard {
+        gap: 5px;
+    }
+    .indices {
+        top: 20%;
+    }
+    .indices h1 {
+        font-size: 15px;
+    }
+    .counter {
+        gap: 10px;
+    }
+    .info-content img {
+        height: 25px;
+    }
+    #countdown-game {
+        font-size: 12px;
+    }
+    .letter {
+        font-size: 20px;
+        height: 30px;
+        width: 20px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes Xpanim {
+    0% {
+        transform: translate(-50%, -50%) scale(0.01);
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes disapear {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(0.01);
+    }
+}
+
+@keyframes depophint {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(0.05);
+    }
+}
+
+@keyframes indicanim {
+    0% {
+        transform: scale(0.01);
+    }
+    30% {
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    60% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

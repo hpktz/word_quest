@@ -1,0 +1,70 @@
+{% extends "help/header.html" %} {% block content %}
+<main>
+    <a href="/dashboard">
+        <img class="main-logo entry-animation" src="/static/imgs/app-main-logo.png" alt="logo">
+    </a>
+    <div class="title entry-animation">Quelques conseils pour débuter !</div>
+    <div class="menu">
+        <a href="/dashboard/help/create" class="item entry-animation">
+            <img src="/static/imgs/3d-young-man-and-woman-looking-at-plan.png" class="illustration" alt="">
+            <div class="title">Créer une liste</div>
+            <div class="desc">
+                Apprenez à créer votre liste de vocabulaire pour apprendre de nouveaux mots.
+            </div>
+            <div class="time">
+                <img src="/static/icons/timer-30-dark-grey.png" class="icon" alt="">
+                <div class="text">1 min</div>
+            </div>
+        </a>
+        <a href="/dashboard/help/discover" class="item entry-animation">
+            <img src="/static/imgs/3d-blue-binoculars.png" class="illustration" alt="">
+            <div class="title">Découvrir des listes</div>
+            <div class="desc">
+                Découvrez des listes de vocabulaire créées par d'autres utilisateurs pour la communauté.
+            </div>
+            <div class="time">
+                <img src="/static/icons/timer-30-dark-grey.png" class="icon" alt="">
+                <div class="text">1 min</div>
+            </div>
+        </a>
+        <a href="/dashboard/help/play" class="item entry-animation">
+            <img src="/static/imgs/3d-game-boy-side-view.png" class="illustration" alt="">
+            <div class="title">Commencer un jeu</div>
+            <div class="desc">
+                Lancez un mini-jeu pour apprendre votre liste de vocabulaire de manière ludique et amusante.
+            </div>
+            <div class="time">
+                <img src="/static/icons/timer-30-dark-grey.png" class="icon" alt="">
+                <div class="text">30 secondes</div>
+            </div>
+        </a>
+        <a href="/dashboard/help/quests" class="item entry-animation">
+            <img src="/static/imgs/3d-paper-page-with-pie-chart-and-text.png" class="illustration" alt="">
+            <div class="title">Voir ses statistiques</div>
+            <div class="desc">
+                Consultez vos statistiques pour voir votre progression, votre niveau et votre classement.
+            </div>
+            <div class="time">
+                <img src="/static/icons/timer-30-dark-grey.png" class="icon" alt="">
+                <div class="text">1 min</div>
+            </div>
+        </a>
+        <a href="/dashboard/help/profile" class="item entry-animation">
+            <img src="/static/imgs/3d-young-man-holding-coffee-and-laptop.png" class="illustration" alt="">
+            <div class="title">Consultez votre profil</div>
+            <div class="desc">
+                Consultez vos abonnements et vos abonnés. Vous pouvez également modifier vos paramètres.
+            </div>
+            <div class="time">
+                <img src="/static/icons/timer-30-dark-grey.png" class="icon" alt="">
+                <div class="text">30 secondes</div>
+            </div>
+        </a>
+    </div>
+    <div class="separate-vertical entry-animation"></div>
+    <a href="/dashboard" class="bouton entry-animation">
+        À vous de jouer !
+    </a>
+    <script src="/static/scripts/help/main.js"></script>
+</main>
+{% endblock %}

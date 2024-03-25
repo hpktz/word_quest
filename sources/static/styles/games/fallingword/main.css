@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    overflow: hidden;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.game-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+
+}
+.duo{
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-family: 'League Spartan';
+    background-color: #766153;
+    transform: scale(0.01);
+    cursor: pointer;
+    transition: 0.4s all;
+}
+.infos{
+    position: relative;
+    z-index: 10;
+    padding: 5px 50px;
+    width: 80vw;
+    border: 2px solid #333;
+    color: #333;
+    font-size: 20px;
+    font-family: 'League Spartan';
+    border-radius: 15px;
+    background-color: white;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 20px;
+}
+.exit {
+    position: absolute;
+    left: 30px;
+    background-color: transparent;
+    border: none;
+}
+
+.exit img {
+    height: 50px;
+}
+
+.time {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time .icon {
+    width: 30px;
+}
+
+.time .data {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+}
+
+.lives{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.lives p{
+    margin: 5px;
+}
+.lives img{
+    height: 25px;
+    transition: all 0.3s ease-out;
+}
+
+@media screen and (max-width: 750px) {
+    .duo{
+        font-size: 22px;
+        padding: 15px 20px;
+    }
+    .infos{
+        margin-top: 5px;
+    }
+    .exit img{
+        height: 35px;
+    }
+}
+@media screen and (max-width: 680px) {
+    .lives{
+        flex-direction: column;
+    }
+    .time {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .exit{
+        left: 15px;
+        height: 35px;
+    }
+}
+@media screen and (max-width: 480px) {
+    .duo{
+        font-size: 16px;
+        padding: 16px 15px;
+    }
+    .time{
+        transform: scale(0.95);
+    }
+}

@@ -1,0 +1,84 @@
+{% extends "header.html" %} {% block title %}Méthode{% endblock %} {% block desc %} Découvrez notre méthode pour apprendre l'anglais de manière efficace et rapide ! {% endblock %} {% block content %}
+<main>
+    <section class="title-section">
+        <div class="title">Notre méthode pour apprendre l'anglais</div>
+    </section>
+    <section class="main-container-section">
+        <div class="text-container">
+            <p>Word Quest offre une approche innovante et ludique pour apprendre l'anglais. Notre méthode d'apprentissage est conçue pour rendre l'expérience éducative aussi divertissante que possible, tout en offrant des résultats concrets.</p>
+            <h1>Des leçons basées sur votre vocabulaire</h1>
+            <div class="content-box">
+                <div class="text">
+                    <p>Chaque session d'apprentissage est centrée autour d'une liste de vocabulaire spécifique, soit créée entièrement par vous, ou alors découverte sur notre site.</p>
+                    <p>Les leçons sont structurées pour favoriser la mémorisation efficace des mots et leur utilisation pratique.</p>
+                </div>
+                <img src="/static/imgs/3d-paper-page-with-notes.png" class="right-img" alt="paper-notes">
+            </div>
+            <h1>Des mini-jeux ludiques</h1>
+            <div class="games-box">
+                <div class="item">
+                    <img src="/static/icons/old-ipod-30-dark-grey.png" alt="old-ipod">
+                    <div class="text">Old-school</div>
+                    <div class="desc">
+                        Les mini-jeux sont, pour la plupart, inspirés de jeux vidéo classiques. Ils sont conçus pour être amusants et stimulants, tout en renforçant la mémorisation du vocabulaire.
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="/static/icons/heart-30-dark-grey.png" alt="heart">
+                    <div class="text">Attrayant</div>
+                    <div class="desc">
+                        Les mini-jeux sont généralement plus attractifs que des leçons classiques car ils sont plus interactifs et plus visuels.
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="/static/icons/trophy-30-dark-grey.png" alt="trophy">
+                    <div class="text">Compétitif</div>
+                    <div class="desc">
+                        Les mini-jeux sont compétitifs. Les utilisateurs peuvent comparer leurs scores avec ceux de leurs amis et d'autres joueurs, ce qui peut les encourager à s'améliorer.
+                    </div>
+                </div>
+            </div>
+            <h1>Un système de fidélité</h1>
+            <div class="fidelity-box">
+                <div class="item">
+                    <img src="/static/imgs/3d-blue-gemstone.png" alt="gemstone">
+                    <div class="text">Gemmes</div>
+                    <div class="desc">Les gemmes sont utilisées comme monnaie virtuelle pour acheter des vies supplémentaires ou débloquer des fonctionnalités spéciales.</div>
+                    <div class="info-box">
+                        <div class="number">200</div>
+                        <div class="text">Pour acheter une nouvelle vie</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="/static/imgs/3d-three-yelow-lightnings.png" alt="lightning">
+                    <div class="text">XP</div>
+                    <div class="desc">À la fin de chaque leçon, les utilisateurs gagnent des points d'expérience (XP) en fonction de leurs performances.</div>
+                    <div class="info-box">
+                        <div class="number">500</div>
+                        <div class="text">Pour passer au niveau intermédiaire</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="/static/imgs/3d-red-heart.png" alt="heart">
+                    <div class="text">Vies</div>
+                    <div class="desc">Les utilisateurs perdent des vies en cas d'erreurs importantes pendant les leçons.</div>
+                    <div class="info-box">
+                        <div class="number">1</div>
+                        <div class="text">Cœurs perdus par leçon avec des fautes</div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-box">
+                <img src="/static/imgs/3d-neural-network.png" alt="">
+                <div class="text">
+                    <h1>Des profils et listes partagées</h1>
+                    <p>Restez connecté avec vos amis !</p>
+                    <p>Les utilisateurs peuvent rendre leur profil public, permettant ainsi aux autres de voir leurs statistiques et leurs listes de vocabulaire.</p>
+                    <p>De même, les listes de vocabulaire peuvent être publiques, ce qui les rend visibles dans l'onglet "Découvertes" et soumises à un algorithme de recommandation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'footer.html' %}
+</main>
+{% endblock %}

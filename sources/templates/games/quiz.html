@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/quiz/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <section class="main-game-section">
+        <a href="/dashboard" class="back">
+            <img src="/static/icons/games-icons/exit.png" alt="">
+        </a>
+        <div class="content">
+            <div class="header">
+                <div class="time">
+                    <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
+                    <div class="data" id="time">{{time}}</div>
+                </div>
+                <div class="progress">
+                    <div class="progress-inner" style="width: 10%;"></div>
+                </div>
+                <div class="score">
+                    <span id="data-score">{{score}}</span> / {{max_score}}
+                </div>
+            </div>
+            <div class="quiz-container">
+                <div class="question" id="question">
+                    {% include question %}
+                </div>
+                <div class="answers">
+                    {% for answer in answers %}
+                    <div class="answer" id="answer-{{loop.index}}">{{answer}}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% set popUpImage = '/static/icons/games-icons/quiz-30-dark-grey.png' %} 
+    {% set popUpTitle = "Quiz" %} 
+    {% set popUpDesc = "Répondez aux questions dans le temps imparti. Attention aux pièges !" %} 
+    {% set popUpGame = "quiz"%} 
+    {% include "games/popups.html" %}
+    <script src="/static/styles/games/quiz/main.js"></script>
+</body>
+
+</html>

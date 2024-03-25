@@ -1,0 +1,531 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=League+Spartan:wght@400;700&family=Nunito+Sans:wght@800&family=Permanent+Marker&family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body,
+html {
+    height: 100%;
+    background-color: #f6f6f6;
+}
+
+body {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.game-section {
+    width: 100%;
+    height: 100%;
+    max-width: 1200px;
+    display: grid;
+    place-items: center;
+}
+
+.back {
+    display: block;
+    width: 45px;
+    height: 45px;
+    margin-bottom: 25px;
+}
+
+.back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.content {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 25px;
+    gap: 10px;
+}
+
+.content .header {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    grid-template-rows: 60px 60px;
+    align-items: center;
+    gap: 20px;
+}
+
+.content .header .time {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.content .header .time .icon {
+    width: 30px;
+}
+
+.content .header .time .data {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+}
+
+.content .header .xp-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.content .header .xp-container .icon {
+    width: 30px;
+}
+
+.content .header .xp-container .data {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+}
+
+.content .header .info-button {
+    width: 200px;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.5s;
+    text-align: center;
+    position: relative;
+    grid-row: 2;
+    grid-column: 1 /span 2;
+}
+
+.content .header .info-button.disabled {
+    border: 2px solid #a7a7a7;
+    background: #a7a7a7;
+    color: #fff;
+    pointer-events: none;
+}
+
+.content .header .info-button:hover {
+    background: #333;
+    color: #fff;
+}
+
+.content .header .info-button.pulse {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 yellow;
+    }
+    50% {
+        transform: scale(1.01);
+        box-shadow: 0 0 30px 10px rgb(185, 185, 13);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 yellow;
+    }
+}
+
+.content .header .info-button.wrong {
+    animation: wrong 0.5s ease-in-out;
+}
+
+.content .header .info-button #tries-amount {
+    padding: 3px 3px 1px 3px;
+    background: black;
+    color: white;
+    border-radius: 10px;
+}
+
+@keyframes wrong {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    50% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.content .header .score {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.content .path-container {
+    width: 100%;
+    max-width: 450px;
+    background: #766153;
+    padding: 10px;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: auto;
+}
+
+.content .path-container .line {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.content .path-container .line .item {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #ededed;
+    position: relative;
+    border-radius: 10px;
+    transition: all 0.5s;
+    animation: pop-entry 0.5s ease-in-out;
+}
+
+@keyframes pop-entry {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.content .path-container .line .item .word {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #fff;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 2px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.content .path-container .line .item.wrong {
+    background: #610000;
+    pointer-events: none;
+}
+
+.content .path-container .line .item.correct {
+    background: #025c05;
+    pointer-events: none;
+}
+
+.content .path-container .line .item.disabled {
+    background: #a7a7a7;
+    pointer-events: none;
+}
+
+.content .path-container .line .item.active {
+    background: #bcbd8b;
+    animation: subliminal 1s infinite;
+}
+
+@keyframes subliminal {
+    0% {
+        box-shadow: 0 0 0 0 #bcbd8b;
+    }
+    50% {
+        box-shadow: 0 0 25px 2.5px #dddf64;
+    }
+    100% {
+        box-shadow: 0 0 0 0 #bcbd8b;
+    }
+}
+
+.content .path-container .line .item .music-listener {
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    place-items: center;
+    cursor: pointer;
+}
+
+.content .path-container .line .item .music-listener .bar {
+    width: 3px;
+    height: 15%;
+    background: #333;
+    border-radius: 5px;
+}
+
+.content .path-container .line .item .music-listener .bar:nth-child(1) {
+    animation: music-bar-animation 1s infinite;
+}
+
+.content .path-container .line .item .music-listener .bar:nth-child(2) {
+    animation: music-bar-animation 1s infinite;
+    animation-delay: 0.2s;
+}
+
+.content .path-container .line .item .music-listener .bar:nth-child(3) {
+    animation: music-bar-animation 1s infinite;
+    animation-delay: 0.4s;
+}
+
+.content .path-container .line .item .music-listener .bar:nth-child(4) {
+    animation: music-bar-animation 1s infinite;
+    animation-delay: 0.2s;
+}
+
+.content .path-container .line .item .music-listener .bar:nth-child(5) {
+    animation: music-bar-animation 1s infinite;
+}
+
+.content .path-container .line .item .micro-listener {
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #333;
+    border-radius: 50%;
+    animation: micro-listener-entry-animation 0.5s ease-in-out, micro-listener-animation 1s linear infinite 0.5s;
+    transition: all 0.5s;
+}
+
+.content .path-container .line .item .micro-listener.exit {
+    animation: none;
+    width: 10px;
+    height: 10px;
+}
+
+.content .path-container .line .item .micro-listener .point {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: micro-listener-point-entry-animation 0.5s ease-in-out, micro-listener-point-animation 0.6s infinite 0.5s;
+    transition: all 0.5s;
+}
+
+.content .path-container .line .item .micro-listener .point.exit {
+    animation: none;
+    top: 50%;
+}
+
+@keyframes micro-listener-entry-animation {
+    from {
+        width: 10px;
+        height: 10px;
+    }
+    to {
+        width: 60%;
+        height: 60%;
+    }
+}
+
+@keyframes micro-listener-animation {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes micro-listener-point-entry-animation {
+    from {
+        top: 50%;
+    }
+    to {
+        top: -6px;
+    }
+}
+
+@keyframes micro-listener-point-animation {
+    0% {
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.5);
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes music-bar-animation {
+    0% {
+        height: 25%;
+    }
+    50% {
+        height: 50%;
+    }
+    100% {
+        height: 25%;
+    }
+}
+
+.words-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    min-height: 80px;
+    justify-content: left;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 80px;
+    margin-top: 25px;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+.words-container .loader {
+    margin-top: 20px;
+    margin-left: 20px;
+    border: 3px solid transparent;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.words-container .mess {
+    font-family: "League Spartan", sans-serif;
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+    width: 100%;
+    font-style: italic;
+}
+
+.words-container .word-draggable {
+    height: 35px;
+    background-color: lightgrey;
+    color: #333;
+    font-family: "League Spartan", sans-serif;
+    border-radius: 30px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 35px;
+    cursor: grab;
+    z-index: 10;
+    position: relative;
+    padding: 0 20px;
+    transition: all 0.05s, left 0s, top 0s, background-color 0.5s, color 0.5s, width 0.25s ease-in-out, height 0.25s ease-in-out;
+    animation: pop-entry 0.5s ease-in-out;
+}
+
+.words-container .word-draggable.correct {
+    background-color: #025c05;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.words-container .word-draggable.wrong {
+    background-color: #610000;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.xp-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    transition: all 0.5s;
+}
+
+.xp-message p {
+    font-family: "League Spartan", sans-serif;
+    font-size: 75px;
+    color: #fac900;
+    font-weight: bold;
+}
+
+.xp-message.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+@media all and (max-width: 768px) {
+    .back {
+        margin: auto;
+        margin-bottom: 25px;
+    }
+    .content {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+    .content .header {
+        width: 100%;
+        grid-template-rows: 1fr;
+        grid-template-columns: 100px 1fr 100px;
+        gap: 10px;
+    }
+    .content .header .info-button {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100%;
+    }
+    .content .header .info-button #tries-amount {
+        display: none;
+    }
+    .content .path-container {
+        margin-top: 0;
+        margin-left: unset;
+        margin: auto;
+    }
+    .words-container {
+        padding: 0px;
+        border: none;
+        border-radius: unset;
+        justify-content: center;
+    }
+    .words-container .mess {
+        text-align: center;
+    }
+}

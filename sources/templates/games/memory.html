@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/memory/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <section class="memories">
+        <div class="container">
+            <a href="/dashboard" class="back">
+                <img src="/static/icons/games-icons/exit.png" alt="">
+            </a>
+            <div class="rules">Trouve les doublets de mots anglais/francais !</div>
+            <div id="game" class="game">
+                {% for i in range(shuffle_cards|length) %} {% if shuffle_cards[i] in cards %}
+                <div class="item box_open" id="{{i}}" style="pointer-events: none;">{{shuffle_cards[i][0]}}</div>
+                {%else%}
+                <div class="item" id="{{i}}"></div>
+                {%endif%} {% endfor %}
+            </div>
+            <span class="separation"></span>
+            <div class="time">
+                <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
+                <div class="data" id="time">{{time}}</div>
+            </div>
+        </div>
+    </section>
+    {% set popUpImage = '/static/icons/games-icons/memory-30-dark-grey.png' %} 
+    {% set popUpTitle = "Memory" %} 
+    {% set popUpDesc = "Vous disposez de 1 minute pour trouver les duos de mots Francais/Anglais" %} 
+    {% set popUpGame = "memory"%} 
+    {% include "games/popups.html" %}
+    <script src="/static/styles/games/memory/main.js"></script>
+</body>
+
+</html>

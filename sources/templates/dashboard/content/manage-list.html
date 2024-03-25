@@ -1,0 +1,73 @@
+<form method="POST" class="manage-list-form" data-id="{{list['id']}}">
+    <div id="alert-message-container"></div>
+    <label for="list-name">Nom de la liste</label>
+    <input type="text" name="listname" id="list-name" value="{{list['title']}}">
+    <label for="list-desc">Description de la liste</label>
+    <textarea name="list-desc" id="listdesc">{{list["description"]}}</textarea>
+    <div class="goals-tab">
+        <p class="subtitle">Temps</p>
+        <div>
+            {% set time_1 = "" %} {% set time_2 = "" %} {% set time_3 = "" %} {% if list["tgt_time"] == 1 %} {% set time_1 = "checked" %} {% elif list["tgt_time"] == 3 %} {% set time_2 = "checked" %} {% else %} {% set time_3 = "checked" %} {% endif %}
+            <input type="radio" name="time" id="time-1" value="1" {{time_1}}>
+            <label for="time-1">1 min</label>
+            <input type="radio" name="time" id="time-2" value="3" {{time_2}}>
+            <label for="time-2">3 min</label>
+            <input type="radio" name="time" id="time-3" value="5" {{time_3}}>
+            <label for="time-3">5 min</label>
+        </div>
+    </div>
+    <div class="goals-tab">
+        <p class="subtitle">XP</p>
+        <div>
+            {% set xp_1 = "" %} {% set xp_2 = "" %} {% set xp_3 = "" %} {% if list["tgt_xp"] == 10 %} {% set xp_1 = "checked" %} {% elif list["tgt_xp"] == 20 %} {% set xp_2 = "checked" %} {% else %} {% set xp_3 = "checked" %} {% endif %}
+            <input type="radio" name="xp" id="xp-1" value="10" {{xp_1}}>
+            <label for="xp-1">10</label>
+            <input type="radio" name="xp" id="xp-2" value="20" {{xp_2}}>
+            <label for="xp-2">20</label>
+            <input type="radio" name="xp" id="xp-3" value="30" {{xp_3}}>
+            <label for="xp-3">30</label>
+        </div>
+    </div>
+    <div class="goals-tab">
+        <p class="subtitle">Jeux</p>
+        <div>
+            {% set game_1 = "" %} {% set game_2 = "" %} {% set game_3 = "" %} {% if list["tgt_games"] == 1 %} {% set game_1 = "checked" %} {% elif list["tgt_games"] == 2 %} {% set game_2 = "checked" %} {% else %} {% set game_3 = "checked" %} {% endif %}
+            <input type="radio" name="game" id="game-1" value="1" {{game_1}}>
+            <label for="game-1">1</label>
+            <input type="radio" name="game" id="game-2" value="2" {{game_2}}>
+            <label for="game-2">2</label>
+            <input type="radio" name="game" id="game-3" value="3" {{game_3}}>
+            <label for="game-3">3</label>
+        </div>
+    </div>
+    <div class="input-title ">Notifications</div>
+    <div class="notifications-tab">
+        <p class="subtitle">Rappel par mail</p>
+        {% set reminder = "" %} {% if list["notif_remind"] == 1 %} {% set reminder = "checked" %} {% endif %}
+        <input type="checkbox" name="reminder" id="reminder-1" {{reminder}}>
+        <label for="reminder-1"> <span class="slider"></span></label>
+    </div>
+    <div class="notifications-tab">
+        <p class="subtitle">Stats par mail</p>
+        {% set stats = "" %} {% if list["notif_stats"] == 1 %} {% set stats = "checked" %} {% endif %}
+        <input type="checkbox" name="stats" id="stats-1" {{stats}}>
+        <label for="stats-1"><span class="slider"></span></label>
+    </div>
+    <div class="notifications-tab">
+        <p class="subtitle">Liste publique</p>
+        {% set public = "" %} {% if list["public"] == 1 %} {% set public = "checked" %} {% endif %}
+        <input type="checkbox" name="public" id="public-1" {{public}}>
+        <label for="public-1"><span class="slider"></span></label>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <button type="submit" class="button" name="button">Modifier</button>
+</form>
+<div class="delete-list-container">
+    <div class="text">Supprimer la liste</div>
+    <div>
+        <form action="/dashboard/delete/{{list['id']}}" method="post">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <input type="submit" value="Supprimer" class="delete-button" id="delete-list-button">
+        </form>
+    </div>
+</div>

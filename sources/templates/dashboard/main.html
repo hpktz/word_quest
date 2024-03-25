@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Accédez à votre tableau de bord pour gérer vos listes de mots et jouer à des jeux de mots.">
+    <title>{% block title %}Word Quest{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/static/icons/favicon.ico" />
+    <link rel="stylesheet" href="/static/styles/css/style-dashboard.css"> {% block css %}{% endblock %}
+</head>
+
+<body>
+    <header class="{% block color %}{% endblock %}">
+        <section class="nav-bar">
+            <div>
+                <div class="phone-menu-logo" id="phone-menu-button">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <div class="account-logo clickable-logo">
+                    <a href="/dashboard/profile/user" class="redirect">
+                        <img src="/static/icons/user-60-white.png" alt="logo">
+                        <div class="text">Profil</div>
+                    </a>
+                </div>
+                <div class="create-logo clickable-logo">
+                    <a href="/dashboard/create" class="redirect">
+                        <img src="/static/icons/plus-60-white.png" alt="logo">
+                        <div class="text">Créer</div>
+                    </a>
+                </div>
+            </div>
+            <div class="middle-logos">
+                <div class="middle-logo clickable-logo {% block dashboard %}{% endblock %}">
+                    <a href="/dashboard" class="redirect">
+                        <img src="/static/icons/home-60-dark-grey.png" alt="logo">
+                        <div class="text">Dashboard</div>
+                    </a>
+                </div>
+                <div class="middle-logo clickable-logo {% block quests %}{% endblock %}">
+                    <a href="/dashboard/quests" class="redirect">
+                        <img src="/static/icons/quest-60-dark-grey.png" alt="logo">
+                        <div class="text">Quêtes</div>
+                    </a>
+                </div>
+                <div class="middle-logo clickable-logo {% block discover %}{% endblock %}">
+                    <a href="/dashboard/discover" class="redirect">
+                        <img src="/static/icons/compass-60-dark-grey.png" alt="logo">
+                        <div class="text">Découvertes</div>
+                    </a>
+                </div>
+                <div class="dynamic-pointer"></div>
+            </div>
+            <div class="app-logos">
+                <div class="app-logo clickable-logo">
+                    <a href="/">
+                        <img src="/static/imgs/app-main-logo.png" alt="logo">
+                    </a>
+                </div>
+                <div class="help-logo clickable-logo">
+                    <a href="/dashboard/help">
+                        <img src="/static/icons/help-60-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+                <div class="responsive-logo clickable-logo">
+                    <a href="" id="responsive-button">
+                        <img src="/static/icons/arrow-left-60-dark-grey.png" alt="logo">
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section class="infos-section">
+            {% block dashboard_info %}{% endblock %}
+        </section>
+    </header>
+    {% block content %}{% endblock %}
+    <section class="alert pop-up">
+        <div class="header">
+            <div class="title">Erreur</div>
+            <div class="close-logo clickable-logo">
+                <a href="" id="alert-button">
+                    <img src="/static/icons/close.png" alt="logo">
+                </a>
+            </div>
+        </div>
+        <img src="/static/icons/issue-100-red.png" class="img">
+        <div class="text">
+            Une erreur est survenue, veuillez réessayer plus tard.
+        </div>
+    </section>
+    <div class="main-loader"></div>
+    <script src="/static/styles/js/main.js"></script>
+    <script src="/static/styles/js/alert.js"></script>
+</body>
+
+</html>

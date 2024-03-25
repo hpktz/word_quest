@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoWordRize - Word Quest</title>
+    <link rel="icon" type="image/png" href="/static/imgs/app-main-logo.png" />
+    <link rel="stylesheet" href="/static/styles/games/memowordrize/main.css">
+    <link rel="stylesheet" href="/static/styles/games/main.css">
+</head>
+
+<body data-session_id="{{session_id}}" data-list_id="{{list_id}}">
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+    <section class="game-section">
+        <div class="content">
+            <div class="main-infos">
+                <a href="/dashboard" class="back">
+                    <img src="/static/icons/games-icons/exit.png" alt="">
+                </a>
+                <div class="header">
+                    <div class="time">
+                        <img src="/static/icons/games-icons/timer-icon.png" class="icon" alt="">
+                        <div class="data" id="time">{{time}}</div>
+                    </div>
+                    {% if not current_path %}{% set infoButton = "active pulse" %}{% else %}{% set infoButton = "disabled" %}{% endif %}
+                    <div class="info-button {{infoButton}}" id="show-path">
+                        <span class="text">Voir le parcours</span> <span class="amount" id="tries-amount">{% if current_path %}{{3 - current_path["tries"]}}{% else %}3{%endif%}</span>
+                    </div>
+                    <div class="xp-container">
+                        <img src="/static/icons/games-icons/big-flash.png" class="icon" alt="">
+                        <div class="data"><span id="xp">{{xp}}</span> XP</div>
+                    </div>
+                </div>
+                <div class="words-container" id="words-container">
+                    <div class="mess">Cliquez sur "Voir le parcours"</div>
+                </div>
+            </div>
+            <div class="path-container">
+                <!-- <div class="music-listener">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div> -->
+                <!-- <div class="micro-listener">
+                    <div class="point"></div>
+                </div> -->
+                <div class="line">
+                    <div class="item" id="item-1"></div>
+                    <div class="item" id="item-2"></div>
+                    <div class="item" id="item-3"></div>
+                    <div class="item" id="item-4"></div>
+                    <div class="item" id="item-5"></div>
+                </div>
+                <div class="line">
+                    <div class="item" id="item-6"></div>
+                    <div class="item" id="item-7"></div>
+                    <div class="item" id="item-8"></div>
+                    <div class="item" id="item-9"></div>
+                    <div class="item" id="item-10"></div>
+                </div>
+                <div class="line">
+                    <div class="item" id="item-11"></div>
+                    <div class="item" id="item-12"></div>
+                    <div class="item" id="item-13"></div>
+                    <div class="item" id="item-14"></div>
+                    <div class="item" id="item-15"></div>
+                </div>
+                <div class="line">
+                    <div class="item" id="item-16"></div>
+                    <div class="item" id="item-17"></div>
+                    <div class="item" id="item-18"></div>
+                    <div class="item" id="item-19"></div>
+                    <div class="item" id="item-20"></div>
+                </div>
+                <div class="line">
+                    <div class="item" id="item-21"></div>
+                    <div class="item" id="item-22"></div>
+                    <div class="item" id="item-23"></div>
+                    <div class="item" id="item-24"></div>
+                    <div class="item" id="item-25"></div>
+                </div>
+                <div class="line">
+                    <div class="item" id="item-26"></div>
+                    <div class="item" id="item-27"></div>
+                    <div class="item" id="item-28"></div>
+                    <div class="item" id="item-29"></div>
+                    <div class="item" id="item-30"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="xp-message">
+        <p>+<span id="xp-message-data">5</span></p>
+        <img src="/static/icons/games-icons/big-flash.png" alt="">
+    </div>
+    {% set popUpImage = '/static/icons/games-icons/memowordrize-30-dark-grey.png' %} 
+    {% set popUpTitle = "MemoWordRize" %} 
+    {% set popUpDesc = "Écoutez les mots prononcés, et reconstituez le chemin le plus rapidement possible !" %} 
+    {% set popUpGame = "memowordrize"%}
+    {% include "games/popups.html" %}
+    <script src="/static/styles/games/memowordrize/main.js"></script>
+</body>
+
+</html>

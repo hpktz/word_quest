@@ -99,6 +99,13 @@ Félicitations ! Vous avez maintenant configuré votre environnement de dévelop
 
 Si vous rencontrez des problèmes ou avez des questions, n'hésitez pas à nous contacter pour obtenir de l'aide supplémentaire.
 
+## Gestion du fuseau horaire ⏱️
+
+Par défaut, le fuseau horaire de la base de données est à UTC +01:00 (heure de Paris). Si votre fuseau horaire n'est pas celui-ci, il est important de le changer.
+Pour ce faire :
+1. Allez dans le fichier python `sources/root.py` ligne 35.
+2. Changez la ligne en indiquant votre fuseau horaire selon le format UTC (`+XX:XX`).
+
 ## Auteurs 📝
 
 - **Hippolyte Pankutz** - *Développeur* - [hpktz](https://github.com/hpktz)

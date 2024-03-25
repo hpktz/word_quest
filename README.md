@@ -15,9 +15,10 @@ Bienvenue dans le guide d'installation de Word Quest. Ce guide vous aidera à co
 ## Étapes Préliminaires 🛠️
 
 Avant de commencer, assurez-vous d'avoir les élements suivants :
-- Un ordinateur sous Windows
+- Un ordinateur sous Windows (10 au minimum)
 - Une connexion internet stable
 - Python 3.8 ou supérieur
+- Avoir Git installé sur votre machine
 
 ## Installation de Wamp64 📦
 
@@ -33,7 +34,7 @@ Pour installer Wamp64, suivez les étapes suivantes :
 1. Ouvrez votre terminal
 2. Naviguez jusqu'à votre dossier www de Wamp64
 ```bash
-cd C:\wamp64\www\word_quest
+cd C:\wamp64\www
 ```
 3. Clonez le site depuis le repository
 ```bash 
@@ -66,13 +67,13 @@ pip install -r requirements.txt
 1. Créez un fichier `.env` dans le dossier `word_quest/sources`
 2. Modifiez les variables d'environnement pour correspondre à votre configuration
 ```env
-FLASK_SECRET_KEY=<VOTRE_CLE_SECRETE> - Clé secrète Flask (valeurs aléatoires recommandées)
-COLLINS_API_KEY=<VOTRE_CLE_API_COLLINS> - Clé API Collins Dictionary
-GOOGLE_SEARCH_API_KEY=<VOTRE_CLE_API_GOOGLE> - Clé API Google Custom Search Engine
-GOOGLE_SEARCH_ENGINE_ID=<VOTRE_ID_MOTEUR_RECHERCHE_GOOGLE> - ID du moteur de recherche Google
+FLASK_SECRET_KEY=<VOTRE_CLE_SECRETE> # Clé secrète Flask (valeurs aléatoires recommandées)
+COLLINS_API_KEY=<VOTRE_CLE_API_COLLINS> # Clé API Collins Dictionary
+GOOGLE_SEARCH_API_KEY=<VOTRE_CLE_API_GOOGLE> # Clé API Google Custom Search Engine
+GOOGLE_SEARCH_ENGINE_ID=<VOTRE_ID_MOTEUR_RECHERCHE_GOOGLE> # ID du moteur de recherche Google
 EMAILING_SERVICE_PASSWORD=<VOTRE_MOT_DE_PASSE_EMAILING_SERVICE> - Mot de passe du compte de messagerie
-EMAILING_SERVICE_TOKEN=<VOTRE_TOKEN_EMAILING_SERVICE> - Token Google Cloud pour taches Cron
-DIRECTORY_PATH=sources/
+EMAILING_SERVICE_TOKEN=<VOTRE_TOKEN_EMAILING_SERVICE> # Token Google Cloud pour taches Cron. Permet d'envoyer une requête POST à notre API de manière sécurisée
+DIRECTORY_PATH= # - Laisser vide (Est utile si vous lancez le site depuis un autre dossier)
 DB_HOST=localhost
 DB_NAME=word_quest
 DB_USERNAME=root

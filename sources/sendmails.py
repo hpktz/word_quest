@@ -15,6 +15,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
+from root import *
 import os
 
 def send_mail(to, subject, body):
@@ -39,7 +40,7 @@ def send_mail(to, subject, body):
     # Attach the body to the message
     mess.attach(MIMEText(body, 'html'))
     
-    with open('static/imgs/app-main-logo.png', 'rb') as fp:
+    with open(str(os.getenv("DIRECTORY_PATH")) + 'static/imgs/app-main-logo.png', 'rb') as fp:
         img = MIMEImage(fp.read())
         img.add_header('Content-ID', '<{}>'.format('app-main-logo'))
         mess.attach(img)

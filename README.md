@@ -18,7 +18,7 @@ Bienvenue dans le guide d'installation de Word Quest. Ce guide vous aidera à co
 
 Avant de commencer, assurez-vous d'avoir les élements suivants :
 - Un ordinateur sous Windows (10 au minimum)
-- Une connexion internet stable
+- Une connexion internet stable et non restreinte
 - Python 3.8 ou supérieur
 - Avoir Git installé sur votre machine
 

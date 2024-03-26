@@ -335,7 +335,7 @@ class snake():
             time_passed = round(time_passed.total_seconds())
                 
             # Lose a life if winning experience points isn't enough
-            if self.xp < len(self.allLetters)//3 or self.word_find <= 4:
+            if self.xp < len(self.allLetters)//4 or self.word_find <= 4:
                 lives_to_lose = 1 
             else:
                 lives_to_lose = 0

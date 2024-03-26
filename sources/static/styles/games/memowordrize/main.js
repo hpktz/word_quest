@@ -267,7 +267,9 @@ async function try_case(draggableEl, max) {
             xpMessageContainer.classList.remove('active');
             document.getElementById('xp').innerHTML = parseInt(document.getElementById('xp').innerHTML) + data.result.xp; // Update the experience points
             infoButton.classList.add('pulse');
+            infoButton.classList.remove('disabled');
             infoButton.blur();
+            document.getElementById('tries-amount').innerHTML = "3";
             wordsContainer.innerHTML = '<div class="mess">Cliquez sur "Voir le parcours" pour continuer</div>';
         }
     } catch (error) {

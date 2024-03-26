@@ -27,6 +27,7 @@ import re
 import json
 import logging
 import time
+from unidecode import unidecode
 
 create_bp = Blueprint('create', __name__)
 """
@@ -263,7 +264,7 @@ def search(language, x):
                     array = {
                         "id": str(uuid.uuid4()),
                         "type": type,
-                        "word": x if language == "english-french" else "",
+                        "word": unidecode(x) if language == "english-french" else "",
                         "french_translation": x if language == "french-english" else "",
                         "examples": [],
                         "french_translation_examples": []
@@ -278,7 +279,7 @@ def search(language, x):
                         if language == "english-french":
                             array["french_translation"] = word.strip()
                         else:
-                            array["word"] = word.strip()
+                            array["word"] = unidecode(word.strip())
                     else:
                         continue
                 else:
@@ -714,4 +715,3 @@ def copy_list_link(token):
             cursor.close()
         if conn:
             conn.close()
-        

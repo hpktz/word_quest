@@ -610,7 +610,8 @@ def pass_recovery_reset_password(token):
         flask.render_template: The 'auth/password-reset.html' template.
     """
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        session.clear()
+        logout_user()
     try:
         # Decode the password recovery token
         payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])

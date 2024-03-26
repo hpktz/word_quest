@@ -152,7 +152,7 @@ class fallingword():
                 word = self.shuffle.pop()
                 
                 # if boolean < 2, the word duo will be correct
-                if boolean <= 2:
+                if boolean < 2:
                     self.answers.append(True)
                     duo = [word['word'], word['trans_word']]
                     self.shuffle.insert(newindex, word)

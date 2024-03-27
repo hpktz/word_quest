@@ -2,7 +2,7 @@
 
 Bienvenue dans le guide d'installation de Word Quest. Ce guide vous aidera à configurer votre environnement de développement et à lancer notre site avec succès. Si vous avez des questions ou rencontrez des problèmes, n'hésitez pas à nous contacter pour obtenir de l'aide supplémentaire.
 
-> **Note importante** : Un seul commit est visible sur ce répertoire. Nous avons dû changer de répertoire à cause d'un problème de visibilité de nos clefs API.
+> **Note importante** : Peu de commits sont visibles sur ce répertoire. Nous avons dû changer de répertoire à cause d'un problème de visibilité de nos clefs API.
 
 ## Table des Matières 📋
 1. [Étapes Préliminaires](#étapes-préliminaires-)

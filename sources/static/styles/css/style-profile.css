@@ -267,6 +267,19 @@
 .profile-main-container .profile-header .profile-main-infos .subscribe-button.active {
     background-image: url("/static/imgs/subscription-animation.gif");
     background-size: cover;
+    animation: subscription 0.5s infinite;
+}
+
+@keyframes subscription {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+    }   
+    100% {
+        transform: scale(1);
+    }
 }
 
 .profile-main-container .profile-header .profile-main-infos .subscribe-button:hover {

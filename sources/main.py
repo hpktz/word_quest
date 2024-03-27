@@ -140,13 +140,14 @@ hsts = {
     'include_subdomains': True
 }
 # Permissions policy
-permissions_policy = {
-    'geolocation': '\'none\'',
-    'camera': '\'none\'',
-    'microphone': '\'self\'', # Necessary for the use of the microphone in one of the games
-    'fullscreen': '\'self\'',
-    'payment': '\'none\''
+permissions_policy  = {
+    'geolocation': '()',
+    'camera': '()',
+    'microphone': '(self)', # Necessary for the use of the microphone in one of the games
+    'fullscreen': '(self)',
+    'payment': '(self)'
 }
+
 # Add the headers to Talisman
 talisman.force_https = True # Force the use of HTTPS
 talisman.force_file_save = True # Force the use of HTTPS for file saving

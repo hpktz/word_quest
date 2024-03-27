@@ -104,7 +104,6 @@ def index():
         xp = user_statement[3]
         
         # Checking if the user is eligible for potential news lives
-        print(lives_time)
         if lives != 5:
             life_time = datetime.strptime(str(lives_time), "%Y-%m-%d %H:%M:%S")
             life_time = life_time + timedelta(minutes=15)
@@ -143,7 +142,6 @@ def index():
     else:
         gifts = False  
     
-    print(gems)
     return render_template(
         'dashboard/dashboard.html', 
         daytime_tip=tip, 

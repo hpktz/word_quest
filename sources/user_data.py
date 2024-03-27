@@ -463,7 +463,6 @@ def profile_list(id):
         copies_id = [row[0] for row in result]
         copies_id.append(id)
         copies_id = ','.join(map(str, copies_id))
-        print(copies_id)
         
         # Récupérer les xp gagnés par jour pour toutes les listes avec cet initial_id
         cursor.execute("SELECT SUM(xp) FROM lessons_log WHERE list_id IN ("+ copies_id +")",)

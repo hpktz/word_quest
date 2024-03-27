@@ -604,8 +604,8 @@ def start(session_id):
                                    score=game.xpTotal,
                                    reloaded=reloaded)
         return redirect(url_for('hangman.index', list_id=game.list_id))
-    #return redirect(url_for('main.index'))
-     
+    return redirect(url_for('main.index'))
+
 @hangman_bp.route('/dashboard/games/hangman/<string:session_id>/check_letter/<string:l>')
 @check_game
 def check(session_id, l):

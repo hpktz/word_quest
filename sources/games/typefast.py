@@ -317,7 +317,7 @@ def check_game(func):
                 return func(session_id, *args, **kwargs)
         return jsonify({
             "code": 404,
-            "message": "Le jeu n'a pas été trouvé!",
+            "message": "Le jeu n'a pas été trouvé !",
             "result": []
         })
     # Return the wrapper function

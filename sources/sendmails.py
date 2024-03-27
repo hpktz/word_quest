@@ -16,6 +16,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from root import *
+import logging
 import os
 
 def send_mail(to, subject, body):
@@ -54,7 +55,7 @@ def send_mail(to, subject, body):
         server.sendmail(mess['From'], mess['To'], mess.as_string())
         return True    
     except Exception as e:
-        print(e)
+        logging.error(f'Error sending email: {e}')
         return False
     finally:
         if server:

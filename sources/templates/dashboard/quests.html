@@ -136,7 +136,10 @@
                             <div class="picture">
                                 <img src="/static/imgs/profiles/{{rank[1]}}.png" alt="">
                             </div>
-                            <div class="name">{{rank[2]}}</div>
+                            <div class="name">
+                                <div class="main-text">{{rank[2]}}</div>
+                                <div class="xp-amount">{{rank[3]}} XP</div>
+                            </div>
                             {% if rank[3] > 15000 %}
                                 <img class="badge" src="/static/imgs/badges/polyglot-badge.png" alt="medal">
                             {% elif rank[3] > 7500 %}

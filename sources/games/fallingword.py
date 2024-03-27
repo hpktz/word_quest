@@ -567,7 +567,7 @@ def checking(session_id):
 def checkTime(session_id):
     data = request.get_json()
     jsanswers = data['answers']
-    print(jsanswers)
+
     game = fallingword.from_json(session["game"])
     result = game.checkingTime(jsanswers, session_id)
     session["game"] = game.to_json()

@@ -396,7 +396,6 @@ class memowordrize():
             cursor.execute("INSERT INTO user_statements SET user_id= %s, transaction_type = 'xp', transaction = %s", ( current_user.id, xp))
             conn.commit()
             
-            print(xp, time_passed, lives_to_lose)
             response = jsonify({
                 "code": 201,
                 "message": "Le jeu est terminé!",
@@ -521,7 +520,6 @@ def index(list_id):
     
     # Sort the lessons by order    
     list_result["lessons"] = sorted(list_result["lessons"], key=lambda k: k['odr'])
-    print(list_result["lessons"])
 
     # Check if the game exists and if it is available
     for index, game in enumerate(list_result["lessons"]):

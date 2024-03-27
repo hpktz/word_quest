@@ -983,6 +983,20 @@ footer .help-box .btn .img {
     height: 25px;
 }
 
+.issue-mess {
+    font-family: "League Spartan", sans-serif;
+    font-size: 16px;
+    text-align: center;
+    font-style: italic;
+    color: grey;
+}
+
+.issue-mess a {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
 @media all and (max-width: 1111px) {
     main .frst-section .imgs .main-img {
         width: 100%;

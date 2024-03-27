@@ -172,6 +172,7 @@ main .bouton:hover {
     justify-content: space-between;
     align-items: center;
     margin-top: 50px;
+    display: none;
 }
 
 .navigation div {
@@ -195,6 +196,8 @@ main .bouton:hover {
 
 .carousel {
     display: flex;
+    flex-direction: column;
+    gap: 100px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -252,6 +255,13 @@ main .bouton:hover {
 
 .carousel .illustration.phone {
     display: none;
+}
+
+.carousel .icon-separator {
+    width: 35px;
+    height: 35px;
+    margin: auto;
+    transform: rotate(90deg);
 }
 
 @media screen and (max-width: 670px) {

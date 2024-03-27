@@ -382,6 +382,7 @@ class memowordrize():
                 lives_to_lose -= 1
             lives_to_lose = 1 if xp < 15 else 0
             
+            # Check if the lesson has already been played
             cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:

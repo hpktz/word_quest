@@ -348,7 +348,7 @@ class snake():
             else:
                 lives_to_lose = 0
             
-            # Reduces the amount of xp gained if the game are already completed
+            # Reduces the amount of xp gained if the game are already finished
             cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:

@@ -211,7 +211,8 @@ class typeFast():
             
             lives_to_lose = 1 if len(self.words_to_check) > 0 else 0
             
-            is_already_completed = cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
+            # Check if the lesson has already been played
+            cursor.execute("SELECT * FROM lessons_log WHERE user_id = %s AND lesson_id = %s", (current_user.id, self.lesson_id))
             is_already_completed = cursor.fetchall()
             if is_already_completed:
                 xp = round(xp  * 0.66)

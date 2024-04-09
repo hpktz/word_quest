@@ -273,7 +273,7 @@ def register_post():
         try:
             conn = create_connection()
             cursor = conn.cursor()
-            cursor.execute(f"SELECT * FROM users WHERE email='{email}'")
+            cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
             data = cursor.fetchone()
 
             # Check if the user's email is already in use
